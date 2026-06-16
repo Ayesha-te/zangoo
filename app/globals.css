@@ -253,8 +253,9 @@ h4{font-size:20px}
 .faq{background:var(--bg4);padding:96px 0}
 .faq-intro{max-width:540px;margin-bottom:40px}
 .faq-intro p{color:var(--body);margin-top:8px;font-size:15px}
-.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.fi{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh1)}
+.faq-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:start}
+.faq-col{display:flex;width:100%;min-width:0;justify-self:stretch;flex-direction:column;gap:12px}
+.fi{width:100%;background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh1);min-height:0}
 .fi-btn{width:100%;background:none;border:none;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;text-align:left;min-height:56px;transition:background var(--tr)}
 .fi-btn:hover{background:rgba(74,144,217,.05)}
 .fi-btn[aria-expanded=true]{background:rgba(44,82,130,.07)}

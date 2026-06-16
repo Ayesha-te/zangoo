@@ -13,6 +13,11 @@ import {
   SofaIllustration,
 } from "./Illustrations";
 
+const primaryButtonClasses =
+  "inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-lg border-2 border-[#1557A7] bg-[#1557A7] px-6 py-2.5 text-[15px] font-semibold text-white transition hover:-translate-y-0.5 hover:border-[#0F4690] hover:bg-[#0F4690] focus-visible:-translate-y-0.5 focus-visible:border-[#0F4690] focus-visible:bg-[#0F4690]";
+const secondaryButtonClasses =
+  "inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-lg border-2 border-[#1A2E44] bg-transparent px-6 py-2.5 text-[15px] font-semibold text-[#1A2E44] transition hover:-translate-y-0.5 hover:bg-[#1A2E44] hover:text-white focus-visible:-translate-y-0.5 focus-visible:bg-[#1A2E44] focus-visible:text-white";
+
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -48,7 +53,7 @@ function Header() {
               </li>
             ))}
           </ul>
-          <a href="#contact" className="nav-cta">
+          <a href="#contact" className="nav-cta inline-flex min-h-11 shrink-0 items-center rounded-lg border border-[#1557A7] px-4 py-2 text-sm font-semibold text-[#1557A7] transition hover:bg-[#1557A7] hover:text-white">
             Book Consultation
           </a>
           <button
@@ -80,7 +85,7 @@ function Header() {
             </li>
           ))}
         </ul>
-        <a href="#contact" className="btn btn-p mob-cta" onClick={() => setMenuOpen(false)}>
+        <a href="#contact" className={`${primaryButtonClasses} mob-cta`} onClick={() => setMenuOpen(false)}>
           Book Free Consultation
         </a>
       </div>
@@ -108,10 +113,10 @@ function Hero() {
           <span className="rating-text">4.9 &bull; 15,000+ verified reviews</span>
         </div>
         <div className="hero-btns">
-          <a href="#collections" className="btn btn-p">
+          <a href="#collections" className={`btn btn-p ${primaryButtonClasses}`}>
             Shop Collection
           </a>
-          <a href="#contact" className="btn btn-s">
+          <a href="#contact" className={`btn btn-s ${secondaryButtonClasses}`}>
             Free Consultation
           </a>
         </div>
@@ -154,7 +159,7 @@ function Collections() {
               <span className="feat-tag">Best Seller</span>
               <p className="feat-name">Nordic Lounge Chair</p>
               <p className="feat-sub">Explore trending styles</p>
-              <span className="btn btn-p btn-sm" aria-hidden="true">
+              <span className={`btn btn-p btn-sm ${primaryButtonClasses}`} aria-hidden="true">
                 Open Store
               </span>
             </div>
@@ -355,6 +360,10 @@ function Blog() {
 
 function Faq() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const columns = [
+    faqs.filter((_, index) => index % 2 === 0),
+    faqs.filter((_, index) => index % 2 === 1),
+  ];
 
   return (
     <section className="faq" id="faq" aria-labelledby="faq-h">
@@ -365,28 +374,33 @@ function Faq() {
           <p>Everything you need to know before you buy - answered clearly and honestly.</p>
         </div>
         <div className="faq-grid" role="list">
-          {faqs.map(([question, answer], index) => {
-            const isOpen = activeIndex === index;
-            const answerId = `faq-answer-${index}`;
+          {columns.map((column, columnIndex) => (
+            <div className="faq-col" key={columnIndex}>
+              {column.map(([question, answer]) => {
+                const index = faqs.findIndex(([faqQuestion]) => faqQuestion === question);
+                const isOpen = activeIndex === index;
+                const answerId = `faq-answer-${index}`;
 
-            return (
-              <div className="fi rv" role="listitem" style={{ transitionDelay: `${index * 0.06}s` }} key={question}>
-                <button
-                  className="fi-btn"
-                  aria-expanded={isOpen}
-                  aria-controls={answerId}
-                  type="button"
-                  onClick={() => setActiveIndex(isOpen ? null : index)}
-                >
-                  <span className="fi-q">{question}</span>
-                  <span className="fi-icon" aria-hidden="true">+</span>
-                </button>
-                <div className="fi-body" id={answerId} aria-hidden={!isOpen}>
-                  <p className="fi-a">{answer}</p>
-                </div>
-              </div>
-            );
-          })}
+                return (
+                  <div className="fi rv" role="listitem" style={{ transitionDelay: `${index * 0.06}s` }} key={question}>
+                    <button
+                      className="fi-btn"
+                      aria-expanded={isOpen}
+                      aria-controls={answerId}
+                      type="button"
+                      onClick={() => setActiveIndex(isOpen ? null : index)}
+                    >
+                      <span className="fi-q">{question}</span>
+                      <span className="fi-icon" aria-hidden="true">+</span>
+                    </button>
+                    <div className="fi-body" id={answerId} aria-hidden={!isOpen}>
+                      <p className="fi-a">{answer}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ))}
         </div>
       </div>
     </section>
@@ -451,7 +465,7 @@ function Contact() {
                   onChange={(event) => setFirstName(event.target.value)}
                 />
               </div>
-              <button type="submit" className={`btn btn-p${subscribed ? " subscribed" : ""}`} disabled={subscribed}>
+              <button type="submit" className={`btn btn-p ${primaryButtonClasses}${subscribed ? " subscribed" : ""}`} disabled={subscribed}>
                 {subscribed ? "Subscribed! Thank you." : "Subscribe - It Is Free"}
               </button>
             </form>
@@ -479,7 +493,7 @@ function Contact() {
               <p className="map-hrs">Open Mon-Sat &bull; 10am-7pm</p>
               <a
                 href="https://maps.google.com"
-                className="btn btn-s directions-btn"
+                className={`btn btn-s directions-btn ${secondaryButtonClasses}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Get directions to our London showroom, opens Google Maps"
