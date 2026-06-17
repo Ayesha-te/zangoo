@@ -1,6 +1,7 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import Link from "next/link";
 import { awards, blogPosts, collections, faqs, navLinks, reviews } from "@/app/data/home";
 import {
   AwardIcon,
@@ -17,6 +18,48 @@ const primaryButtonClasses =
   "inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-lg border-2 border-[#1557A7] bg-[#1557A7] px-6 py-2.5 text-[15px] font-semibold text-white transition hover:-translate-y-0.5 hover:border-[#0F4690] hover:bg-[#0F4690] focus-visible:-translate-y-0.5 focus-visible:border-[#0F4690] focus-visible:bg-[#0F4690]";
 const secondaryButtonClasses =
   "inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-lg border-2 border-[#1A2E44] bg-transparent px-6 py-2.5 text-[15px] font-semibold text-[#1A2E44] transition hover:-translate-y-0.5 hover:bg-[#1A2E44] hover:text-white focus-visible:-translate-y-0.5 focus-visible:bg-[#1A2E44] focus-visible:text-white";
+
+type NewsletterErrors = {
+  email?: string;
+  firstName?: string;
+  form?: string;
+};
+
+const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,24}$/i;
+const namePattern = /^[A-Za-z][A-Za-z' -]{0,39}$/;
+
+function normalizeSpaces(value: string) {
+  return value.replace(/\s+/g, " ").trim();
+}
+
+function validateNewsletter(emailValue: string, firstNameValue: string, websiteValue: string): NewsletterErrors {
+  const email = emailValue.trim().toLowerCase();
+  const firstName = normalizeSpaces(firstNameValue);
+  const errors: NewsletterErrors = {};
+
+  if (websiteValue.trim()) {
+    errors.form = "We could not process this request. Please try again.";
+  }
+
+  if (!email) {
+    errors.email = "Email address is required.";
+  } else if (email.length > 80) {
+    errors.email = "Email address must be 80 characters or fewer.";
+  } else if (!emailPattern.test(email) || email.includes("..")) {
+    errors.email = "Enter a valid email address, for example name@example.com.";
+  } else {
+    const [localPart, domainPart] = email.split("@");
+    if (!localPart || !domainPart || localPart.length > 64 || domainPart.length > 253) {
+      errors.email = "Enter a valid email address, for example name@example.com.";
+    }
+  }
+
+  if (firstName && !namePattern.test(firstName)) {
+    errors.firstName = "Use letters, spaces, apostrophes, or hyphens only. Max 40 characters.";
+  }
+
+  return errors;
+}
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -41,9 +84,9 @@ function Header() {
     <header>
       <nav className={`nav${scrolled ? " up" : ""}`} aria-label="Main navigation">
         <div className="nav-in">
-          <a href="/" className="nav-logo" aria-label="Furniture Co. home">
+          <Link href="/" className="nav-logo" aria-label="Furniture Co. home">
             Furniture Co.
-          </a>
+          </Link>
           <ul className="nav-links" role="list">
             {navLinks.map((link) => (
               <li key={link.label}>
@@ -410,20 +453,45 @@ function Faq() {
 function Contact() {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
-  const [error, setError] = useState("");
-  const [subscribed, setSubscribed] = useState(false);
+  const [website, setWebsite] = useState("");
+  const [errors, setErrors] = useState<NewsletterErrors>({});
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    if (!showSuccess) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setShowSuccess(false);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [showSuccess]);
+
+  function onEmailChange(event: ChangeEvent<HTMLInputElement>) {
+    setEmail(event.target.value.slice(0, 80));
+    setErrors((current) => ({ ...current, email: undefined, form: undefined }));
+  }
+
+  function onFirstNameChange(event: ChangeEvent<HTMLInputElement>) {
+    setFirstName(event.target.value.slice(0, 40));
+    setErrors((current) => ({ ...current, firstName: undefined, form: undefined }));
+  }
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const valid = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.trim());
+    const nextErrors = validateNewsletter(email, firstName, website);
 
-    if (!valid) {
-      setError("Please enter a valid email address.");
+    if (Object.values(nextErrors).some(Boolean)) {
+      setErrors(nextErrors);
       return;
     }
 
-    setError("");
-    setSubscribed(true);
+    setEmail("");
+    setFirstName("");
+    setWebsite("");
+    setErrors({});
+    setShowSuccess(true);
   }
 
   return (
@@ -434,6 +502,11 @@ function Contact() {
             <span className="nl-tag">Stay in the Loop</span>
             <h3 id="nl-h">New arrivals, ideas &amp; exclusive offers</h3>
             <form className="nl-form" onSubmit={onSubmit} noValidate aria-label="Newsletter sign-up">
+              {errors.form ? (
+                <p className="form-alert" role="alert">
+                  {errors.form}
+                </p>
+              ) : null}
               <div className="fg">
                 <label htmlFor="nl-email">Email address <span aria-hidden="true" className="req">*</span></label>
                 <input
@@ -442,15 +515,19 @@ function Contact() {
                   name="email"
                   placeholder="you@example.com"
                   autoComplete="email"
+                  inputMode="email"
+                  maxLength={80}
+                  pattern="[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,24}"
                   required
                   aria-required="true"
                   aria-describedby="nl-err"
-                  aria-invalid={error ? "true" : "false"}
+                  aria-invalid={errors.email ? "true" : "false"}
                   value={email}
-                  onChange={(event) => setEmail(event.target.value)}
+                  onChange={onEmailChange}
+                  onBlur={() => setEmail((value) => value.trim().toLowerCase())}
                 />
-                <span className={`f-err${error ? " show" : ""}`} id="nl-err" role="alert" aria-live="polite">
-                  {error}
+                <span className={`f-err${errors.email ? " show" : ""}`} id="nl-err" role="alert" aria-live="polite">
+                  {errors.email}
                 </span>
               </div>
               <div className="fg">
@@ -461,12 +538,32 @@ function Contact() {
                   name="fname"
                   placeholder="Your first name"
                   autoComplete="given-name"
+                  maxLength={40}
+                  pattern="[A-Za-z][A-Za-z' -]{0,39}"
+                  aria-describedby="nl-name-err"
+                  aria-invalid={errors.firstName ? "true" : "false"}
                   value={firstName}
-                  onChange={(event) => setFirstName(event.target.value)}
+                  onChange={onFirstNameChange}
+                  onBlur={() => setFirstName((value) => normalizeSpaces(value))}
+                />
+                <span className={`f-err${errors.firstName ? " show" : ""}`} id="nl-name-err" role="alert" aria-live="polite">
+                  {errors.firstName}
+                </span>
+              </div>
+              <div className="hp-field" aria-hidden="true">
+                <label htmlFor="nl-website">Website</label>
+                <input
+                  type="text"
+                  id="nl-website"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={website}
+                  onChange={(event) => setWebsite(event.target.value)}
                 />
               </div>
-              <button type="submit" className={`btn btn-p ${primaryButtonClasses}${subscribed ? " subscribed" : ""}`} disabled={subscribed}>
-                {subscribed ? "Subscribed! Thank you." : "Subscribe - It Is Free"}
+              <button type="submit" className={`btn btn-p ${primaryButtonClasses}`}>
+                Subscribe - It Is Free
               </button>
             </form>
             <ul className="nl-list" aria-label="Newsletter topics">
@@ -504,6 +601,30 @@ function Contact() {
           </address>
         </div>
       </div>
+      {showSuccess ? (
+        <div className="modal-backdrop" role="presentation" onMouseDown={() => setShowSuccess(false)}>
+          <div
+            className="success-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="subscribe-success-title"
+            aria-describedby="subscribe-success-copy"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <button className="modal-close" type="button" aria-label="Close subscription confirmation" onClick={() => setShowSuccess(false)}>
+              x
+            </button>
+            <span className="modal-kicker">Subscribed</span>
+            <h3 id="subscribe-success-title">Thank you for subscribing.</h3>
+            <p id="subscribe-success-copy">
+              Your form has been cleared. New arrivals, design ideas, and exclusive offers will be sent to your inbox.
+            </p>
+            <button className={`btn btn-p ${primaryButtonClasses}`} type="button" onClick={() => setShowSuccess(false)}>
+              Done
+            </button>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }
@@ -512,14 +633,14 @@ function Footer() {
   return (
     <footer role="contentinfo">
       <div className="foot-in">
-        <a href="/" className="foot-logo" aria-label="Furniture Co. home">Furniture Co.</a>
+        <Link href="/" className="foot-logo" aria-label="Furniture Co. home">Furniture Co.</Link>
         <nav aria-label="Footer navigation">
           <ul className="foot-links" role="list">
-            <li><a href="#">Customer Programme</a></li>
-            <li><a href="#">Delivery Info</a></li>
-            <li><a href="#">Order Tracking</a></li>
-            <li><a href="#">Privacy Policy</a></li>
-            <li><a href="#">Accessibility</a></li>
+            <li><a href="#faq">Returns &amp; Warranty</a></li>
+            <li><a href="#contact">Secure Enquiry</a></li>
+            <li><a href="#contact">Privacy Notice</a></li>
+            <li><a href="#contact">Accessibility Statement</a></li>
+            <li><a href="#contact">Contact Support</a></li>
           </ul>
         </nav>
         <p className="foot-copy"><small>&copy; 2026 Furniture Co. All rights reserved.</small></p>

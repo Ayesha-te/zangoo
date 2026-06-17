@@ -280,6 +280,8 @@ h4{font-size:20px}
 .fg input[aria-invalid=true]{border-color:var(--err)}
 .f-err{font-size:12px;color:var(--err);display:none;margin-top:2px}
 .f-err.show{display:block}
+.form-alert{border:1px solid rgba(198,40,40,.32);background:rgba(198,40,40,.08);border-radius:var(--r);padding:10px 12px;font-size:13px;font-weight:600;color:var(--err)}
+.hp-field{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
 .nl-list{margin-top:20px;border-top:1px solid var(--bdr)}
 .nl-list li{font-size:13px;color:var(--body);padding:8px 0;border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:8px}
 .nl-list li::before{content:"\2192";color:var(--blue);font-size:11px}
@@ -291,6 +293,13 @@ h4{font-size:20px}
 .map-name{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px}
 .map-addr{font-size:13px;color:var(--body);line-height:1.6;margin-bottom:8px}
 .map-hrs{font-size:13px;color:var(--ok);font-weight:600}
+.modal-backdrop{position:fixed;inset:0;z-index:800;display:flex;align-items:center;justify-content:center;background:rgba(26,46,68,.42);padding:24px;backdrop-filter:blur(4px)}
+.success-modal{position:relative;width:min(100%,420px);border:1px solid var(--bdr);border-radius:var(--rl);background:var(--surf);box-shadow:var(--sh3);padding:32px;color:var(--body)}
+.success-modal h3{margin:4px 0 10px;color:var(--navy);font-size:24px}
+.success-modal p{font-size:14px;line-height:1.65;margin-bottom:20px}
+.modal-kicker{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--ok)}
+.modal-close{position:absolute;top:14px;right:14px;width:34px;height:34px;border:1px solid var(--bdr);border-radius:50%;background:var(--bg1);color:var(--navy);cursor:pointer;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;transition:background var(--tr),color var(--tr),border-color var(--tr)}
+.modal-close:hover,.modal-close:focus-visible{background:var(--blue);border-color:var(--blue);color:#fff}
 /* ── FOOTER ── */
 footer{background:var(--bg2);padding:32px 0;border-top:1px solid rgba(184,203,224,.1)}
 .foot-in{max-width:1200px;margin:0 auto;padding:0 64px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap}
