@@ -32,6 +32,27 @@ function normalizeSpaces(value: string) {
   return value.replace(/\s+/g, " ").trim();
 }
 
+function hasValidEmailParts(email: string) {
+  const [localPart, domainPart] = email.split("@");
+
+  if (!localPart || !domainPart || localPart.length > 64 || domainPart.length > 253) {
+    return false;
+  }
+
+  if (localPart.startsWith(".") || localPart.endsWith(".") || localPart.includes("..")) {
+    return false;
+  }
+
+  const domainLabels = domainPart.split(".");
+  if (domainLabels.length < 2 || domainLabels.some((label) => !label)) {
+    return false;
+  }
+
+  return domainLabels.every((label) => {
+    return !label.startsWith("-") && !label.endsWith("-") && /^[a-z0-9-]+$/i.test(label);
+  });
+}
+
 function validateNewsletter(emailValue: string, firstNameValue: string, websiteValue: string): NewsletterErrors {
   const email = emailValue.trim().toLowerCase();
   const firstName = normalizeSpaces(firstNameValue);
@@ -45,13 +66,8 @@ function validateNewsletter(emailValue: string, firstNameValue: string, websiteV
     errors.email = "Email address is required.";
   } else if (email.length > 80) {
     errors.email = "Email address must be 80 characters or fewer.";
-  } else if (!emailPattern.test(email) || email.includes("..")) {
+  } else if (!emailPattern.test(email) || !hasValidEmailParts(email)) {
     errors.email = "Enter a valid email address, for example name@example.com.";
-  } else {
-    const [localPart, domainPart] = email.split("@");
-    if (!localPart || !domainPart || localPart.length > 64 || domainPart.length > 253) {
-      errors.email = "Enter a valid email address, for example name@example.com.";
-    }
   }
 
   if (firstName && !namePattern.test(firstName)) {
