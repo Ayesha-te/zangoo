@@ -316,14 +316,15 @@ footer{background:var(--bg2);padding:32px 0;border-top:1px solid rgba(184,203,22
   .nav-in{padding:0 24px}
   .hero{grid-template-columns:1fr;height:auto;min-height:100svh}
   .hero-txt{padding:calc(var(--nav) + 32px) 24px 32px;order:1}
-  .hero-vis{order:2;height:280px;position:relative}
+  .hero-vis{order:2;height:clamp(290px,62vw,360px);position:relative}
   .hero-badge{top:calc(var(--nav) + 8px);right:12px}
   .hero::after{display:none}
   .hero-trust{position:relative;bottom:auto;right:auto;margin:8px 16px 0;display:inline-flex;align-self:flex-start}
-  .hero-vis .hero-trust{position:absolute;bottom:12px;right:12px;font-size:10px;padding:5px 12px}
-  .scroll-hint{bottom:8px;left:50%;z-index:10}
-  .scroll-hint span{font-size:9px}
-  .scroll-hint svg{width:18px;height:18px}
+  .hero-vis .hero-sofa{bottom:34px}
+  .hero-vis .hero-trust{position:absolute;bottom:12px;left:12px;right:12px;justify-content:center;max-width:calc(100% - 24px);font-size:10px;padding:5px 10px;text-align:center}
+  .scroll-hint{display:flex;bottom:52px;left:50%;z-index:10;flex-direction:row;gap:4px;background:rgba(255,255,255,.84);border:1px solid rgba(200,218,234,.9);border-radius:999px;padding:3px 6px}
+  .scroll-hint span{font-size:9px;padding:0;background:transparent}
+  .scroll-hint svg{width:18px;height:18px;padding:2px;background:transparent}
   .coll-wrap{grid-template-columns:1fr}
   .coll-grid{grid-template-columns:repeat(2,1fr)}
   .stats-grid{grid-template-columns:1fr 1fr}
