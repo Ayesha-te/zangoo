@@ -2,7 +2,9 @@
 
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
-import { awards, blogPosts, collections, faqs, navLinks, reviews } from "@/app/data/home";
+import { awards, blogPosts, collections, faqs, reviews } from "@/app/data/home";
+import { primaryButtonClasses, secondaryButtonClasses } from "@/app/components/site/buttonClasses";
+import { SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import {
   AwardIcon,
   BlogVisual,
@@ -14,10 +16,47 @@ import {
   SofaIllustration,
 } from "./Illustrations";
 
-const primaryButtonClasses =
-  "inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-lg border-2 border-[#1557A7] bg-[#1557A7] px-6 py-2.5 text-[15px] font-semibold text-white transition hover:-translate-y-0.5 hover:border-[#0F4690] hover:bg-[#0F4690] focus-visible:-translate-y-0.5 focus-visible:border-[#0F4690] focus-visible:bg-[#0F4690]";
-const secondaryButtonClasses =
-  "inline-flex min-h-11 items-center justify-center gap-2 whitespace-nowrap rounded-lg border-2 border-[#1A2E44] bg-transparent px-6 py-2.5 text-[15px] font-semibold text-[#1A2E44] transition hover:-translate-y-0.5 hover:bg-[#1A2E44] hover:text-white focus-visible:-translate-y-0.5 focus-visible:bg-[#1A2E44] focus-visible:text-white";
+type HomepageBlogPost = {
+  id: number | string;
+  title: string;
+  excerpt: string;
+  meta: string;
+  href: string;
+  tag: string;
+  className: string;
+  visual: "dining-room" | "chair-trend" | "sustainable-room";
+  imageUrl?: string;
+  imageAlt?: string;
+};
+
+type WordPressRendered = {
+  rendered?: string;
+};
+
+type WordPressMedia = {
+  alt_text?: string;
+  source_url?: string;
+  media_details?: {
+    sizes?: Record<string, { source_url?: string }>;
+  };
+};
+
+type WordPressTerm = {
+  name?: string;
+};
+
+type WordPressPost = {
+  id: number;
+  slug?: string;
+  date?: string;
+  link?: string;
+  title?: WordPressRendered;
+  excerpt?: WordPressRendered;
+  _embedded?: {
+    "wp:featuredmedia"?: WordPressMedia[];
+    "wp:term"?: WordPressTerm[][];
+  };
+};
 
 type NewsletterErrors = {
   email?: string;
@@ -77,79 +116,61 @@ function validateNewsletter(emailValue: string, firstNameValue: string, websiteV
   return errors;
 }
 
-function Header() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+function decodeHtml(value: string) {
+  if (typeof window === "undefined") return value;
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const textarea = document.createElement("textarea");
+  textarea.innerHTML = value;
+  return textarea.value;
+}
 
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setMenuOpen(false);
-    };
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, []);
+function stripHtml(value: string) {
+  if (typeof window === "undefined") return value;
 
+  const doc = new DOMParser().parseFromString(value, "text/html");
+  return decodeHtml(doc.body.textContent?.replace(/\s+/g, " ").trim() ?? "");
+}
+
+function truncateText(value: string, maxLength: number) {
+  if (value.length <= maxLength) return value;
+  return `${value.slice(0, maxLength).trimEnd()}...`;
+}
+
+function formatPostMeta(date?: string, tag?: string) {
+  const fallback = tag ? `Latest - ${tag}` : "Latest";
+  if (!date) return fallback;
+
+  return `${new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(date))}${tag ? ` - ${tag}` : ""}`;
+}
+
+function getFeaturedImage(media?: WordPressMedia) {
   return (
-    <header>
-      <nav className={`nav${scrolled ? " up" : ""}`} aria-label="Main navigation">
-        <div className="nav-in">
-          <Link href="/" className="nav-logo" aria-label="Furniture Co. home">
-            Furniture Co.
-          </Link>
-          <ul className="nav-links" role="list">
-            {navLinks.map((link) => (
-              <li key={link.label}>
-                <a href={link.href} className={link.active ? "act" : undefined} aria-current={link.active ? "page" : undefined}>
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <a href="#contact" className="nav-cta inline-flex min-h-11 shrink-0 items-center rounded-lg border border-[#1557A7] px-4 py-2 text-sm font-semibold text-[#1557A7] transition hover:bg-[#1557A7] hover:text-white">
-            Book Consultation
-          </a>
-          <button
-            className="hbg"
-            aria-expanded={menuOpen}
-            aria-controls="mob"
-            aria-label="Toggle menu"
-            type="button"
-            onClick={() => setMenuOpen((open) => !open)}
-          >
-            <span />
-            <span />
-            <span />
-          </button>
-        </div>
-      </nav>
-      <div className={`mob-menu${menuOpen ? " open" : ""}`} id="mob" hidden={!menuOpen} aria-label="Mobile navigation">
-        <ul className="mob-links" role="list">
-          {navLinks.map((link) => (
-            <li key={link.label}>
-              <a
-                href={link.href}
-                className={link.active ? "act" : undefined}
-                aria-current={link.active ? "page" : undefined}
-                onClick={() => setMenuOpen(false)}
-              >
-                {link.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-        <a href="#contact" className={`${primaryButtonClasses} mob-cta`} onClick={() => setMenuOpen(false)}>
-          Book Free Consultation
-        </a>
-      </div>
-    </header>
+    media?.media_details?.sizes?.medium_large?.source_url ??
+    media?.media_details?.sizes?.medium?.source_url ??
+    media?.source_url
   );
+}
+
+function mapWordPressPost(post: WordPressPost, index: number): HomepageBlogPost {
+  const tag = post._embedded?.["wp:term"]?.[0]?.[0]?.name ?? "Blog";
+  const media = post._embedded?.["wp:featuredmedia"]?.[0];
+
+  return {
+    id: post.id,
+    title: decodeHtml(stripHtml(post.title?.rendered ?? "Untitled post")),
+    excerpt: truncateText(stripHtml(post.excerpt?.rendered ?? ""), 145),
+    meta: formatPostMeta(post.date, tag),
+    href: post.slug ? `/blog/?slug=${encodeURIComponent(post.slug)}` : "/blog/",
+    tag,
+    className: blogPosts[index]?.className ?? "bc-a",
+    visual: blogPosts[index]?.visual ?? "dining-room",
+    imageUrl: getFeaturedImage(media),
+    imageAlt: media?.alt_text || stripHtml(post.title?.rendered ?? "Blog post image"),
+  };
 }
 
 function Hero() {
@@ -387,6 +408,53 @@ function Reviews() {
 }
 
 function Blog() {
+  const [posts, setPosts] = useState<HomepageBlogPost[]>(
+    blogPosts.map((post) => ({
+      id: post.title,
+      title: post.title,
+      excerpt: post.excerpt,
+      meta: post.meta,
+      href: "/blog/",
+      tag: post.tag,
+      className: post.className,
+      visual: post.visual,
+    })),
+  );
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const postsUrl = new URL("https://peru-armadillo-169520.hostingersite.com/wp-json/wp/v2/posts");
+    postsUrl.searchParams.set("per_page", "3");
+    postsUrl.searchParams.set("_embed", "1");
+    postsUrl.searchParams.set("orderby", "date");
+    postsUrl.searchParams.set("order", "desc");
+    postsUrl.searchParams.set("_", String(Date.now()));
+
+    async function loadWordPressPosts() {
+      try {
+        const response = await fetch(postsUrl.toString(), {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+
+        if (!response.ok) return;
+
+        const data = (await response.json()) as WordPressPost[];
+        if (!Array.isArray(data) || data.length === 0) return;
+
+        setPosts(data.slice(0, 3).map(mapWordPressPost));
+      } catch (error) {
+        if (!controller.signal.aborted) {
+          console.warn("WordPress blog fetch failed", error);
+        }
+      }
+    }
+
+    loadWordPressPosts();
+
+    return () => controller.abort();
+  }, []);
+
   return (
     <section className="blog" aria-labelledby="blog-h">
       <div className="wrap">
@@ -395,13 +463,26 @@ function Blog() {
             <span className="sec-lbl sec-lbl-lt">Ideas &amp; Inspiration</span>
             <h2 className="h2lt" id="blog-h">From Our Blog</h2>
           </div>
-          <a href="#" className="sec-lnk sec-lnk-lt" aria-label="View all blog articles">View All</a>
+          <Link href="/blog/" className="sec-lnk sec-lnk-lt" aria-label="View all blog articles">View All</Link>
         </div>
         <div className="blog-grid">
-          {blogPosts.map((post, index) => (
-            <article className="bc rv" style={{ transitionDelay: `${index * 0.1}s` }} key={post.title}>
-              <div className={`bc-thumb ${post.className}`} aria-hidden="true" role="img" aria-label={post.title}>
-                <BlogVisual kind={post.visual} />
+          {posts.map((post, index) => (
+            <Link
+              className="bc rv"
+              href={post.href}
+              style={{ transitionDelay: `${index * 0.1}s` }}
+              key={post.id}
+              aria-label={`Read blog post: ${post.title}`}
+            >
+              <div
+                className={`bc-thumb ${post.className}${post.imageUrl ? " bc-thumb-photo" : ""}`}
+                role="img"
+                aria-label={post.imageAlt ?? post.title}
+                style={post.imageUrl ? { backgroundImage: `url(${post.imageUrl})` } : undefined}
+              >
+                {!post.imageUrl ? (
+                  <BlogVisual kind={post.visual} />
+                ) : null}
               </div>
               <div className="bc-body">
                 <span className="bc-tag">{post.tag}</span>
@@ -409,7 +490,7 @@ function Blog() {
                 <p className="bc-exc">{post.excerpt}</p>
                 <p className="bc-meta">{post.meta}</p>
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </div>
@@ -645,26 +726,6 @@ function Contact() {
   );
 }
 
-function Footer() {
-  return (
-    <footer role="contentinfo">
-      <div className="foot-in">
-        <Link href="/" className="foot-logo" aria-label="Furniture Co. home">Furniture Co.</Link>
-        <nav aria-label="Footer navigation">
-          <ul className="foot-links" role="list">
-            <li><a href="#faq">Returns &amp; Warranty</a></li>
-            <li><a href="#contact">Secure Enquiry</a></li>
-            <li><a href="#contact">Privacy Notice</a></li>
-            <li><a href="#contact">Accessibility Statement</a></li>
-            <li><a href="#contact">Contact Support</a></li>
-          </ul>
-        </nav>
-        <p className="foot-copy"><small>&copy; 2026 Furniture Co. All rights reserved.</small></p>
-      </div>
-    </footer>
-  );
-}
-
 function BackToTop() {
   const [visible, setVisible] = useState(false);
 
@@ -730,7 +791,7 @@ export function HomePage() {
   return (
     <>
       <a href="#main" className="skip">Skip to main content</a>
-      <Header />
+      <SiteHeader />
       <main id="main" tabIndex={-1}>
         <Hero />
         <Collections />
@@ -741,7 +802,7 @@ export function HomePage() {
         <Faq />
         <Contact />
       </main>
-      <Footer />
+      <SiteFooter />
       <BackToTop />
     </>
   );
