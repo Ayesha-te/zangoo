@@ -104,9 +104,14 @@ export function SiteFooter() {
   return (
     <footer role="contentinfo">
       <div className="foot-in">
-        <Link href="/" className="foot-logo" aria-label="Furniture Co. home">
-          Furniture Co.
-        </Link>
+        <div className="foot-brand">
+          <Link href="/" className="foot-logo" aria-label="Furniture Co. home">
+            Furniture Co.
+          </Link>
+          <p className="foot-copy">
+            <small>&copy; 2026 Furniture Co. All rights reserved.</small>
+          </p>
+        </div>
         <nav aria-label="Footer navigation">
           <ul className="foot-links" role="list">
             <li>
@@ -126,9 +131,6 @@ export function SiteFooter() {
             </li>
           </ul>
         </nav>
-        <p className="foot-copy">
-          <small>&copy; 2026 Furniture Co. All rights reserved.</small>
-        </p>
       </div>
     </footer>
   );

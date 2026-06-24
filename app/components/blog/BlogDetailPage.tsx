@@ -156,9 +156,8 @@ export function BlogDetailPage() {
           setPosts(data);
           setStatus(data.length ? "ready" : "empty");
         }
-      } catch (error) {
+      } catch {
         if (!controller.signal.aborted) {
-          console.warn("WordPress blog detail fetch failed", error);
           setStatus("error");
         }
       }

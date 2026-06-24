@@ -443,10 +443,8 @@ function Blog() {
         if (!Array.isArray(data) || data.length === 0) return;
 
         setPosts(data.slice(0, 3).map(mapWordPressPost));
-      } catch (error) {
-        if (!controller.signal.aborted) {
-          console.warn("WordPress blog fetch failed", error);
-        }
+      } catch {
+        // Keep the local fallback cards when the WordPress host rejects a browser request.
       }
     }
 
@@ -685,6 +683,20 @@ function Contact() {
                 United Kingdom
               </p>
               <p className="map-hrs">Open Mon-Sat &bull; 10am-7pm</p>
+              <div className="map-hours-table" aria-label="Opening times">
+                <div>
+                  <span>Monday-Friday</span>
+                  <strong>10am-7pm</strong>
+                </div>
+                <div>
+                  <span>Saturday</span>
+                  <strong>10am-6pm</strong>
+                </div>
+                <div>
+                  <span>Sunday</span>
+                  <strong>By appointment</strong>
+                </div>
+              </div>
               <a
                 href="https://maps.google.com"
                 className={`btn btn-s directions-btn ${secondaryButtonClasses}`}
