@@ -316,12 +316,11 @@ section[id]{scroll-margin-top:calc(var(--nav) + 16px)}
 .map-info{padding:16px 20px 20px}
 .map-name{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:4px}
 .map-addr{font-size:13px;color:var(--body);line-height:1.6;margin-bottom:8px}
-.map-hrs{font-size:13px;color:var(--ok);font-weight:600}
-.map-hours-table{margin-top:14px;border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;background:var(--bg1)}
-.map-hours-table div{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:9px 12px;border-bottom:1px solid var(--bdr)}
-.map-hours-table div:last-child{border-bottom:0}
-.map-hours-table span{font-size:12px;color:var(--body)}
-.map-hours-table strong{font-size:12px;color:var(--navy);white-space:nowrap}
+.map-info .map-hours-table{display:block;width:100%;margin:14px 0 16px;border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;background:var(--bg1)}
+.map-info .map-hours-row{display:flex;align-items:center;justify-content:space-between;gap:16px;width:100%;padding:9px 12px;border-bottom:1px solid var(--bdr);line-height:1.35}
+.map-info .map-hours-row:last-child{border-bottom:0}
+.map-info .map-hours-row span{font-size:12px;font-weight:400;color:var(--body)}
+.map-info .map-hours-row strong{font-size:12px;font-weight:700;color:var(--navy);white-space:nowrap}
 .modal-backdrop{position:fixed;inset:0;z-index:800;display:flex;align-items:center;justify-content:center;background:rgba(26,46,68,.42);padding:24px;backdrop-filter:blur(4px)}
 .success-modal{position:relative;width:min(100%,420px);border:1px solid var(--bdr);border-radius:var(--rl);background:var(--surf);box-shadow:var(--sh3);padding:32px;color:var(--body)}
 .success-modal h3{margin:4px 0 10px;color:var(--navy);font-size:24px}
@@ -331,13 +330,14 @@ section[id]{scroll-margin-top:calc(var(--nav) + 16px)}
 .modal-close:hover,.modal-close:focus-visible{background:var(--blue);border-color:var(--blue);color:#fff}
 /* ── FOOTER ── */
 footer{background:var(--bg2);padding:32px 0;border-top:1px solid rgba(184,203,224,.1)}
-.foot-in{max-width:1200px;margin:0 auto;padding:0 64px;display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,auto);align-items:start;gap:32px}
-.foot-brand{display:flex;flex-direction:column;align-items:flex-start;gap:10px}
+.foot-in{max-width:1200px;margin:0 auto;padding:0 64px;display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,auto);grid-template-areas:"logo links" "copy copy";align-items:start;gap:18px 32px}
 .foot-logo{font-family:var(--serif);font-size:17px;font-weight:500;color:rgba(184,203,224,.5)}
+.foot-logo{grid-area:logo}
 .foot-links{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 .foot-links a{font-size:12px;color:rgba(139,173,200,.5);min-height:24px;display:flex;align-items:center;justify-content:flex-end;text-align:right;transition:color var(--tr)}
 .foot-links a:hover{color:var(--powder)}
-.foot-copy{font-size:12px;color:rgba(139,173,200,.3)}
+footer nav{grid-area:links}
+.foot-copy{grid-area:copy;justify-self:center;text-align:center;font-size:12px;color:rgba(139,173,200,.3)}
 /* ── RESPONSIVE ── */
 @media(max-width:1180px) and (min-width:901px){
   .hero{grid-template-columns:minmax(0,.9fr) minmax(430px,1.1fr);min-height:760px}
@@ -378,7 +378,7 @@ footer{background:var(--bg2);padding:32px 0;border-top:1px solid rgba(184,203,22
   .map-card{display:grid;grid-template-columns:minmax(240px,.9fr) minmax(260px,1fr)}
   .map-vis{height:auto;min-height:260px}
   .map-info{padding:24px}
-  .foot-in{grid-template-columns:minmax(0,1fr) minmax(150px,auto);padding:0 24px;gap:24px}
+  .foot-in{grid-template-columns:minmax(0,1fr) minmax(150px,auto);grid-template-areas:"logo links" "copy copy";padding:0 24px;gap:18px 24px}
   .foot-links{align-items:flex-end;gap:8px}
   .foot-links a{justify-content:flex-end;text-align:right}
 }
@@ -418,9 +418,9 @@ footer{background:var(--bg2);padding:32px 0;border-top:1px solid rgba(184,203,22
   .nl{padding:24px}
   .map-card{grid-template-columns:1fr}
   .map-vis{min-height:180px}
-  .foot-in{grid-template-columns:minmax(0,1fr) minmax(132px,auto);padding:0 16px;gap:16px}
+  .foot-in{grid-template-columns:minmax(0,1fr) minmax(132px,auto);grid-template-areas:"logo links" "copy copy";padding:0 16px;gap:18px 16px}
   .foot-logo{font-size:16px}
-  .foot-copy{max-width:130px;line-height:1.45}
+  .foot-copy{max-width:none;line-height:1.45}
   .foot-links a{font-size:11px;line-height:1.35}
 }
 /* ── BACK TO TOP ── */

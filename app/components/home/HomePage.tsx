@@ -684,17 +684,16 @@ function Contact() {
                 <br />
                 United Kingdom
               </p>
-              <p className="map-hrs">Open Mon-Sat &bull; 10am-7pm</p>
               <div className="map-hours-table" aria-label="Opening times">
-                <div>
+                <div className="map-hours-row">
                   <span>Monday-Friday</span>
                   <strong>10am-7pm</strong>
                 </div>
-                <div>
+                <div className="map-hours-row">
                   <span>Saturday</span>
                   <strong>10am-6pm</strong>
                 </div>
-                <div>
+                <div className="map-hours-row">
                   <span>Sunday</span>
                   <strong>By appointment</strong>
                 </div>
