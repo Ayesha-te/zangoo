@@ -285,7 +285,7 @@ function Collections() {
 
 function Stats() {
   return (
-    <section className="stats" aria-labelledby="stats-h">
+    <section className="stats" id="stats" aria-labelledby="stats-h">
       <div className="wrap">
         <div className="sec-hdr">
           <div>
@@ -343,18 +343,20 @@ function Awards() {
           <p>Independently recognised for design, sustainability, and customer experience - so you can buy with complete confidence.</p>
         </div>
       </div>
-      <div className="marquee-outer" aria-label="Awards and certifications" role="region">
-        <div className="marquee-track" aria-hidden="true">
-          {marqueeAwards.map(([className, icon, org, name, year], index) => (
-            <div className={`mq-card ${className}`} key={`${name}-${index}`}>
-              <span className="mq-icon"><AwardIcon kind={icon} /></span>
-              <div className="mq-body">
-                <span className="mq-org">{org}</span>
-                <span className="mq-name">{name}</span>
-                <span className="mq-year">{year}</span>
+      <div className="wrap">
+        <div className="marquee-outer" aria-label="Awards and certifications" role="region">
+          <div className="marquee-track" aria-hidden="true">
+            {marqueeAwards.map(([className, icon, org, name, year], index) => (
+              <div className={`mq-card ${className}`} key={`${name}-${index}`}>
+                <span className="mq-icon"><AwardIcon kind={icon} /></span>
+                <div className="mq-body">
+                  <span className="mq-org">{org}</span>
+                  <span className="mq-name">{name}</span>
+                  <span className="mq-year">{year}</span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
       <div className="wrap">
@@ -370,7 +372,7 @@ function Awards() {
 
 function Reviews() {
   return (
-    <section className="why" aria-labelledby="why-h">
+    <section className="why" id="reviews" aria-labelledby="why-h">
       <div className="wrap">
         <div className="sec-hdr">
           <div>
@@ -454,7 +456,7 @@ function Blog() {
   }, []);
 
   return (
-    <section className="blog" aria-labelledby="blog-h">
+    <section className="blog" id="blog" aria-labelledby="blog-h">
       <div className="wrap">
         <div className="sec-hdr rv">
           <div>

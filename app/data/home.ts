@@ -1,7 +1,10 @@
 export const navLinks = [
   { label: "Shop", href: "#", active: true },
   { label: "Collections", href: "#collections" },
+  { label: "Stats", href: "#stats" },
   { label: "Awards", href: "#awards" },
+  { label: "Reviews", href: "#reviews" },
+  { label: "Blog", href: "#blog" },
   { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" },
 ];
