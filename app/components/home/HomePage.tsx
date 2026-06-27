@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, type RefObject, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { awards, blogPosts, collections, faqs, reviews } from "@/app/data/home";
 import { primaryButtonClasses, secondaryButtonClasses } from "@/app/components/site/buttonClasses";
@@ -155,6 +155,20 @@ function getFeaturedImage(media?: WordPressMedia) {
   );
 }
 
+function todayInputValue() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function scrollCarousel(ref: RefObject<HTMLElement | null>, direction: -1 | 1) {
+  const element = ref.current;
+  if (!element) return;
+
+  element.scrollBy({
+    left: direction * element.clientWidth * 0.86,
+    behavior: "smooth",
+  });
+}
+
 function mapWordPressPost(post: WordPressPost, index: number): HomepageBlogPost {
   const tag = post._embedded?.["wp:term"]?.[0]?.[0]?.name ?? "Blog";
   const media = post._embedded?.["wp:featuredmedia"]?.[0];
@@ -174,6 +188,19 @@ function mapWordPressPost(post: WordPressPost, index: number): HomepageBlogPost 
 }
 
 function Hero() {
+  const [bookingOpen, setBookingOpen] = useState(false);
+
+  useEffect(() => {
+    if (!bookingOpen) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setBookingOpen(false);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [bookingOpen]);
+
   return (
     <section className="hero" aria-labelledby="h1">
       <div className="hero-txt">
@@ -196,9 +223,9 @@ function Hero() {
           <a href="#collections" className={`btn btn-p ${primaryButtonClasses}`}>
             Shop Collection
           </a>
-          <a href="#contact" className={`btn btn-s ${secondaryButtonClasses}`}>
+          <button className={`btn btn-s ${secondaryButtonClasses}`} type="button" onClick={() => setBookingOpen(true)}>
             Free Consultation
-          </a>
+          </button>
         </div>
       </div>
       <div className="hero-vis" role="img" aria-label="Modern living room with a pale blue sofa, wooden coffee table and floor lamp">
@@ -222,6 +249,48 @@ function Hero() {
           <path d="M12 5v14M5 12l7 7 7-7" />
         </svg>
       </div>
+      {bookingOpen ? (
+        <div className="modal-backdrop" role="presentation" onMouseDown={() => setBookingOpen(false)}>
+          <form
+            className="booking-modal"
+            aria-labelledby="booking-title"
+            onSubmit={(event) => {
+              event.preventDefault();
+              setBookingOpen(false);
+            }}
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <button className="modal-close" type="button" aria-label="Close consultation booking" onClick={() => setBookingOpen(false)}>
+              x
+            </button>
+            <span className="modal-kicker">Free Consultation</span>
+            <h3 id="booking-title">Choose a date and time</h3>
+            <div className="booking-grid">
+              <label>
+                Date
+                <input type="date" name="consultation-date" min={todayInputValue()} required />
+              </label>
+              <label>
+                Time
+                <select name="consultation-time" defaultValue="10:00" required>
+                  <option value="10:00">10:00 AM</option>
+                  <option value="12:00">12:00 PM</option>
+                  <option value="14:00">2:00 PM</option>
+                  <option value="16:00">4:00 PM</option>
+                  <option value="18:00">6:00 PM</option>
+                </select>
+              </label>
+            </div>
+            <label className="booking-field">
+              Email address
+              <input type="email" name="consultation-email" placeholder="you@example.com" required />
+            </label>
+            <button className={`btn btn-p ${primaryButtonClasses}`} type="submit">
+              Confirm Time
+            </button>
+          </form>
+        </div>
+      ) : null}
     </section>
   );
 }
@@ -371,6 +440,8 @@ function Awards() {
 }
 
 function Reviews() {
+  const sliderRef = useRef<HTMLDivElement>(null);
+
   return (
     <section className="why" id="reviews" aria-labelledby="why-h">
       <div className="wrap">
@@ -379,8 +450,16 @@ function Reviews() {
             <span className="sec-lbl">Customer Stories</span>
             <h2 className="h2dk rv" id="why-h">Why Choose Us</h2>
           </div>
+          <div className="carousel-actions" aria-label="Review carousel controls">
+            <button type="button" aria-label="Previous review" onClick={() => scrollCarousel(sliderRef, -1)}>
+              &larr;
+            </button>
+            <button type="button" aria-label="Next review" onClick={() => scrollCarousel(sliderRef, 1)}>
+              &rarr;
+            </button>
+          </div>
         </div>
-        <div className="why-grid">
+        <div className="why-grid carousel-track" ref={sliderRef}>
           {reviews.map((review, index) => (
             <article className="rc rv" style={{ transitionDelay: `${index * 0.1}s` }} key={review.title}>
               <div>
@@ -410,8 +489,9 @@ function Reviews() {
 }
 
 function Blog() {
+  const sliderRef = useRef<HTMLDivElement>(null);
   const [posts, setPosts] = useState<HomepageBlogPost[]>(
-    blogPosts.map((post) => ({
+    [...blogPosts, ...blogPosts].map((post) => ({
       id: post.title,
       title: post.title,
       excerpt: post.excerpt,
@@ -420,13 +500,13 @@ function Blog() {
       tag: post.tag,
       className: post.className,
       visual: post.visual,
-    })),
+    })).slice(0, 6).map((post, index) => ({ ...post, id: `${post.id}-${index}` })),
   );
 
   useEffect(() => {
     const controller = new AbortController();
     const postsUrl = new URL("https://peru-armadillo-169520.hostingersite.com/wp-json/wp/v2/posts");
-    postsUrl.searchParams.set("per_page", "3");
+    postsUrl.searchParams.set("per_page", "6");
     postsUrl.searchParams.set("_embed", "1");
     postsUrl.searchParams.set("orderby", "date");
     postsUrl.searchParams.set("order", "desc");
@@ -444,7 +524,7 @@ function Blog() {
         const data = (await response.json()) as WordPressPost[];
         if (!Array.isArray(data) || data.length === 0) return;
 
-        setPosts(data.slice(0, 3).map(mapWordPressPost));
+        setPosts(data.slice(0, 6).map(mapWordPressPost));
       } catch {
         // Keep the local fallback cards when the WordPress host rejects a browser request.
       }
@@ -463,9 +543,19 @@ function Blog() {
             <span className="sec-lbl sec-lbl-lt">Ideas &amp; Inspiration</span>
             <h2 className="h2lt" id="blog-h">From Our Blog</h2>
           </div>
-          <Link href="/blog/" className="sec-lnk sec-lnk-lt" aria-label="View all blog articles">View All</Link>
+          <div className="blog-head-actions">
+            <div className="carousel-actions carousel-actions-lt" aria-label="Blog carousel controls">
+              <button type="button" aria-label="Previous blog post" onClick={() => scrollCarousel(sliderRef, -1)}>
+                &larr;
+              </button>
+              <button type="button" aria-label="Next blog post" onClick={() => scrollCarousel(sliderRef, 1)}>
+                &rarr;
+              </button>
+            </div>
+            <Link href="/blog/" className="sec-lnk sec-lnk-lt" aria-label="View all blog articles">View All</Link>
+          </div>
         </div>
-        <div className="blog-grid">
+        <div className="blog-grid carousel-track" ref={sliderRef}>
           {posts.map((post, index) => (
             <Link
               className="bc rv"

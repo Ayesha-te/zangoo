@@ -4,12 +4,16 @@ import { type MouseEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { navLinks } from "@/app/data/home";
-import { primaryButtonClasses } from "./buttonClasses";
 
 function homeHref(href: string) {
   if (href === "#") return "/";
   if (href.startsWith("#")) return `/${href}`;
   return href;
+}
+
+function navHref(href: string, isHome: boolean) {
+  if (isHome && href.startsWith("#")) return href;
+  return homeHref(href);
 }
 
 function sectionIdFromHref(href: string) {
@@ -95,8 +99,10 @@ export function SiteHeader() {
 
     if (href === "#") {
       window.history.pushState(null, "", "/");
-      window.scrollTo({ top: 0, behavior: "smooth" });
       setActiveHref("#");
+      window.requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
       return;
     }
 
@@ -123,7 +129,7 @@ export function SiteHeader() {
               return (
                 <li key={link.label}>
                   <Link
-                    href={homeHref(link.href)}
+                    href={navHref(link.href, isHome)}
                     className={active ? "act" : undefined}
                     aria-current={active ? "page" : undefined}
                     onClick={(event) => onHomeHashClick(event, link.href)}
@@ -134,13 +140,6 @@ export function SiteHeader() {
               );
             })}
           </ul>
-          <Link
-            href="/#contact"
-            className={`nav-cta inline-flex min-h-11 shrink-0 items-center rounded-lg border border-[#1557A7] px-4 py-2 text-sm font-semibold text-[#1557A7] transition hover:bg-[#1557A7] hover:text-white${isHome && activeHref === "#contact" ? " act" : ""}`}
-            onClick={(event) => onHomeHashClick(event, "#contact")}
-          >
-            Book Consultation
-          </Link>
           <button
             className="hbg"
             aria-expanded={menuOpen}
@@ -163,7 +162,7 @@ export function SiteHeader() {
             return (
               <li key={link.label}>
                 <Link
-                  href={homeHref(link.href)}
+                  href={navHref(link.href, isHome)}
                   className={active ? "act" : undefined}
                   aria-current={active ? "page" : undefined}
                   onClick={(event) => onHomeHashClick(event, link.href)}
@@ -174,8 +173,8 @@ export function SiteHeader() {
             );
           })}
         </ul>
-        <Link href="/#contact" className={`${primaryButtonClasses} mob-cta`} onClick={(event) => onHomeHashClick(event, "#contact")}>
-          Book Free Consultation
+        <Link href="/#contact" className="mob-consult-link" onClick={(event) => onHomeHashClick(event, "#contact")}>
+          Book a free consultation
         </Link>
       </div>
     </header>
