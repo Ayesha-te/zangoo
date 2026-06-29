@@ -43,6 +43,17 @@ export function SiteHeader() {
   }, []);
 
   useEffect(() => {
+    const desktopQuery = window.matchMedia("(min-width: 901px)");
+    const closeDesktopMenu = () => {
+      if (desktopQuery.matches) setMenuOpen(false);
+    };
+
+    closeDesktopMenu();
+    desktopQuery.addEventListener("change", closeDesktopMenu);
+    return () => desktopQuery.removeEventListener("change", closeDesktopMenu);
+  }, []);
+
+  useEffect(() => {
     if (!isHome) {
       return;
     }
@@ -190,6 +201,9 @@ export function SiteFooter() {
         </Link>
         <nav aria-label="Footer navigation">
           <ul className="foot-links" role="list">
+            <li>
+              <Link href="/about/">About Us</Link>
+            </li>
             <li>
               <Link href="/#faq">Returns &amp; Warranty</Link>
             </li>

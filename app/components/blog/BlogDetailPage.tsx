@@ -3,6 +3,7 @@
 import { ReactNode, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { BlogPageLoading } from "@/app/components/blog/BlogPageLoading";
 import { SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 
 type WordPressRendered = {
@@ -96,7 +97,7 @@ function getExcerpt(post: WordPressPost) {
 }
 
 function internalBlogHref(post: WordPressPost) {
-  return `/blog/?slug=${encodeURIComponent(post.slug ?? String(post.id))}`;
+  return `/blog/${encodeURIComponent(post.slug ?? String(post.id))}/`;
 }
 
 async function fetchWordPressPosts(url: URL, signal: AbortSignal) {
@@ -122,9 +123,9 @@ function BlogShell({ children }: { children: ReactNode }) {
   );
 }
 
-export function BlogDetailPage() {
+export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
   const searchParams = useSearchParams();
-  const slug = searchParams.get("slug");
+  const slug = routeSlug ?? searchParams.get("slug");
   const [post, setPost] = useState<WordPressPost | null>(null);
   const [posts, setPosts] = useState<WordPressPost[]>([]);
   const [status, setStatus] = useState<"loading" | "ready" | "empty" | "error">("loading");
@@ -174,15 +175,7 @@ export function BlogDetailPage() {
   }, [post]);
 
   if (status === "loading") {
-    return (
-      <BlogShell>
-        <main className="blog-page">
-          <div className="wrap">
-            <p className="blog-status">Loading blog post...</p>
-          </div>
-        </main>
-      </BlogShell>
-    );
+    return <BlogPageLoading label={slug ? "Loading blog post..." : "Loading blog..."} />;
   }
 
   if (status === "error") {
@@ -190,7 +183,7 @@ export function BlogDetailPage() {
       <BlogShell>
         <main className="blog-page">
           <div className="wrap">
-            <Link className="blog-back" href="/#blog-h">Back to home</Link>
+            <Link className="blog-back" href="/#blog">Back to home</Link>
             <h1>Blog temporarily unavailable</h1>
             <p className="blog-status">We could not load the WordPress post right now. Please try again shortly.</p>
           </div>
@@ -204,7 +197,7 @@ export function BlogDetailPage() {
       <BlogShell>
         <main className="blog-page">
           <div className="wrap">
-            <Link className="blog-back" href="/#blog-h">Back to home</Link>
+            <Link className="blog-back" href="/#blog">Back to home</Link>
             <span className="sec-lbl">Ideas &amp; Inspiration</span>
             <h1>Latest Blog Posts</h1>
             <div className="blog-list">
@@ -237,7 +230,7 @@ export function BlogDetailPage() {
       <BlogShell>
         <main className="blog-page">
           <div className="wrap">
-            <Link className="blog-back" href="/#blog-h">Back to home</Link>
+            <Link className="blog-back" href="/#blog">Back to home</Link>
             <h1>Post not found</h1>
             <p className="blog-status">This post may have been removed or unpublished in WordPress.</p>
           </div>
@@ -253,7 +246,7 @@ export function BlogDetailPage() {
     <BlogShell>
       <main className="blog-page">
         <article className="wrap blog-article">
-          <Link className="blog-back" href="/#blog-h">Back to home</Link>
+          <Link className="blog-back" href="/#blog">Back to home</Link>
           <span className="sec-lbl">{getCategory(post)}</span>
           <h1>{getTitle(post)}</h1>
           <p className="blog-detail-meta">{formatDate(post.date)}</p>

@@ -178,7 +178,7 @@ function mapWordPressPost(post: WordPressPost, index: number): HomepageBlogPost 
     title: decodeHtml(stripHtml(post.title?.rendered ?? "Untitled post")),
     excerpt: truncateText(stripHtml(post.excerpt?.rendered ?? ""), 145),
     meta: formatPostMeta(post.date, tag),
-    href: post.slug ? `/blog/?slug=${encodeURIComponent(post.slug)}` : "/blog/",
+    href: post.slug ? `/blog/${encodeURIComponent(post.slug)}/` : "/blog/",
     tag,
     className: blogPosts[index]?.className ?? "bc-a",
     visual: blogPosts[index]?.visual ?? "dining-room",
@@ -300,7 +300,7 @@ function Collections() {
     <section className="collections" id="collections" aria-labelledby="coll-h">
       <div className="wrap">
         <div className="coll-wrap">
-          <a href="#" className="feat-card rv" aria-label="Shop Nordic Lounge Chair, Best Seller">
+          <a href="#contact" className="feat-card rv" aria-label="Ask about Nordic Lounge Chair, Best Seller">
             <div className="feat-thumb" aria-hidden="true">
               <FeaturedChairIcon />
             </div>
@@ -321,14 +321,14 @@ function Collections() {
                   Explore Our Collections
                 </h2>
               </div>
-              <a href="#" className="sec-lnk sec-lnk-lt rv" aria-label="View all collections">
+              <a href="#collections" className="sec-lnk sec-lnk-lt rv" aria-label="View all collections">
                 View All
               </a>
             </div>
             <div className="coll-grid" role="list">
               {collections.map((collection, index) => (
                 <a
-                  href="#"
+                  href="#contact"
                   className="cc rv"
                   role="listitem"
                   aria-label={`${collection.name}, ${collection.count}`}
@@ -464,6 +464,7 @@ function Reviews() {
             <article className="rc rv" style={{ transitionDelay: `${index * 0.1}s` }} key={review.title}>
               <div>
                 <span className="rc-lbl">{review.label}</span>
+                <span className="rc-date">{review.date}</span>
                 <h3 className="rc-title">{review.title}</h3>
                 <span className="rc-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
                 {review.body.map((paragraph) => (
@@ -496,7 +497,7 @@ function Blog() {
       title: post.title,
       excerpt: post.excerpt,
       meta: post.meta,
-      href: "/blog/",
+      href: `/blog/${post.slug}/`,
       tag: post.tag,
       className: post.className,
       visual: post.visual,

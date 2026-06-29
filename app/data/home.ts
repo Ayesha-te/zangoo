@@ -34,6 +34,7 @@ export const awards = [
 export const reviews = [
   {
     label: "Featured Review",
+    date: "March 18, 2026",
     title: "Completely transformed my living room",
     body: [
       "The quality exceeded my expectations. Every piece arrived perfectly packaged and the craftsmanship is outstanding.",
@@ -46,6 +47,7 @@ export const reviews = [
   },
   {
     label: "Latest Review",
+    date: "May 2, 2026",
     title: "Best furniture I have ever bought online",
     body: [
       "Sceptical about buying furniture online, but Furniture Co. changed my mind. The pieces look even better in person.",
@@ -60,6 +62,7 @@ export const reviews = [
 
 export const blogPosts = [
   {
+    slug: "style-dining-space-guests",
     tag: "Interior Design",
     title: "How to Style a Dining Space That Wows Your Guests",
     excerpt: "Tips from award-winning designers on creating inviting atmospheres that make every meal special.",
@@ -68,6 +71,7 @@ export const blogPosts = [
     visual: "dining-room",
   },
   {
+    slug: "chair-trends-2026-modern-interiors",
     tag: "Trend Report",
     title: "Chair Trends 2026: What Is Dominating Modern Interiors",
     excerpt: "From boucle to burl wood - the materials shaping furniture design this year.",
@@ -76,6 +80,7 @@ export const blogPosts = [
     visual: "chair-trend",
   },
   {
+    slug: "sustainable-living-space-style",
     tag: "Sustainability",
     title: "Create a Sustainable Living Space Without Sacrificing Style",
     excerpt: "Thoughtful swaps that reduce your environmental impact and look beautiful.",
