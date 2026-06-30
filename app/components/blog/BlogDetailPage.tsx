@@ -20,6 +20,7 @@ type WordPressMedia = {
 
 type WordPressTerm = {
   name?: string;
+  slug?: string;
 };
 
 type WordPressPost = {
@@ -87,6 +88,18 @@ function getCategory(post: WordPressPost) {
   return post._embedded?.["wp:term"]?.[0]?.[0]?.name ?? "Blog";
 }
 
+function isReviewCategoryPost(post: WordPressPost) {
+  return Boolean(
+    post._embedded?.["wp:term"]?.some((termGroup) =>
+      termGroup.some((term) => {
+        const name = term.name?.toLowerCase();
+        const slug = term.slug?.toLowerCase();
+        return name === "reviews" || slug === "reviews";
+      }),
+    ),
+  );
+}
+
 function getTitle(post: WordPressPost) {
   return stripHtml(post.title?.rendered ?? "Untitled post");
 }
@@ -141,6 +154,7 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
       url.searchParams.set("per_page", "1");
     } else {
       url.searchParams.set("per_page", "6");
+      url.searchParams.set("categories_exclude", "31");
       url.searchParams.set("orderby", "date");
       url.searchParams.set("order", "desc");
     }
@@ -154,8 +168,9 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
           setPost(data[0] ?? null);
           setStatus(data[0] ? "ready" : "empty");
         } else {
-          setPosts(data);
-          setStatus(data.length ? "ready" : "empty");
+          const blogOnlyPosts = data.filter((item) => !isReviewCategoryPost(item));
+          setPosts(blogOnlyPosts);
+          setStatus(blogOnlyPosts.length ? "ready" : "empty");
         }
       } catch {
         if (!controller.signal.aborted) {

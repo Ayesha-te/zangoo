@@ -11,7 +11,7 @@ export async function generateStaticParams() {
   const fallbackSlugs = blogPosts.map((post) => ({ slug: post.slug }));
 
   try {
-    const response = await fetch("https://peru-armadillo-169520.hostingersite.com/wp-json/wp/v2/posts?per_page=20&_fields=slug");
+    const response = await fetch("https://peru-armadillo-169520.hostingersite.com/wp-json/wp/v2/posts?per_page=20&_fields=slug&categories_exclude=31");
 
     if (!response.ok) return fallbackSlugs;
 
