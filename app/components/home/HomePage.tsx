@@ -29,6 +29,17 @@ type HomepageBlogPost = {
   imageAlt?: string;
 };
 
+type HomepageReview = {
+  label: string;
+  date: string;
+  title: string;
+  body: string[];
+  author: string;
+  initial: string;
+  photoClass: string;
+  photo: "living-room" | "bedroom";
+};
+
 type WordPressRendered = {
   rendered?: string;
 };
@@ -56,6 +67,12 @@ type WordPressPost = {
     "wp:featuredmedia"?: WordPressMedia[];
     "wp:term"?: WordPressTerm[][];
   };
+};
+
+type WordPressReviewPost = {
+  date?: string;
+  modified?: string;
+  content?: WordPressRendered;
 };
 
 type NewsletterErrors = {
@@ -145,6 +162,65 @@ function formatPostMeta(date?: string, tag?: string) {
     day: "numeric",
     year: "numeric",
   }).format(new Date(date))}${tag ? ` - ${tag}` : ""}`;
+}
+
+function formatReviewDate(date?: string) {
+  if (!date) return "Verified review";
+
+  return new Intl.DateTimeFormat("en", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(date));
+}
+
+function reviewTitleFromBody(body: string) {
+  const firstSentence = body.split(/[.!?]/)[0]?.trim();
+  if (!firstSentence) return "Verified customer review";
+  return truncateText(firstSentence, 58);
+}
+
+function cleanReviewText(value: string) {
+  return value
+    .replace(/^[\s⭐★]+/u, "")
+    .replace(/^["“]+/, "")
+    .replace(/["”]+$/, "")
+    .trim();
+}
+
+function parseWordPressReviews(html: string, date?: string): HomepageReview[] {
+  if (typeof window === "undefined") return [];
+
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const paragraphs = Array.from(doc.querySelectorAll("p"))
+    .map((paragraph) => decodeHtml(paragraph.textContent?.replace(/\s+/g, " ").trim() ?? ""))
+    .filter(Boolean);
+
+  const parsed: HomepageReview[] = [];
+
+  for (let index = 0; index < paragraphs.length - 1; index += 2) {
+    const quote = cleanReviewText(paragraphs[index]);
+    const authorLine = paragraphs[index + 1]?.trim();
+
+    if (!quote || !authorLine || quote.length < 24) continue;
+
+    const [authorName, location] = authorLine.split(",").map((part) => part.trim());
+    const author = authorName || authorLine;
+    const locationLabel = location ? `, ${location}` : "";
+
+    parsed.push({
+      label: index === 0 ? "Featured Review" : "Customer Review",
+      date: formatReviewDate(date),
+      title: reviewTitleFromBody(quote),
+      body: [quote],
+      author: `${author}${locationLabel}`,
+      initial: author.charAt(0).toUpperCase() || "C",
+      photoClass: index % 2 === 0 ? "rc-photo-a" : "rc-photo-b",
+      photo: index % 2 === 0 ? "living-room" : "bedroom",
+    });
+  }
+
+  return parsed;
 }
 
 function getFeaturedImage(media?: WordPressMedia) {
@@ -441,6 +517,41 @@ function Awards() {
 
 function Reviews() {
   const sliderRef = useRef<HTMLDivElement>(null);
+  const [reviewItems, setReviewItems] = useState<HomepageReview[]>(reviews.map((review) => ({ ...review })));
+
+  useEffect(() => {
+    const controller = new AbortController();
+    const reviewsUrl = new URL("https://peru-armadillo-169520.hostingersite.com/wp-json/wp/v2/posts");
+    reviewsUrl.searchParams.set("slug", "852-2");
+    reviewsUrl.searchParams.set("_", String(Date.now()));
+
+    async function loadWordPressReviews() {
+      try {
+        const response = await fetch(reviewsUrl.toString(), {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+
+        if (!response.ok) return;
+
+        const data = (await response.json()) as WordPressReviewPost[];
+        const post = data[0];
+        const nextReviews = post?.content?.rendered
+          ? parseWordPressReviews(post.content.rendered, post.modified ?? post.date)
+          : [];
+
+        if (nextReviews.length) {
+          setReviewItems(nextReviews);
+        }
+      } catch {
+        // Keep the local fallback reviews when WordPress is unavailable.
+      }
+    }
+
+    loadWordPressReviews();
+
+    return () => controller.abort();
+  }, []);
 
   return (
     <section className="why" id="reviews" aria-labelledby="why-h">
@@ -460,7 +571,7 @@ function Reviews() {
           </div>
         </div>
         <div className="why-grid carousel-track" ref={sliderRef}>
-          {reviews.map((review, index) => (
+          {reviewItems.map((review, index) => (
             <article className="rc rv" style={{ transitionDelay: `${index * 0.1}s` }} key={review.title}>
               <div>
                 <span className="rc-lbl">{review.label}</span>
