@@ -54,6 +54,7 @@ type WordPressMedia = {
 
 type WordPressTerm = {
   name?: string;
+  slug?: string;
 };
 
 type WordPressPost = {
@@ -263,6 +264,18 @@ function mapWordPressPost(post: WordPressPost, index: number): HomepageBlogPost 
   };
 }
 
+function isReviewCategoryPost(post: WordPressPost) {
+  return Boolean(
+    post._embedded?.["wp:term"]?.some((termGroup) =>
+      termGroup.some((term) => {
+        const name = term.name?.toLowerCase();
+        const slug = term.slug?.toLowerCase();
+        return name === "reviews" || slug === "reviews";
+      }),
+    ),
+  );
+}
+
 function Hero() {
   const [bookingOpen, setBookingOpen] = useState(false);
 
@@ -412,6 +425,9 @@ function Collections() {
                   key={collection.name}
                 >
                   <div className={`cc-thumb ${collection.className}`} aria-hidden="true">
+                    <span className={`cc-badge${collection.name === "Bedroom" ? " cc-badge-live" : ""}`}>
+                      {collection.badge}
+                    </span>
                     <CollectionIcon kind={collection.kind} />
                   </div>
                   <div className="cc-info">
@@ -620,6 +636,7 @@ function Blog() {
     const postsUrl = new URL("https://peru-armadillo-169520.hostingersite.com/wp-json/wp/v2/posts");
     postsUrl.searchParams.set("per_page", "6");
     postsUrl.searchParams.set("_embed", "1");
+    postsUrl.searchParams.set("categories_exclude", "31");
     postsUrl.searchParams.set("orderby", "date");
     postsUrl.searchParams.set("order", "desc");
     postsUrl.searchParams.set("_", String(Date.now()));
@@ -636,7 +653,10 @@ function Blog() {
         const data = (await response.json()) as WordPressPost[];
         if (!Array.isArray(data) || data.length === 0) return;
 
-        setPosts(data.slice(0, 6).map(mapWordPressPost));
+        const blogOnlyPosts = data.filter((post) => !isReviewCategoryPost(post)).slice(0, 6);
+        if (!blogOnlyPosts.length) return;
+
+        setPosts(blogOnlyPosts.map(mapWordPressPost));
       } catch {
         // Keep the local fallback cards when the WordPress host rejects a browser request.
       }

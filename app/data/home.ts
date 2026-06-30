@@ -10,10 +10,10 @@ export const navLinks = [
 ];
 
 export const collections = [
-  { name: "Living Room", count: "220 products", className: "cc-living", kind: "sofa" },
-  { name: "Dining", count: "158 products", className: "cc-dining", kind: "dining" },
-  { name: "Bedroom", count: "310 products", className: "cc-bedroom", kind: "bed" },
-  { name: "Lighting", count: "117 products", className: "cc-lighting", kind: "lamp" },
+  { name: "Living Room", count: "220 products", className: "cc-living", kind: "sofa", badge: "Coming Soon" },
+  { name: "Dining", count: "158 products", className: "cc-dining", kind: "dining", badge: "Coming Soon" },
+  { name: "Bedroom", count: "310 products", className: "cc-bedroom", kind: "bed", badge: "Mattress Sale" },
+  { name: "Lighting", count: "117 products", className: "cc-lighting", kind: "lamp", badge: "Coming Soon" },
 ] as const;
 
 export const awards = [
