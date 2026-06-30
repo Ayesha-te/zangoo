@@ -533,7 +533,12 @@ function Awards() {
 
 function Reviews() {
   const sliderRef = useRef<HTMLDivElement>(null);
-  const [reviewItems, setReviewItems] = useState<HomepageReview[]>(reviews.map((review) => ({ ...review })));
+  const [reviewItems, setReviewItems] = useState<HomepageReview[]>(
+    reviews.map((review) => ({
+      ...review,
+      body: [...review.body],
+    })),
+  );
 
   useEffect(() => {
     const controller = new AbortController();
