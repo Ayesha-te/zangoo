@@ -389,7 +389,7 @@ function Collections() {
     <section className="collections" id="collections" aria-labelledby="coll-h">
       <div className="wrap">
         <div className="coll-wrap">
-          <a href="#contact" className="feat-card rv" aria-label="Ask about Nordic Lounge Chair, Best Seller">
+          <Link href="/collections/#living-room" className="feat-card rv" aria-label="View Living Room collection">
             <div className="feat-thumb" aria-hidden="true">
               <FeaturedChairIcon />
             </div>
@@ -401,7 +401,7 @@ function Collections() {
                 Open Store
               </span>
             </div>
-          </a>
+          </Link>
           <div>
             <div className="sec-hdr">
               <div>
@@ -410,14 +410,14 @@ function Collections() {
                   Explore Our Collections
                 </h2>
               </div>
-              <a href="#collections" className="sec-lnk sec-lnk-lt rv" aria-label="View all collections">
+              <Link href="/collections/" className="sec-lnk sec-lnk-lt rv" aria-label="View all collections">
                 View All
-              </a>
+              </Link>
             </div>
             <div className="coll-grid" role="list">
               {collections.map((collection, index) => (
                 <a
-                  href="#contact"
+                  href={`/collections/#${collection.slug}`}
                   className="cc rv"
                   role="listitem"
                   aria-label={`${collection.name}, ${collection.count}`}

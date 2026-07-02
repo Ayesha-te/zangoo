@@ -82,7 +82,6 @@
   background: var(--blue-h);
   border-color: var(--blue-h);
   color: #fff;
-  transform: translateY(-2px);
 }
 
 .secondaryButton {
@@ -95,7 +94,6 @@
 .secondaryButton:focus-visible {
   background: var(--navy);
   color: #fff;
-  transform: translateY(-2px);
 }
 
 .proof {

@@ -3,7 +3,7 @@
 import { type MouseEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { navLinks } from "@/app/data/home";
+import { collectionMenu, navLinks } from "@/app/data/home";
 
 function homeHref(href: string) {
   if (href === "#") return "/";
@@ -104,6 +104,7 @@ export function SiteHeader() {
   function onHomeHashClick(event: MouseEvent<HTMLAnchorElement>, href: string) {
     setMenuOpen(false);
 
+    if (!href.startsWith("#")) return;
     if (!isHome) return;
 
     event.preventDefault();
@@ -135,10 +136,11 @@ export function SiteHeader() {
           </Link>
           <ul className="nav-links" role="list">
             {navLinks.map((link) => {
-              const active = isHome && activeHref === link.href;
+              const active = link.href === "/collections/" ? pathname.startsWith("/collections") : isHome && activeHref === link.href;
+              const hasMegaMenu = link.label === "Collections";
 
               return (
-                <li key={link.label}>
+                <li className={hasMegaMenu ? "nav-item has-mega" : "nav-item"} key={link.label}>
                   <Link
                     href={navHref(link.href, isHome)}
                     className={active ? "act" : undefined}
@@ -147,6 +149,30 @@ export function SiteHeader() {
                   >
                     {link.label}
                   </Link>
+                  {hasMegaMenu ? (
+                    <div className="mega-menu" aria-label="Collection subcategories">
+                      <div className="mega-panel">
+                        <div className="mega-intro">
+                          <span>Shop by room</span>
+                          <strong>Explore collections</strong>
+                          <p>Browse the main furniture categories, including the current bedroom mattress sale.</p>
+                        </div>
+                        <ul className="mega-links" role="list">
+                          {collectionMenu.map((item) => (
+                            <li key={item.label}>
+                              <Link className="mega-link" href={item.href}>
+                                <span className="mega-link-copy">
+                                  <strong>{item.label}</strong>
+                                  <small>{item.description}</small>
+                                </span>
+                                <em className="mega-link-badge">{item.badge}</em>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  ) : null}
                 </li>
               );
             })}
@@ -168,7 +194,8 @@ export function SiteHeader() {
       <div className={`mob-menu${menuOpen ? " open" : ""}`} id="mob" aria-hidden={!menuOpen} aria-label="Mobile navigation">
         <ul className="mob-links" role="list">
           {navLinks.map((link) => {
-            const active = isHome && activeHref === link.href;
+            const active = link.href === "/collections/" ? pathname.startsWith("/collections") : isHome && activeHref === link.href;
+            const hasCollections = link.label === "Collections";
 
             return (
               <li key={link.label}>
@@ -180,6 +207,18 @@ export function SiteHeader() {
                 >
                   {link.label}
                 </Link>
+                {hasCollections ? (
+                  <ul className="mob-sub-links" role="list" aria-label="Collection subcategories">
+                    {collectionMenu.map((item) => (
+                      <li key={item.label}>
+                        <Link href={item.href} onClick={() => setMenuOpen(false)}>
+                          <span>{item.label}</span>
+                          <em>{item.badge}</em>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
               </li>
             );
           })}

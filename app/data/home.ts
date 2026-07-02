@@ -1,6 +1,6 @@
 export const navLinks = [
   { label: "Shop", href: "#", active: true },
-  { label: "Collections", href: "#collections" },
+  { label: "Collections", href: "/collections/" },
   { label: "Stats", href: "#stats" },
   { label: "Awards", href: "#awards" },
   { label: "Reviews", href: "#reviews" },
@@ -10,11 +10,18 @@ export const navLinks = [
 ];
 
 export const collections = [
-  { name: "Living Room", count: "220 products", className: "cc-living", kind: "sofa", badge: "Coming Soon" },
-  { name: "Dining", count: "158 products", className: "cc-dining", kind: "dining", badge: "Coming Soon" },
-  { name: "Bedroom", count: "310 products", className: "cc-bedroom", kind: "bed", badge: "Mattress Sale" },
-  { name: "Lighting", count: "117 products", className: "cc-lighting", kind: "lamp", badge: "Coming Soon" },
+  { name: "Living Room", slug: "living-room", count: "220 products", className: "cc-living", kind: "sofa", badge: "Coming Soon", description: "Sofas, lounge chairs, media units, and relaxed living pieces." },
+  { name: "Dining", slug: "dining", count: "158 products", className: "cc-dining", kind: "dining", badge: "Coming Soon", description: "Dining tables, chairs, benches, and hosting-ready storage." },
+  { name: "Bedroom", slug: "bedroom", count: "310 products", className: "cc-bedroom", kind: "bed", badge: "Mattress Sale", description: "Mattresses, beds, bedside tables, wardrobes, and sleep essentials." },
+  { name: "Lighting", slug: "lighting", count: "117 products", className: "cc-lighting", kind: "lamp", badge: "Coming Soon", description: "Floor lamps, pendants, table lamps, and layered lighting." },
 ] as const;
+
+export const collectionMenu = collections.map((collection) => ({
+  label: collection.name,
+  href: `/collections/#${collection.slug}`,
+  badge: collection.badge,
+  description: collection.description,
+}));
 
 export const awards = [
   ["mq-gold", "trophy", "Which? Magazine", "Best Buy Retailer", "2024"],
