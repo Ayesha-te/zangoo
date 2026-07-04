@@ -48,10 +48,10 @@ export default function AboutPage() {
               and a consultation-led buying experience that keeps the process clear from first idea to delivery.
             </p>
             <div className={styles.actions}>
-              <Link className={styles.primaryButton} href="/#contact">
+              <Link className={styles.primaryButton} href="/contact/">
                 Contact Support
               </Link>
-              <Link className={styles.secondaryButton} href="/#collections">
+              <Link className={styles.secondaryButton} href="/collections/">
                 View Collections
               </Link>
             </div>

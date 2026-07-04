@@ -309,9 +309,9 @@ function Hero() {
           <span className="rating-text">4.9 &bull; 15,000+ verified reviews</span>
         </div>
         <div className="hero-btns">
-          <a href="#collections" className={`btn btn-p ${primaryButtonClasses}`}>
+          <Link href="/collections/" className={`btn btn-p ${primaryButtonClasses}`}>
             Shop Collection
-          </a>
+          </Link>
           <button className={`btn btn-s ${secondaryButtonClasses}`} type="button" onClick={() => setBookingOpen(true)}>
             Free Consultation
           </button>
@@ -389,7 +389,7 @@ function Collections() {
     <section className="collections" id="collections" aria-labelledby="coll-h">
       <div className="wrap">
         <div className="coll-wrap">
-          <Link href="/collections/#living-room" className="feat-card rv" aria-label="View Living Room collection">
+          <Link href="/collections/living-room/" className="feat-card rv" aria-label="View Living Room collection">
             <div className="feat-thumb" aria-hidden="true">
               <FeaturedChairIcon />
             </div>
@@ -417,7 +417,7 @@ function Collections() {
             <div className="coll-grid" role="list">
               {collections.map((collection, index) => (
                 <a
-                  href={`/collections/#${collection.slug}`}
+                  href={`/collections/${collection.slug}/`}
                   className="cc rv"
                   role="listitem"
                   aria-label={`${collection.name}, ${collection.count}`}

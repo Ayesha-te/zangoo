@@ -36,7 +36,7 @@ export default function CollectionsPage() {
                 </div>
                 <div className={styles.cardBottom}>
                   <span>{collection.count}</span>
-                  <Link href={isLive ? "/#contact" : "/collections/"} aria-label={`${collection.name} collection details`}>
+                  <Link href={`/collections/${collection.slug}/`} aria-label={`${collection.name} collection details`}>
                     {isLive ? "Enquire Now" : "Coming Soon"}
                   </Link>
                 </div>

@@ -7,12 +7,12 @@ import { collectionMenu, navLinks } from "@/app/data/home";
 
 function homeHref(href: string) {
   if (href === "#") return "/";
-  if (href.startsWith("#")) return `/${href}`;
+  if (href.startsWith("#")) return "/";
   return href;
 }
 
 function navHref(href: string, isHome: boolean) {
-  if (isHome && href.startsWith("#")) return href;
+  if (href.startsWith("#")) return "/";
   return homeHref(href);
 }
 
@@ -110,7 +110,7 @@ export function SiteHeader() {
     event.preventDefault();
 
     if (href === "#") {
-      window.history.pushState(null, "", "/");
+      window.history.replaceState(null, "", "/");
       setActiveHref("#");
       window.requestAnimationFrame(() => {
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -122,7 +122,7 @@ export function SiteHeader() {
     const target = id ? document.getElementById(id) : null;
     if (!target) return;
 
-    window.history.pushState(null, "", href);
+    window.history.replaceState(null, "", "/");
     target.scrollIntoView({ behavior: "smooth", block: "start" });
     setActiveHref(href);
   }
@@ -223,7 +223,7 @@ export function SiteHeader() {
             );
           })}
         </ul>
-        <Link href="/#contact" className="mob-consult-link" onClick={(event) => onHomeHashClick(event, "#contact")}>
+        <Link href="/contact/" className="mob-consult-link">
           Book a free consultation
         </Link>
       </div>
@@ -244,19 +244,19 @@ export function SiteFooter() {
               <Link href="/about/">About Us</Link>
             </li>
             <li>
-              <Link href="/#faq">Returns &amp; Warranty</Link>
+              <Link href="/faq/">Returns &amp; Warranty</Link>
             </li>
             <li>
-              <Link href="/#contact">Secure Enquiry</Link>
+              <Link href="/contact/">Secure Enquiry</Link>
             </li>
             <li>
-              <Link href="/#contact">Privacy Notice</Link>
+              <Link href="/contact/">Privacy Notice</Link>
             </li>
             <li>
-              <Link href="/#contact">Accessibility Statement</Link>
+              <Link href="/contact/">Accessibility Statement</Link>
             </li>
             <li>
-              <Link href="/#contact">Contact Support</Link>
+              <Link href="/contact/">Contact Support</Link>
             </li>
           </ul>
         </nav>

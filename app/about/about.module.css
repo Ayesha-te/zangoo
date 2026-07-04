@@ -68,7 +68,7 @@
   font-size: 15px;
   font-weight: 800;
   line-height: 1;
-  transition: transform var(--tr), background var(--tr), color var(--tr), border-color var(--tr);
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
 .primaryButton {
@@ -204,16 +204,27 @@
   .hero {
     grid-template-columns: 1fr;
     min-height: auto;
-    padding: 54px 24px 64px;
-    gap: 34px;
+    padding: 52px clamp(28px, 6vw, 48px) 64px;
+    gap: 32px;
+    align-items: stretch;
+  }
+
+  .copy {
+    max-width: 720px;
   }
 
   .title {
-    font-size: clamp(38px, 8vw, 56px);
+    max-width: 720px;
+    font-size: clamp(42px, 7vw, 54px);
+  }
+
+  .lede {
+    max-width: 700px;
   }
 
   .proof {
-    max-width: 620px;
+    width: 100%;
+    max-width: none;
   }
 
   .statList {
@@ -221,7 +232,7 @@
   }
 
   .valuesGrid {
-    padding: 0 24px;
+    padding: 0 clamp(28px, 6vw, 48px);
     grid-template-columns: 1fr;
   }
 }

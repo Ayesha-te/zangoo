@@ -198,7 +198,7 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
       <BlogShell>
         <main className="blog-page">
           <div className="wrap">
-            <Link className="blog-back" href="/#blog">Back to home</Link>
+            <Link className="blog-back" href="/blog/">Back to blog</Link>
             <h1>Blog temporarily unavailable</h1>
             <p className="blog-status">We could not load the WordPress post right now. Please try again shortly.</p>
           </div>
@@ -212,7 +212,7 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
       <BlogShell>
         <main className="blog-page">
           <div className="wrap">
-            <Link className="blog-back" href="/#blog">Back to home</Link>
+            <Link className="blog-back" href="/blog/">Back to blog</Link>
             <span className="sec-lbl">Ideas &amp; Inspiration</span>
             <h1>Latest Blog Posts</h1>
             <div className="blog-list">
@@ -245,7 +245,7 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
       <BlogShell>
         <main className="blog-page">
           <div className="wrap">
-            <Link className="blog-back" href="/#blog">Back to home</Link>
+            <Link className="blog-back" href="/blog/">Back to blog</Link>
             <h1>Post not found</h1>
             <p className="blog-status">This post may have been removed or unpublished in WordPress.</p>
           </div>
@@ -261,7 +261,7 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
     <BlogShell>
       <main className="blog-page">
         <article className="wrap blog-article">
-          <Link className="blog-back" href="/#blog">Back to home</Link>
+          <Link className="blog-back" href="/blog/">Back to blog</Link>
           <span className="sec-lbl">{getCategory(post)}</span>
           <h1>{getTitle(post)}</h1>
           <p className="blog-detail-meta">{formatDate(post.date)}</p>

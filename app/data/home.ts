@@ -18,7 +18,7 @@ export const collections = [
 
 export const collectionMenu = collections.map((collection) => ({
   label: collection.name,
-  href: `/collections/#${collection.slug}`,
+  href: `/collections/${collection.slug}/`,
   badge: collection.badge,
   description: collection.description,
 }));

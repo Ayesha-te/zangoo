@@ -137,6 +137,48 @@
   color: #fff;
 }
 
+.detailActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 30px;
+}
+
+.primaryLink,
+.secondaryLink {
+  min-height: 48px;
+  padding: 11px 24px;
+  border: 2px solid var(--blue);
+  border-radius: var(--r);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.primaryLink {
+  background: var(--blue);
+  color: #fff;
+}
+
+.primaryLink:hover,
+.primaryLink:focus-visible {
+  background: var(--blue-h);
+  border-color: var(--blue-h);
+}
+
+.secondaryLink {
+  border-color: var(--navy);
+  color: var(--navy);
+}
+
+.secondaryLink:hover,
+.secondaryLink:focus-visible {
+  background: var(--navy);
+  color: #fff;
+}
+
 @media (max-width: 900px) {
   .hero {
     padding: 56px 24px 42px;
@@ -173,6 +215,10 @@
 
   .cardBottom {
     align-items: stretch;
+    flex-direction: column;
+  }
+
+  .detailActions {
     flex-direction: column;
   }
 }
