@@ -1,9 +1,6 @@
 export const navLinks = [
   { label: "Shop", href: "#", active: true },
   { label: "Collections", href: "/collections/" },
-  { label: "Stats", href: "#stats" },
-  { label: "Awards", href: "#awards" },
-  { label: "Reviews", href: "#reviews" },
   { label: "Blog", href: "#blog" },
   { label: "FAQ", href: "#faq" },
   { label: "Contact", href: "#contact" },
@@ -16,12 +13,70 @@ export const collections = [
   { name: "Lighting", slug: "lighting", count: "117 products", className: "cc-lighting", kind: "lamp", badge: "Coming Soon", description: "Floor lamps, pendants, table lamps, and layered lighting." },
 ] as const;
 
+export const collectionCategories = [
+  {
+    label: "Living Room",
+    href: "/collections/living-room/",
+    badge: "Coming Soon",
+    groups: [
+      { label: "Sofas", href: "/collections/living-room/sofas/" },
+      { label: "Lounge Chairs", href: "/collections/living-room/lounge-chairs/" },
+      { label: "Media Units", href: "/collections/living-room/media-units/" },
+    ],
+  },
+  {
+    label: "Dining",
+    href: "/collections/dining/",
+    badge: "Coming Soon",
+    groups: [
+      { label: "Dining Tables", href: "/collections/dining/tables/" },
+      { label: "Dining Chairs", href: "/collections/dining/chairs/" },
+      { label: "Benches", href: "/collections/dining/benches/" },
+    ],
+  },
+  {
+    label: "Bedroom",
+    href: "/collections/bedroom/",
+    badge: "Mattress Sale",
+    groups: [
+      { label: "Mattresses", href: "/collections/bedroom/mattresses/" },
+      { label: "Beds", href: "/collections/bedroom/beds/" },
+      { label: "Bedside Tables", href: "/collections/bedroom/bedside-tables/" },
+    ],
+  },
+  {
+    label: "Lighting",
+    href: "/collections/lighting/",
+    badge: "Coming Soon",
+    groups: [
+      { label: "Floor Lamps", href: "/collections/lighting/floor-lamps/" },
+      { label: "Pendant Lights", href: "/collections/lighting/pendants/" },
+      { label: "Table Lamps", href: "/collections/lighting/table-lamps/" },
+    ],
+  },
+] as const;
+
 export const collectionMenu = collections.map((collection) => ({
   label: collection.name,
   href: `/collections/${collection.slug}/`,
   badge: collection.badge,
   description: collection.description,
 }));
+
+export const footerMainLinks = [
+  { label: "Shop", href: "/" },
+  { label: "Collections", href: "/collections/" },
+  { label: "Blog", href: "/blog/" },
+  { label: "FAQ", href: "/faq/" },
+  { label: "Contact", href: "/contact/" },
+  { label: "About Us", href: "/about/" },
+] as const;
+
+export const footerSocialLinks = [
+  { label: "Instagram", href: "https://www.instagram.com/" },
+  { label: "Pinterest", href: "https://www.pinterest.com/" },
+  { label: "Facebook", href: "https://www.facebook.com/" },
+] as const;
 
 export const awards = [
   ["mq-gold", "trophy", "Which? Magazine", "Best Buy Retailer", "2024"],

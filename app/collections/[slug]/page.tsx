@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
+import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { collections } from "@/app/data/home";
 import styles from "../collections.module.css";
 
@@ -36,6 +36,7 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
   return (
     <>
       <SiteHeader />
+      <Breadcrumbs items={[{ label: "Collections", href: "/collections/" }, { label: collection.name }]} />
       <main className={styles.page}>
         <section className={styles.hero} aria-labelledby="collection-title">
           <span>{collection.badge}</span>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { collections } from "@/app/data/home";
-import { SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
+import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import styles from "./collections.module.css";
 
 export const metadata: Metadata = {
@@ -13,6 +13,7 @@ export default function CollectionsPage() {
   return (
     <>
       <SiteHeader />
+      <Breadcrumbs items={[{ label: "Collections" }]} />
       <main className={styles.page}>
         <section className={styles.hero} aria-labelledby="collections-title">
           <span>Furniture Collections</span>

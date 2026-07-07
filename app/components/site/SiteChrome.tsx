@@ -3,7 +3,7 @@
 import { type MouseEvent, useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { collectionMenu, navLinks } from "@/app/data/home";
+import { collectionCategories, footerMainLinks, footerSocialLinks, navLinks } from "@/app/data/home";
 
 function homeHref(href: string) {
   if (href === "#") return "/";
@@ -24,6 +24,7 @@ export function SiteHeader() {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const [menuOpen, setMenuOpen] = useState(false);
+  const [openMobileCategory, setOpenMobileCategory] = useState<string | null>("Bedroom");
   const [scrolled, setScrolled] = useState(false);
   const [activeHref, setActiveHref] = useState("#");
 
@@ -158,15 +159,22 @@ export function SiteHeader() {
                           <p>Browse the main furniture categories, including the current bedroom mattress sale.</p>
                         </div>
                         <ul className="mega-links" role="list">
-                          {collectionMenu.map((item) => (
-                            <li key={item.label}>
+                          {collectionCategories.map((item) => (
+                            <li className="mega-category" key={item.label}>
                               <Link className="mega-link" href={item.href}>
                                 <span className="mega-link-copy">
                                   <strong>{item.label}</strong>
-                                  <small>{item.description}</small>
+                                  <small>{item.groups.map((group) => group.label).join(", ")}</small>
                                 </span>
                                 <em className="mega-link-badge">{item.badge}</em>
                               </Link>
+                              <ul className="mega-products" role="list" aria-label={`${item.label} products`}>
+                                {item.groups.map((group) => (
+                                  <li key={group.label}>
+                                    <Link href={group.href}>{group.label}</Link>
+                                  </li>
+                                ))}
+                              </ul>
                             </li>
                           ))}
                         </ul>
@@ -177,6 +185,20 @@ export function SiteHeader() {
               );
             })}
           </ul>
+          <div className="nav-tools" aria-label="Shopping tools">
+            <Link href="/search/" aria-label="Search">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-5-5m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" /></svg>
+            </Link>
+            <Link href="/account/" aria-label="Account">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21a8 8 0 0 0-16 0m12-13a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" /></svg>
+            </Link>
+            <Link href="/wishlist/" aria-label="Wishlist">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 0 0-7.1 7.1L12 21l8.8-8.3a5 5 0 0 0 0-7.1Z" /></svg>
+            </Link>
+            <Link href="/cart/" aria-label="Cart">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h15l-2 8H8L6 3H3m6 16a1 1 0 1 0 0 .1m9-.1a1 1 0 1 0 0 .1" /></svg>
+            </Link>
+          </div>
           <button
             className="hbg"
             aria-expanded={menuOpen}
@@ -209,12 +231,29 @@ export function SiteHeader() {
                 </Link>
                 {hasCollections ? (
                   <ul className="mob-sub-links" role="list" aria-label="Collection subcategories">
-                    {collectionMenu.map((item) => (
+                    {collectionCategories.map((item) => (
                       <li key={item.label}>
-                        <Link href={item.href} onClick={() => setMenuOpen(false)}>
+                        <button
+                          className="mob-category-btn"
+                          type="button"
+                          aria-expanded={openMobileCategory === item.label}
+                          onClick={() => setOpenMobileCategory((current) => (current === item.label ? null : item.label))}
+                        >
                           <span>{item.label}</span>
                           <em>{item.badge}</em>
-                        </Link>
+                        </button>
+                        {openMobileCategory === item.label ? (
+                          <ul className="mob-product-links" role="list" aria-label={`${item.label} products`}>
+                            <li>
+                              <Link href={item.href} onClick={() => setMenuOpen(false)}>View {item.label}</Link>
+                            </li>
+                            {item.groups.map((group) => (
+                              <li key={group.label}>
+                                <Link href={group.href} onClick={() => setMenuOpen(false)}>{group.label}</Link>
+                              </li>
+                            ))}
+                          </ul>
+                        ) : null}
                       </li>
                     ))}
                   </ul>
@@ -235,14 +274,32 @@ export function SiteFooter() {
   return (
     <footer role="contentinfo">
       <div className="foot-in">
-        <Link href="/" className="foot-logo" aria-label="Furniture Co. home">
-          Furniture Co.
-        </Link>
-        <nav aria-label="Footer navigation">
+        <div className="foot-brand">
+          <Link href="/" className="foot-logo" aria-label="Furniture Co. home">
+            Furniture Co.
+          </Link>
+          <p>Responsibly crafted furniture, with mattress offers launching first.</p>
+          <div className="foot-social" aria-label="Social links">
+            {footerSocialLinks.map((link) => (
+              <a href={link.href} target="_blank" rel="noopener noreferrer" key={link.label}>
+                {link.label}
+              </a>
+            ))}
+          </div>
+        </div>
+        <nav className="foot-main-nav" aria-label="Footer main navigation">
+          <h2>Main Menu</h2>
           <ul className="foot-links" role="list">
-            <li>
-              <Link href="/about/">About Us</Link>
-            </li>
+            {footerMainLinks.map((link) => (
+              <li key={link.label}>
+                <Link href={link.href}>{link.label}</Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <nav className="foot-support-nav" aria-label="Footer support navigation">
+          <h2>Support</h2>
+          <ul className="foot-links" role="list">
             <li>
               <Link href="/faq/">Returns &amp; Warranty</Link>
             </li>
@@ -260,10 +317,36 @@ export function SiteFooter() {
             </li>
           </ul>
         </nav>
+        <form className="foot-newsletter" aria-label="Footer newsletter sign-up">
+          <h2>Newsletter</h2>
+          <p>Mattress sale updates, launches, and room guides.</p>
+          <label>
+            <span>Email address</span>
+            <input type="email" placeholder="you@example.com" required />
+          </label>
+          <button type="submit">Subscribe</button>
+        </form>
         <p className="foot-copy">
           <small>&copy; 2026 Furniture Co. All rights reserved.</small>
         </p>
       </div>
     </footer>
+  );
+}
+
+export function Breadcrumbs({ items }: { items: Array<{ label: string; href?: string }> }) {
+  return (
+    <nav className="breadcrumbs" aria-label="Breadcrumb">
+      <ol>
+        <li>
+          <Link href="/">Home</Link>
+        </li>
+        {items.map((item) => (
+          <li key={item.label}>
+            {item.href ? <Link href={item.href}>{item.label}</Link> : <span aria-current="page">{item.label}</span>}
+          </li>
+        ))}
+      </ol>
+    </nav>
   );
 }

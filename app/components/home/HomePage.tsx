@@ -444,6 +444,43 @@ function Collections() {
   );
 }
 
+function FeaturedMattresses() {
+  const featured = [
+    ["Pocket Spring Mattress", "Balanced support for everyday sleep", "From GBP 499"],
+    ["Hybrid Comfort Mattress", "Foam comfort with responsive springs", "From GBP 649"],
+    ["Orthopaedic Mattress", "Firm support for deeper rest", "From GBP 579"],
+  ];
+
+  return (
+    <section className="featured-trends" aria-labelledby="featured-h">
+      <div className="wrap">
+        <div className="sec-hdr">
+          <div>
+            <span className="sec-lbl">Featured Collections &amp; Trends</span>
+            <h2 className="h2dk rv" id="featured-h">Mattress sale highlights</h2>
+          </div>
+          <Link href="/collections/bedroom/mattresses/" className="sec-lnk">Shop Mattresses</Link>
+        </div>
+        <div className="featured-grid">
+          {featured.map(([title, copy, price], index) => (
+            <Link
+              className="featured-card rv"
+              href="/collections/bedroom/mattresses/"
+              style={{ transitionDelay: `${index * 0.08}s` }}
+              key={title}
+            >
+              <span>Mattress Sale</span>
+              <strong>{title}</strong>
+              <p>{copy}</p>
+              <em>{price}</em>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Stats() {
   return (
     <section className="stats" id="stats" aria-labelledby="stats-h">
@@ -1035,6 +1072,7 @@ export function HomePage() {
       <main id="main" tabIndex={-1}>
         <Hero />
         <Collections />
+        <FeaturedMattresses />
         <Stats />
         <Awards />
         <Reviews />

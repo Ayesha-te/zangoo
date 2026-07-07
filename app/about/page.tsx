@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
+import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import styles from "./about.module.css";
 
 export const metadata: Metadata = {
@@ -36,6 +36,7 @@ export default function AboutPage() {
   return (
     <>
       <SiteHeader />
+      <Breadcrumbs items={[{ label: "About Us" }]} />
       <main className={styles.page}>
         <section className={styles.hero} aria-labelledby="about-title">
           <div className={styles.copy}>
