@@ -5,6 +5,33 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { collectionCategories, footerMainLinks, footerSocialLinks, navLinks } from "@/app/data/home";
 
+function SocialIcon({ label }: { label: string }) {
+  if (label === "Instagram") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="4" y="4" width="16" height="16" rx="5" />
+        <circle cx="12" cy="12" r="3.5" />
+        <path d="M17.5 6.8h.1" />
+      </svg>
+    );
+  }
+
+  if (label === "Pinterest") {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="8" />
+        <path d="M10.5 20 12 13m0 0c-2.2-.4-2.6-2.1-2.1-3.5.6-1.7 2.2-2.5 4-1.9 1.7.6 2.4 2.3 1.8 4-.5 1.7-1.9 2.7-3.7 1.4Z" />
+      </svg>
+    );
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M14 8h3V4h-3c-3 0-5 2-5 5v3H6v4h3v4h4v-4h3l1-4h-4V9c0-.6.4-1 1-1Z" />
+    </svg>
+  );
+}
+
 function homeHref(href: string) {
   if (href === "#") return "/";
   if (href.startsWith("#")) return "/";
@@ -281,8 +308,8 @@ export function SiteFooter() {
           <p>Responsibly crafted furniture, with mattress offers launching first.</p>
           <div className="foot-social" aria-label="Social links">
             {footerSocialLinks.map((link) => (
-              <a href={link.href} target="_blank" rel="noopener noreferrer" key={link.label}>
-                {link.label}
+              <a href={link.href} target="_blank" rel="noopener noreferrer" key={link.label} aria-label={link.label}>
+                <SocialIcon label={link.label} />
               </a>
             ))}
           </div>
