@@ -5,6 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { collectionCategories, footerMainLinks, footerSocialLinks, navLinks } from "@/app/data/home";
 
+const pendingSectionKey = "furnitureCoPendingSection";
+
 function SocialIcon({ label }: { label: string }) {
   if (label === "Instagram") {
     return (
@@ -129,13 +131,47 @@ export function SiteHeader() {
     };
   }, [isHome]);
 
+  useEffect(() => {
+    if (!isHome) return;
+
+    const pendingHref = window.sessionStorage.getItem(pendingSectionKey);
+    if (!pendingHref) return;
+
+    window.sessionStorage.removeItem(pendingSectionKey);
+
+    const id = sectionIdFromHref(pendingHref);
+    const target = id ? document.getElementById(id) : null;
+
+    if (pendingHref === "#") {
+      window.history.replaceState(null, "", "/");
+      window.requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, behavior: "auto" });
+        setActiveHref("#");
+      });
+      return;
+    }
+
+    if (!target) return;
+
+    window.history.replaceState(null, "", "/");
+    window.requestAnimationFrame(() => {
+      target.scrollIntoView({ behavior: "auto", block: "start" });
+      setActiveHref(pendingHref);
+    });
+  }, [isHome]);
+
   function onHomeHashClick(event: MouseEvent<HTMLAnchorElement>, href: string) {
     setMenuOpen(false);
 
     if (!href.startsWith("#")) return;
-    if (!isHome) return;
 
     event.preventDefault();
+
+    if (!isHome) {
+      window.sessionStorage.setItem(pendingSectionKey, href);
+      window.location.assign("/");
+      return;
+    }
 
     if (href === "#") {
       window.history.replaceState(null, "", "/");
