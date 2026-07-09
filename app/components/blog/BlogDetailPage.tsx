@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { BlogPageLoading } from "@/app/components/blog/BlogPageLoading";
 import { SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
+import { localBlogPosts, type LocalBlogPost } from "@/app/data/localBlogPosts";
 
 type WordPressRendered = {
   rendered?: string;
@@ -113,6 +114,20 @@ function internalBlogHref(post: WordPressPost) {
   return `/blog/${encodeURIComponent(post.slug ?? String(post.id))}/`;
 }
 
+function localPostToWordPressPost(post: LocalBlogPost): WordPressPost {
+  return {
+    id: -1,
+    slug: post.slug,
+    date: post.date,
+    title: { rendered: post.title },
+    excerpt: { rendered: post.excerpt },
+    content: { rendered: post.contentHtml },
+    _embedded: {
+      "wp:term": [[{ name: post.category, slug: post.category.toLowerCase().replace(/[^a-z0-9]+/g, "-") }]],
+    },
+  };
+}
+
 async function fetchWordPressPosts(url: URL, signal: AbortSignal) {
   const response = await fetch(url.toString(), {
     cache: "no-store",
@@ -145,6 +160,14 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
 
   useEffect(() => {
     const controller = new AbortController();
+    const localPost = slug ? localBlogPosts.find((item) => item.slug === slug) : null;
+
+    if (localPost) {
+      setPost(localPostToWordPressPost(localPost));
+      setStatus("ready");
+      return () => controller.abort();
+    }
+
     const url = new URL(`${WORDPRESS_ORIGIN}/wp-json/wp/v2/posts`);
     url.searchParams.set("_embed", "1");
     url.searchParams.set("_", String(Date.now()));

@@ -49,6 +49,11 @@ function sectionIdFromHref(href: string) {
   return href.startsWith("#") && href.length > 1 ? href.slice(1) : null;
 }
 
+function observedSectionId(href: string) {
+  if (href === "/collections/") return "collections";
+  return sectionIdFromHref(href);
+}
+
 export function SiteHeader() {
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -89,7 +94,7 @@ export function SiteHeader() {
     }
 
     let frame = 0;
-    const sectionLinks = navLinks.filter((link) => sectionIdFromHref(link.href));
+    const sectionLinks = navLinks.filter((link) => observedSectionId(link.href));
 
     const updateActiveSection = () => {
       frame = 0;
@@ -102,7 +107,7 @@ export function SiteHeader() {
       const activationLine = Math.min(window.innerHeight * 0.34, 300);
       const current = sectionLinks.reduce(
         (active, link) => {
-          const id = sectionIdFromHref(link.href);
+          const id = observedSectionId(link.href);
           const section = id ? document.getElementById(id) : null;
           if (!section) return active;
 
@@ -139,9 +144,6 @@ export function SiteHeader() {
 
     window.sessionStorage.removeItem(pendingSectionKey);
 
-    const id = sectionIdFromHref(pendingHref);
-    const target = id ? document.getElementById(id) : null;
-
     if (pendingHref === "#") {
       window.history.replaceState(null, "", "/");
       window.requestAnimationFrame(() => {
@@ -151,13 +153,24 @@ export function SiteHeader() {
       return;
     }
 
-    if (!target) return;
+    const id = observedSectionId(pendingHref);
+    if (!id) return;
 
     window.history.replaceState(null, "", "/");
-    window.requestAnimationFrame(() => {
-      target.scrollIntoView({ behavior: "auto", block: "start" });
-      setActiveHref(pendingHref);
-    });
+    let attempts = 0;
+    const scrollWhenReady = () => {
+      const target = document.getElementById(id);
+      if (target) {
+        target.scrollIntoView({ behavior: "auto", block: "start" });
+        setActiveHref(pendingHref);
+        return;
+      }
+
+      attempts += 1;
+      if (attempts < 12) window.setTimeout(scrollWhenReady, 50);
+    };
+
+    window.requestAnimationFrame(scrollWhenReady);
   }, [isHome]);
 
   function onHomeHashClick(event: MouseEvent<HTMLAnchorElement>, href: string) {
@@ -200,7 +213,10 @@ export function SiteHeader() {
           </Link>
           <ul className="nav-links" role="list">
             {navLinks.map((link) => {
-              const active = link.href === "/collections/" ? pathname.startsWith("/collections") : isHome && activeHref === link.href;
+              const active =
+                link.href === "/collections/"
+                  ? pathname.startsWith("/collections") || (isHome && activeHref === "/collections/")
+                  : isHome && activeHref === link.href;
               const hasMegaMenu = link.label === "Collections";
 
               return (
@@ -279,7 +295,10 @@ export function SiteHeader() {
       <div className={`mob-menu${menuOpen ? " open" : ""}`} id="mob" aria-hidden={!menuOpen} aria-label="Mobile navigation">
         <ul className="mob-links" role="list">
           {navLinks.map((link) => {
-            const active = link.href === "/collections/" ? pathname.startsWith("/collections") : isHome && activeHref === link.href;
+            const active =
+              link.href === "/collections/"
+                ? pathname.startsWith("/collections") || (isHome && activeHref === "/collections/")
+                : isHome && activeHref === link.href;
             const hasCollections = link.label === "Collections";
 
             return (
