@@ -84,6 +84,7 @@ type NewsletterErrors = {
 
 const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,24}$/i;
 const namePattern = /^[A-Za-z][A-Za-z' -]{0,39}$/;
+const whatsappHref = "https://wa.me/447830376489";
 
 function normalizeSpaces(value: string) {
   return value.replace(/\s+/g, " ").trim();
@@ -232,10 +233,6 @@ function getFeaturedImage(media?: WordPressMedia) {
   );
 }
 
-function todayInputValue() {
-  return new Date().toISOString().slice(0, 10);
-}
-
 function scrollCarousel(ref: RefObject<HTMLElement | null>, direction: -1 | 1) {
   const element = ref.current;
   if (!element) return;
@@ -277,19 +274,6 @@ function isReviewCategoryPost(post: WordPressPost) {
 }
 
 function Hero() {
-  const [bookingOpen, setBookingOpen] = useState(false);
-
-  useEffect(() => {
-    if (!bookingOpen) return;
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setBookingOpen(false);
-    };
-
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [bookingOpen]);
-
   return (
     <section className="hero" aria-labelledby="h1">
       <div className="hero-txt">
@@ -302,19 +286,19 @@ function Hero() {
         <p className="hero-sub">
           Sustainably crafted pieces that balance comfort, durability, and contemporary design - furniture built to grow with your life.
         </p>
-        <div className="hero-stars" role="img" aria-label="Rated 4.9 out of 5 by over 15,000 homeowners">
+        <div className="hero-stars" role="img" aria-label="5 star verified reviews">
           <span className="stars" aria-hidden="true">
             &#9733;&#9733;&#9733;&#9733;&#9733;
           </span>
-          <span className="rating-text">4.9 &bull; 15,000+ verified reviews</span>
+          <span className="rating-text">5 star verified reviews</span>
         </div>
         <div className="hero-btns">
           <Link href="/collections/" className={`btn btn-p ${primaryButtonClasses}`}>
             Shop Collection
           </Link>
-          <button className={`btn btn-s ${secondaryButtonClasses}`} type="button" onClick={() => setBookingOpen(true)}>
+          <a className={`btn btn-s ${secondaryButtonClasses}`} href={whatsappHref} target="_blank" rel="noopener noreferrer">
             Free Consultation
-          </button>
+          </a>
         </div>
       </div>
       <div className="hero-vis" role="img" aria-label="Modern living room with a pale blue sofa, wooden coffee table and floor lamp">
@@ -324,8 +308,8 @@ function Hero() {
         <div className="hero-badge" aria-hidden="true">
           <i><AwardIcon kind="trophy" /></i>
           <div>
-            <strong>Which? Best Buy 2024</strong>
-            <s>Award-winning retailer</s>
+            <strong>ISO 9001, ISO 14001</strong>
+            <s>ISO 27001, ISO 45001 supplier</s>
           </div>
         </div>
         <div className="hero-trust" aria-hidden="true">
@@ -338,48 +322,20 @@ function Hero() {
           <path d="M12 5v14M5 12l7 7 7-7" />
         </svg>
       </div>
-      {bookingOpen ? (
-        <div className="modal-backdrop" role="presentation" onMouseDown={() => setBookingOpen(false)}>
-          <form
-            className="booking-modal"
-            aria-labelledby="booking-title"
-            onSubmit={(event) => {
-              event.preventDefault();
-              setBookingOpen(false);
-            }}
-            onMouseDown={(event) => event.stopPropagation()}
-          >
-            <button className="modal-close" type="button" aria-label="Close consultation booking" onClick={() => setBookingOpen(false)}>
-              x
-            </button>
-            <span className="modal-kicker">Free Consultation</span>
-            <h3 id="booking-title">Choose a date and time</h3>
-            <div className="booking-grid">
-              <label>
-                Date
-                <input type="date" name="consultation-date" min={todayInputValue()} required />
-              </label>
-              <label>
-                Time
-                <select name="consultation-time" defaultValue="10:00" required>
-                  <option value="10:00">10:00 AM</option>
-                  <option value="12:00">12:00 PM</option>
-                  <option value="14:00">2:00 PM</option>
-                  <option value="16:00">4:00 PM</option>
-                  <option value="18:00">6:00 PM</option>
-                </select>
-              </label>
-            </div>
-            <label className="booking-field">
-              Email address
-              <input type="email" name="consultation-email" placeholder="you@example.com" required />
-            </label>
-            <button className={`btn btn-p ${primaryButtonClasses}`} type="submit">
-              Confirm Time
-            </button>
-          </form>
-        </div>
-      ) : null}
+    </section>
+  );
+}
+
+function TrustBar() {
+  return (
+    <section className="trust-bar" aria-label="Furniture Co. trust benefits">
+      <div className="trust-bar-in" role="list">
+        <span role="listitem">🇬🇧 Made in the UK</span>
+        <span role="listitem">🚚 Free UK Delivery</span>
+        <span role="listitem">💳 0% Interest-Free Finance</span>
+        <span role="listitem">🛡️ 10-Year Guarantee</span>
+        <span role="listitem">🌱 FSC Certified &amp; Carbon Neutral</span>
+      </div>
     </section>
   );
 }
@@ -1014,17 +970,25 @@ function BackToTop() {
   }, []);
 
   return (
-    <button
-      className={`btt${visible ? " show" : ""}`}
-      aria-label="Back to top of page"
-      hidden={!visible}
-      type="button"
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-    >
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M12 19V5M5 12l7-7 7 7" />
-      </svg>
-    </button>
+    <>
+      <a className="whatsapp-float" href={whatsappHref} target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp at +44 7830 376489">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M19.1 4.9A9.8 9.8 0 0 0 3.8 16.7L3 21l4.4-.8A9.8 9.8 0 0 0 19.1 4.9Z" />
+          <path d="M8.6 8.2c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.7 1.7c.1.2.1.4-.1.6l-.4.5c-.1.1-.2.3 0 .5.5.9 1.3 1.7 2.3 2.2.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.7.8c.3.1.4.3.4.5 0 .7-.5 1.5-1.1 1.8-.5.3-1.4.4-3.1-.3-2.6-1.1-4.4-3.5-4.8-4.1-.4-.5-1.1-1.7-1-2.5 0-.7.5-1.1.7-1.3Z" />
+        </svg>
+      </a>
+      <button
+        className={`btt${visible ? " show" : ""}`}
+        aria-label="Back to top of page"
+        hidden={!visible}
+        type="button"
+        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M12 19V5M5 12l7-7 7 7" />
+        </svg>
+      </button>
+    </>
   );
 }
 
@@ -1071,6 +1035,7 @@ export function HomePage() {
       <SiteHeader />
       <main id="main" tabIndex={-1}>
         <Hero />
+        <TrustBar />
         <Collections />
         <FeaturedMattresses />
         <Stats />

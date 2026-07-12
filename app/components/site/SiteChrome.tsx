@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { collectionCategories, footerMainLinks, footerSocialLinks, navLinks } from "@/app/data/home";
 
 const pendingSectionKey = "furnitureCoPendingSection";
+const whatsappHref = "https://wa.me/447830376489";
 
 function SocialIcon({ label }: { label: string }) {
   if (label === "Instagram") {
@@ -207,6 +208,13 @@ export function SiteHeader() {
   return (
     <header>
       <nav className={`nav${scrolled ? " up" : ""}`} aria-label="Main navigation">
+        <div className="announce-bar" aria-label="Store announcements">
+          <div className="announce-track">
+            <span>Summer mattress sale now live</span>
+            <span>Free UK delivery on launch offers</span>
+            <span>0% interest-free finance available</span>
+          </div>
+        </div>
         <div className="nav-in">
           <Link href="/" className="nav-logo" aria-label="Furniture Co. home">
             Furniture Co.
@@ -245,7 +253,7 @@ export function SiteHeader() {
                                   <strong>{item.label}</strong>
                                   <small>{item.groups.map((group) => group.label).join(", ")}</small>
                                 </span>
-                                <em className="mega-link-badge">{item.badge}</em>
+                                <em className={`mega-link-badge${item.label === "Bedroom" ? " is-active" : ""}`}>{item.badge}</em>
                               </Link>
                               <ul className="mega-products" role="list" aria-label={`${item.label} products`}>
                                 {item.groups.map((group) => (
@@ -322,7 +330,7 @@ export function SiteHeader() {
                           onClick={() => setOpenMobileCategory((current) => (current === item.label ? null : item.label))}
                         >
                           <span>{item.label}</span>
-                          <em>{item.badge}</em>
+                          <em className={item.label === "Bedroom" ? "is-active" : undefined}>{item.badge}</em>
                         </button>
                         {openMobileCategory === item.label ? (
                           <ul className="mob-product-links" role="list" aria-label={`${item.label} products`}>
@@ -344,9 +352,9 @@ export function SiteHeader() {
             );
           })}
         </ul>
-        <Link href="/contact/" className="mob-consult-link">
+        <a href={whatsappHref} className="mob-consult-link" target="_blank" rel="noopener noreferrer">
           Book a free consultation
-        </Link>
+        </a>
       </div>
     </header>
   );

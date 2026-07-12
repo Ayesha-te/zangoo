@@ -15,6 +15,16 @@ export const collections = [
 
 export const collectionCategories = [
   {
+    label: "Bedroom",
+    href: "/collections/bedroom/",
+    badge: "Mattress Sale",
+    groups: [
+      { label: "Mattresses", href: "/collections/bedroom/mattresses/" },
+      { label: "Beds", href: "/collections/bedroom/beds/" },
+      { label: "Bedside Tables", href: "/collections/bedroom/bedside-tables/" },
+    ],
+  },
+  {
     label: "Living Room",
     href: "/collections/living-room/",
     badge: "Coming Soon",
@@ -32,16 +42,6 @@ export const collectionCategories = [
       { label: "Dining Tables", href: "/collections/dining/tables/" },
       { label: "Dining Chairs", href: "/collections/dining/chairs/" },
       { label: "Benches", href: "/collections/dining/benches/" },
-    ],
-  },
-  {
-    label: "Bedroom",
-    href: "/collections/bedroom/",
-    badge: "Mattress Sale",
-    groups: [
-      { label: "Mattresses", href: "/collections/bedroom/mattresses/" },
-      { label: "Beds", href: "/collections/bedroom/beds/" },
-      { label: "Bedside Tables", href: "/collections/bedroom/bedside-tables/" },
     ],
   },
   {
@@ -83,8 +83,8 @@ export const awards = [
   ["mq-blue", "palette", "Design Week", "Gold Award - Interiors", "2023"],
   ["mq-green", "leaf", "Eco Commerce Awards", "Green Retail of the Year", "2023"],
   ["mq-gold", "star", "Trustpilot", "Excellent - Top 1% UK", "2024"],
-  ["mq-blue", "shield", "BSI", "ISO 9001 Certified", "2024"],
-  ["mq-green", "recycle", "FSC", "Chain of Custody Certified", "2022"],
+  ["mq-blue", "shield", "Certified Supplier", "ISO 9001, ISO 14001, ISO 27001, ISO 45001", "Supplier"],
+  ["mq-green", "recycle", "FSC", "Responsible Materials Supplier", "2026"],
   ["mq-navy", "britain", "Made in Britain", "Certified Member", "2023"],
   ["mq-gold", "medal", "FIRA International", "Gold Award", "2024"],
   ["mq-blue", "lab", "OEKO-TEX", "Standard 100 Certified", "2024"],
