@@ -79,18 +79,11 @@ export const footerSocialLinks = [
 ] as const;
 
 export const awards = [
-  ["mq-gold", "trophy", "Which? Magazine", "Best Buy Retailer", "2024"],
-  ["mq-blue", "palette", "Design Week", "Gold Award - Interiors", "2023"],
-  ["mq-green", "leaf", "Eco Commerce Awards", "Green Retail of the Year", "2023"],
-  ["mq-gold", "star", "Trustpilot", "Excellent - Top 1% UK", "2024"],
-  ["mq-blue", "shield", "Certified Supplier", "ISO 9001, ISO 14001, ISO 27001, ISO 45001", "Supplier"],
-  ["mq-green", "recycle", "FSC", "Responsible Materials Supplier", "2026"],
-  ["mq-navy", "britain", "Made in Britain", "Certified Member", "2023"],
-  ["mq-gold", "medal", "FIRA International", "Gold Award", "2024"],
-  ["mq-blue", "lab", "OEKO-TEX", "Standard 100 Certified", "2024"],
-  ["mq-green", "globe", "Carbon Trust", "Carbon Neutral Delivery", "2023"],
-  ["mq-navy", "bolt", "RE100", "100% Renewable Energy", "2023"],
-  ["mq-blue", "card", "FCA", "Authorised Finance Partner", "2022"],
+  ["mq-blue", "shield", "UKAS Management Systems", "ISO 9001 Quality Management", "Certified", "/award1.jpeg"],
+  ["mq-green", "leaf", "ISO Supplier", "ISO 14001 Environmental Management", "Certified"],
+  ["mq-navy", "shield", "ISO Supplier", "ISO 27001 Information Security", "Certified"],
+  ["mq-gold", "medal", "ISO Supplier", "ISO 45001 Health & Safety", "Certified"],
+  ["mq-green", "globe", "The Green Organisation", "Green Organisation Award", "Member", "/award2.jpeg", "https://thegreenorganisation.info/"],
 ] as const;
 
 export const reviews = [
@@ -155,7 +148,7 @@ export const blogPosts = [
 export const faqs = [
   ["How long does furniture delivery take?", "Standard delivery takes 5-10 business days. White-glove delivery with in-home setup is available in most major UK cities within 7-14 days. You will receive tracking updates at every stage."],
   ["What materials are used in your furniture?", "We use sustainably sourced solid hardwoods, FSC-certified engineered timber, high-resilience foam cushioning, and natural textiles including linen, wool, and full-grain leather. All tested for low VOC emissions."],
-  ["Do you offer a warranty on your furniture?", "Yes. All pieces come with a 10-year structural warranty and a 2-year fabric and finish warranty, covering manufacturing defects, frame integrity, and spring systems under normal residential use."],
+  ["Do you offer a guarantee on your furniture?", "Yes. All pieces come with a 1-year guarantee covering manufacturing defects, frame integrity, and spring systems under normal residential use."],
   ["Can I return furniture if I do not like it?", "We offer a 60-day returns policy on most items in original condition. Collection is free for defective items; a return fee applies for change-of-mind returns. Custom orders are non-returnable."],
   ["Do you offer interior design consultations?", "Yes. Free 45-minute virtual consultations and in-home visits are available in London, Manchester, and Birmingham, covering space planning, material selection, and styling."],
   ["Is your furniture flat-pack or fully assembled?", "Sofas and beds arrive fully assembled. Dining tables and some bedroom pieces require light assembly with included tools and instructions. White-glove assembly is available at checkout."],

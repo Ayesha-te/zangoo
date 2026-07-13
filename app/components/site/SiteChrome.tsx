@@ -391,7 +391,7 @@ export function SiteFooter() {
           <h2>Support</h2>
           <ul className="foot-links" role="list">
             <li>
-              <Link href="/faq/">Returns &amp; Warranty</Link>
+              <Link href="/faq/">Returns &amp; Guarantee</Link>
             </li>
             <li>
               <Link href="/contact/">Secure Enquiry</Link>

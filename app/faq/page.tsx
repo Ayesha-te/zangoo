@@ -4,7 +4,7 @@ import { faqs } from "@/app/data/home";
 
 export const metadata: Metadata = {
   title: "FAQ | Furniture Co.",
-  description: "Frequently asked questions about Furniture Co. delivery, returns, warranty, and consultations.",
+  description: "Frequently asked questions about Furniture Co. delivery, returns, guarantee, and consultations.",
 };
 
 export default function FaqPage() {

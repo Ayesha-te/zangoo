@@ -5,21 +5,21 @@ import styles from "./about.module.css";
 
 export const metadata: Metadata = {
   title: "About Us | Furniture Co.",
-  description: "Learn about Furniture Co.'s sustainable materials, design process, warranty standards, and customer-first furniture service.",
+  description: "Learn about Furniture Co.'s sustainable materials, design process, 1-year guarantee standards, and customer-first furniture service.",
 };
 
 export default function AboutPage() {
   const proofPoints = [
-    ["15,000+", "Orders delivered"],
+    ["5000+", "Orders delivered"],
     ["4.9/5", "Average customer rating"],
-    ["10 years", "Structural warranty"],
+    ["1 year", "Guarantee"],
   ];
 
   const values = [
     {
       number: "01",
       title: "Made To Last",
-      copy: "Every frame, fabric, and finish is selected for real daily use, backed by our 10-year structural warranty.",
+      copy: "Every frame, fabric, and finish is selected for real daily use, backed by our 1-year guarantee.",
     },
     {
       number: "02",

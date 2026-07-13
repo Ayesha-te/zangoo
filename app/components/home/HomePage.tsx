@@ -5,16 +5,7 @@ import Link from "next/link";
 import { awards, blogPosts, collections, faqs, reviews } from "@/app/data/home";
 import { primaryButtonClasses, secondaryButtonClasses } from "@/app/components/site/buttonClasses";
 import { SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
-import {
-  AwardIcon,
-  BlogVisual,
-  ChairMedalVisual,
-  CollectionIcon,
-  FeaturedChairIcon,
-  MapPinIcon,
-  ReviewVisual,
-  SofaIllustration,
-} from "./Illustrations";
+import { AwardIcon, BlogVisual } from "./Illustrations";
 
 type HomepageBlogPost = {
   id: number | string;
@@ -85,6 +76,29 @@ type NewsletterErrors = {
 const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,24}$/i;
 const namePattern = /^[A-Za-z][A-Za-z' -]{0,39}$/;
 const whatsappHref = "https://wa.me/447830376489";
+const remoteImages = {
+  hero: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=80",
+  feature: "https://images.pexels.com/photos/276583/pexels-photo-276583.jpeg?auto=compress&cs=tinysrgb&w=900",
+  collections: {
+    "living-room": "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=900",
+    dining: "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=900",
+    bedroom: "https://images.pexels.com/photos/1454806/pexels-photo-1454806.jpeg?auto=compress&cs=tinysrgb&w=900",
+    lighting: "https://images.pexels.com/photos/112811/pexels-photo-112811.jpeg?auto=compress&cs=tinysrgb&w=900",
+  },
+  featured: [
+    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80",
+    "https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&w=900&q=80",
+  ],
+  reviews: {
+    "living-room": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=700&q=80",
+    bedroom: "https://images.unsplash.com/photo-1616627561950-9f746e330187?auto=format&fit=crop&w=700&q=80",
+  },
+} as const;
+
+function imageStyle(url: string) {
+  return { backgroundImage: `url("${url}")` };
+}
 
 function normalizeSpaces(value: string) {
   return value.replace(/\s+/g, " ").trim();
@@ -301,10 +315,13 @@ function Hero() {
           </a>
         </div>
       </div>
-      <div className="hero-vis" role="img" aria-label="Modern living room with a pale blue sofa, wooden coffee table and floor lamp">
-        <div className="hero-sofa">
-          <SofaIllustration />
-        </div>
+      <div
+        className="hero-vis hero-photo"
+        style={imageStyle(remoteImages.hero)}
+        role="img"
+        aria-label="Modern living room with a sofa, warm lighting and contemporary furniture"
+      >
+        <div className="hero-photo-shade" aria-hidden="true" />
         <div className="hero-badge" aria-hidden="true">
           <i><AwardIcon kind="trophy" /></i>
           <div>
@@ -333,7 +350,7 @@ function TrustBar() {
         <span role="listitem">🇬🇧 Made in the UK</span>
         <span role="listitem">🚚 Free UK Delivery</span>
         <span role="listitem">💳 0% Interest-Free Finance</span>
-        <span role="listitem">🛡️ 10-Year Guarantee</span>
+        <span role="listitem">🛡️ 1-Year Guarantee</span>
         <span role="listitem">🌱 FSC Certified &amp; Carbon Neutral</span>
       </div>
     </section>
@@ -346,9 +363,7 @@ function Collections() {
       <div className="wrap">
         <div className="coll-wrap">
           <Link href="/collections/living-room/" className="feat-card rv" aria-label="View Living Room collection">
-            <div className="feat-thumb" aria-hidden="true">
-              <FeaturedChairIcon />
-            </div>
+            <div className="feat-thumb feat-thumb-photo" style={imageStyle(remoteImages.feature)} aria-hidden="true" />
             <div className="feat-info">
               <span className="feat-tag">Best Seller</span>
               <p className="feat-name">Nordic Lounge Chair</p>
@@ -380,11 +395,14 @@ function Collections() {
                   style={{ transitionDelay: `${index * 0.08}s` }}
                   key={collection.name}
                 >
-                  <div className={`cc-thumb ${collection.className}`} aria-hidden="true">
+                  <div
+                    className={`cc-thumb ${collection.className} cc-thumb-photo`}
+                    style={imageStyle(remoteImages.collections[collection.slug as keyof typeof remoteImages.collections])}
+                    aria-hidden="true"
+                  >
                     <span className={`cc-badge${collection.name === "Bedroom" ? " cc-badge-live" : ""}`}>
                       {collection.badge}
                     </span>
-                    <CollectionIcon kind={collection.kind} />
                   </div>
                   <div className="cc-info">
                     <p className="cc-name">{collection.name}</p>
@@ -402,9 +420,9 @@ function Collections() {
 
 function FeaturedMattresses() {
   const featured = [
-    ["Pocket Spring Mattress", "Balanced support for everyday sleep", "From GBP 499"],
-    ["Hybrid Comfort Mattress", "Foam comfort with responsive springs", "From GBP 649"],
-    ["Orthopaedic Mattress", "Firm support for deeper rest", "From GBP 579"],
+    ["Pocket Spring Mattress", "Balanced support for everyday sleep", "From GBP 499", remoteImages.featured[0]],
+    ["Hybrid Comfort Mattress", "Foam comfort with responsive springs", "From GBP 649", remoteImages.featured[1]],
+    ["Orthopaedic Mattress", "Firm support for deeper rest", "From GBP 579", remoteImages.featured[2]],
   ];
 
   return (
@@ -418,11 +436,11 @@ function FeaturedMattresses() {
           <Link href="/collections/bedroom/mattresses/" className="sec-lnk">Shop Mattresses</Link>
         </div>
         <div className="featured-grid">
-          {featured.map(([title, copy, price], index) => (
+          {featured.map(([title, copy, price, image], index) => (
             <Link
-              className="featured-card rv"
+              className="featured-card featured-card-photo rv"
               href="/collections/bedroom/mattresses/"
-              style={{ transitionDelay: `${index * 0.08}s` }}
+              style={{ ...imageStyle(image), transitionDelay: `${index * 0.08}s` }}
               key={title}
             >
               <span>Mattress Sale</span>
@@ -445,29 +463,29 @@ function Stats() {
           <div>
             <span className="sec-lbl">Proof in Numbers</span>
             <h2 className="h2dk rv" id="stats-h">
-              What Our Customers Say
+              Our Suppliers
             </h2>
           </div>
         </div>
         <div className="stats-grid">
           <div className="sc rv">
-            <p className="sc-num" aria-label="15,000 plus orders delivered">
-              15,000+
+            <p className="sc-num" aria-label="5,000 plus orders delivered">
+              5000+
             </p>
             <h3 className="sc-lbl">Orders Delivered</h3>
             <p className="sc-desc">Quality craftsmanship and a genuine commitment to your home.</p>
             <ul className="sc-badges" role="list">
               <li className="sc-badge"><span className="sc-dot" aria-hidden="true" />Satisfaction guaranteed</li>
               <li className="sc-badge"><span className="sc-dot" aria-hidden="true" />Sustainably sourced materials</li>
-              <li className="sc-badge"><span className="sc-dot" aria-hidden="true" />10-year structural warranty</li>
+              <li className="sc-badge"><span className="sc-dot" aria-hidden="true" />1-year guarantee</li>
             </ul>
           </div>
           <div className="sc sc-vis rv" style={{ transitionDelay: ".1s" }}>
-            <div className="sc-vis-img" aria-hidden="true"><ChairMedalVisual /></div>
+            <div className="sc-vis-img sc-vis-number" aria-hidden="true">35</div>
             <div className="sc-vis-body">
-              <p className="sc-vis-lbl">Customer Satisfaction</p>
-              <p className="sc-vis-num" aria-label="98 percent">98%</p>
-              <p className="sc-vis-sub">From 15,000+ orders delivered.</p>
+              <p className="sc-vis-lbl">Supplier Network</p>
+              <p className="sc-vis-num" aria-label="Established since 1990">1990</p>
+              <p className="sc-vis-sub">Established since 1990</p>
             </div>
           </div>
           <div className="sc rv" style={{ transitionDelay: ".2s" }}>
@@ -476,7 +494,7 @@ function Stats() {
             <p className="sc-desc">Exceptional attention to detail in every piece we make.</p>
             <ul className="sc-badges" role="list">
               <li className="sc-badge"><span className="sc-dot" aria-hidden="true" />Eco-friendly manufacturing</li>
-              <li className="sc-badge"><span className="sc-dot" aria-hidden="true" />10-year warranty</li>
+              <li className="sc-badge"><span className="sc-dot" aria-hidden="true" />1-year guarantee</li>
             </ul>
           </div>
         </div>
@@ -500,16 +518,22 @@ function Awards() {
       <div className="wrap">
         <div className="marquee-outer" aria-label="Awards and certifications" role="region">
           <div className="marquee-track" aria-hidden="true">
-            {marqueeAwards.map(([className, icon, org, name, year], index) => (
-              <div className={`mq-card ${className}`} key={`${name}-${index}`}>
-                <span className="mq-icon"><AwardIcon kind={icon} /></span>
+            {marqueeAwards.map(([className, icon, org, name, year, image, href], index) => {
+              const AwardTag = href ? "a" : "div";
+
+              return (
+              <AwardTag className={`mq-card ${className}`} href={href} target={href ? "_blank" : undefined} rel={href ? "noopener noreferrer" : undefined} key={`${name}-${index}`}>
+                <span className="mq-icon">
+                  {image ? <img className="mq-img" src={image} alt="" /> : <AwardIcon kind={icon} />}
+                </span>
                 <div className="mq-body">
                   <span className="mq-org">{org}</span>
                   <span className="mq-name">{name}</span>
                   <span className="mq-year">{year}</span>
                 </div>
-              </div>
-            ))}
+              </AwardTag>
+            );
+            })}
           </div>
         </div>
       </div>
@@ -603,9 +627,13 @@ function Reviews() {
                   </div>
                 </div>
               </div>
-              <div className={`rc-photo ${review.photoClass}`} role="img" aria-label="Customer room" aria-hidden="true">
-                <ReviewVisual kind={review.photo} />
-              </div>
+              <div
+                className={`rc-photo ${review.photoClass} rc-photo-img`}
+                style={imageStyle(remoteImages.reviews[review.photo])}
+                role="img"
+                aria-label="Customer room"
+                aria-hidden="true"
+              />
             </article>
           ))}
         </div>
@@ -891,35 +919,35 @@ function Contact() {
             </ul>
           </div>
           <address className="map-card rv map-address">
-            <div className="map-vis" aria-hidden="true">
-              <div className="map-grid" />
-              <div className="map-pin"><MapPinIcon /></div>
+            <div className="map-vis">
+              <iframe
+                title="Google map for Furniture Co. Showroom"
+                src="https://maps.google.com/maps?q=70%20Ilford%20Lane%2C%20London%20IG1%202LA&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
             <div className="map-info">
               <p className="map-name">Furniture Co. Showroom</p>
               <p className="map-addr">
-                14 Design Quarter
+                70 Ilford Lane
                 <br />
-                Shoreditch, London E1 6RF
+                London IG1 2LA
                 <br />
                 United Kingdom
               </p>
               <div className="map-hours-table" aria-label="Opening times">
                 <div className="map-hours-row">
-                  <span>Monday-Friday</span>
-                  <strong>10am-7pm</strong>
+                  <span>Mon-Fri</span>
+                  <strong>9am-5pm</strong>
                 </div>
                 <div className="map-hours-row">
                   <span>Saturday</span>
-                  <strong>10am-6pm</strong>
-                </div>
-                <div className="map-hours-row">
-                  <span>Sunday</span>
-                  <strong>By appointment</strong>
+                  <strong>10am-4pm</strong>
                 </div>
               </div>
               <a
-                href="https://maps.google.com"
+                href="https://www.google.com/maps/search/?api=1&query=70%20Ilford%20Lane%2C%20London%20IG1%202LA"
                 className={`btn btn-s directions-btn ${secondaryButtonClasses}`}
                 target="_blank"
                 rel="noopener noreferrer"
