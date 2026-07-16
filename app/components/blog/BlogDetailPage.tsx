@@ -51,15 +51,165 @@ function stripHtml(value: string) {
   return decodeHtml(doc.body.textContent?.replace(/\s+/g, " ").trim() ?? "");
 }
 
+function isSafeHref(value: string) {
+  const href = value.trim();
+  return (
+    href.startsWith("/") ||
+    href.startsWith("#") ||
+    href.startsWith("https://") ||
+    href.startsWith("http://") ||
+    href.startsWith("mailto:") ||
+    href.startsWith("tel:")
+  );
+}
+
+function applyMarkdownLinks(doc: Document) {
+  const walker = doc.createTreeWalker(doc.body, NodeFilter.SHOW_TEXT);
+  const textNodes: Text[] = [];
+
+  while (walker.nextNode()) {
+    const node = walker.currentNode as Text;
+    const parent = node.parentElement;
+    if (!parent || parent.closest("a,code,pre,script,style")) continue;
+    if (/\[[^\]]+]\([^)]+\)/.test(node.nodeValue ?? "")) {
+      textNodes.push(node);
+    }
+  }
+
+  textNodes.forEach((node) => {
+    const text = node.nodeValue ?? "";
+    const fragment = doc.createDocumentFragment();
+    let lastIndex = 0;
+    const pattern = /\[([^\]]+)]\(([^)]+)\)/g;
+    let match: RegExpExecArray | null;
+
+    while ((match = pattern.exec(text))) {
+      fragment.append(text.slice(lastIndex, match.index));
+      const href = match[2].trim();
+
+      if (isSafeHref(href)) {
+        const anchor = doc.createElement("a");
+        anchor.href = href;
+        anchor.textContent = match[1];
+        fragment.append(anchor);
+      } else {
+        fragment.append(match[1]);
+      }
+
+      lastIndex = match.index + match[0].length;
+    }
+
+    fragment.append(text.slice(lastIndex));
+    node.replaceWith(fragment);
+  });
+}
+
+function tableFromMarkdown(doc: Document, lines: string[]) {
+  if (lines.length < 3 || !/^\s*\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?\s*$/.test(lines[1])) {
+    return null;
+  }
+
+  const splitCells = (line: string) =>
+    line
+      .trim()
+      .replace(/^\|/, "")
+      .replace(/\|$/, "")
+      .split("|")
+      .map((cell) => cell.trim());
+
+  const headers = splitCells(lines[0]);
+  const rows = lines.slice(2).map(splitCells).filter((row) => row.some(Boolean));
+  if (!headers.length || !rows.length) return null;
+
+  const tableWrap = doc.createElement("div");
+  tableWrap.className = "blog-table-wrap";
+  const table = doc.createElement("table");
+  const thead = doc.createElement("thead");
+  const headRow = doc.createElement("tr");
+  headers.forEach((header) => {
+    const th = doc.createElement("th");
+    th.textContent = header;
+    headRow.append(th);
+  });
+  thead.append(headRow);
+
+  const tbody = doc.createElement("tbody");
+  rows.forEach((row) => {
+    const tr = doc.createElement("tr");
+    headers.forEach((_, index) => {
+      const td = doc.createElement("td");
+      td.textContent = row[index] ?? "";
+      tr.append(td);
+    });
+    tbody.append(tr);
+  });
+
+  table.append(thead, tbody);
+  tableWrap.append(table);
+  return tableWrap;
+}
+
+function applyMarkdownBlocks(doc: Document) {
+  doc.body.querySelectorAll("p").forEach((paragraph) => {
+    const rawText = paragraph.textContent?.trim() ?? "";
+    const lines = rawText.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+
+    if (lines.length >= 3 && lines.every((line) => line.includes("|"))) {
+      const table = tableFromMarkdown(doc, lines);
+      if (table) {
+        paragraph.replaceWith(table);
+        return;
+      }
+    }
+
+    if (lines.length > 1 && lines.every((line) => /^[-*]\s+/.test(line))) {
+      const list = doc.createElement("ul");
+      lines.forEach((line) => {
+        const item = doc.createElement("li");
+        item.textContent = line.replace(/^[-*]\s+/, "");
+        list.append(item);
+      });
+      paragraph.replaceWith(list);
+      return;
+    }
+
+    if (lines.length > 1 && lines.every((line) => /^\d+\.\s+/.test(line))) {
+      const list = doc.createElement("ol");
+      lines.forEach((line) => {
+        const item = doc.createElement("li");
+        item.textContent = line.replace(/^\d+\.\s+/, "");
+        list.append(item);
+      });
+      paragraph.replaceWith(list);
+      return;
+    }
+
+    const heading = rawText.match(/^(#{2,4})\s+(.+)$/);
+    if (heading) {
+      const level = Math.min(heading[1].length, 4);
+      const nextHeading = doc.createElement(`h${level}`);
+      nextHeading.textContent = heading[2];
+      paragraph.replaceWith(nextHeading);
+    }
+  });
+}
+
 function sanitizeWordPressHtml(html: string) {
   const doc = new DOMParser().parseFromString(html, "text/html");
   doc.querySelectorAll("script,style,iframe,object,embed,form,input,button,textarea,select").forEach((node) => node.remove());
+
+  applyMarkdownBlocks(doc);
+  applyMarkdownLinks(doc);
 
   doc.body.querySelectorAll("*").forEach((node) => {
     Array.from(node.attributes).forEach((attribute) => {
       const name = attribute.name.toLowerCase();
       const value = attribute.value.trim().toLowerCase();
       if (name.startsWith("on") || value.startsWith("javascript:")) {
+        node.removeAttribute(attribute.name);
+      }
+
+      if ((name === "href" || name === "src") && !isSafeHref(attribute.value)) {
         node.removeAttribute(attribute.name);
       }
     });

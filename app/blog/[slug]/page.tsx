@@ -8,6 +8,8 @@ type WordPressSlugPost = {
   slug?: string;
 };
 
+export const dynamicParams = false;
+
 export async function generateStaticParams() {
   const fallbackSlugs = [...blogPosts.map((post) => post.slug), ...localBlogPosts.map((post) => post.slug)];
 
