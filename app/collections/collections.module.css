@@ -83,8 +83,8 @@
 }
 
 .liveBadge {
-  background: rgba(214, 168, 90, 0.2);
-  color: var(--gold-text);
+  background: #c62828;
+  color: #fff;
 }
 
 .cardTop strong {
