@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { collectionCategories } from "@/app/data/home";
+import { orthoMattressProducts } from "@/app/data/mattressProducts";
 import styles from "../../collections.module.css";
 
 type ProductPageProps = {
@@ -43,6 +44,8 @@ export default async function CollectionProductPage({ params }: ProductPageProps
 
   if (!item) notFound();
 
+  const isMattressRange = slug === "bedroom" && product === "mattresses";
+
   return (
     <>
       <SiteHeader />
@@ -71,6 +74,27 @@ export default async function CollectionProductPage({ params }: ProductPageProps
             </Link>
           </div>
         </section>
+        {isMattressRange ? (
+          <section className={styles.mattressGrid} aria-label="Orthopaedic mattress landing pages">
+            {orthoMattressProducts.map((mattress) => (
+              <Link
+                className={styles.mattressCard}
+                href={`/collections/bedroom/mattresses/${mattress.slug}/`}
+                key={mattress.slug}
+              >
+                <span className={styles.mattressImage}>
+                  <img src={mattress.image} alt="" />
+                  <span className={styles.saleBadge}>Mattress Sale</span>
+                </span>
+                <span className={styles.mattressInfo}>
+                  <strong>{mattress.shortName}</strong>
+                  <span className={styles.mattressFeel}>{mattress.firmness} orthopaedic support</span>
+                  <span className={styles.mattressPrice}>{mattress.price}</span>
+                </span>
+              </Link>
+            ))}
+          </section>
+        ) : null}
       </main>
       <SiteFooter />
     </>

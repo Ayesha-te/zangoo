@@ -1,3 +1,5 @@
+import { orthoMattressProducts } from "./mattressProducts";
+
 export const navLinks = [
   { label: "Shop", href: "#", active: true },
   { label: "Collections", href: "/collections/" },
@@ -19,7 +21,14 @@ export const collectionCategories = [
     href: "/collections/bedroom/",
     badge: "Mattress Sale",
     groups: [
-      { label: "Mattresses", href: "/collections/bedroom/mattresses/" },
+      {
+        label: "Mattresses",
+        href: "/collections/bedroom/mattresses/",
+        products: orthoMattressProducts.map((product) => ({
+          label: product.shortName,
+          href: `/collections/bedroom/mattresses/${product.slug}/`,
+        })),
+      },
       { label: "Beds", href: "/collections/bedroom/beds/" },
       { label: "Bedside Tables", href: "/collections/bedroom/bedside-tables/" },
     ],

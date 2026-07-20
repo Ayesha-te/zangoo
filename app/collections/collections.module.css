@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  padding-top: var(--nav);
+  padding-top: 0;
   background: var(--bg1);
   color: var(--body);
 }
@@ -8,7 +8,7 @@
 .hero {
   width: min(100%, 1200px);
   margin: 0 auto;
-  padding: 86px 64px 54px;
+  padding: 36px 64px 42px;
 }
 
 .hero span {
@@ -144,6 +144,105 @@
   margin-top: 30px;
 }
 
+.mattressGrid {
+  width: min(100%, 1200px);
+  margin: 0 auto;
+  padding: 0 64px 96px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+.mattressCard {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--bdr);
+  border-radius: var(--rl);
+  background: #fff;
+  box-shadow: var(--sh1);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.mattressCard:hover,
+.mattressCard:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: var(--sh2);
+}
+
+.mattressImage {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--bg4);
+}
+
+.mattressImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.25s ease;
+}
+
+.mattressCard:hover .mattressImage img {
+  transform: scale(1.04);
+}
+
+.saleBadge {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  z-index: 2;
+  border-radius: 999px;
+  background: #c62828;
+  color: #fff;
+  padding: 6px 11px;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.mattressInfo {
+  flex: 1;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.mattressInfo strong {
+  display: block;
+  font-family: var(--serif);
+  font-size: clamp(24px, 2vw, 32px);
+  line-height: 1.08;
+  color: var(--navy);
+}
+
+.mattressInfo span {
+  display: block;
+}
+
+.mattressFeel {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--body);
+}
+
+.mattressPrice {
+  margin-top: auto;
+  padding-top: 16px;
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--blue);
+}
+
 .primaryLink,
 .secondaryLink {
   min-height: 48px;
@@ -181,12 +280,17 @@
 
 @media (max-width: 900px) {
   .hero {
-    padding: 56px 24px 42px;
+    padding: 32px 24px 36px;
   }
 
   .grid {
     padding: 0 24px 72px;
     grid-template-columns: 1fr;
+  }
+
+  .mattressGrid {
+    padding: 0 24px 72px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -205,6 +309,11 @@
 
   .grid {
     padding: 0 16px 64px;
+  }
+
+  .mattressGrid {
+    padding: 0 16px 64px;
+    grid-template-columns: 1fr;
   }
 
   .cardTop,

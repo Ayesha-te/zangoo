@@ -102,6 +102,8 @@ section[id]{scroll-margin-top:calc(var(--nav) + 16px)}
 .mega-category:hover .mega-products,.mega-category:focus-within .mega-products{display:grid;gap:4px}
 .mega-products a{min-height:34px!important;padding:7px 9px!important;border-radius:8px;font-size:12px!important;color:var(--body)!important;background:transparent!important}
 .mega-products a:hover,.mega-products a:focus-visible{background:var(--bg4)!important;color:var(--navy)!important}
+.mega-sub-products{display:grid;gap:2px;margin:2px 0 6px 10px;padding-left:8px;border-left:1px solid var(--bdr)}
+.mega-sub-products a{min-height:28px!important;padding:5px 8px!important;font-size:11px!important;font-weight:700!important;color:var(--blue)!important}
 .nav-tools{display:flex;align-items:center;gap:4px;flex-shrink:0}
 .nav-tools a{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--body);transition:background .15s ease,color .15s ease}
 .nav-tools a:hover,.nav-tools a:focus-visible{background:rgba(21,87,167,.08);color:var(--blue)}
@@ -124,6 +126,8 @@ section[id]{scroll-margin-top:calc(var(--nav) + 16px)}
 .mob-category-btn em.is-active{border-radius:999px;background:#C62828;color:#fff;padding:3px 7px;box-shadow:0 6px 14px rgba(198,40,40,.2)}
 .mob-product-links{display:grid;gap:4px;margin:6px 0 2px 12px}
 .mob-product-links a{min-height:34px;padding:7px 10px;border-radius:7px;background:transparent;font-size:13px}
+.mob-product-sub-links{display:grid;gap:3px;margin:2px 0 6px 14px;padding-left:8px;border-left:1px solid var(--bdr)}
+.mob-product-sub-links a{min-height:30px!important;padding:6px 10px!important;font-size:12px!important;font-weight:700;color:var(--blue)}
 .mob-menu .mob-consult-link{display:flex!important;min-height:52px;align-items:center;justify-content:center;margin-top:14px;border-radius:var(--r);border:2px solid var(--blue);background:var(--blue);color:#fff!important;font-size:15px;font-weight:800;box-shadow:0 8px 22px rgba(21,87,167,.24);transition:background .15s ease,border-color .15s ease}
 .mob-menu .mob-consult-link:hover,.mob-menu .mob-consult-link:focus-visible{background:var(--blue-h);border-color:var(--blue-h);color:#fff!important}
 @media(min-width:901px){.mob-menu{display:none!important}}
@@ -657,4 +661,394 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
   .btt svg{width:18px;height:18px}
   .whatsapp-float{bottom:76px;right:16px;width:44px;height:44px}
   .whatsapp-float svg{width:23px;height:23px}
+}
+
+/* Mattress product landing pages */
+.mattress-landing{
+  background:var(--bg1);
+  color:var(--body);
+  overflow:hidden;
+}
+
+.mattress-landing-hero{
+  width:min(100%,1200px);
+  margin:0 auto;
+  padding:34px 64px 54px;
+  display:grid;
+  grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);
+  gap:40px;
+  align-items:center;
+}
+
+.mattress-copy,.mattress-media{min-width:0}
+
+.mattress-sale-pill,.mattress-firmness{
+  display:inline-flex;
+  width:max-content;
+  max-width:100%;
+  border-radius:999px;
+  background:#c62828;
+  color:#fff;
+  padding:7px 13px;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.12em;
+  line-height:1;
+  text-transform:uppercase;
+  box-shadow:0 8px 22px rgba(198,40,40,.22);
+}
+
+.mattress-title{
+  max-width:620px;
+  margin:16px 0 0!important;
+  font-size:clamp(42px,5.2vw,74px)!important;
+  line-height:1.02!important;
+  letter-spacing:0!important;
+  color:var(--navy)!important;
+}
+
+.mattress-description{
+  max-width:560px;
+  margin:18px 0 0;
+  font-size:17px;
+  line-height:1.75;
+  color:var(--body);
+}
+
+.mattress-rating{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+
+.mattress-rating span{
+  color:var(--gold);
+  font-size:18px;
+  letter-spacing:2px;
+}
+
+.mattress-rating strong{
+  border-radius:999px;
+  background:#fff;
+  padding:4px 10px;
+  font-size:13px;
+  font-weight:900;
+  color:var(--gold-text);
+  box-shadow:var(--sh1);
+}
+
+.mattress-bullets{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-top:22px;
+  max-width:590px;
+}
+
+.mattress-bullets li{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-width:0;
+  border:1px solid var(--bdr);
+  border-radius:var(--r);
+  background:#fff;
+  padding:10px 12px;
+  font-size:14px;
+  font-weight:800;
+  line-height:1.3;
+  color:var(--navy);
+}
+
+.mattress-bullets li span{
+  display:grid;
+  place-items:center;
+  flex:0 0 24px;
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  background:var(--blue);
+  color:#fff;
+  font-size:12px;
+}
+
+.mattress-actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:26px;
+}
+
+.mattress-primary,.mattress-secondary{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:48px;
+  border:2px solid var(--blue);
+  border-radius:var(--r);
+  padding:10px 22px;
+  font-size:15px;
+  font-weight:900;
+  line-height:1.2;
+  transition:background .15s ease,color .15s ease,border-color .15s ease;
+}
+
+.mattress-primary{
+  background:var(--blue);
+  color:#fff;
+}
+
+.mattress-primary:hover,.mattress-primary:focus-visible{
+  background:var(--blue-h);
+  border-color:var(--blue-h);
+}
+
+.mattress-secondary{
+  border-color:var(--navy);
+  color:var(--navy);
+  background:transparent;
+}
+
+.mattress-secondary:hover,.mattress-secondary:focus-visible{
+  background:var(--navy);
+  color:#fff;
+}
+
+.mattress-photo-card{
+  overflow:hidden;
+  border:1px solid var(--bdr);
+  border-radius:var(--rl);
+  background:#fff;
+  box-shadow:var(--sh2);
+}
+
+.mattress-photo{
+  position:relative;
+  aspect-ratio:4/3;
+  overflow:hidden;
+}
+
+.mattress-photo img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.mattress-firmness{
+  position:absolute;
+  top:18px;
+  left:18px;
+  z-index:2;
+}
+
+.mattress-price-card{
+  position:absolute;
+  right:18px;
+  bottom:18px;
+  border-radius:12px;
+  background:rgba(255,255,255,.94);
+  padding:12px 16px;
+  box-shadow:var(--sh2);
+  backdrop-filter:blur(8px);
+}
+
+.mattress-price-card span{
+  display:block;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+.mattress-price-card strong{
+  display:block;
+  margin-top:2px;
+  font-size:20px;
+  line-height:1.1;
+  color:var(--navy);
+}
+
+.mattress-spec-section{
+  background:var(--bg2);
+  padding:34px 0;
+}
+
+.mattress-spec-grid{
+  width:min(100%,1200px);
+  margin:0 auto;
+  padding:0 64px;
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:1px;
+  overflow:hidden;
+  border-radius:var(--rl);
+}
+
+.mattress-spec{
+  background:var(--surf-dk);
+  padding:22px 18px;
+  text-align:center;
+}
+
+.mattress-spec span{
+  display:block;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--slate);
+}
+
+.mattress-spec strong{
+  display:block;
+  margin-top:6px;
+  font-family:var(--serif);
+  font-size:clamp(30px,3vw,46px);
+  font-weight:400;
+  line-height:1;
+  color:var(--gold);
+}
+
+.mattress-spec small{
+  display:block;
+  margin-top:4px;
+  font-size:12px;
+  color:var(--powder);
+}
+
+.mattress-feature-grid{
+  width:min(100%,1200px);
+  margin:0 auto;
+  padding:64px;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:24px;
+}
+
+.mattress-feature{
+  border:1px solid var(--bdr);
+  border-radius:var(--rl);
+  background:#fff;
+  padding:32px;
+  box-shadow:var(--sh1);
+}
+
+.mattress-feature > span,.mattress-faq-inner > span{
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--blue);
+}
+
+.mattress-feature h2{
+  margin:10px 0 0!important;
+  font-size:clamp(28px,3vw,42px)!important;
+  line-height:1.12!important;
+  color:var(--navy)!important;
+}
+
+.mattress-feature p{
+  margin-top:14px;
+  font-size:15px;
+  line-height:1.75;
+  color:var(--body);
+}
+
+.mattress-feature ul{
+  display:grid;
+  gap:9px;
+  margin-top:18px;
+}
+
+.mattress-feature li{
+  position:relative;
+  padding-left:17px;
+  font-size:14px;
+  font-weight:800;
+  color:var(--navy);
+}
+
+.mattress-feature li::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:.75em;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:var(--ok);
+}
+
+.mattress-faq-section{
+  background:var(--bg4);
+  padding:64px 0;
+}
+
+.mattress-faq-inner{
+  width:min(100%,960px);
+  margin:0 auto;
+  padding:0 64px;
+}
+
+.mattress-faq-inner h2{
+  margin:10px 0 0!important;
+  font-size:clamp(30px,4vw,52px)!important;
+  color:var(--navy)!important;
+}
+
+.mattress-faq-inner > div{
+  display:grid;
+  gap:14px;
+  margin-top:28px;
+}
+
+.mattress-faq-inner article{
+  border:1px solid var(--bdr);
+  border-radius:var(--r);
+  background:#fff;
+  padding:22px;
+}
+
+.mattress-faq-inner h3{
+  margin:0!important;
+  font-family:var(--sans)!important;
+  font-size:16px!important;
+  font-weight:900;
+  color:var(--navy)!important;
+}
+
+.mattress-faq-inner p{
+  margin-top:8px;
+  font-size:14px;
+  line-height:1.7;
+  color:var(--body);
+}
+
+@media(max-width:900px){
+  .mattress-landing-hero{
+    grid-template-columns:1fr;
+    padding:28px 24px 44px;
+    gap:28px;
+  }
+
+  .mattress-copy{order:2}
+  .mattress-media{order:1}
+  .mattress-title{font-size:clamp(38px,8vw,58px)!important}
+  .mattress-spec-grid{padding:0 24px;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mattress-feature-grid{padding:48px 24px;grid-template-columns:1fr}
+  .mattress-faq-inner{padding:0 24px}
+}
+
+@media(max-width:560px){
+  .mattress-landing-hero{padding-left:16px;padding-right:16px}
+  .mattress-bullets{grid-template-columns:1fr}
+  .mattress-actions{flex-direction:column}
+  .mattress-primary,.mattress-secondary{width:100%}
+  .mattress-spec-grid{padding:0 16px;grid-template-columns:1fr}
+  .mattress-feature-grid{padding-left:16px;padding-right:16px}
+  .mattress-faq-inner{padding:0 16px}
 }

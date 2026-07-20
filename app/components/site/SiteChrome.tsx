@@ -259,6 +259,15 @@ export function SiteHeader() {
                                 {item.groups.map((group) => (
                                   <li key={group.label}>
                                     <Link href={group.href}>{group.label}</Link>
+                                    {"products" in group && group.products ? (
+                                      <ul className="mega-sub-products" role="list" aria-label={`${group.label} product pages`}>
+                                        {group.products.map((product) => (
+                                          <li key={product.label}>
+                                            <Link href={product.href}>{product.label}</Link>
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    ) : null}
                                   </li>
                                 ))}
                               </ul>
@@ -340,6 +349,15 @@ export function SiteHeader() {
                             {item.groups.map((group) => (
                               <li key={group.label}>
                                 <Link href={group.href} onClick={() => setMenuOpen(false)}>{group.label}</Link>
+                                {"products" in group && group.products ? (
+                                  <ul className="mob-product-sub-links" role="list" aria-label={`${group.label} product pages`}>
+                                    {group.products.map((product) => (
+                                      <li key={product.label}>
+                                        <Link href={product.href} onClick={() => setMenuOpen(false)}>{product.label}</Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                ) : null}
                               </li>
                             ))}
                           </ul>
