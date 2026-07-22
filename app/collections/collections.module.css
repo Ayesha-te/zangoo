@@ -144,6 +144,39 @@
   margin-top: 30px;
 }
 
+.sectionIntro {
+  width: min(100%, 1200px);
+  margin: 0 auto;
+  padding: 0 64px 28px;
+}
+
+.sectionIntro span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+
+.sectionIntro h2 {
+  margin: 0;
+  max-width: 760px;
+  font-family: var(--serif);
+  font-size: clamp(32px, 4vw, 54px);
+  line-height: 1.1;
+  color: var(--navy);
+}
+
+.sectionIntro p {
+  max-width: 640px;
+  margin-top: 12px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--body);
+}
+
 .mattressGrid {
   width: min(100%, 1200px);
   margin: 0 auto;
@@ -292,6 +325,10 @@
     padding: 0 24px 72px;
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .sectionIntro {
+    padding: 0 24px 24px;
+  }
 }
 
 @media (max-width: 580px) {
@@ -314,6 +351,10 @@
   .mattressGrid {
     padding: 0 16px 64px;
     grid-template-columns: 1fr;
+  }
+
+  .sectionIntro {
+    padding: 0 16px 22px;
   }
 
   .cardTop,

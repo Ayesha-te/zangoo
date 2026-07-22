@@ -35,6 +35,7 @@ ul{list-style:none}
 /* ── SKIP ── */
 .skip{position:absolute;top:-200%;left:16px;background:var(--blue);color:#fff;padding:10px 24px;border-radius:0 0 var(--r) var(--r);font-size:14px;font-weight:600;z-index:9999;transition:top .2s}
 .skip:focus-visible{top:0}
+.page-top-anchor{position:absolute;top:0;left:0;width:1px;height:1px;overflow:hidden;pointer-events:none}
 .sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 /* ── TYPE ── */
 h1,h2,h3,h4{font-family:var(--serif);color:var(--head);line-height:1.15;letter-spacing:-.02em}
@@ -612,6 +613,8 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
   background:var(--navy);
   color:#fff;
   cursor:pointer;
+  text-decoration:none;
+  line-height:1;
   display:flex;
   align-items:center;
   justify-content:center;

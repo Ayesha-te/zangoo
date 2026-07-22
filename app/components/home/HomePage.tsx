@@ -997,6 +997,19 @@ function BackToTop() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  function scrollToPageTop() {
+    const scrollingElement = document.scrollingElement ?? document.documentElement;
+    const setAbsoluteTop = () => {
+      scrollingElement.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    };
+
+    setAbsoluteTop();
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    window.setTimeout(setAbsoluteTop, 450);
+  }
+
   return (
     <>
       <a className="whatsapp-float" href={whatsappHref} target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp at +44 7830 376489">
@@ -1005,17 +1018,17 @@ function BackToTop() {
           <path d="M8.6 8.2c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.7 1.7c.1.2.1.4-.1.6l-.4.5c-.1.1-.2.3 0 .5.5.9 1.3 1.7 2.3 2.2.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.7.8c.3.1.4.3.4.5 0 .7-.5 1.5-1.1 1.8-.5.3-1.4.4-3.1-.3-2.6-1.1-4.4-3.5-4.8-4.1-.4-.5-1.1-1.7-1-2.5 0-.7.5-1.1.7-1.3Z" />
         </svg>
       </a>
-      <button
+      <a
+        href="#page-top"
         className={`btt${visible ? " show" : ""}`}
         aria-label="Back to top of page"
         hidden={!visible}
-        type="button"
-        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+        onClick={scrollToPageTop}
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <path d="M12 19V5M5 12l7-7 7 7" />
         </svg>
-      </button>
+      </a>
     </>
   );
 }
@@ -1059,6 +1072,7 @@ export function HomePage() {
 
   return (
     <>
+      <span id="page-top" className="page-top-anchor" aria-hidden="true" />
       <a href="#main" className="skip">Skip to main content</a>
       <SiteHeader />
       <main id="main" tabIndex={-1}>
