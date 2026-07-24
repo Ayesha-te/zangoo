@@ -10,6 +10,10 @@ export const metadata: Metadata = {
 };
 
 export default function CollectionsPage() {
+  const intro =
+    "Explore the main Furniture Co. categories with clear status labels. Bedroom mattresses are currently on sale, while other room collections are being prepared for launch.";
+  const shouldCollapseIntro = intro.length > 140;
+
   return (
     <>
       <SiteHeader />
@@ -18,16 +22,17 @@ export default function CollectionsPage() {
         <section className={styles.hero} aria-labelledby="collections-title">
           <span>Furniture Collections</span>
           <h1 id="collections-title">Shop furniture by room.</h1>
-          <details className={styles.collapsibleText}>
-            <summary>
-              <span className={styles.showMoreText}>Show more</span>
-              <span className={styles.showLessText}>Show less</span>
-            </summary>
-            <p>
-              Explore the main Furniture Co. categories with clear status labels. Bedroom mattresses are currently on sale,
-              while other room collections are being prepared for launch.
-            </p>
-          </details>
+          {shouldCollapseIntro ? (
+            <details className={styles.collapsibleText}>
+              <summary>
+                <span className={styles.showMoreText}>Show more</span>
+                <span className={styles.showLessText}>Show less</span>
+              </summary>
+              <p>{intro}</p>
+            </details>
+          ) : (
+            <p>{intro}</p>
+          )}
         </section>
 
         <section className={styles.grid} aria-label="Furniture collection categories">
@@ -39,13 +44,7 @@ export default function CollectionsPage() {
                 <div className={styles.cardTop}>
                   <span className={isLive ? styles.liveBadge : styles.badge}>{collection.badge}</span>
                   <strong>{collection.name}</strong>
-                  <details className={styles.collapsibleText}>
-                    <summary>
-                      <span className={styles.showMoreText}>Show more</span>
-                      <span className={styles.showLessText}>Show less</span>
-                    </summary>
-                    <p>{collection.description}</p>
-                  </details>
+                  <p>{collection.description}</p>
                 </div>
                 <div className={styles.cardBottom}>
                   <span>{collection.count}</span>
