@@ -116,7 +116,7 @@ section[id]{scroll-margin-top:calc(var(--nav) + 16px)}
 .hbg[aria-expanded=true] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .hbg[aria-expanded=true] span:nth-child(2){opacity:0}
 .hbg[aria-expanded=true] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
-.mob-menu{display:block;position:fixed;top:var(--nav);left:0;right:0;background:var(--surf);border-bottom:1px solid var(--bdr);padding:16px 24px 24px;box-shadow:var(--sh2);z-index:290;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-12px);transition:opacity .24s ease,transform .28s cubic-bezier(.22,1,.36,1),visibility 0s linear .28s}
+.mob-menu{display:block;position:fixed;top:var(--nav);left:0;right:0;max-height:calc(100svh - var(--nav));overflow-y:auto;overscroll-behavior:contain;background:var(--surf);border-bottom:1px solid var(--bdr);padding:16px 24px 24px;box-shadow:var(--sh2);z-index:290;opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-12px);transition:opacity .24s ease,transform .28s cubic-bezier(.22,1,.36,1),visibility 0s linear .28s}
 .mob-menu.open{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0);transition-delay:0s}
 .mob-links{display:flex;flex-direction:column;gap:4px;margin-bottom:16px}
 .mob-links a{font-size:16px;font-weight:500;color:var(--body);padding:12px 16px;border-radius:var(--r);display:flex;align-items:center;min-height:48px;transition:background var(--tr),color var(--tr)}
@@ -505,6 +505,7 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 @media(max-width:900px){
   .wrap{padding:0 24px}
   .nav-links{display:none}
+  .nav-in{gap:10px}
   .nav-tools{margin-left:auto}
   .nav-tools a{width:32px;height:32px}
   .hbg{display:flex}
@@ -566,7 +567,12 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 }
 @media(max-width:580px){
   .wrap{padding:0 16px}
-  .nav-in{padding:0 16px}
+  .nav-in{padding:0 16px;gap:6px}
+  .nav-logo{font-size:19px}
+  .nav-tools{gap:0}
+  .nav-tools a{width:30px;height:32px}
+  .hbg{min-width:42px;min-height:42px;padding:8px}
+  .mob-menu{padding:12px 16px 18px}
   .announce-track span{font-size:10px;letter-spacing:.05em}
   .trust-bar-in{padding:10px 16px;gap:8px 12px}
   .trust-bar span{font-size:12px}
@@ -599,6 +605,23 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
   .breadcrumbs{padding-left:16px;padding-right:16px}
   .booking-grid{grid-template-columns:1fr}
   .booking-modal{padding:24px}
+  footer{padding:28px 0 22px}
+  .foot-in{grid-template-columns:1fr;grid-template-areas:"brand" "main" "support" "news" "copy";padding:0 16px;gap:18px}
+  .foot-brand p,.foot-newsletter p{margin-top:6px;font-size:12px;line-height:1.45}
+  .foot-social{margin-top:10px;gap:8px}
+  .foot-social a{width:32px;height:32px}
+  .foot-links{gap:3px}
+  .foot-links a{min-height:24px;font-size:12px}
+  .foot-newsletter label{margin-top:8px}
+  .foot-newsletter input,.foot-newsletter button{min-height:38px}
+}
+@media(max-width:360px){
+  .nav-in{padding:0 10px;gap:4px}
+  .nav-logo{font-size:18px}
+  .nav-tools a{width:28px}
+  .nav-tools a:nth-child(3),
+  .nav-tools a:nth-child(4){display:none}
+  .hbg{min-width:40px;min-height:40px}
 }
 /* ── BACK TO TOP ── */
 .btt{

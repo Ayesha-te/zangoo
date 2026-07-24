@@ -294,6 +294,9 @@
   background:rgba(21,87,167,.08)!important;
   color:var(--body)!important;
   font:900 10px/1.2 var(--sans)!important;
+  overflow:hidden!important;
+  text-align:center!important;
+  overflow-wrap:anywhere!important;
 }
 
 :global(.mattress-landing .lp-zone-map span:nth-child(4)){
@@ -450,6 +453,12 @@
   border-radius:var(--rl)!important;
   background:var(--bg1)!important;
   box-shadow:var(--sh1)!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+
+:global(.mattress-landing .lp-review-grid article){
+  min-height:330px!important;
 }
 
 :global(.mattress-landing .lp-trust-grid article > span){
@@ -482,6 +491,10 @@
   margin:0!important;
   color:var(--body)!important;
   font:500 14px/1.7 var(--sans)!important;
+}
+
+:global(.mattress-landing .lp-review-grid p){
+  min-height:120px!important;
 }
 
 :global(.mattress-landing .lp-why-compare){
@@ -649,7 +662,8 @@
   display:flex!important;
   align-items:center!important;
   gap:12px!important;
-  margin-top:20px!important;
+  margin-top:auto!important;
+  margin-bottom:0!important;
   padding-top:16px!important;
   border-top:1px solid var(--bdr)!important;
 }
@@ -899,12 +913,15 @@
   }
 
   :global(.mattress-landing .lp-zone-map){
-    height:240px!important;
-    gap:5px!important;
+    height:250px!important;
+    grid-template-columns:repeat(7,minmax(0,1fr))!important;
+    gap:6px!important;
   }
 
   :global(.mattress-landing .lp-zone-map span){
-    font-size:8px!important;
+    padding:10px 2px!important;
+    font-size:7px!important;
+    line-height:1.05!important;
   }
 
   :global(.mattress-landing .lp-specs){
@@ -917,6 +934,18 @@
   :global(.mattress-landing .lp-pain-grid),
   :global(.mattress-landing .lp-value-grid){
     grid-template-columns:1fr!important;
+  }
+
+  :global(.mattress-landing .lp-review-grid article){
+    min-height:0!important;
+  }
+
+  :global(.mattress-landing .lp-review-grid p){
+    min-height:0!important;
+  }
+
+  :global(.mattress-landing .lp-review-grid article > div){
+    margin-top:20px!important;
   }
 
   :global(.mattress-landing .lp-value-grid article),

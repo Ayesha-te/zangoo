@@ -43,7 +43,13 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
         <section className={styles.hero} aria-labelledby="collection-title">
           <span>{collection.badge}</span>
           <h1 id="collection-title">{collection.name}</h1>
-          <p>{collection.description}</p>
+          <details className={styles.collapsibleText}>
+            <summary>
+              <span className={styles.showMoreText}>Show more</span>
+              <span className={styles.showLessText}>Show less</span>
+            </summary>
+            <p>{collection.description}</p>
+          </details>
           <div className={styles.detailActions}>
             <Link className={styles.primaryLink} href="/contact/">
               {isLive ? "Enquire About Mattress Sale" : "Join Launch List"}
@@ -66,11 +72,17 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
                       {isMattresses ? "Mattress Sale" : "Coming Soon"}
                     </span>
                     <strong>{group.label}</strong>
-                    <p>
+                    <details className={styles.collapsibleText}>
+                      <summary>
+                        <span className={styles.showMoreText}>Show more</span>
+                        <span className={styles.showLessText}>Show less</span>
+                      </summary>
+                      <p>
                       {isMattresses
                         ? "Orthopaedic mattress sale products are available now with individual landing pages."
                         : `${group.label} products are being prepared for launch.`}
-                    </p>
+                      </p>
+                    </details>
                   </div>
                   <div className={styles.cardBottom}>
                     <span>{isMattresses ? `${orthoMattressProducts.length} products live` : "Launching soon"}</span>
@@ -84,34 +96,6 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
           </section>
         ) : null}
 
-        {isLive ? (
-          <>
-            <section className={styles.sectionIntro} aria-labelledby="bedroom-mattresses-title">
-              <span>Mattress landing pages</span>
-              <h2 id="bedroom-mattresses-title">Orthopaedic mattresses now live</h2>
-              <p>These are the new mattress pages the client is expecting to see under the Bedroom collection.</p>
-            </section>
-            <section className={styles.mattressGrid} aria-label="Bedroom orthopaedic mattress product pages">
-              {orthoMattressProducts.map((mattress) => (
-                <Link
-                  className={styles.mattressCard}
-                  href={`/collections/bedroom/mattresses/${mattress.slug}/`}
-                  key={mattress.slug}
-                >
-                  <span className={styles.mattressImage}>
-                    <img src={mattress.image} alt="" />
-                    <span className={styles.saleBadge}>Mattress Sale</span>
-                  </span>
-                  <span className={styles.mattressInfo}>
-                    <strong>{mattress.shortName}</strong>
-                    <span className={styles.mattressFeel}>{mattress.firmness} orthopaedic support</span>
-                    <span className={styles.mattressPrice}>{mattress.price}</span>
-                  </span>
-                </Link>
-              ))}
-            </section>
-          </>
-        ) : null}
       </main>
       <SiteFooter />
     </>

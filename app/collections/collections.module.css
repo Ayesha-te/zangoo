@@ -38,6 +38,56 @@
   line-height: 1.75;
 }
 
+.collapsibleText {
+  display: flex;
+  flex-direction: column;
+  max-width: 720px;
+  margin-top: 18px;
+}
+
+.collapsibleText summary {
+  order: 2;
+  width: max-content;
+  max-width: 100%;
+  margin-top: 8px;
+  cursor: pointer;
+  color: var(--blue);
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.2;
+  list-style: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.collapsibleText summary::-webkit-details-marker {
+  display: none;
+}
+
+.collapsibleText p {
+  order: 1;
+  max-height: 5.2em;
+  margin: 0;
+  overflow: hidden;
+  color: var(--body);
+}
+
+.collapsibleText[open] p {
+  max-height: none;
+}
+
+.collapsibleText summary .showLessText {
+  display: none;
+}
+
+.collapsibleText[open] summary .showMoreText {
+  display: none;
+}
+
+.collapsibleText[open] summary .showLessText {
+  display: inline;
+}
+
 .grid {
   width: min(100%, 1200px);
   margin: 0 auto;
@@ -63,6 +113,9 @@
   flex: 1;
   padding: 32px;
   background: linear-gradient(135deg, var(--bg4), #fff);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .badge,
@@ -105,19 +158,22 @@
 .cardBottom {
   padding: 20px 32px;
   border-top: 1px solid var(--bdr);
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
   gap: 18px;
 }
 
 .cardBottom span {
+  min-width: 0;
   font-size: 14px;
   font-weight: 800;
   color: var(--body);
 }
 
 .cardBottom a {
+  width: max-content;
+  max-width: 100%;
   min-height: 42px;
   padding: 9px 18px;
   border-radius: var(--r);
@@ -125,9 +181,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  text-align: center;
   font-size: 13px;
   font-weight: 800;
+  line-height: 1.2;
   color: var(--blue);
+  white-space: normal;
+  overflow-wrap: anywhere;
   transition: background var(--tr), color var(--tr);
 }
 
@@ -286,6 +346,10 @@
   align-items: center;
   justify-content: center;
   font-weight: 800;
+  line-height: 1.25;
+  text-align: center;
+  white-space: normal;
+  overflow-wrap: anywhere;
   transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
 }
 
@@ -365,7 +429,14 @@
 
   .cardBottom {
     align-items: stretch;
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .cardBottom a,
+  .primaryLink,
+  .secondaryLink {
+    width: 100%;
   }
 
   .detailActions {
