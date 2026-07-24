@@ -143,6 +143,7 @@
   display:inline-flex!important;
   align-items:center!important;
   justify-content:center!important;
+  gap:8px!important;
   min-height:48px!important;
   padding:12px 30px!important;
   border:2px solid transparent!important;
@@ -150,6 +151,17 @@
   font:900 16px/1.2 var(--sans)!important;
   text-decoration:none!important;
   white-space:nowrap!important;
+}
+
+:global(.mattress-landing .lp-btn svg){
+  width:19px!important;
+  height:19px!important;
+  flex:0 0 19px!important;
+  fill:none!important;
+  stroke:currentColor!important;
+  stroke-width:1.9!important;
+  stroke-linecap:round!important;
+  stroke-linejoin:round!important;
 }
 
 :global(.mattress-landing .lp-btn-primary){
@@ -752,32 +764,73 @@
   gap:12px!important;
 }
 
-:global(.mattress-landing .lp-faq details){
+:global(.mattress-landing .lp-faq-item){
   border:1px solid var(--bdr)!important;
   border-radius:var(--rl)!important;
   background:#fff!important;
   overflow:hidden!important;
 }
 
-:global(.mattress-landing .lp-faq summary){
+:global(.mattress-landing .lp-faq-btn){
+  width:100%!important;
   min-height:60px!important;
   cursor:pointer!important;
-  list-style:none!important;
+  border:0!important;
+  background:none!important;
   padding:18px 22px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:16px!important;
+  text-align:left!important;
   color:var(--navy)!important;
   font:900 14px/1.4 var(--sans)!important;
+  transition:background var(--tr)!important;
 }
 
-:global(.mattress-landing .lp-faq summary::-webkit-details-marker){
-  display:none!important;
+:global(.mattress-landing .lp-faq-btn:hover){
+  background:rgba(21,87,167,.04)!important;
 }
 
-:global(.mattress-landing .lp-faq details[open] summary){
+:global(.mattress-landing .lp-faq-btn[aria-expanded=true]){
   background:rgba(21,87,167,.07)!important;
 }
 
-:global(.mattress-landing .lp-faq details p){
-  margin:0 22px 18px!important;
+:global(.mattress-landing .lp-faq-icon){
+  width:28px!important;
+  height:28px!important;
+  flex:0 0 28px!important;
+  border-radius:50%!important;
+  background:var(--bg4)!important;
+  display:grid!important;
+  place-items:center!important;
+  color:var(--blue)!important;
+  font:400 17px/1 var(--sans)!important;
+  transition:transform var(--tr),background var(--tr),color var(--tr)!important;
+}
+
+:global(.mattress-landing .lp-faq-btn[aria-expanded=true] .lp-faq-icon){
+  transform:rotate(45deg)!important;
+  background:var(--blue)!important;
+  color:#fff!important;
+}
+
+:global(.mattress-landing .lp-faq-body){
+  display:grid!important;
+  grid-template-rows:0fr!important;
+  padding:0 22px!important;
+  transition:grid-template-rows .3s cubic-bezier(.22,1,.36,1),padding .3s cubic-bezier(.22,1,.36,1)!important;
+}
+
+:global(.mattress-landing .lp-faq-body[aria-hidden=false]){
+  grid-template-rows:1fr!important;
+  padding:0 22px 18px!important;
+}
+
+:global(.mattress-landing .lp-faq-body p){
+  min-height:0!important;
+  overflow:hidden!important;
+  margin:0!important;
   padding-top:14px!important;
   border-top:1px solid var(--bdr)!important;
   color:var(--body)!important;

@@ -59,7 +59,8 @@ export function SiteHeader() {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const [menuOpen, setMenuOpen] = useState(false);
-  const [openMobileCategory, setOpenMobileCategory] = useState<string | null>("Bedroom");
+  const [openMobileCategory, setOpenMobileCategory] = useState<string | null>(null);
+  const [openDesktopCategory, setOpenDesktopCategory] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [activeHref, setActiveHref] = useState("#");
 
@@ -247,15 +248,28 @@ export function SiteHeader() {
                         </div>
                         <ul className="mega-links" role="list">
                           {collectionCategories.map((item) => (
-                            <li className="mega-category" key={item.label}>
-                              <Link className="mega-link" href={item.href}>
+                            <li
+                              className={`mega-category${openDesktopCategory === item.label ? " open" : ""}`}
+                              key={item.label}
+                              onMouseEnter={() => setOpenDesktopCategory(item.label)}
+                              onFocus={() => setOpenDesktopCategory(item.label)}
+                            >
+                              <button
+                                className="mega-link"
+                                type="button"
+                                aria-expanded={openDesktopCategory === item.label}
+                                onClick={() => setOpenDesktopCategory((current) => (current === item.label ? null : item.label))}
+                              >
                                 <span className="mega-link-copy">
                                   <strong>{item.label}</strong>
                                   <small>{item.groups.map((group) => group.label).join(", ")}</small>
                                 </span>
                                 <em className={`mega-link-badge${item.label === "Bedroom" ? " is-active" : ""}`}>{item.badge}</em>
-                              </Link>
+                              </button>
                               <ul className="mega-products" role="list" aria-label={`${item.label} products`}>
+                                <li>
+                                  <Link href={item.href}>View {item.label}</Link>
+                                </li>
                                 {item.groups.map((group) => (
                                   <li key={group.label}>
                                     <Link href={group.href}>{group.label}</Link>

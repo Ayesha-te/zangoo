@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, type RefObject, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, type CSSProperties, type RefObject, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { awards, blogPosts, collections, faqs, reviews } from "@/app/data/home";
 import { primaryButtonClasses, secondaryButtonClasses } from "@/app/components/site/buttonClasses";
@@ -987,6 +987,144 @@ function Contact() {
   );
 }
 
+function CampaignPopup() {
+  const [visible, setVisible] = useState(false);
+  const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [website, setWebsite] = useState("");
+  const [errors, setErrors] = useState<NewsletterErrors>({});
+  const [subscribed, setSubscribed] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setVisible(true), 900);
+    return () => window.clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setVisible(false);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const nextErrors = validateNewsletter(email, firstName, website);
+
+    if (Object.values(nextErrors).some(Boolean)) {
+      setErrors(nextErrors);
+      return;
+    }
+
+    setEmail("");
+    setFirstName("");
+    setWebsite("");
+    setErrors({});
+    setSubscribed(true);
+  }
+
+  if (!visible) return null;
+
+  const popupStyle: CSSProperties = {
+    position: "fixed",
+    right: "24px",
+    bottom: "24px",
+    zIndex: 760,
+    width: "min(360px, calc(100vw - 32px))",
+    border: "1px solid var(--bdr)",
+    borderRadius: "var(--rl)",
+    background: "rgba(255,255,255,.98)",
+    boxShadow: "var(--sh3)",
+    padding: "24px",
+    color: "var(--body)",
+  };
+
+  const closeStyle: CSSProperties = {
+    position: "absolute",
+    top: "12px",
+    right: "12px",
+    width: "32px",
+    height: "32px",
+    border: "1px solid var(--bdr)",
+    borderRadius: "50%",
+    background: "var(--bg1)",
+    color: "var(--navy)",
+    cursor: "pointer",
+    fontSize: "18px",
+    lineHeight: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  };
+
+  const fieldStyle: CSSProperties = {
+    minHeight: "40px",
+    border: "1.5px solid var(--bdr)",
+    borderRadius: "var(--r)",
+    background: "var(--bg1)",
+    padding: "9px 12px",
+    font: "inherit",
+    color: "var(--navy)",
+  };
+
+  return (
+    <aside className="campaign-popup" aria-labelledby="campaign-popup-title" style={popupStyle}>
+      <button className="campaign-popup-close" type="button" aria-label="Close campaign offer" onClick={() => setVisible(false)} style={closeStyle}>
+        x
+      </button>
+      <span className="campaign-popup-kicker" style={{ display: "block", margin: "0 42px 8px 0", color: "var(--blue)", fontSize: "10px", fontWeight: 900, letterSpacing: ".14em", textTransform: "uppercase" }}>New member offer</span>
+      <h2 id="campaign-popup-title" style={{ margin: 0, color: "var(--navy)", fontSize: "25px", lineHeight: 1.12 }}>Get 10% off your first order.</h2>
+      <p style={{ margin: "10px 0 16px", fontSize: "13px", lineHeight: 1.55, color: "var(--body)" }}>Subscribe for launch offers, mattress sale updates, and room styling guides.</p>
+      {subscribed ? (
+        <div className="campaign-popup-success" role="status" style={{ border: "1px solid rgba(46,125,50,.28)", borderRadius: "var(--r)", background: "rgba(46,125,50,.08)", padding: "12px", color: "var(--ok)", fontSize: "13px", fontWeight: 800, lineHeight: 1.45 }}>
+          You are subscribed. Your welcome offer will be sent by email.
+        </div>
+      ) : (
+        <form className="campaign-popup-form" onSubmit={onSubmit} noValidate style={{ display: "grid", gap: "10px" }}>
+          <label style={{ display: "grid", gap: "5px", fontSize: "12px", fontWeight: 800, color: "var(--navy)" }}>
+            <span>First name</span>
+            <input
+              type="text"
+              value={firstName}
+              onChange={(event) => {
+                setFirstName(event.target.value.slice(0, 40));
+                setErrors((current) => ({ ...current, firstName: undefined, form: undefined }));
+              }}
+              aria-invalid={Boolean(errors.firstName)}
+              style={fieldStyle}
+            />
+          </label>
+          {errors.firstName ? <small className="campaign-popup-error">{errors.firstName}</small> : null}
+          <label style={{ display: "grid", gap: "5px", fontSize: "12px", fontWeight: 800, color: "var(--navy)" }}>
+            <span>Email address</span>
+            <input
+              type="email"
+              value={email}
+              placeholder="you@example.com"
+              onChange={(event) => {
+                setEmail(event.target.value.slice(0, 80));
+                setErrors((current) => ({ ...current, email: undefined, form: undefined }));
+              }}
+              aria-invalid={Boolean(errors.email)}
+              required
+              style={fieldStyle}
+            />
+          </label>
+          {errors.email ? <small className="campaign-popup-error">{errors.email}</small> : null}
+          <label className="hp-field">
+            <span>Website</span>
+            <input type="text" value={website} onChange={(event) => setWebsite(event.target.value)} tabIndex={-1} autoComplete="off" />
+          </label>
+          {errors.form ? <div className="campaign-popup-error">{errors.form}</div> : null}
+          <button type="submit" style={{ minHeight: "42px", border: "2px solid var(--blue)", borderRadius: "var(--r)", background: "var(--blue)", color: "#fff", font: "900 14px/1.2 var(--sans)", cursor: "pointer" }}>Subscribe</button>
+        </form>
+      )}
+    </aside>
+  );
+}
+
 function BackToTop() {
   const [visible, setVisible] = useState(false);
 
@@ -1088,6 +1226,7 @@ export function HomePage() {
         <Contact />
       </main>
       <SiteFooter />
+      <CampaignPopup />
       <BackToTop />
     </>
   );

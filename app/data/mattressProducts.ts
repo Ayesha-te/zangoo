@@ -18,7 +18,7 @@ export const orthoMattressProducts: MattressProduct[] = [
     slug: "restcore-ortho",
     name: "RestCore Ortho Mattress",
     shortName: "RestCore Ortho",
-    price: "From GBP 499",
+    price: "From £499",
     firmness: "Medium-firm",
     description:
       "An orthopaedic mattress designed for balanced spinal alignment, everyday pressure relief, and reliable support through the night.",
@@ -52,7 +52,7 @@ export const orthoMattressProducts: MattressProduct[] = [
     slug: "alignplus-ortho",
     name: "AlignPlus Ortho Mattress",
     shortName: "AlignPlus Ortho",
-    price: "From GBP 579",
+    price: "From £579",
     firmness: "Firm",
     description:
       "A firmer orthopaedic mattress for sleepers who prefer a more lifted, stable feel across the hips, shoulders, and lower back.",
@@ -86,7 +86,7 @@ export const orthoMattressProducts: MattressProduct[] = [
     slug: "ortholux-pocket",
     name: "OrthoLux Pocket Mattress",
     shortName: "OrthoLux Pocket",
-    price: "From GBP 649",
+    price: "From £649",
     firmness: "Medium-firm",
     description:
       "A pocket-sprung orthopaedic mattress made for independent support, reduced partner disturbance, and a more responsive sleep feel.",
@@ -120,7 +120,7 @@ export const orthoMattressProducts: MattressProduct[] = [
     slug: "spineguard-ortho",
     name: "SpineGuard Ortho Mattress",
     shortName: "SpineGuard Ortho",
-    price: "From GBP 699",
+    price: "From £699",
     firmness: "Extra firm",
     description:
       "The firmest orthopaedic option in the launch range, created for customers who want maximum lift and a highly supportive sleep surface.",

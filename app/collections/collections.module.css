@@ -204,6 +204,15 @@
   margin-top: 30px;
 }
 
+.detailActions .secondaryLink {
+  gap: 10px;
+}
+
+.detailActions .secondaryLink span {
+  font-size: 18px;
+  line-height: 1;
+}
+
 .sectionIntro {
   width: min(100%, 1200px);
   margin: 0 auto;
@@ -331,8 +340,10 @@
 .mattressPrice {
   margin-top: auto;
   padding-top: 16px;
-  font-size: 14px;
+  font-family: var(--serif);
+  font-size: clamp(22px, 2.2vw, 30px);
   font-weight: 900;
+  line-height: 1.1;
   color: var(--blue);
 }
 

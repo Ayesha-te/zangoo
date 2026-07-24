@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ProductFaq } from "@/app/components/site/ProductFaq";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { getMattressProduct, orthoMattressProducts } from "@/app/data/mattressProducts";
 import "./productLanding.module.css";
@@ -78,6 +79,13 @@ const painPoints = [
   ["Warm sleep", "Breathable materials help the sleep surface feel more balanced."],
   ["Daily durability", "Built for regular family use with practical support and comfort."],
 ];
+
+const whatsappIcon = (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M5.1 19.2 6 15.8a7.4 7.4 0 1 1 2.8 2.8l-3.7.6Z" />
+    <path d="M9.2 8.8c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.6 1.4c.1.3.1.4-.1.6l-.4.5c-.1.1-.2.3 0 .5.4.8 1.1 1.5 2 1.9.2.1.4.1.5-.1l.6-.7c.2-.2.4-.2.6-.1l1.5.7c.3.1.4.3.4.5 0 .6-.5 1.3-1.1 1.5-.6.2-1.8.2-3.4-.6-1.9-.9-3.2-2.5-3.7-4-.5-1.3-.2-2 .3-2.6Z" />
+  </svg>
+);
 
 function MattressIllustration() {
   return (
@@ -180,6 +188,7 @@ export default async function ProductLandingPage({ params }: ProductLandingPageP
 
           <div className="lp-actions">
             <a className="lp-btn lp-btn-primary" href="https://wa.me/447830376489" target="_blank" rel="noopener noreferrer">
+              {whatsappIcon}
               Ask About This Mattress
             </a>
             <a className="lp-btn lp-btn-light" href="#features">
@@ -393,22 +402,19 @@ export default async function ProductLandingPage({ params }: ProductLandingPageP
             <h2 id="faq-title">Everything you need to know</h2>
             <p>Helpful answers about {item.shortName} before you commit.</p>
           </div>
-          <div className="lp-faq-grid">
-            {item.faqs.map((faq) => (
-              <details key={faq.question}>
-                <summary>{faq.question}</summary>
-                <p>{faq.answer}</p>
-              </details>
-            ))}
-            <details>
-              <summary>What sizes are available?</summary>
-              <p>Single, Double, King and Super King options can be discussed through WhatsApp before ordering.</p>
-            </details>
-            <details>
-              <summary>Can I get help choosing firmness?</summary>
-              <p>Yes. Message us and we will guide you based on sleep position, comfort preference, and support needs.</p>
-            </details>
-          </div>
+          <ProductFaq
+            faqs={[
+              ...item.faqs,
+              {
+                question: "What sizes are available?",
+                answer: "Single, Double, King and Super King options can be discussed through WhatsApp before ordering.",
+              },
+              {
+                question: "Can I get help choosing firmness?",
+                answer: "Yes. Message us and we will guide you based on sleep position, comfort preference, and support needs.",
+              },
+            ]}
+          />
         </section>
 
         <section className="lp-cta" id="order" aria-labelledby="order-title">
@@ -416,8 +422,12 @@ export default async function ProductLandingPage({ params }: ProductLandingPageP
             <h2 id="order-title">Ready to ask about {item.shortName}?</h2>
             <p>Get direct guidance on sizes, firmness, delivery, and the current mattress sale.</p>
             <a className="lp-btn lp-btn-white" href="https://wa.me/447830376489" target="_blank" rel="noopener noreferrer">
+              {whatsappIcon}
               Open WhatsApp Consultation
             </a>
+            <Link className="lp-btn lp-btn-light" href="/contact/">
+              Contact Support
+            </Link>
             <Link className="lp-btn lp-btn-light" href="/collections/bedroom/mattresses/">
               View Mattress Range
             </Link>

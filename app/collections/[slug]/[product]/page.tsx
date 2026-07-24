@@ -66,10 +66,8 @@ export default async function CollectionProductPage({ params }: ProductPageProps
               : "This category is coming soon. Join the launch list for updates."}
           </p>
           <div className={styles.detailActions}>
-            <Link className={styles.primaryLink} href="/contact/">
-              Contact Support
-            </Link>
             <Link className={styles.secondaryLink} href={item.category.href}>
+              <span aria-hidden="true">←</span>
               Back to {item.category.label}
             </Link>
           </div>
