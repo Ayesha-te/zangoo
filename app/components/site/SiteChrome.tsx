@@ -60,7 +60,7 @@ export function SiteHeader() {
   const isHome = pathname === "/";
   const [menuOpen, setMenuOpen] = useState(false);
   const [openMobileCategory, setOpenMobileCategory] = useState<string | null>(null);
-  const [openDesktopCategory, setOpenDesktopCategory] = useState<string | null>(null);
+  const [openDesktopCategory, setOpenDesktopCategory] = useState<string>("Bedroom");
   const [scrolled, setScrolled] = useState(false);
   const [activeHref, setActiveHref] = useState("#");
 
@@ -227,6 +227,8 @@ export function SiteHeader() {
                   ? pathname.startsWith("/collections") || (isHome && activeHref === "/collections/")
                   : isHome && activeHref === link.href;
               const hasMegaMenu = link.label === "Collections";
+              const desktopCategory =
+                collectionCategories.find((item) => item.label === openDesktopCategory) ?? collectionCategories[0];
 
               return (
                 <li className={hasMegaMenu ? "nav-item has-mega" : "nav-item"} key={link.label}>
@@ -254,40 +256,45 @@ export function SiteHeader() {
                               onMouseEnter={() => setOpenDesktopCategory(item.label)}
                               onFocus={() => setOpenDesktopCategory(item.label)}
                             >
-                              <button
+                              <Link
                                 className="mega-link"
-                                type="button"
-                                aria-expanded={openDesktopCategory === item.label}
-                                onClick={() => setOpenDesktopCategory((current) => (current === item.label ? null : item.label))}
+                                href={item.href}
+                                aria-current={openDesktopCategory === item.label ? "true" : undefined}
                               >
                                 <span className="mega-link-copy">
                                   <strong>{item.label}</strong>
                                   <small>{item.groups.map((group) => group.label).join(", ")}</small>
                                 </span>
                                 <em className={`mega-link-badge${item.label === "Bedroom" ? " is-active" : ""}`}>{item.badge}</em>
-                              </button>
-                              <ul className="mega-products" role="list" aria-label={`${item.label} products`}>
-                                <li>
-                                  <Link href={item.href}>View {item.label}</Link>
-                                </li>
-                                {item.groups.map((group) => (
-                                  <li key={group.label}>
-                                    <Link href={group.href}>{group.label}</Link>
-                                    {"products" in group && group.products ? (
-                                      <ul className="mega-sub-products" role="list" aria-label={`${group.label} product pages`}>
-                                        {group.products.map((product) => (
-                                          <li key={product.label}>
-                                            <Link href={product.href}>{product.label}</Link>
-                                          </li>
-                                        ))}
-                                      </ul>
-                                    ) : null}
-                                  </li>
-                                ))}
-                              </ul>
+                              </Link>
                             </li>
                           ))}
                         </ul>
+                        <div className="mega-products-panel" aria-label={`${desktopCategory.label} subcategories`}>
+                          <Link className="mega-panel-title" href={desktopCategory.href}>
+                            View {desktopCategory.label}
+                          </Link>
+                          <ul className="mega-products" role="list">
+                            {desktopCategory.groups.map((group, groupIndex) => (
+                              <li className="mega-product-group" key={group.label}>
+                                <Link href={group.href}>{group.label}</Link>
+                                {"products" in group && group.products ? (
+                                  <ul
+                                    className={`mega-sub-products${groupIndex === 0 ? " is-default" : ""}`}
+                                    role="list"
+                                    aria-label={`${group.label} product pages`}
+                                  >
+                                    {group.products.map((product) => (
+                                      <li key={product.label}>
+                                        <Link href={product.href}>{product.label}</Link>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                ) : null}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   ) : null}

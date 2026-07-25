@@ -1,5 +1,5 @@
 .page {
-  min-height: 100vh;
+  min-height: auto;
   padding-top: 0;
   background: var(--bg1);
   color: var(--body);
@@ -254,6 +254,13 @@
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 20px;
   align-items: stretch;
+}
+
+@media (orientation: portrait) and (min-width: 700px) {
+  .grid,
+  .mattressGrid {
+    padding-bottom: 48px;
+  }
 }
 
 .mattressCard {
