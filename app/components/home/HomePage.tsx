@@ -339,6 +339,7 @@ function Hero() {
           <path d="M12 5v14M5 12l7 7 7-7" />
         </svg>
       </div>
+      <TrustBar />
     </section>
   );
 }
@@ -1025,8 +1026,6 @@ function CampaignPopup() {
     setSubscribed(true);
   }
 
-  if (!visible) return null;
-
   const popupStyle: CSSProperties = {
     position: "fixed",
     right: "24px",
@@ -1070,7 +1069,7 @@ function CampaignPopup() {
   };
 
   return (
-    <aside className="campaign-popup" aria-labelledby="campaign-popup-title" style={popupStyle}>
+    <aside className={`campaign-popup${visible ? " is-visible" : ""}`} aria-hidden={!visible} aria-labelledby="campaign-popup-title" style={popupStyle}>
       <button className="campaign-popup-close" type="button" aria-label="Close campaign offer" onClick={() => setVisible(false)} style={closeStyle}>
         x
       </button>
@@ -1215,7 +1214,6 @@ export function HomePage() {
       <SiteHeader />
       <main id="main" tabIndex={-1}>
         <Hero />
-        <TrustBar />
         <Collections />
         <FeaturedMattresses />
         <Stats />

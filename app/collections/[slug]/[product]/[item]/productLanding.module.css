@@ -865,6 +865,11 @@
 
 :global(.mattress-landing .lp-cta .lp-btn){
   margin:0 6px 10px!important;
+  vertical-align:top!important;
+}
+
+:global(.mattress-landing .lp-cta .lp-btn-white){
+  min-width:min(100%,320px)!important;
 }
 
 :global(.mattress-landing .lp-cta-note){

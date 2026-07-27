@@ -60,6 +60,7 @@ export function SiteHeader() {
   const isHome = pathname === "/";
   const [menuOpen, setMenuOpen] = useState(false);
   const [openMobileCategory, setOpenMobileCategory] = useState<string | null>(null);
+  const [openMobileGroup, setOpenMobileGroup] = useState<string | null>(null);
   const [openDesktopCategory, setOpenDesktopCategory] = useState<string>("Bedroom");
   const [scrolled, setScrolled] = useState(false);
   const [activeHref, setActiveHref] = useState("#");
@@ -275,12 +276,12 @@ export function SiteHeader() {
                             View {desktopCategory.label}
                           </Link>
                           <ul className="mega-products" role="list">
-                            {desktopCategory.groups.map((group, groupIndex) => (
-                              <li className="mega-product-group" key={group.label}>
+                            {desktopCategory.groups.map((group) => (
+                              <li className={`mega-product-group${"products" in group && group.products ? " has-products" : ""}`} key={group.label}>
                                 <Link href={group.href}>{group.label}</Link>
                                 {"products" in group && group.products ? (
                                   <ul
-                                    className={`mega-sub-products${groupIndex === 0 ? " is-default" : ""}`}
+                                    className="mega-sub-products"
                                     role="list"
                                     aria-label={`${group.label} product pages`}
                                   >
@@ -357,30 +358,57 @@ export function SiteHeader() {
                           className="mob-category-btn"
                           type="button"
                           aria-expanded={openMobileCategory === item.label}
-                          onClick={() => setOpenMobileCategory((current) => (current === item.label ? null : item.label))}
+                          onClick={() => {
+                            setOpenMobileCategory((current) => (current === item.label ? null : item.label));
+                            setOpenMobileGroup(null);
+                          }}
                         >
                           <span>{item.label}</span>
-                          <em className={item.label === "Bedroom" ? "is-active" : undefined}>{item.badge}</em>
+                          <span className="mob-category-meta">
+                            <em className={item.label === "Bedroom" ? "is-active" : undefined}>{item.badge}</em>
+                            <b aria-hidden="true">&gt;</b>
+                          </span>
                         </button>
                         {openMobileCategory === item.label ? (
                           <ul className="mob-product-links" role="list" aria-label={`${item.label} products`}>
                             <li>
                               <Link href={item.href} onClick={() => setMenuOpen(false)}>View {item.label}</Link>
                             </li>
-                            {item.groups.map((group) => (
-                              <li key={group.label}>
-                                <Link href={group.href} onClick={() => setMenuOpen(false)}>{group.label}</Link>
-                                {"products" in group && group.products ? (
-                                  <ul className="mob-product-sub-links" role="list" aria-label={`${group.label} product pages`}>
-                                    {group.products.map((product) => (
-                                      <li key={product.label}>
-                                        <Link href={product.href} onClick={() => setMenuOpen(false)}>{product.label}</Link>
+                            {item.groups.map((group) => {
+                              const groupKey = `${item.label}:${group.label}`;
+                              const products = "products" in group ? group.products : undefined;
+                              const hasProducts = Boolean(products);
+
+                              return (
+                                <li key={group.label}>
+                                  {hasProducts ? (
+                                    <button
+                                      className="mob-product-btn"
+                                      type="button"
+                                      aria-expanded={openMobileGroup === groupKey}
+                                      onClick={() => setOpenMobileGroup((current) => (current === groupKey ? null : groupKey))}
+                                    >
+                                      <span>{group.label}</span>
+                                      <b aria-hidden="true">&gt;</b>
+                                    </button>
+                                  ) : (
+                                    <Link href={group.href} onClick={() => setMenuOpen(false)}>{group.label}</Link>
+                                  )}
+                                  {hasProducts && openMobileGroup === groupKey ? (
+                                    <ul className="mob-product-sub-links" role="list" aria-label={`${group.label} product pages`}>
+                                      <li>
+                                        <Link href={group.href} onClick={() => setMenuOpen(false)}>View {group.label}</Link>
                                       </li>
-                                    ))}
-                                  </ul>
-                                ) : null}
+                                      {products?.map((product) => (
+                                        <li key={product.label}>
+                                          <Link href={product.href} onClick={() => setMenuOpen(false)}>{product.label}</Link>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  ) : null}
                               </li>
-                            ))}
+                              );
+                            })}
                           </ul>
                         ) : null}
                       </li>

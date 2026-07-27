@@ -45,6 +45,10 @@ export default async function CollectionProductPage({ params }: ProductPageProps
   if (!item) notFound();
 
   const isMattressRange = slug === "bedroom" && product === "mattresses";
+  const intro =
+    item.category.label === "Bedroom"
+      ? `${item.group.label} sale products are available for enquiry now. Use this category page to compare the available product landing pages, review support details, and choose the mattress you want to ask about before opening a consultation.`
+      : `${item.group.label} in the ${item.category.label} collection is being prepared for launch. This category page will hold product links, availability notes, and enquiry options when the range is ready.`;
 
   return (
     <>
@@ -60,11 +64,13 @@ export default async function CollectionProductPage({ params }: ProductPageProps
         <section className={styles.hero} aria-labelledby="product-title">
           <span>{item.category.badge}</span>
           <h1 id="product-title">{item.group.label}</h1>
-          <p>
-            {item.category.label === "Bedroom"
-              ? "Mattress sale products are available for enquiry now."
-              : "This category is coming soon. Join the launch list for updates."}
-          </p>
+          <details className={styles.collapsibleText}>
+            <summary>
+              <span className={styles.showMoreText}>Show more</span>
+              <span className={styles.showLessText}>Show less</span>
+            </summary>
+            <p>{intro}</p>
+          </details>
           <div className={styles.detailActions}>
             <Link className={styles.secondaryLink} href={item.category.href}>
               <span aria-hidden="true">←</span>
