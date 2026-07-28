@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductFaq } from "@/app/components/site/ProductFaq";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
-import { getMattressProduct, orthoMattressProducts } from "@/app/data/mattressProducts";
+import { getMattressProduct, orthoMattressProducts, type MattressProduct } from "@/app/data/mattressProducts";
 import "./productLanding.module.css";
 
 type ProductLandingPageProps = {
@@ -122,18 +122,35 @@ function MattressIllustration() {
   );
 }
 
+function ProductHeroVisual({ item }: { item: MattressProduct }) {
+  if (item.gallery?.length) {
+    const [primary, secondary] = item.gallery;
+
+    return (
+      <div className="lp-product-gallery">
+        <img className="lp-product-gallery-main" src={primary.src} alt={primary.alt} />
+        {secondary ? <img className="lp-product-gallery-secondary" src={secondary.src} alt={secondary.alt} /> : null}
+      </div>
+    );
+  }
+
+  return <MattressIllustration />;
+}
+
 export default async function ProductLandingPage({ params }: ProductLandingPageProps) {
   const { slug, product, item: itemSlug } = await params;
   const item = getMattressProduct(itemSlug);
 
   if (slug !== "bedroom" || product !== "mattresses" || !item) notFound();
 
+  const productImages = item.gallery?.map((image) => image.src) ?? [item.image];
+
   const productSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: item.name,
     description: item.description,
-    image: item.image,
+    image: productImages,
     brand: { "@type": "Brand", name: "Furniture Co." },
     aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "5000" },
     offers: {
@@ -197,7 +214,7 @@ export default async function ProductLandingPage({ params }: ProductLandingPageP
           </div>
 
           <div className="lp-bed">
-            <MattressIllustration />
+            <ProductHeroVisual item={item} />
           </div>
         </section>
 

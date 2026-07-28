@@ -195,6 +195,37 @@
   height:auto!important;
 }
 
+:global(.mattress-landing .lp-product-gallery){
+  width:100%!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1.25fr) minmax(220px,.75fr)!important;
+  gap:14px!important;
+  align-items:stretch!important;
+}
+
+:global(.mattress-landing .lp-product-gallery img){
+  display:block!important;
+  width:100%!important;
+  min-width:0!important;
+  border:1px solid rgba(184,203,224,.34)!important;
+  border-radius:var(--rl)!important;
+  background:#fff!important;
+  box-shadow:var(--sh2)!important;
+}
+
+:global(.mattress-landing .lp-product-gallery-main){
+  height:100%!important;
+  min-height:310px!important;
+  object-fit:cover!important;
+}
+
+:global(.mattress-landing .lp-product-gallery-secondary){
+  height:100%!important;
+  min-height:310px!important;
+  padding:18px!important;
+  object-fit:contain!important;
+}
+
 :global(.mattress-landing .lp-section-head){
   max-width:760px!important;
   margin:0 auto!important;
@@ -968,6 +999,16 @@
 
   :global(.mattress-landing .lp-bed){
     margin-top:32px!important;
+  }
+
+  :global(.mattress-landing .lp-product-gallery){
+    grid-template-columns:1fr!important;
+    gap:12px!important;
+  }
+
+  :global(.mattress-landing .lp-product-gallery-main),
+  :global(.mattress-landing .lp-product-gallery-secondary){
+    min-height:220px!important;
   }
 
   :global(.mattress-landing .lp-zone-map){

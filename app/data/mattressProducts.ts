@@ -7,6 +7,7 @@ export type MattressProduct = {
   description: string;
   image: string;
   imageAlt: string;
+  gallery?: Array<{ src: string; alt: string }>;
   bullets: string[];
   specs: Array<{ label: string; value: string; note: string }>;
   features: Array<{ title: string; body: string; points: string[] }>;
@@ -148,6 +149,50 @@ export const orthoMattressProducts: MattressProduct[] = [
     faqs: [
       { question: "Is SpineGuard the firmest option?", answer: "Yes. SpineGuard is the firmest orthopaedic mattress in this initial launch set." },
       { question: "Should side sleepers choose it?", answer: "Dedicated side sleepers may prefer RestCore or OrthoLux unless they already know they like extra-firm mattresses." },
+    ],
+  },
+  {
+    slug: "capri-ortho-mattress",
+    name: "Capri Ortho Mattress",
+    shortName: "Capri Ortho",
+    price: "From £749",
+    firmness: "Firm",
+    description:
+      "A firm orthopaedic mattress with a clean quilted finish, created for stable spinal support, everyday comfort, and a brighter bedroom look.",
+    image: "/capri-ortho-hero.webp",
+    imageAlt: "Capri Ortho Mattress styled on a divan bed in a bright bedroom",
+    gallery: [
+      {
+        src: "/capri-ortho-hero.webp",
+        alt: "Capri Ortho Mattress styled on a divan bed in a bright bedroom",
+      },
+      {
+        src: "/capri-ortho-product.webp",
+        alt: "Capri Ortho Mattress product view on a white background",
+      },
+    ],
+    bullets: ["Firm orthopaedic support", "Quilted comfort surface", "Free UK delivery", "Mattress sale active"],
+    specs: [
+      { label: "Firmness", value: "7/10", note: "Firm support" },
+      { label: "Profile", value: "28cm", note: "Deep quilted build" },
+      { label: "Trial", value: "60 nights", note: "At-home comfort check" },
+      { label: "Delivery", value: "Free", note: "UK mainland" },
+    ],
+    features: [
+      {
+        title: "Stable orthopaedic support",
+        body: "Capri Ortho is built to keep the body evenly supported with a firmer sleep surface that helps reduce unwanted sinking.",
+        points: ["Firm support feel", "Balanced shoulder and hip comfort", "Stable edge-to-edge profile"],
+      },
+      {
+        title: "Clean quilted comfort",
+        body: "The quilted finish gives the mattress a neat, breathable surface while keeping the support feel practical for everyday sleep.",
+        points: ["Soft-touch quilted top", "Bright bedroom-ready styling", "Supportive comfort without a heavy sink"],
+      },
+    ],
+    faqs: [
+      { question: "Who is Capri Ortho best for?", answer: "It is best for sleepers who want a firmer orthopaedic mattress with a clean quilted finish and dependable everyday support." },
+      { question: "Are these the supplied Capri images?", answer: "Yes. The Capri landing page uses the provided mattress images converted to WebP format." },
     ],
   },
 ];
