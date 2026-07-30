@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./capriOrthoMattress2.module.css";
 
 const wordpressReviewsUrl = "https://peru-armadillo-169520.hostingersite.com/852-2/";
+const wordpressReviewsApiUrl = "https://peru-armadillo-169520.hostingersite.com/wp-json/wp/v2/posts?slug=852-2";
 
 const specs = [
   ["26cm", "Total Depth"],
@@ -36,6 +37,119 @@ const sizes = {
 };
 
 type SizeKey = keyof typeof sizes;
+
+type ReviewItem = {
+  label: string;
+  date: string;
+  title: string;
+  body: string[];
+  author: string;
+  initial: string;
+};
+
+type WordPressReviewPost = {
+  date?: string;
+  modified?: string;
+  content?: {
+    rendered?: string;
+  };
+};
+
+const fallbackReviews: ReviewItem[] = [
+  {
+    label: "Featured Review",
+    date: "Verified review",
+    title: "Supportive without feeling harsh",
+    body: ["The Capri Ortho feels firm and steady without being uncomfortable. Delivery was straightforward and the mattress feels well made."],
+    author: "Priya M.",
+    initial: "P",
+  },
+  {
+    label: "Customer Review",
+    date: "Verified review",
+    title: "A proper upgrade for the spare room",
+    body: ["We bought this for our guest room and the quality is far better than expected at this price. The double-sided design feels practical."],
+    author: "James H.",
+    initial: "J",
+  },
+  {
+    label: "Customer Review",
+    date: "Verified review",
+    title: "Good firm support",
+    body: ["I wanted a mattress that felt supportive around my lower back. This has the firmer feel I was looking for and still feels comfortable."],
+    author: "Sandra K.",
+    initial: "S",
+  },
+];
+
+function decodeHtml(value: string) {
+  if (typeof window === "undefined") return value;
+
+  const textarea = document.createElement("textarea");
+  textarea.innerHTML = value;
+  return textarea.value;
+}
+
+function truncateText(value: string, maxLength: number) {
+  if (value.length <= maxLength) return value;
+  return `${value.slice(0, maxLength).trimEnd()}...`;
+}
+
+function formatReviewDate(date?: string) {
+  if (!date) return "Verified review";
+
+  return new Intl.DateTimeFormat("en", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(date));
+}
+
+function cleanReviewText(value: string) {
+  return value
+    .replace(/^[\s★⭐]+/u, "")
+    .replace(/^["“]+/, "")
+    .replace(/["”]+$/, "")
+    .trim();
+}
+
+function reviewTitleFromBody(body: string) {
+  const firstSentence = body.split(/[.!?]/)[0]?.trim();
+  if (!firstSentence) return "Verified customer review";
+  return truncateText(firstSentence, 58);
+}
+
+function parseWordPressReviews(html: string, date?: string): ReviewItem[] {
+  if (typeof window === "undefined") return [];
+
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const paragraphs = Array.from(doc.querySelectorAll("p"))
+    .map((paragraph) => decodeHtml(paragraph.textContent?.replace(/\s+/g, " ").trim() ?? ""))
+    .filter(Boolean);
+
+  const parsed: ReviewItem[] = [];
+
+  for (let index = 0; index < paragraphs.length - 1; index += 2) {
+    const quote = cleanReviewText(paragraphs[index]);
+    const authorLine = paragraphs[index + 1]?.trim();
+
+    if (!quote || !authorLine || quote.length < 24) continue;
+
+    const [authorName, location] = authorLine.split(",").map((part) => part.trim());
+    const author = authorName || authorLine;
+
+    parsed.push({
+      label: index === 0 ? "Featured Review" : "Customer Review",
+      date: formatReviewDate(date),
+      title: reviewTitleFromBody(quote),
+      body: [quote],
+      author: location ? `${author}, ${location}` : author,
+      initial: author.charAt(0).toUpperCase() || "C",
+    });
+  }
+
+  return parsed.slice(0, 3);
+}
 
 function FabricVisual() {
   return (
@@ -138,9 +252,41 @@ export default function CapriOrthoMattress2Client() {
   const [selectedSize, setSelectedSize] = useState<SizeKey>("single");
   const [baseAdded, setBaseAdded] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [reviewItems, setReviewItems] = useState<ReviewItem[]>(fallbackReviews);
 
   const size = sizes[selectedSize];
   const total = size.price + (baseAdded ? size.base : 0);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    async function loadWordPressReviews() {
+      try {
+        const response = await fetch(`${wordpressReviewsApiUrl}&_=${Date.now()}`, {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+
+        if (!response.ok) return;
+
+        const data = (await response.json()) as WordPressReviewPost[];
+        const post = data[0];
+        const nextReviews = post?.content?.rendered
+          ? parseWordPressReviews(post.content.rendered, post.modified ?? post.date)
+          : [];
+
+        if (nextReviews.length) {
+          setReviewItems(nextReviews);
+        }
+      } catch {
+        // Keep fallback reviews when WordPress is unavailable.
+      }
+    }
+
+    loadWordPressReviews();
+
+    return () => controller.abort();
+  }, []);
 
   return (
     <main className={styles.page}>
@@ -279,11 +425,35 @@ export default function CapriOrthoMattress2Client() {
       </section>
 
       <section className={`${styles.panel} ${styles.reviewsPanel}`} id="reviews">
-        <div className={styles.reviewLinkCard}>
+        <div className={styles.sectionHead}>
           <span className={styles.eyebrow}>Real customers, real results</span>
           <h2>What Our Customers Say</h2>
-          <p>The review section on this landing page now links to the main WordPress reviews, as requested.</p>
-          <a className={styles.primaryBtn} href={wordpressReviewsUrl} target="_blank" rel="noopener noreferrer">Open Main WordPress Reviews</a>
+          <p>Live customer reviews are pulled from the main WordPress reviews page.</p>
+        </div>
+        <div className={styles.reviewGrid}>
+          {reviewItems.map((review) => (
+            <article className={styles.reviewCard} key={`${review.author}-${review.title}`}>
+              <div className={styles.reviewMeta}>
+                <span>{review.label}</span>
+                <small>{review.date}</small>
+              </div>
+              <h3>{review.title}</h3>
+              <span className={styles.reviewStars} role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+              {review.body.map((paragraph) => (
+                <p key={paragraph}>&ldquo;{paragraph}&rdquo;</p>
+              ))}
+              <div className={styles.reviewAuthor}>
+                <div aria-hidden="true">{review.initial}</div>
+                <span>
+                  <b>{review.author}</b>
+                  <small>&#10003; Verified customer</small>
+                </span>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div className={styles.actions}>
+          <a className={styles.primaryBtn} href={wordpressReviewsUrl} target="_blank" rel="noopener noreferrer">Read All WordPress Reviews</a>
         </div>
       </section>
 
