@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import styles from "./capriOrthoMattress2.module.css";
 
 const wordpressReviewsUrl = "https://peru-armadillo-169520.hostingersite.com/852-2/";
@@ -159,7 +160,7 @@ function FabricVisual() {
         <defs>
           <pattern id="capriDsk" x="0" y="0" width="140" height="90" patternUnits="userSpaceOnUse">
             <rect width="140" height="90" fill="#FAFCFE" />
-            <image href="/m2.jpeg" x="-226" y="-81" width="646" height="404" opacity=".9" />
+            <image href="/capri-ortho-mattress-damask-fabric-close-up.jpeg" x="-226" y="-81" width="646" height="404" opacity=".9" />
           </pattern>
           <clipPath id="capriCloseupClip">
             <rect x="40" y="584" width="620" height="136" rx="10" />
@@ -205,7 +206,7 @@ function FabricVisual() {
         <text x="530" y="218" textAnchor="middle" fontFamily="DM Sans,sans-serif" fontSize="16" fill="rgba(255,255,255,.85)">Premium quality finish</text>
         <rect x="28" y="572" width="644" height="160" rx="14" fill="white" stroke="#C8DAEA" strokeWidth="1.5" />
         <g clipPath="url(#capriCloseupClip)">
-          <image href="/m2.jpeg" x="-394" y="435" width="1488" height="930" />
+          <image href="/capri-ortho-mattress-damask-fabric-close-up.jpeg" x="-394" y="435" width="1488" height="930" />
         </g>
         <rect x="40" y="584" width="620" height="136" rx="10" fill="none" stroke="#C8DAEA" strokeWidth="1" />
         <text x="350" y="746" textAnchor="middle" fontFamily="DM Sans,sans-serif" fontSize="15" fontWeight="600" fill="#4D667D" letterSpacing="0.1em">CLOSE-UP: WOVEN DAMASK PATTERN</text>
@@ -442,7 +443,13 @@ export default function CapriOrthoMattress2Client() {
     <main className={styles.page}>
       <section className={`${styles.panel} ${styles.hero}`} id="hero">
         <div className={styles.heroImage}>
-          <img src="/capri-ortho-product.webp" alt="Capri Ortho Mattress close-up product view" />
+          <Image
+            src="/capri-ortho-mattress-product-cutout.webp"
+            alt="Capri Ortho Mattress close-up product view"
+            fill
+            priority
+            sizes="100vw"
+          />
         </div>
         <div className={styles.heroContent}>
           <span className={styles.eyebrow}>UK-handcrafted orthopaedic mattress</span>

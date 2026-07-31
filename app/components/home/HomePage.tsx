@@ -1,6 +1,7 @@
 "use client";
 
 import { ChangeEvent, FormEvent, type CSSProperties, type RefObject, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { awards, blogPosts, collections, faqs, reviews } from "@/app/data/home";
 import { primaryButtonClasses, secondaryButtonClasses } from "@/app/components/site/buttonClasses";
@@ -525,7 +526,7 @@ function Awards() {
               return (
               <AwardTag className={`mq-card ${className}`} href={href} target={href ? "_blank" : undefined} rel={href ? "noopener noreferrer" : undefined} key={`${name}-${index}`}>
                 <span className="mq-icon">
-                  {image ? <img className="mq-img" src={image} alt="" /> : <AwardIcon kind={icon} />}
+                  {image ? <Image className="mq-img" src={image} alt="" width={54} height={54} /> : <AwardIcon kind={icon} />}
                 </span>
                 <div className="mq-body">
                   <span className="mq-org">{org}</span>

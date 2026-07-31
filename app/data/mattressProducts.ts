@@ -159,15 +159,15 @@ export const orthoMattressProducts: MattressProduct[] = [
     firmness: "Firm",
     description:
       "A firm orthopaedic mattress with a clean quilted finish, created for stable spinal support, everyday comfort, and a brighter bedroom look.",
-    image: "/capri-ortho-hero.webp",
+    image: "/capri-ortho-mattress-bedroom-hero.webp",
     imageAlt: "Capri Ortho Mattress styled on a divan bed in a bright bedroom",
     gallery: [
       {
-        src: "/capri-ortho-hero.webp",
+        src: "/capri-ortho-mattress-bedroom-hero.webp",
         alt: "Capri Ortho Mattress styled on a divan bed in a bright bedroom",
       },
       {
-        src: "/capri-ortho-product.webp",
+        src: "/capri-ortho-mattress-product-cutout.webp",
         alt: "Capri Ortho Mattress product view on a white background",
       },
     ],

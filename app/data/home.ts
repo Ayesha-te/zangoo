@@ -88,11 +88,11 @@ export const footerSocialLinks = [
 ] as const;
 
 export const awards = [
-  ["mq-blue", "shield", "UKAS Management Systems", "ISO 9001 Quality Management", "Certified", "/award1.jpeg"],
+  ["mq-blue", "shield", "UKAS Management Systems", "ISO 9001 Quality Management", "Certified", "/ukas-iso-9001-quality-management-certification.jpeg"],
   ["mq-green", "leaf", "ISO Supplier", "ISO 14001 Environmental Management", "Certified"],
   ["mq-navy", "shield", "ISO Supplier", "ISO 27001 Information Security", "Certified"],
   ["mq-gold", "medal", "ISO Supplier", "ISO 45001 Health & Safety", "Certified"],
-  ["mq-green", "globe", "The Green Organisation", "Green Organisation Award", "Member", "/award2.jpeg", "https://thegreenorganisation.info/"],
+  ["mq-green", "globe", "The Green Organisation", "Green Organisation Award", "Member", "/green-organisation-award-member-certification.jpeg", "https://thegreenorganisation.info/"],
 ] as const;
 
 export const reviews = [
