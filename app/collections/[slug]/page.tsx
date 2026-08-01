@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { collectionCategories, collections } from "@/app/data/home";
 import { orthoMattressProducts } from "@/app/data/mattressProducts";
+import { getSentencePreview } from "@/app/utils/collapsibleIntro";
 import styles from "../collections.module.css";
 
 type CollectionPageProps = {
@@ -35,6 +36,7 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
   const isLive = collection.name === "Bedroom";
   const category = collectionCategories.find((item) => item.href === `/collections/${collection.slug}/`);
   const intro = `${collection.description} Browse the available subcategories below for current launch status, product availability, and the most relevant enquiry route for this collection.`;
+  const introPreview = getSentencePreview(intro);
 
   return (
     <>
@@ -44,13 +46,20 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
         <section className={styles.hero} aria-labelledby="collection-title">
           <span>{collection.badge}</span>
           <h1 id="collection-title">{collection.name}</h1>
-          <details className={styles.collapsibleText}>
-            <summary>
-              <span className={styles.showMoreText}>Show more</span>
-              <span className={styles.showLessText}>Show less</span>
-            </summary>
+          {introPreview.shouldCollapse ? (
+            <details className={styles.collapsibleText}>
+              <summary>
+                <span className={styles.showMoreText}>Show more</span>
+                <span className={styles.showLessText}>Show less</span>
+              </summary>
+              <p>
+                <span className={styles.collapsedText}>{introPreview.preview}</span>
+                <span className={styles.expandedText}>{intro}</span>
+              </p>
+            </details>
+          ) : (
             <p>{intro}</p>
-          </details>
+          )}
           <div className={styles.detailActions}>
             <Link className={styles.primaryLink} href="/contact/">
               {isLive ? "Enquire About Mattress Sale" : "Join Launch List"}

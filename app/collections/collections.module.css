@@ -66,14 +66,25 @@
 
 .collapsibleText p {
   order: 1;
-  max-height: 5.2em;
   margin: 0;
-  overflow: hidden;
   color: var(--body);
 }
 
-.collapsibleText[open] p {
-  max-height: none;
+.collapsedText,
+.expandedText {
+  display: block;
+}
+
+.expandedText {
+  display: none;
+}
+
+.collapsibleText[open] .collapsedText {
+  display: none;
+}
+
+.collapsibleText[open] .expandedText {
+  display: block;
 }
 
 .collapsibleText summary .showLessText {

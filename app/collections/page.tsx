@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { collections } from "@/app/data/home";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
+import { getSentencePreview } from "@/app/utils/collapsibleIntro";
 import styles from "./collections.module.css";
 
 export const metadata: Metadata = {
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 export default function CollectionsPage() {
   const intro =
     "Explore the main Furniture Co. categories with clear status labels. Bedroom mattresses are currently on sale, while other room collections are being prepared for launch.";
-  const shouldCollapseIntro = intro.length > 140;
+  const introPreview = getSentencePreview(intro);
 
   return (
     <>
@@ -22,13 +23,16 @@ export default function CollectionsPage() {
         <section className={styles.hero} aria-labelledby="collections-title">
           <span>Furniture Collections</span>
           <h1 id="collections-title">Shop furniture by room.</h1>
-          {shouldCollapseIntro ? (
+          {introPreview.shouldCollapse ? (
             <details className={styles.collapsibleText}>
               <summary>
                 <span className={styles.showMoreText}>Show more</span>
                 <span className={styles.showLessText}>Show less</span>
               </summary>
-              <p>{intro}</p>
+              <p>
+                <span className={styles.collapsedText}>{introPreview.preview}</span>
+                <span className={styles.expandedText}>{intro}</span>
+              </p>
             </details>
           ) : (
             <p>{intro}</p>

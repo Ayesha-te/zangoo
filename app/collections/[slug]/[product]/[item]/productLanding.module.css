@@ -900,7 +900,11 @@
 }
 
 :global(.mattress-landing .lp-cta .lp-btn-white){
-  min-width:min(100%,320px)!important;
+  width:min(100%,360px)!important;
+  margin:0 auto 12px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
 }
 
 :global(.mattress-landing .lp-cta-note){

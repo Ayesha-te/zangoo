@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { collectionCategories } from "@/app/data/home";
 import { orthoMattressProducts } from "@/app/data/mattressProducts";
+import { getSentencePreview } from "@/app/utils/collapsibleIntro";
 import styles from "../../collections.module.css";
 
 type ProductPageProps = {
@@ -49,6 +50,7 @@ export default async function CollectionProductPage({ params }: ProductPageProps
     item.category.label === "Bedroom"
       ? `${item.group.label} sale products are available for enquiry now. Use this category page to compare the available product landing pages, review support details, and choose the mattress you want to ask about before opening a consultation.`
       : `${item.group.label} in the ${item.category.label} collection is being prepared for launch. This category page will hold product links, availability notes, and enquiry options when the range is ready.`;
+  const introPreview = getSentencePreview(intro);
 
   return (
     <>
@@ -64,13 +66,20 @@ export default async function CollectionProductPage({ params }: ProductPageProps
         <section className={styles.hero} aria-labelledby="product-title">
           <span>{item.category.badge}</span>
           <h1 id="product-title">{item.group.label}</h1>
-          <details className={styles.collapsibleText}>
-            <summary>
-              <span className={styles.showMoreText}>Show more</span>
-              <span className={styles.showLessText}>Show less</span>
-            </summary>
+          {introPreview.shouldCollapse ? (
+            <details className={styles.collapsibleText}>
+              <summary>
+                <span className={styles.showMoreText}>Show more</span>
+                <span className={styles.showLessText}>Show less</span>
+              </summary>
+              <p>
+                <span className={styles.collapsedText}>{introPreview.preview}</span>
+                <span className={styles.expandedText}>{intro}</span>
+              </p>
+            </details>
+          ) : (
             <p>{intro}</p>
-          </details>
+          )}
           <div className={styles.detailActions}>
             <Link className={styles.secondaryLink} href={item.category.href}>
               <span aria-hidden="true">←</span>
