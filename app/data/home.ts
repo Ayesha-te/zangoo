@@ -17,23 +17,6 @@ export const collections = [
 
 export const collectionCategories = [
   {
-    label: "Bedroom",
-    href: "/collections/bedroom/",
-    badge: "Mattress Sale",
-    groups: [
-      {
-        label: "Mattresses",
-        href: "/collections/bedroom/mattresses/",
-        products: orthoMattressProducts.map((product) => ({
-          label: product.shortName,
-          href: `/collections/bedroom/mattresses/${product.slug}/`,
-        })),
-      },
-      { label: "Beds", href: "/collections/bedroom/beds/" },
-      { label: "Bedside Tables", href: "/collections/bedroom/bedside-tables/" },
-    ],
-  },
-  {
     label: "Living Room",
     href: "/collections/living-room/",
     badge: "Coming Soon",
@@ -51,6 +34,23 @@ export const collectionCategories = [
       { label: "Dining Tables", href: "/collections/dining/tables/" },
       { label: "Dining Chairs", href: "/collections/dining/chairs/" },
       { label: "Benches", href: "/collections/dining/benches/" },
+    ],
+  },
+  {
+    label: "Bedroom",
+    href: "/collections/bedroom/",
+    badge: "Mattress Sale",
+    groups: [
+      {
+        label: "Mattresses",
+        href: "/collections/bedroom/mattresses/",
+        products: orthoMattressProducts.map((product) => ({
+          label: product.shortName,
+          href: `/collections/bedroom/mattresses/${product.slug}/`,
+        })),
+      },
+      { label: "Beds", href: "/collections/bedroom/beds/" },
+      { label: "Bedside Tables", href: "/collections/bedroom/bedside-tables/" },
     ],
   },
   {
