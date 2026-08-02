@@ -647,7 +647,7 @@ function Reviews() {
 function Blog() {
   const sliderRef = useRef<HTMLDivElement>(null);
   const [posts, setPosts] = useState<HomepageBlogPost[]>(
-    [...blogPosts, ...blogPosts].map((post) => ({
+    blogPosts.map((post, index) => ({
       id: post.title,
       title: post.title,
       excerpt: post.excerpt,
@@ -656,13 +656,13 @@ function Blog() {
       tag: post.tag,
       className: post.className,
       visual: post.visual,
-    })).slice(0, 6).map((post, index) => ({ ...post, id: `${post.id}-${index}` })),
+    })).map((post, index) => ({ ...post, id: `${post.id}-${index}` })),
   );
 
   useEffect(() => {
     const controller = new AbortController();
     const postsUrl = new URL("https://peru-armadillo-169520.hostingersite.com/wp-json/wp/v2/posts");
-    postsUrl.searchParams.set("per_page", "6");
+    postsUrl.searchParams.set("per_page", "100");
     postsUrl.searchParams.set("_embed", "1");
     postsUrl.searchParams.set("categories_exclude", "31");
     postsUrl.searchParams.set("orderby", "date");
@@ -681,7 +681,7 @@ function Blog() {
         const data = (await response.json()) as WordPressPost[];
         if (!Array.isArray(data) || data.length === 0) return;
 
-        const blogOnlyPosts = data.filter((post) => !isReviewCategoryPost(post)).slice(0, 6);
+        const blogOnlyPosts = data.filter((post) => !isReviewCategoryPost(post));
         if (!blogOnlyPosts.length) return;
 
         setPosts(blogOnlyPosts.map(mapWordPressPost));

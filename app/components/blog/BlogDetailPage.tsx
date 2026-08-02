@@ -39,6 +39,7 @@ type WordPressPost = {
 };
 
 const WORDPRESS_ORIGIN = "https://peru-armadillo-169520.hostingersite.com";
+const BLOG_POSTS_PER_PAGE = 10;
 
 function decodeHtml(value: string) {
   const textarea = document.createElement("textarea");
@@ -304,6 +305,8 @@ function BlogShell({ children }: { children: ReactNode }) {
 export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
   const searchParams = useSearchParams();
   const slug = routeSlug ?? searchParams.get("slug");
+  const requestedPage = Number(searchParams.get("page") ?? "1");
+  const currentPage = Number.isFinite(requestedPage) && requestedPage > 0 ? Math.floor(requestedPage) : 1;
   const [post, setPost] = useState<WordPressPost | null>(null);
   const [posts, setPosts] = useState<WordPressPost[]>([]);
   const [status, setStatus] = useState<"loading" | "ready" | "empty" | "error">("loading");
@@ -326,7 +329,7 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
       url.searchParams.set("slug", slug);
       url.searchParams.set("per_page", "1");
     } else {
-      url.searchParams.set("per_page", "6");
+      url.searchParams.set("per_page", "100");
       url.searchParams.set("categories_exclude", "31");
       url.searchParams.set("orderby", "date");
       url.searchParams.set("order", "desc");
@@ -381,6 +384,11 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
   }
 
   if (!slug) {
+    const totalPages = Math.max(1, Math.ceil(posts.length / BLOG_POSTS_PER_PAGE));
+    const activePage = Math.min(currentPage, totalPages);
+    const pageStart = (activePage - 1) * BLOG_POSTS_PER_PAGE;
+    const visiblePosts = posts.slice(pageStart, pageStart + BLOG_POSTS_PER_PAGE);
+
     return (
       <BlogShell>
         <main className="blog-page">
@@ -389,7 +397,7 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
             <span className="sec-lbl">Ideas &amp; Inspiration</span>
             <h1>Latest Blog Posts</h1>
             <div className="blog-list">
-              {posts.map((item) => {
+              {visiblePosts.map((item) => {
                 const media = item._embedded?.["wp:featuredmedia"]?.[0];
                 const image = getFeaturedImage(media);
 
@@ -407,6 +415,32 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
                 );
               })}
             </div>
+            {totalPages > 1 ? (
+              <nav className="blog-pagination" aria-label="Blog pagination">
+                {activePage > 1 ? (
+                  <Link href={activePage === 2 ? "/blog/" : `/blog/?page=${activePage - 1}`}>Previous</Link>
+                ) : (
+                  <span aria-disabled="true">Previous</span>
+                )}
+                {Array.from({ length: totalPages }, (_, index) => {
+                  const page = index + 1;
+                  return (
+                    <Link
+                      href={page === 1 ? "/blog/" : `/blog/?page=${page}`}
+                      aria-current={page === activePage ? "page" : undefined}
+                      key={page}
+                    >
+                      {page}
+                    </Link>
+                  );
+                })}
+                {activePage < totalPages ? (
+                  <Link href={`/blog/?page=${activePage + 1}`}>Next</Link>
+                ) : (
+                  <span aria-disabled="true">Next</span>
+                )}
+              </nav>
+            ) : null}
           </div>
         </main>
       </BlogShell>
