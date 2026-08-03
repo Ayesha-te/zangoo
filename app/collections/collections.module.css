@@ -39,64 +39,38 @@
 }
 
 .collapsibleText {
-  display: flex;
-  flex-direction: column;
   max-width: 720px;
   margin-top: 18px;
 }
 
-.collapsibleText summary {
-  order: 2;
+.collapsiblePanel {
+  max-height: 2.05em;
+  margin: 0;
+  overflow: hidden;
+  color: var(--body);
+  transition: max-height 0.35s ease;
+}
+
+.collapsibleText[data-open="true"] .collapsiblePanel {
+  max-height: 420px;
+}
+
+.collapsibleButton {
+  display: inline-flex;
   width: max-content;
   max-width: 100%;
   margin-top: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
   cursor: pointer;
   color: var(--blue);
+  font-family: var(--sans);
   font-size: 13px;
   font-weight: 900;
   line-height: 1.2;
-  list-style: none;
   text-decoration: underline;
   text-underline-offset: 3px;
-}
-
-.collapsibleText summary::-webkit-details-marker {
-  display: none;
-}
-
-.collapsibleText p {
-  order: 1;
-  margin: 0;
-  color: var(--body);
-}
-
-.collapsedText,
-.expandedText {
-  display: block;
-}
-
-.expandedText {
-  display: none;
-}
-
-.collapsibleText[open] .collapsedText {
-  display: none;
-}
-
-.collapsibleText[open] .expandedText {
-  display: block;
-}
-
-.collapsibleText summary .showLessText {
-  display: none;
-}
-
-.collapsibleText[open] summary .showMoreText {
-  display: none;
-}
-
-.collapsibleText[open] summary .showLessText {
-  display: inline;
 }
 
 .grid {

@@ -726,13 +726,12 @@ function Blog() {
             >
               <div
                 className={`bc-thumb ${post.className}${post.imageUrl ? " bc-thumb-photo" : ""}`}
-                role="img"
-                aria-label={post.imageAlt ?? post.title}
-                style={post.imageUrl ? { backgroundImage: `url(${post.imageUrl})` } : undefined}
               >
-                {!post.imageUrl ? (
+                {post.imageUrl ? (
+                  <img src={post.imageUrl} alt={post.imageAlt ?? ""} />
+                ) : (
                   <BlogVisual kind={post.visual} />
-                ) : null}
+                )}
               </div>
               <div className="bc-body">
                 <span className="bc-tag">{post.tag}</span>

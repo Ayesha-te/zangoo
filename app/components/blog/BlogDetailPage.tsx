@@ -307,9 +307,14 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
   const slug = routeSlug ?? searchParams.get("slug");
   const requestedPage = Number(searchParams.get("page") ?? "1");
   const currentPage = Number.isFinite(requestedPage) && requestedPage > 0 ? Math.floor(requestedPage) : 1;
+  const [visiblePage, setVisiblePage] = useState(currentPage);
   const [post, setPost] = useState<WordPressPost | null>(null);
   const [posts, setPosts] = useState<WordPressPost[]>([]);
   const [status, setStatus] = useState<"loading" | "ready" | "empty" | "error">("loading");
+
+  useEffect(() => {
+    if (!slug) setVisiblePage(currentPage);
+  }, [currentPage, slug]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -385,9 +390,9 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
 
   if (!slug) {
     const totalPages = Math.max(1, Math.ceil(posts.length / BLOG_POSTS_PER_PAGE));
-    const activePage = Math.min(currentPage, totalPages);
-    const pageStart = (activePage - 1) * BLOG_POSTS_PER_PAGE;
-    const visiblePosts = posts.slice(pageStart, pageStart + BLOG_POSTS_PER_PAGE);
+    const activePage = Math.min(visiblePage, totalPages);
+    const visiblePosts = posts.slice(0, activePage * BLOG_POSTS_PER_PAGE);
+    const remainingPosts = Math.max(0, posts.length - visiblePosts.length);
 
     return (
       <BlogShell>
@@ -404,7 +409,9 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
                 return (
                   <Link href={internalBlogHref(item)} className="blog-list-card" key={item.id}>
                     {image ? (
-                      <span className="blog-list-img" style={{ backgroundImage: `url(${image})` }} aria-hidden="true" />
+                      <span className="blog-list-img" aria-hidden="true">
+                        <img src={image} alt="" />
+                      </span>
                     ) : null}
                     <span className="blog-list-body">
                       <span className="blog-detail-meta">{formatDate(item.date)} - {getCategory(item)}</span>
@@ -416,30 +423,23 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
               })}
             </div>
             {totalPages > 1 ? (
-              <nav className="blog-pagination" aria-label="Blog pagination">
-                {activePage > 1 ? (
-                  <Link href={activePage === 2 ? "/blog/" : `/blog/?page=${activePage - 1}`}>Previous</Link>
-                ) : (
-                  <span aria-disabled="true">Previous</span>
-                )}
-                {Array.from({ length: totalPages }, (_, index) => {
-                  const page = index + 1;
-                  return (
-                    <Link
-                      href={page === 1 ? "/blog/" : `/blog/?page=${page}`}
-                      aria-current={page === activePage ? "page" : undefined}
-                      key={page}
-                    >
-                      {page}
-                    </Link>
-                  );
-                })}
+              <div className="blog-load-more">
+                <span>
+                  Showing {visiblePosts.length} of {posts.length} posts
+                </span>
                 {activePage < totalPages ? (
-                  <Link href={`/blog/?page=${activePage + 1}`}>Next</Link>
-                ) : (
-                  <span aria-disabled="true">Next</span>
-                )}
-              </nav>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const nextPage = Math.min(activePage + 1, totalPages);
+                      setVisiblePage(nextPage);
+                      window.history.pushState(null, "", `/blog/?page=${nextPage}`);
+                    }}
+                  >
+                    Load more{remainingPosts ? ` (${Math.min(BLOG_POSTS_PER_PAGE, remainingPosts)} more)` : ""}
+                  </button>
+                ) : null}
+              </div>
             ) : null}
           </div>
         </main>

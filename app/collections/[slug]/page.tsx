@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CollapsibleIntro } from "@/app/components/site/CollapsibleIntro";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { collectionCategories, collections } from "@/app/data/home";
 import { orthoMattressProducts } from "@/app/data/mattressProducts";
@@ -47,16 +48,14 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
           <span>{collection.badge}</span>
           <h1 id="collection-title">{collection.name}</h1>
           {introPreview.shouldCollapse ? (
-            <details className={styles.collapsibleText}>
-              <summary>
-                <span className={styles.showMoreText}>Show more</span>
-                <span className={styles.showLessText}>Show less</span>
-              </summary>
-              <p>
-                <span className={styles.collapsedText}>{introPreview.preview}</span>
-                <span className={styles.expandedText}>{intro}</span>
-              </p>
-            </details>
+            <CollapsibleIntro
+              text={intro}
+              classes={{
+                collapsibleText: styles.collapsibleText,
+                collapsiblePanel: styles.collapsiblePanel,
+                collapsibleButton: styles.collapsibleButton,
+              }}
+            />
           ) : (
             <p>{intro}</p>
           )}
