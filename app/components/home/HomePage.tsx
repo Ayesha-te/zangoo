@@ -242,6 +242,7 @@ function parseWordPressReviews(html: string, date?: string): HomepageReview[] {
 
 function getFeaturedImage(media?: WordPressMedia) {
   return (
+    media?.media_details?.sizes?.large?.source_url ??
     media?.media_details?.sizes?.medium_large?.source_url ??
     media?.media_details?.sizes?.medium?.source_url ??
     media?.source_url
@@ -667,12 +668,11 @@ function Blog() {
     postsUrl.searchParams.set("categories_exclude", "31");
     postsUrl.searchParams.set("orderby", "date");
     postsUrl.searchParams.set("order", "desc");
-    postsUrl.searchParams.set("_", String(Date.now()));
 
     async function loadWordPressPosts() {
       try {
         const response = await fetch(postsUrl.toString(), {
-          cache: "no-store",
+          cache: "force-cache",
           signal: controller.signal,
         });
 
@@ -720,7 +720,6 @@ function Blog() {
             <Link
               className="bc rv"
               href={post.href}
-              style={{ transitionDelay: `${index * 0.1}s` }}
               key={post.id}
               aria-label={`Read blog post: ${post.title}`}
             >
@@ -728,7 +727,12 @@ function Blog() {
                 className={`bc-thumb ${post.className}${post.imageUrl ? " bc-thumb-photo" : ""}`}
               >
                 {post.imageUrl ? (
-                  <img src={post.imageUrl} alt={post.imageAlt ?? ""} />
+                  <img
+                    src={post.imageUrl}
+                    alt={post.imageAlt ?? ""}
+                    loading={index < 2 ? "eager" : "lazy"}
+                    decoding="async"
+                  />
                 ) : (
                   <BlogVisual kind={post.visual} />
                 )}
@@ -847,6 +851,9 @@ function Contact() {
           <div className="nl rv">
             <span className="nl-tag">Stay in the Loop</span>
             <h3 id="nl-h">New arrivals, ideas &amp; exclusive offers</h3>
+            <p className="nl-intro">
+              Get mattress sale updates, room guides, and subscriber-only offers straight to your inbox.
+            </p>
             <form className="nl-form" onSubmit={onSubmit} noValidate aria-label="Newsletter sign-up">
               {errors.form ? (
                 <p className="form-alert" role="alert">

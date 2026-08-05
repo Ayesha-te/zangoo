@@ -221,8 +221,8 @@ function sanitizeWordPressHtml(html: string) {
 
 function getFeaturedImage(media?: WordPressMedia) {
   return (
-    media?.media_details?.sizes?.medium_large?.source_url ??
     media?.media_details?.sizes?.large?.source_url ??
+    media?.media_details?.sizes?.medium_large?.source_url ??
     media?.source_url
   );
 }
@@ -281,7 +281,7 @@ function localPostToWordPressPost(post: LocalBlogPost): WordPressPost {
 
 async function fetchWordPressPosts(url: URL, signal: AbortSignal) {
   const response = await fetch(url.toString(), {
-    cache: "no-store",
+    cache: "force-cache",
     signal,
   });
 
@@ -328,7 +328,6 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
 
     const url = new URL(`${WORDPRESS_ORIGIN}/wp-json/wp/v2/posts`);
     url.searchParams.set("_embed", "1");
-    url.searchParams.set("_", String(Date.now()));
 
     if (slug) {
       url.searchParams.set("slug", slug);
@@ -402,7 +401,7 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
             <span className="sec-lbl">Ideas &amp; Inspiration</span>
             <h1>Latest Blog Posts</h1>
             <div className="blog-list">
-              {visiblePosts.map((item) => {
+              {visiblePosts.map((item, index) => {
                 const media = item._embedded?.["wp:featuredmedia"]?.[0];
                 const image = getFeaturedImage(media);
 
@@ -410,7 +409,7 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
                   <Link href={internalBlogHref(item)} className="blog-list-card" key={item.id}>
                     {image ? (
                       <span className="blog-list-img" aria-hidden="true">
-                        <img src={image} alt="" />
+                        <img src={image} alt="" loading={index < 4 ? "eager" : "lazy"} decoding="async" />
                       </span>
                     ) : null}
                     <span className="blog-list-body">
