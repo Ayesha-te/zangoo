@@ -231,6 +231,104 @@
   color: var(--body);
 }
 
+.filterPanel {
+  width: min(100%, 1200px);
+  margin: 0 auto 18px;
+  padding: 0 64px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, .8fr) auto;
+  gap: 20px;
+  align-items: end;
+}
+
+.filterPanel strong {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--navy);
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.filterChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filterChips button,
+.filterActions button,
+.filterActions select,
+.mattressToolbar button {
+  min-height: 40px;
+  border: 1px solid var(--bdr);
+  border-radius: var(--r);
+  background: #fff;
+  color: var(--navy);
+  padding: 8px 18px;
+  font: 900 13px/1.2 var(--sans);
+  cursor: pointer;
+}
+
+.filterChips .activeChip {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: #fff;
+}
+
+.filterActions {
+  display: flex;
+  align-items: end;
+  gap: 12px;
+}
+
+.filterActions button {
+  padding-left: 22px;
+  padding-right: 22px;
+}
+
+.filterActions label {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font: 900 11px/1 var(--sans);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.filterActions select {
+  min-width: 166px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.mattressToolbar {
+  width: min(100%, 1200px);
+  margin: 0 auto 20px;
+  padding: 16px 64px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  color: var(--body);
+}
+
+.mattressToolbar strong,
+.mattressToolbar span {
+  color: var(--navy);
+  font: 900 13px/1.2 var(--sans);
+}
+
+.mattressToolbar span::before {
+  content: "✓";
+  margin-right: 7px;
+  color: var(--blue);
+}
+
+.mattressToolbar button {
+  margin-left: auto;
+  border-color: var(--navy);
+}
+
 .mattressGrid {
   width: min(100%, 1200px);
   margin: 0 auto;
@@ -252,9 +350,9 @@
   min-width: 0;
   overflow: hidden;
   border: 1px solid var(--bdr);
-  border-radius: var(--rl);
+  border-radius: 8px;
   background: #fff;
-  box-shadow: var(--sh1);
+  box-shadow: 0 2px 10px rgba(26, 46, 68, .08);
   display: flex;
   flex-direction: column;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -269,15 +367,16 @@
 .mattressImage {
   position: relative;
   display: block;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1.35 / 1;
   overflow: hidden;
-  background: var(--bg4);
+  background: linear-gradient(180deg, #fff, var(--bg1));
 }
 
 .mattressImage img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  padding: 26px 20px 12px;
   transition: transform 0.25s ease;
 }
 
@@ -287,24 +386,40 @@
 
 .saleBadge {
   position: absolute;
-  top: 18px;
-  left: 18px;
+  top: 12px;
+  left: 12px;
   z-index: 2;
   border-radius: 999px;
-  background: #c62828;
+  background: var(--navy);
   color: #fff;
-  padding: 6px 11px;
-  font-size: 10px;
+  padding: 5px 9px;
+  font-size: 9px;
   font-weight: 900;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.02em;
   line-height: 1;
-  text-transform: uppercase;
   white-space: nowrap;
+}
+
+.heartBadge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(26, 46, 68, .12);
+  border-radius: 50%;
+  background: rgba(255,255,255,.92);
+  color: var(--navy);
+  font-size: 20px;
+  line-height: 1;
 }
 
 .mattressInfo {
   flex: 1;
-  padding: 22px;
+  padding: 0 18px 16px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -312,9 +427,10 @@
 
 .mattressInfo strong {
   display: block;
-  font-family: var(--serif);
-  font-size: clamp(24px, 2vw, 32px);
-  line-height: 1.08;
+  font-family: var(--sans);
+  font-size: 20px;
+  line-height: 1.18;
+  font-weight: 900;
   color: var(--navy);
 }
 
@@ -323,20 +439,143 @@
 }
 
 .mattressFeel {
-  margin-top: 8px;
-  font-size: 14px;
-  line-height: 1.55;
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.45;
   color: var(--body);
 }
 
+.mattressSpecs {
+  width: 100%;
+  display: flex !important;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 12px;
+}
+
+.mattressSpecs span {
+  width: 100%;
+  min-height: 31px;
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid rgba(200, 218, 234, .8);
+  text-align: left;
+  color: var(--muted);
+  font: 800 12px/1.2 var(--sans);
+}
+
+.mattressSpecs span::before {
+  content: "✓";
+  display: inline-block;
+  color: var(--blue);
+  font-size: 13px;
+  line-height: 1;
+}
+
+.mattressRating {
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+  color: var(--gold);
+  font: 900 12px/1.2 var(--sans);
+}
+
+.mattressRating b {
+  color: var(--navy);
+  font-weight: 900;
+}
+
+.mattressRating small {
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.deliveryNote {
+  display: flex !important;
+  align-items: center;
+  gap: 7px;
+  margin-top: 8px;
+  color: var(--ok);
+  font: 800 12px/1.35 var(--sans);
+}
+
+.deliveryNote::before {
+  content: "✓";
+  width: 17px;
+  height: 17px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(46, 125, 50, .35);
+  border-radius: 50%;
+  font-size: 10px;
+}
+
 .mattressPrice {
-  margin-top: auto;
-  padding-top: 16px;
-  font-family: var(--serif);
-  font-size: clamp(22px, 2.2vw, 30px);
+  margin-top: 16px;
+  padding-top: 0;
+  border-top: 0;
+  width: 100%;
+  font-family: var(--sans);
+  font-size: 26px;
   font-weight: 900;
   line-height: 1.1;
-  color: var(--blue);
+  color: var(--navy);
+}
+
+.mattressPrice small {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 5px;
+  color: var(--muted);
+  font: 800 11px/1.2 var(--sans);
+}
+
+.mattressPrice small b {
+  color: #c62828;
+  font-weight: 900;
+}
+
+.mattressButton {
+  width: 100%;
+  min-height: 40px;
+  margin-top: 12px;
+  border: 2px solid var(--navy);
+  border-radius: 5px;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  background: var(--navy);
+  color: #fff;
+  font: 900 13px/1.2 var(--sans);
+  transition: background var(--tr), color var(--tr);
+}
+
+.mattressCard:hover .mattressButton,
+.mattressCard:focus-visible .mattressButton {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+.compareCheck {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  color: var(--body);
+  font: 700 12px/1.2 var(--sans);
+}
+
+.compareCheck > span {
+  width: 15px;
+  height: 15px;
+  border: 1px solid var(--muted);
+  border-radius: 3px;
+  background: #fff;
 }
 
 .primaryLink,
@@ -388,6 +627,24 @@
     grid-template-columns: 1fr;
   }
 
+  .filterPanel {
+    padding: 0 24px;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .filterActions {
+    justify-content: space-between;
+  }
+
+  .mattressToolbar {
+    padding: 14px 24px;
+  }
+
+  .mattressToolbar button {
+    margin-left: 0;
+  }
+
   .mattressGrid {
     padding: 0 24px 72px;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -413,6 +670,23 @@
 
   .grid {
     padding: 0 16px 64px;
+  }
+
+  .filterPanel,
+  .mattressToolbar {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .filterActions,
+  .filterActions label,
+  .filterActions button,
+  .filterActions select {
+    width: 100%;
+  }
+
+  .filterActions {
+    flex-direction: column;
   }
 
   .mattressGrid {
@@ -444,5 +718,271 @@
 
   .detailActions {
     flex-direction: column;
+  }
+}
+
+.mattressLayout {
+  width: min(100%, 1200px);
+  margin: 0 auto;
+  padding: 0 64px 96px;
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.filterSidebar {
+  position: sticky;
+  top: calc(var(--nav) + 18px);
+  border: 1px solid var(--bdr);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: var(--sh1);
+  padding: 18px;
+}
+
+.filterHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--bdr);
+}
+
+.filterHead strong {
+  color: var(--navy);
+  font: 900 13px/1 var(--sans);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.filterHead button {
+  border: 0;
+  background: transparent;
+  color: var(--blue);
+  font: 900 12px/1 var(--sans);
+  cursor: pointer;
+}
+
+.filterGroup {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--bdr);
+}
+
+.filterGroup strong {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--navy);
+  font: 900 13px/1.2 var(--sans);
+}
+
+.filterOption {
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--body);
+  font: 700 13px/1.2 var(--sans);
+  cursor: pointer;
+}
+
+.filterOption input,
+.compareCheck input {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--blue);
+  cursor: pointer;
+}
+
+.helpBox {
+  margin-top: 16px;
+  padding: 14px;
+  border-radius: 8px;
+  background: var(--bg4);
+}
+
+.helpBox strong {
+  color: var(--navy);
+  font: 900 13px/1.2 var(--sans);
+}
+
+.helpBox p {
+  margin: 6px 0 12px;
+  color: var(--body);
+  font: 500 12px/1.5 var(--sans);
+}
+
+.helpBox a {
+  min-height: 38px;
+  border: 2px solid var(--blue);
+  border-radius: var(--r);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--blue);
+  font: 900 12px/1 var(--sans);
+  text-decoration: none;
+}
+
+.helpBox a:hover,
+.helpBox a:focus-visible {
+  background: var(--blue);
+  color: #fff;
+}
+
+.mattressResults {
+  min-width: 0;
+}
+
+.mattressToolbar {
+  width: 100%;
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--bdr);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: var(--sh1);
+}
+
+.mattressToolbar label {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font: 900 11px/1 var(--sans);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.mattressToolbar select {
+  min-height: 38px;
+  border: 1px solid var(--bdr);
+  border-radius: var(--r);
+  background: #fff;
+  color: var(--navy);
+  padding: 0 12px;
+  font: 900 13px/1 var(--sans);
+  letter-spacing: 0;
+  text-transform: none;
+  cursor: pointer;
+}
+
+.mattressToolbar button {
+  margin-left: 0;
+}
+
+.mattressToolbar button:hover,
+.mattressToolbar button:focus-visible,
+.mattressToolbar select:hover,
+.mattressToolbar select:focus-visible,
+.filterHead button:hover,
+.filterHead button:focus-visible {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(21, 87, 167, .08);
+}
+
+.mattressGrid {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.mattressCard {
+  position: relative;
+}
+
+.mattressMainLink {
+  min-height: 100%;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+}
+
+.heartButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(26, 46, 68, .12);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .95);
+  color: var(--navy);
+  box-shadow: var(--sh1);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.heartButton:hover,
+.heartButton:focus-visible {
+  border-color: var(--blue);
+  background: var(--bg4);
+  color: var(--blue);
+}
+
+.mattressMainLink:hover .mattressButton,
+.mattressMainLink:focus-visible .mattressButton {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: #fff;
+}
+
+.compareCheck {
+  margin: 10px 18px 16px;
+  cursor: pointer;
+}
+
+.compareCheck > span {
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+@media (max-width: 900px) {
+  .mattressLayout {
+    padding: 0 24px 72px;
+    grid-template-columns: 1fr;
+  }
+
+  .filterSidebar {
+    position: static;
+  }
+
+  .mattressToolbar label {
+    margin-left: 0;
+  }
+
+  .mattressGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 580px) {
+  .mattressLayout {
+    padding: 0 16px 64px;
+  }
+
+  .mattressGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .mattressToolbar {
+    align-items: stretch;
+  }
+
+  .mattressToolbar label,
+  .mattressToolbar select,
+  .mattressToolbar button {
+    width: 100%;
   }
 }

@@ -90,10 +90,18 @@
   background: rgba(26, 46, 68, .72);
   color: #fff;
   cursor: pointer;
+  transition: background var(--tr), transform var(--tr), box-shadow var(--tr);
 }
 
 .playButton span {
   margin-left: 4px;
+}
+
+.playButton:hover,
+.playButton:focus-visible {
+  background: var(--blue);
+  transform: translate(-50%, -50%) scale(1.05);
+  box-shadow: var(--sh2);
 }
 
 .view360 {
@@ -106,6 +114,15 @@
   color: var(--navy);
   padding: 8px 12px;
   font: 900 12px/1 var(--sans);
+  cursor: pointer;
+  transition: background var(--tr), color var(--tr), border-color var(--tr);
+}
+
+.view360:hover,
+.view360:focus-visible {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: #fff;
 }
 
 .thumbs {
@@ -122,6 +139,15 @@
   background: #f8fbff;
   padding: 4px;
   cursor: pointer;
+  transition: border-color var(--tr), box-shadow var(--tr), transform var(--tr);
+}
+
+.thumbs button:hover,
+.thumbs button:focus-visible,
+.thumbs .activeThumb {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(21, 87, 167, .12);
+  transform: translateY(-2px);
 }
 
 .summaryCard {
@@ -201,6 +227,14 @@
   background: #fff;
   color: var(--navy);
   font: 700 14px/1 var(--sans);
+  cursor: pointer;
+  transition: border-color var(--tr), box-shadow var(--tr);
+}
+
+.buyCard select:hover,
+.buyCard select:focus-visible {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(21, 87, 167, .1);
 }
 
 .qty {
@@ -222,6 +256,14 @@
   background: #f4f7fb;
   color: var(--navy);
   font: 900 18px/1 var(--sans);
+  cursor: pointer;
+  transition: background var(--tr), color var(--tr);
+}
+
+.qty button:hover,
+.qty button:focus-visible {
+  background: var(--blue);
+  color: #fff;
 }
 
 .qty strong {
@@ -266,23 +308,81 @@
   text-transform: uppercase;
 }
 
+.buyActions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 54px;
+  gap: 10px;
+}
+
 .addButton {
   background: #2e7d32;
   color: #fff;
+  transition: background var(--tr), transform var(--tr), box-shadow var(--tr);
+}
+
+.addButton:hover,
+.addButton:focus-visible {
+  background: #236728;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(46, 125, 50, .18);
+}
+
+.addedButton {
+  background: var(--blue);
+}
+
+.favoriteButton {
+  min-height: 46px;
+  border: 1px solid var(--bdr);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--navy);
+  cursor: pointer;
+  font: 900 24px/1 var(--sans);
+  box-shadow: var(--sh1);
+  transition: background var(--tr), color var(--tr), border-color var(--tr), transform var(--tr);
+}
+
+.favoriteButton:hover,
+.favoriteButton:focus-visible,
+.favoriteActive {
+  border-color: var(--blue);
+  background: var(--bg4);
+  color: var(--blue);
+  transform: translateY(-1px);
 }
 
 .buyButton {
   margin-top: 10px;
   background: #edf3f8;
   color: var(--navy);
+  transition: background var(--tr), color var(--tr), transform var(--tr);
 }
 
-.buyCard > small {
+.buyButton:hover,
+.buyButton:focus-visible {
+  background: var(--navy);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.stockNote {
   display: block;
   margin-top: 10px;
   color: var(--ok);
   text-align: center;
   font-weight: 800;
+}
+
+.stockNote span {
+  width: 11px;
+  height: 11px;
+  display: inline-block;
+  margin-right: 8px;
+  border: 2px solid rgba(46, 125, 50, .22);
+  border-radius: 50%;
+  background: var(--ok);
+  vertical-align: -1px;
 }
 
 .detailGrid {
@@ -313,6 +413,15 @@
   padding: 18px 22px;
   color: var(--navy);
   font: 900 14px/1.2 var(--sans);
+  transition: background var(--tr), color var(--tr);
+}
+
+.accordionCard summary:hover,
+.accordionCard summary:focus-visible,
+.faq summary:hover,
+.faq summary:focus-visible {
+  background: var(--bg4);
+  color: var(--blue);
 }
 
 .accordionCard summary::after,
@@ -484,37 +593,71 @@
   background: #fff;
 }
 
-.compareGrid article {
+.compareProduct {
   padding: 12px;
   text-align: center;
+  cursor: pointer;
+  transition: border-color var(--tr), box-shadow var(--tr), transform var(--tr), background var(--tr);
 }
 
-.compareGrid article img {
+.compareProduct:hover,
+.compareProduct:focus-visible,
+.compareActive {
+  border-color: var(--blue);
+  background: #f8fbff;
+  box-shadow: 0 0 0 3px rgba(21, 87, 167, .1);
+  transform: translateY(-2px);
+}
+
+.compareActive::before {
+  content: "Selected";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 24px;
+  margin-bottom: 8px;
+  padding: 0 9px;
+  border-radius: 999px;
+  background: var(--blue);
+  color: #fff;
+  font: 900 10px/1 var(--sans);
+}
+
+.compareProduct img {
   height: 95px;
 }
 
-.compareGrid article strong,
-.compareGrid article span,
+.compareProduct strong,
+.compareProduct span,
 .rail strong,
 .rail span {
   display: block;
 }
 
-.compareGrid article strong {
+.compareProduct strong {
   color: var(--navy);
   font: 900 13px/1.25 var(--sans);
 }
 
-.compareGrid article span {
+.compareProduct span {
   margin-top: 4px;
   color: var(--body);
   font: 800 12px/1 var(--sans);
 }
 
-.compareGrid button {
+.selectProduct {
   color: var(--muted);
   font: 900 13px/1.2 var(--sans);
   border-style: dashed;
+  cursor: pointer;
+  transition: border-color var(--tr), color var(--tr), background var(--tr);
+}
+
+.selectProduct:hover,
+.selectProduct:focus-visible {
+  border-color: var(--blue);
+  color: var(--blue);
+  background: var(--bg4);
 }
 
 .compareGrid ul {
@@ -525,6 +668,29 @@
   font: 800 13px/1.7 var(--sans);
 }
 
+.compareButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  margin-top: 16px;
+  border: 2px solid var(--navy);
+  border-radius: var(--r);
+  background: var(--navy);
+  color: #fff;
+  padding: 0 20px;
+  font: 900 13px/1 var(--sans);
+  cursor: pointer;
+  transition: background var(--tr), border-color var(--tr), transform var(--tr);
+}
+
+.compareButton:hover,
+.compareButton:focus-visible {
+  border-color: var(--blue);
+  background: var(--blue);
+  transform: translateY(-1px);
+}
+
 .rail > div {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -533,26 +699,58 @@
 }
 
 .rail a {
-  padding: 12px;
+  padding: 14px;
   color: inherit;
   text-align: center;
   text-decoration: none;
+  box-shadow: var(--sh1);
+  transition: transform var(--tr), box-shadow var(--tr), border-color var(--tr);
+}
+
+.rail a:hover,
+.rail a:focus-visible {
+  transform: translateY(-3px);
+  border-color: var(--blue);
+  box-shadow: var(--sh2);
 }
 
 .rail img {
-  height: 96px;
+  height: 120px;
   margin-bottom: 10px;
+  border-radius: 6px;
+  background: var(--bg1);
 }
 
 .rail strong {
   color: var(--navy);
-  font: 900 13px/1.25 var(--sans);
+  font: 900 16px/1.2 var(--sans);
+}
+
+.rail small {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font: 800 12px/1.2 var(--sans);
 }
 
 .rail span {
-  margin-top: 4px;
+  margin-top: 9px;
   color: var(--body);
-  font: 800 12px/1 var(--sans);
+  font: 900 18px/1 var(--sans);
+}
+
+.rail em {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  width: 100%;
+  margin-top: 12px;
+  border: 2px solid var(--blue);
+  border-radius: var(--r);
+  color: var(--blue);
+  font: 900 12px/1 var(--sans);
+  font-style: normal;
 }
 
 @media (max-width: 920px) {
@@ -598,5 +796,9 @@
 
   .thumbs {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .rail img {
+    height: 150px;
   }
 }
