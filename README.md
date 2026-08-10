@@ -10,6 +10,17 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## Landing Pages
+
+- [Mattresses category](http://localhost:3000/collections/bedroom/mattresses/)
+- [RestCore Ortho](http://localhost:3000/collections/bedroom/mattresses/restcore-ortho/)
+- [AlignPlus Ortho](http://localhost:3000/collections/bedroom/mattresses/alignplus-ortho/)
+- [OrthoLux Pocket](http://localhost:3000/collections/bedroom/mattresses/ortholux-pocket/)
+- [SpineGuard Ortho](http://localhost:3000/collections/bedroom/mattresses/spineguard-ortho/)
+- [Capri Ortho Mattress](http://localhost:3000/collections/bedroom/mattresses/capri-ortho-mattress/)
+- [Capri Ortho Mattress 2](http://localhost:3000/collections/bedroom/mattresses/capri-ortho-mattress2/)
+- [Product page wireframe preview](http://localhost:3000/product-page-wireframe/)
+
 ## Image Assets
 
 Public images live in [`public/`](./public/). Use descriptive, lowercase, hyphenated filenames that describe the product, context, and asset purpose. Avoid generic filenames such as `m1.jpeg`, `image.png`, or `award1.jpeg`.
