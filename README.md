@@ -8,18 +8,18 @@ Next.js storefront and landing-page project for Zangoo/Furniture Co.
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [https://www.zaango.co.uk](https://www.zaango.co.uk).
 
 ## Landing Pages
 
-- [Mattresses category](http://localhost:3000/collections/bedroom/mattresses/)
-- [RestCore Ortho](http://localhost:3000/collections/bedroom/mattresses/restcore-ortho/)
-- [AlignPlus Ortho](http://localhost:3000/collections/bedroom/mattresses/alignplus-ortho/)
-- [OrthoLux Pocket](http://localhost:3000/collections/bedroom/mattresses/ortholux-pocket/)
-- [SpineGuard Ortho](http://localhost:3000/collections/bedroom/mattresses/spineguard-ortho/)
-- [Capri Ortho Mattress](http://localhost:3000/collections/bedroom/mattresses/capri-ortho-mattress/)
-- [Capri Ortho Mattress 2](http://localhost:3000/collections/bedroom/mattresses/capri-ortho-mattress2/)
-- [Product page wireframe preview](http://localhost:3000/product-page-wireframe/)
+- [Mattresses category](https://www.zaango.co.uk/collections/bedroom/mattresses/)
+- [RestCore Ortho](https://www.zaango.co.uk/collections/bedroom/mattresses/restcore-ortho/)
+- [AlignPlus Ortho](https://www.zaango.co.uk/collections/bedroom/mattresses/alignplus-ortho/)
+- [OrthoLux Pocket](https://www.zaango.co.uk/collections/bedroom/mattresses/ortholux-pocket/)
+- [SpineGuard Ortho](https://www.zaango.co.uk/collections/bedroom/mattresses/spineguard-ortho/)
+- [Capri Ortho Mattress](https://www.zaango.co.uk/collections/bedroom/mattresses/capri-ortho-mattress/)
+- [Capri Ortho Mattress 2](https://www.zaango.co.uk/collections/bedroom/mattresses/capri-ortho-mattress2/)
+- [Product page wireframe preview](https://www.zaango.co.uk/product-page-wireframe/)
 
 ## Image Assets
 
