@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { MattressFilters } from "@/app/components/collections/MattressFilters";
 import { CollapsibleIntro } from "@/app/components/site/CollapsibleIntro";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { collectionCategories } from "@/app/data/home";
@@ -93,48 +94,7 @@ export default async function CollectionProductPage({ params }: ProductPageProps
 
         {isMattressRange ? (
           <div className={styles.mattressLayout}>
-            <aside className={styles.filterSidebar} aria-label="Mattress filters">
-              <div className={styles.filterHead}>
-                <strong>Filter by</strong>
-                <button type="button">Clear all</button>
-              </div>
-
-              <div className={styles.filterGroup}>
-                <strong>Shop by Need</strong>
-                {needFilters.map((filter, index) => (
-                  <label className={styles.filterOption} key={filter}>
-                    <input type="checkbox" defaultChecked={index === 0} />
-                    <span>{filter}</span>
-                  </label>
-                ))}
-              </div>
-
-              <div className={styles.filterGroup}>
-                <strong>Feel</strong>
-                {feelFilters.map((filter, index) => (
-                  <label className={styles.filterOption} key={filter}>
-                    <input type="checkbox" defaultChecked={index === 1} />
-                    <span>{filter}</span>
-                  </label>
-                ))}
-              </div>
-
-              <div className={styles.filterGroup}>
-                <strong>Size</strong>
-                {sizeFilters.map((filter, index) => (
-                  <label className={styles.filterOption} key={filter}>
-                    <input type="checkbox" defaultChecked={index === 2} />
-                    <span>{filter}</span>
-                  </label>
-                ))}
-              </div>
-
-              <div className={styles.helpBox}>
-                <strong>Need help choosing?</strong>
-                <p>Our sleep experts can help you find the right mattress.</p>
-                <Link href="/contact/">Contact Us</Link>
-              </div>
-            </aside>
+            <MattressFilters needFilters={needFilters} feelFilters={feelFilters} sizeFilters={sizeFilters} />
 
             <section className={styles.mattressResults} aria-label="Orthopaedic mattress results">
               <div className={styles.mattressToolbar}>
