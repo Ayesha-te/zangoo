@@ -647,18 +647,29 @@ function Reviews() {
 
 function Blog() {
   const sliderRef = useRef<HTMLDivElement>(null);
+  const fallbackPosts = blogPosts.map((post, index) => ({
+    id: post.title,
+    title: post.title,
+    excerpt: post.excerpt,
+    meta: post.meta,
+    href: `/blog/${post.slug}/`,
+    tag: post.tag,
+    className: post.className,
+    visual: post.visual,
+  })).map((post, index) => ({ ...post, id: `${post.id}-${index}` }));
   const [posts, setPosts] = useState<HomepageBlogPost[]>(
-    blogPosts.map((post, index) => ({
-      id: post.title,
-      title: post.title,
-      excerpt: post.excerpt,
-      meta: post.meta,
-      href: `/blog/${post.slug}/`,
-      tag: post.tag,
-      className: post.className,
-      visual: post.visual,
-    })).map((post, index) => ({ ...post, id: `${post.id}-${index}` })),
+    fallbackPosts,
   );
+
+  useEffect(() => {
+    fallbackPosts.forEach((post) => {
+      if (!post.href || post.href === "/blog/") return;
+      const prefetch = document.createElement("link");
+      prefetch.rel = "prefetch";
+      prefetch.href = post.href;
+      document.head.appendChild(prefetch);
+    });
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -690,9 +701,19 @@ function Blog() {
       }
     }
 
-    loadWordPressPosts();
+    const idleId =
+      "requestIdleCallback" in window
+        ? window.requestIdleCallback(loadWordPressPosts, { timeout: 1200 })
+        : globalThis.setTimeout(loadWordPressPosts, 150);
 
-    return () => controller.abort();
+    return () => {
+      controller.abort();
+      if ("cancelIdleCallback" in window && typeof idleId === "number") {
+        window.cancelIdleCallback(idleId);
+      } else if (typeof idleId === "number") {
+        globalThis.clearTimeout(idleId);
+      }
+    };
   }, []);
 
   return (
@@ -730,7 +751,8 @@ function Blog() {
                   <img
                     src={post.imageUrl}
                     alt={post.imageAlt ?? ""}
-                    loading={index < 2 ? "eager" : "lazy"}
+                    loading={index < 3 ? "eager" : "lazy"}
+                    fetchPriority={index < 3 ? "high" : "auto"}
                     decoding="async"
                   />
                 ) : (
@@ -847,6 +869,13 @@ function Contact() {
   return (
     <section className="bottom" id="contact" aria-labelledby="nl-h">
       <div className="wrap">
+        <div className="contact-section-head rv">
+          <span className="sec-lbl">Contact &amp; Updates</span>
+          <h2>Visit the showroom or stay updated</h2>
+          <p>
+            Get help choosing the right furniture, ask about launch offers, or subscribe for room guides and mattress sale updates.
+          </p>
+        </div>
         <div className="bot-grid">
           <div className="nl rv">
             <span className="nl-tag">Stay in the Loop</span>

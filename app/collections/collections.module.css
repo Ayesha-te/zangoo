@@ -38,6 +38,24 @@
   line-height: 1.75;
 }
 
+.categoryImageBanner {
+  width: 100%;
+  max-width: 940px;
+  aspect-ratio: 16 / 5;
+  margin: 24px 0 0;
+  border: 1px solid var(--bdr);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: var(--sh1);
+}
+
+.categoryImageBanner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .collapsibleText {
   max-width: 720px;
   margin-top: 18px;
@@ -843,17 +861,25 @@
   border-radius: 10px;
   background: #fff;
   box-shadow: var(--sh1);
+  justify-content: space-between;
+}
+
+.mattressTrustSummary,
+.mattressToolbarActions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
 }
 
 .mattressToolbar label {
-  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 8px;
   color: var(--muted);
   font: 900 11px/1 var(--sans);
-  letter-spacing: .08em;
-  text-transform: uppercase;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .mattressToolbar select {
@@ -893,6 +919,7 @@
 
 .mattressCard {
   position: relative;
+  min-height: 100%;
 }
 
 .mattressMainLink {
@@ -905,27 +932,7 @@
 }
 
 .heartButton {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 3;
-  width: 36px;
-  height: 36px;
-  border: 1px solid rgba(26, 46, 68, .12);
-  border-radius: 50%;
-  background: rgba(255, 255, 255, .95);
-  color: var(--navy);
-  box-shadow: var(--sh1);
-  font-size: 20px;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.heartButton:hover,
-.heartButton:focus-visible {
-  border-color: var(--blue);
-  background: var(--bg4);
-  color: var(--blue);
+  display: none;
 }
 
 .mattressMainLink:hover .mattressButton,
@@ -936,7 +943,8 @@
 }
 
 .compareCheck {
-  margin: 10px 18px 16px;
+  margin: 0 18px 16px;
+  padding-top: 2px;
   cursor: pointer;
 }
 
@@ -1086,5 +1094,377 @@
   .mattressToolbar select,
   .mattressToolbar button {
     width: 100%;
+  }
+}
+
+/* Mattress category wireframe refinements */
+.categoryImageBanner {
+  width: 100%;
+  max-width: 940px;
+  aspect-ratio: 16 / 5;
+  margin: 24px 0 0;
+  border: 1px solid var(--bdr);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: var(--sh1);
+}
+
+.categoryImageBanner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mattressToolbar {
+  justify-content: space-between;
+}
+
+.mattressTrustSummary,
+.mattressToolbarActions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.mattressToolbarActions {
+  margin-left: auto;
+  justify-content: flex-end;
+}
+
+.mattressToolbarActions label {
+  margin-left: 0;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.mattressCard {
+  height: 100%;
+}
+
+.mattressMainLink {
+  min-height: 0;
+  flex: 1;
+}
+
+.mattressImage {
+  aspect-ratio: 4 / 3;
+}
+
+.saleBadge {
+  top: 12px;
+  left: 12px;
+  background: var(--navy);
+}
+
+.heartBadge {
+  top: 12px;
+  right: 12px;
+  width: 38px;
+  height: 38px;
+  box-shadow: 0 4px 14px rgba(26, 46, 68, .14);
+}
+
+.mattressSpecs span::before {
+  content: none;
+}
+
+.mattressSpecs span span {
+  width: 18px;
+  min-width: 18px;
+  height: 18px;
+  display: grid !important;
+  place-items: center;
+  border: 1px solid rgba(21, 87, 167, .22);
+  border-radius: 5px;
+  color: var(--blue);
+  font-size: 12px;
+  line-height: 1;
+}
+
+.mattressRating {
+  font-size: 14px;
+}
+
+.mattressRating small {
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.deliveryNote::before,
+.mattressToolbar span::before {
+  content: "✓";
+}
+
+.mattressPrice small {
+  font-size: 13px;
+}
+
+.mattressPrice small s {
+  text-decoration-thickness: 2px;
+}
+
+.compareCheck {
+  min-height: 34px;
+  margin: 0 18px 18px;
+  padding-top: 0;
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  color: var(--navy);
+  font: 900 12px/1.2 var(--sans);
+}
+
+.compareCheck input {
+  width: 15px;
+  height: 15px;
+  margin: 0;
+  flex: 0 0 15px;
+  accent-color: var(--blue);
+  cursor: pointer;
+}
+
+.compareCheck > span {
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.categorySupportGrid {
+  margin-top: 34px;
+  display: grid;
+  gap: 18px;
+}
+
+.categoryCompare,
+.categoryGuides,
+.categoryFaqs,
+.categoryReviews {
+  border: 1px solid var(--bdr);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: var(--sh1);
+  padding: 22px;
+}
+
+.categoryCompare {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+}
+
+.categoryCompare strong,
+.supportHeading h2 {
+  margin: 0;
+  color: var(--navy);
+  font: 900 20px/1.2 var(--sans);
+}
+
+.categoryCompare p {
+  margin: 6px 0 0;
+  color: var(--body);
+  font: 500 14px/1.55 var(--sans);
+}
+
+.categoryCompare button {
+  min-height: 44px;
+  border: 0;
+  border-radius: var(--r);
+  background: var(--navy);
+  color: #fff;
+  padding: 10px 22px;
+  font: 900 13px/1 var(--sans);
+  cursor: pointer;
+}
+
+.supportHeading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.supportHeading a {
+  color: var(--blue);
+  font: 900 13px/1.2 var(--sans);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+}
+
+.guideGrid,
+.categoryFaqGrid,
+.reviewMiniGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.guideCard {
+  min-height: 118px;
+  border: 1px solid var(--bdr);
+  border-radius: 8px;
+  padding: 16px;
+  display: grid;
+  gap: 8px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.guideCard > span {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--bg4);
+  color: var(--blue);
+}
+
+.guideCard strong {
+  color: var(--navy);
+  font: 900 14px/1.25 var(--sans);
+}
+
+.guideCard small {
+  color: var(--body);
+  font: 500 12px/1.45 var(--sans);
+}
+
+.categoryFaqItem {
+  border: 1px solid var(--bdr);
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.categoryFaqItem summary {
+  min-height: 48px;
+  padding: 12px 16px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--navy);
+  font: 900 13px/1.3 var(--sans);
+  cursor: pointer;
+  list-style: none;
+}
+
+.categoryFaqItem summary::-webkit-details-marker {
+  display: none;
+}
+
+.categoryFaqItem p {
+  margin: 0;
+  padding: 0 16px 14px;
+  color: var(--body);
+  font: 500 13px/1.55 var(--sans);
+}
+
+.reviewMiniGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.reviewMiniCard {
+  border: 1px solid var(--bdr);
+  border-radius: 8px;
+  padding: 16px;
+  background: var(--bg1);
+}
+
+.reviewMiniCard span {
+  color: var(--ok);
+  font: 900 13px/1 var(--sans);
+  letter-spacing: 2px;
+}
+
+.reviewMiniCard p {
+  margin: 10px 0;
+  color: var(--body);
+  font: 600 13px/1.55 var(--sans);
+}
+
+.reviewMiniCard small {
+  color: var(--muted);
+  font: 800 12px/1.2 var(--sans);
+}
+
+@media (max-width: 1024px) {
+  .mattressLayout {
+    padding: 0 24px 72px;
+    grid-template-columns: 1fr;
+  }
+
+  .filterSidebar {
+    display: none;
+  }
+
+  .filterSidebarOpen {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    inset: 0;
+    z-index: 800;
+    width: 100%;
+    max-height: 100vh;
+    overflow-y: auto;
+    background: #fff;
+    border: 0;
+    border-radius: 0;
+    padding: 18px 18px 100px;
+  }
+
+  .filterTrigger {
+    width: 100%;
+    margin: 0 auto 16px;
+    display: flex;
+  }
+
+  .mattressToolbar {
+    align-items: flex-start;
+  }
+
+  .mattressToolbarActions {
+    margin-left: auto;
+    justify-content: flex-end;
+  }
+
+  .mattressGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 580px) {
+  .categoryImageBanner {
+    aspect-ratio: 16 / 8;
+  }
+
+  .mattressTrustSummary,
+  .mattressToolbarActions {
+    width: 100%;
+  }
+
+  .categoryCompare,
+  .supportHeading {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .categoryCompare button,
+  .supportHeading a {
+    width: 100%;
+  }
+
+  .guideGrid,
+  .categoryFaqGrid,
+  .reviewMiniGrid {
+    grid-template-columns: 1fr;
   }
 }

@@ -416,6 +416,9 @@ section[id]{scroll-margin-top:calc(var(--nav) + 16px)}
 .fi-a{min-height:0;overflow:hidden;font-size:14px;color:var(--body);line-height:1.7;border-top:1px solid var(--bdr);padding-top:12px}
 /* ── NEWSLETTER ── */
 .bottom{background:var(--bg6);padding:96px 0}
+.contact-section-head{max-width:680px;margin:0 0 34px;opacity:1!important;transform:none!important}
+.contact-section-head h2{margin:0;color:var(--navy);font-size:clamp(30px,4vw,48px)}
+.contact-section-head p{margin:10px 0 0;color:var(--body);font-size:16px;line-height:1.7}
 .bot-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:stretch}
 .nl{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--rl);padding:40px;box-shadow:var(--sh1);min-width:0}
 .nl-tag{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:8px;display:block}
