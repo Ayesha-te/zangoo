@@ -178,7 +178,7 @@ export default async function CollectionProductPage({ params }: ProductPageProps
                           <span><span aria-hidden="true">◇</span>Approx. 26cm deep</span>
                         </span>
                         <span className={styles.mattressRating} aria-label={`${mattress.shortName} reviews`}>
-                          <span aria-hidden="true">*****</span>
+                          <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
                           <b>4.8</b>
                           <small>({mattress.slug === "capri-ortho-mattress" ? "358" : "27"} reviews)</small>
                         </span>
