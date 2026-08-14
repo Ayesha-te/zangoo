@@ -159,14 +159,17 @@ export default async function CollectionProductPage({ params }: ProductPageProps
               <div className={styles.mattressGrid}>
                 {orthoMattressProducts.map((mattress) => (
                   <article className={styles.mattressCard} key={mattress.slug}>
-                    <Link
-                      className={styles.mattressMainLink}
-                      href={`/collections/bedroom/mattresses/${mattress.slug}/`}
-                    >
+                    <div className={styles.mattressCardBody}>
                       <span className={styles.mattressImage}>
                         <img src={mattress.gallery?.[1]?.src ?? mattress.image} alt="" />
                         <span className={styles.saleBadge}>{mattress.firmness}</span>
-                        <span className={styles.heartBadge} aria-hidden="true">&#9825;</span>
+                        <button
+                          type="button"
+                          className={styles.heartBadge}
+                          aria-label={`Add ${mattress.shortName} to favourites`}
+                        >
+                          <span aria-hidden="true">&#9825;</span>
+                        </button>
                       </span>
                       <span className={styles.mattressInfo}>
                         <strong>{mattress.shortName}</strong>
@@ -177,19 +180,28 @@ export default async function CollectionProductPage({ params }: ProductPageProps
                           <span><span aria-hidden="true">▧</span>Wire edge</span>
                           <span><span aria-hidden="true">◇</span>Approx. 26cm deep</span>
                         </span>
-                        <span className={styles.mattressRating} aria-label={`${mattress.shortName} reviews`}>
+                        <Link
+                          className={styles.mattressRating}
+                          href={`/collections/bedroom/mattresses/${mattress.slug}/#reviews`}
+                          aria-label={`Read ${mattress.shortName} reviews`}
+                        >
                           <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
                           <b>4.8</b>
                           <small>({mattress.slug === "capri-ortho-mattress" ? "358" : "27"} reviews)</small>
-                        </span>
+                        </Link>
                         <span className={styles.deliveryNote}>In stock - Free delivery from Tomorrow</span>
                         <span className={styles.mattressPrice}>
                           {cleanPrice(mattress.price)}
                           <small><s>RRP £249.00</s> <b>Save £50 (15%)</b></small>
                         </span>
-                        <span className={styles.mattressButton}>View Mattress <span aria-hidden="true">&rsaquo;</span></span>
+                        <Link
+                          className={styles.mattressButton}
+                          href={`/collections/bedroom/mattresses/${mattress.slug}/`}
+                        >
+                          View Mattress <span aria-hidden="true">&rsaquo;</span>
+                        </Link>
                       </span>
-                    </Link>
+                    </div>
                     <label className={styles.compareCheck}>
                       <input type="checkbox" aria-label={`Add ${mattress.shortName} to compare`} />
                       <span>Add to compare</span>
