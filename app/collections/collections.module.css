@@ -1188,8 +1188,6 @@
   height: 18px;
   display: grid !important;
   place-items: center;
-  border: 1px solid rgba(21, 87, 167, .22);
-  border-radius: 5px;
   color: var(--blue);
   font-size: 12px;
   line-height: 1;
