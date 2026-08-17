@@ -99,14 +99,17 @@ section[id]{scroll-margin-top:calc(var(--nav) + 16px)}
 .mega-link-badge{justify-self:end;border-radius:999px;padding:3px 7px;background:rgba(21,87,167,.08);font-style:normal;font-size:9px;font-weight:800;color:var(--blue);white-space:nowrap}
 .mega-link-badge.is-active{background:#C62828;color:#fff;box-shadow:0 6px 14px rgba(198,40,40,.24)}
 .mega-products-panel{min-width:0;align-self:start;padding:12px;border:1px solid var(--bdr);border-radius:12px;background:#fff;box-shadow:var(--sh1)}
+.mega-products-panel.is-empty{min-height:128px;display:grid;place-items:center;background:var(--bg1)}
+.mega-products-hint{margin:0;padding:12px;color:var(--muted);font-size:12px;font-weight:700;line-height:1.55;text-align:center}
 .nav-links .mega-panel-title{min-height:0!important;padding:4px 4px 10px!important;border-bottom:1px solid var(--bdr);border-radius:0!important;font-size:12px!important;font-weight:900!important;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)!important;background:transparent!important}
 .mega-products{display:grid;position:static;width:100%;margin:8px 0 0;padding:0;border:0;border-radius:0;background:transparent;box-shadow:none;align-content:start;gap:4px;z-index:2}
 .mega-product-group{min-width:0;position:relative}
 .mega-product-group>a{min-height:38px!important;padding:8px 28px 8px 9px!important;border-radius:8px;font-size:12px!important;font-weight:800!important;color:var(--body)!important;background:transparent!important}
 .mega-product-group.has-products>a::after{content:">";position:absolute;right:10px;top:8px;color:var(--blue);font-weight:900}
+.mega-product-group.has-products>a::after{transform:rotate(90deg)}
 .mega-product-group>a:hover,.mega-product-group>a:focus-visible{background:var(--bg4)!important;color:var(--navy)!important}
 .mega-sub-products{display:none;gap:2px;margin:2px 0 6px 10px;padding-left:8px;border-left:1px solid var(--bdr)}
-.mega-product-group:hover .mega-sub-products,.mega-product-group:focus-within .mega-sub-products{display:grid}
+.mega-product-group.has-products .mega-sub-products{display:grid}
 .mega-sub-products a{min-height:28px!important;padding:5px 8px!important;font-size:11px!important;font-weight:700!important;color:var(--blue)!important}
 .nav-tools{display:flex;align-items:center;gap:4px;flex-shrink:0}
 .nav-tools a{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--body);transition:background .15s ease,color .15s ease}

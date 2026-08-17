@@ -481,7 +481,7 @@
   margin-top: 12px;
 }
 
-.mattressSpecs span {
+.mattressSpecs > span {
   width: 100%;
   min-height: 26px;
   display: flex !important;
@@ -493,7 +493,7 @@
   font: 800 12px/1.2 var(--sans);
 }
 
-.mattressSpecs span::before {
+.mattressSpecs > span::before {
   content: "✓";
   display: inline-block;
   color: var(--blue);
@@ -1178,11 +1178,11 @@
   box-shadow: 0 4px 14px rgba(26, 46, 68, .14);
 }
 
-.mattressSpecs span::before {
+.mattressSpecs > span::before {
   content: none;
 }
 
-.mattressSpecs span span {
+.mattressSpecs > span > span {
   width: 18px;
   min-width: 18px;
   height: 18px;
@@ -1522,16 +1522,18 @@
     margin-top: 24px;
   }
 
-  .mattressSpecs span {
+  .mattressSpecs > span {
     min-height: 32px;
     gap: 8px;
     font-size: 15px;
   }
 
-  .mattressSpecs span span {
+  .mattressSpecs > span > span {
     width: 26px;
     min-width: 26px;
     height: 26px;
+    min-height: 0;
+    border-top: 0;
     border-radius: 8px;
     font-size: 14px;
   }

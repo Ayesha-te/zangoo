@@ -61,7 +61,7 @@ export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openMobileCategory, setOpenMobileCategory] = useState<string | null>(null);
   const [openMobileGroup, setOpenMobileGroup] = useState<string | null>(null);
-  const [openDesktopCategory, setOpenDesktopCategory] = useState<string>("Bedroom");
+  const [openDesktopCategory, setOpenDesktopCategory] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [activeHref, setActiveHref] = useState("#");
 
@@ -228,8 +228,7 @@ export function SiteHeader() {
                   ? pathname.startsWith("/collections") || (isHome && activeHref === "/collections/")
                   : isHome && activeHref === link.href;
               const hasMegaMenu = link.label === "Collections";
-              const desktopCategory =
-                collectionCategories.find((item) => item.label === openDesktopCategory) ?? collectionCategories[0];
+              const desktopCategory = collectionCategories.find((item) => item.label === openDesktopCategory);
 
               return (
                 <li className={hasMegaMenu ? "nav-item has-mega" : "nav-item"} key={link.label}>
@@ -257,26 +256,33 @@ export function SiteHeader() {
                               onMouseEnter={() => setOpenDesktopCategory(item.label)}
                               onFocus={() => setOpenDesktopCategory(item.label)}
                             >
-                              <Link
+                              <button
+                                type="button"
                                 className="mega-link"
-                                href={item.href}
                                 aria-current={openDesktopCategory === item.label ? "true" : undefined}
+                                aria-expanded={openDesktopCategory === item.label}
+                                onClick={() => setOpenDesktopCategory(item.label)}
                               >
                                 <span className="mega-link-copy">
                                   <strong>{item.label}</strong>
                                   <small>{item.groups.map((group) => group.label).join(", ")}</small>
                                 </span>
                                 <em className={`mega-link-badge${item.label === "Bedroom" ? " is-active" : ""}`}>{item.badge}</em>
-                              </Link>
+                              </button>
                             </li>
                           ))}
                         </ul>
-                        <div className="mega-products-panel" aria-label={`${desktopCategory.label} subcategories`}>
-                          <Link className="mega-panel-title" href={desktopCategory.href}>
-                            View {desktopCategory.label}
-                          </Link>
-                          <ul className="mega-products" role="list">
-                            {desktopCategory.groups.map((group) => (
+                        <div
+                          className={`mega-products-panel${desktopCategory ? "" : " is-empty"}`}
+                          aria-label={desktopCategory ? `${desktopCategory.label} subcategories` : "Subcategory instructions"}
+                        >
+                          {desktopCategory ? (
+                            <>
+                              <Link className="mega-panel-title" href={desktopCategory.href}>
+                                View {desktopCategory.label}
+                              </Link>
+                              <ul className="mega-products" role="list">
+                                {desktopCategory.groups.map((group) => (
                               <li className={`mega-product-group${"products" in group && group.products ? " has-products" : ""}`} key={group.label}>
                                 <Link href={group.href}>{group.label}</Link>
                                 {"products" in group && group.products ? (
@@ -293,8 +299,12 @@ export function SiteHeader() {
                                   </ul>
                                 ) : null}
                               </li>
-                            ))}
-                          </ul>
+                                ))}
+                              </ul>
+                            </>
+                          ) : (
+                            <p className="mega-products-hint">Hover over or select a room to view its subcategories.</p>
+                          )}
                         </div>
                       </div>
                     </div>
