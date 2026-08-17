@@ -3,6 +3,7 @@ import { BlogDetailPage } from "@/app/components/blog/BlogDetailPage";
 import { BlogPageLoading } from "@/app/components/blog/BlogPageLoading";
 import { blogPosts } from "@/app/data/home";
 import { localBlogPosts } from "@/app/data/localBlogPosts";
+import { getBlogPost } from "@/app/data/wordpressBlog";
 
 type WordPressSlugPost = {
   slug?: string;
@@ -31,10 +32,11 @@ export async function generateStaticParams() {
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
+  const post = await getBlogPost(slug);
 
   return (
     <Suspense fallback={<BlogPageLoading label="Loading blog post..." />}>
-      <BlogDetailPage slug={slug} />
+      <BlogDetailPage slug={slug} initialPost={post} initialDataReady />
     </Suspense>
   );
 }

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { BlogPageLoading } from "@/app/components/blog/BlogPageLoading";
 import { SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
-import { localBlogPosts, type LocalBlogPost } from "@/app/data/localBlogPosts";
 
 type WordPressRendered = {
   rendered?: string;
@@ -24,7 +23,7 @@ type WordPressTerm = {
   slug?: string;
 };
 
-type WordPressPost = {
+export type WordPressPost = {
   id: number;
   slug?: string;
   date?: string;
@@ -265,20 +264,6 @@ function internalBlogHref(post: WordPressPost) {
   return `/blog/${encodeURIComponent(post.slug ?? String(post.id))}/`;
 }
 
-function localPostToWordPressPost(post: LocalBlogPost): WordPressPost {
-  return {
-    id: -1,
-    slug: post.slug,
-    date: post.date,
-    title: { rendered: post.title },
-    excerpt: { rendered: post.excerpt },
-    content: { rendered: post.contentHtml },
-    _embedded: {
-      "wp:term": [[{ name: post.category, slug: post.category.toLowerCase().replace(/[^a-z0-9]+/g, "-") }]],
-    },
-  };
-}
-
 async function fetchWordPressPosts(url: URL, signal: AbortSignal) {
   const response = await fetch(url.toString(), {
     cache: "force-cache",
@@ -302,29 +287,34 @@ function BlogShell({ children }: { children: ReactNode }) {
   );
 }
 
-export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
+type BlogDetailPageProps = {
+  slug?: string;
+  initialPost?: WordPressPost | null;
+  initialPosts?: WordPressPost[];
+  initialDataReady?: boolean;
+};
+
+export function BlogDetailPage({
+  slug: routeSlug,
+  initialPost = null,
+  initialPosts = [],
+  initialDataReady = false,
+}: BlogDetailPageProps = {}) {
   const searchParams = useSearchParams();
   const slug = routeSlug ?? searchParams.get("slug");
   const requestedPage = Number(searchParams.get("page") ?? "1");
   const currentPage = Number.isFinite(requestedPage) && requestedPage > 0 ? Math.floor(requestedPage) : 1;
   const [visiblePage, setVisiblePage] = useState(currentPage);
-  const [post, setPost] = useState<WordPressPost | null>(null);
-  const [posts, setPosts] = useState<WordPressPost[]>([]);
-  const [status, setStatus] = useState<"loading" | "ready" | "empty" | "error">("loading");
+  const [post, setPost] = useState<WordPressPost | null>(initialPost);
+  const [posts, setPosts] = useState<WordPressPost[]>(initialPosts);
+  const [status, setStatus] = useState<"loading" | "ready" | "empty" | "error">(
+    initialDataReady ? (initialPost || initialPosts.length ? "ready" : "empty") : "loading",
+  );
 
   useEffect(() => {
-    if (!slug) setVisiblePage(currentPage);
-  }, [currentPage, slug]);
+    if (initialDataReady) return;
 
-  useEffect(() => {
     const controller = new AbortController();
-    const localPost = slug ? localBlogPosts.find((item) => item.slug === slug) : null;
-
-    if (localPost) {
-      setPost(localPostToWordPressPost(localPost));
-      setStatus("ready");
-      return () => controller.abort();
-    }
 
     const url = new URL(`${WORDPRESS_ORIGIN}/wp-json/wp/v2/posts`);
     url.searchParams.set("_embed", "1");
@@ -362,7 +352,7 @@ export function BlogDetailPage({ slug: routeSlug }: { slug?: string } = {}) {
     loadPost();
 
     return () => controller.abort();
-  }, [slug]);
+  }, [initialDataReady, slug]);
 
   const safeContent = useMemo(() => {
     if (!post?.content?.rendered) return "";

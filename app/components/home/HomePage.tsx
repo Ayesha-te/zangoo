@@ -151,18 +151,19 @@ function validateNewsletter(emailValue: string, firstNameValue: string, websiteV
 }
 
 function decodeHtml(value: string) {
-  if (typeof window === "undefined") return value;
+  const namedEntities: Record<string, string> = {
+    amp: "&", apos: "'", gt: ">", lt: "<", nbsp: " ", quot: '"',
+  };
 
-  const textarea = document.createElement("textarea");
-  textarea.innerHTML = value;
-  return textarea.value;
+  return value.replace(/&(#x[\da-f]+|#\d+|[a-z]+);/gi, (entity, code: string) => {
+    if (code.startsWith("#x")) return String.fromCodePoint(Number.parseInt(code.slice(2), 16));
+    if (code.startsWith("#")) return String.fromCodePoint(Number.parseInt(code.slice(1), 10));
+    return namedEntities[code.toLowerCase()] ?? entity;
+  });
 }
 
 function stripHtml(value: string) {
-  if (typeof window === "undefined") return value;
-
-  const doc = new DOMParser().parseFromString(value, "text/html");
-  return decodeHtml(doc.body.textContent?.replace(/\s+/g, " ").trim() ?? "");
+  return decodeHtml(value.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim());
 }
 
 function truncateText(value: string, maxLength: number) {
@@ -645,7 +646,7 @@ function Reviews() {
   );
 }
 
-function Blog() {
+function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
   const sliderRef = useRef<HTMLDivElement>(null);
   const fallbackPosts = blogPosts.map((post, index) => ({
     id: post.title,
@@ -657,8 +658,8 @@ function Blog() {
     className: post.className,
     visual: post.visual,
   })).map((post, index) => ({ ...post, id: `${post.id}-${index}` }));
-  const [posts, setPosts] = useState<HomepageBlogPost[]>(
-    fallbackPosts,
+  const [posts, setPosts] = useState<HomepageBlogPost[]>(() =>
+    initialPosts.length ? initialPosts.map(mapWordPressPost) : fallbackPosts,
   );
 
   useEffect(() => {
@@ -672,6 +673,8 @@ function Blog() {
   }, []);
 
   useEffect(() => {
+    if (initialPosts.length) return;
+
     const controller = new AbortController();
     const postsUrl = new URL("https://peru-armadillo-169520.hostingersite.com/wp-json/wp/v2/posts");
     postsUrl.searchParams.set("per_page", "100");
@@ -714,7 +717,7 @@ function Blog() {
         globalThis.clearTimeout(idleId);
       }
     };
-  }, []);
+  }, [initialPosts.length]);
 
   return (
     <section className="blog" id="blog" aria-labelledby="blog-h">
@@ -1240,7 +1243,7 @@ function useRevealOnScroll() {
   }, []);
 }
 
-export function HomePage() {
+export function HomePage({ initialBlogPosts = [] }: { initialBlogPosts?: WordPressPost[] }) {
   useRevealOnScroll();
 
   return (
@@ -1255,7 +1258,7 @@ export function HomePage() {
         <Stats />
         <Awards />
         <Reviews />
-        <Blog />
+        <Blog initialPosts={initialBlogPosts} />
         <Faq />
         <Contact />
       </main>
