@@ -1582,10 +1582,13 @@
 
   .mattressPrice small {
     margin-top: 10px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    font-size: 14px;
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 10px;
+    font-size: 16px;
+    line-height: 1.3;
+    white-space: nowrap;
   }
 
   .mattressButton {
