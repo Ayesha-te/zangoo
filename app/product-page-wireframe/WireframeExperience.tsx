@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import type { MattressProduct } from "@/app/data/mattressProducts";
 import { orthoMattressProducts } from "@/app/data/mattressProducts";
 import styles from "./productPageWireframe.module.css";
@@ -80,7 +80,8 @@ export function WireframeExperience({ product, relatedProducts }: WireframeExper
       <p className={styles.kicker}>Product page wireframe preview</p>
 
       <section className={styles.topGrid} aria-labelledby="wireframe-title">
-        <div className={styles.galleryCard}>
+        <div className={styles.leftColumn}>
+          <div className={styles.galleryCard}>
           <div className={styles.media}>
             <span className={styles.saleBadge}>-15%</span>
             <img src={gallery[activeImage]?.src ?? gallery[0].src} alt={gallery[activeImage]?.alt ?? gallery[0].alt} />
@@ -103,9 +104,20 @@ export function WireframeExperience({ product, relatedProducts }: WireframeExper
               </button>
             ))}
           </div>
+          </div>
+
+          <div className={styles.accordionCard} aria-label="Product information">
+            {accordions.map((item) => (
+              <details key={item.title}>
+                <summary>{item.title}</summary>
+                <p>{item.body}</p>
+              </details>
+            ))}
+          </div>
         </div>
 
-        <article className={styles.summaryCard}>
+        <div className={styles.rightColumn}>
+          <article className={styles.summaryCard}>
           <p className={styles.sku}>SKU: CAPRI-ORTHO-PREVIEW</p>
           <h1 id="wireframe-title">{product.name}</h1>
           <div className={styles.rating} aria-label="Rated 4.8 out of 5 from 358 reviews">
@@ -120,9 +132,9 @@ export function WireframeExperience({ product, relatedProducts }: WireframeExper
               <li key={benefit}>{benefit}</li>
             ))}
           </ul>
-        </article>
+          </article>
 
-        <aside className={styles.buyCard} aria-label="Product purchase options">
+          <aside className={styles.buyCard} aria-label="Product purchase options">
           <label>
             Size
             <select value={size} onChange={(event) => setSize(event.target.value)}>
@@ -164,20 +176,11 @@ export function WireframeExperience({ product, relatedProducts }: WireframeExper
           </div>
           <button className={styles.buyButton} type="button">Buy Now</button>
           <small className={styles.stockNote}><span aria-hidden="true"></span>4 left in stock</small>
-        </aside>
+          </aside>
+        </div>
       </section>
 
-      <section className={styles.detailGrid} aria-label="Product details">
-        <div className={styles.accordionCard}>
-          {accordions.map((item) => (
-            <details key={item.title}>
-              <summary>{item.title}</summary>
-              <p>{item.body}</p>
-            </details>
-          ))}
-        </div>
-
-        <div className={styles.trustStrip} role="list">
+      <section className={styles.trustStrip} aria-label="Purchase benefits" role="list">
           {["100-night sleep trial", "10-year warranty", "Free delivery", "Free returns"].map((item) => (
             <article key={item} role="listitem">
               <span aria-hidden="true">+</span>
@@ -185,7 +188,6 @@ export function WireframeExperience({ product, relatedProducts }: WireframeExper
               <small>Clear support included</small>
             </article>
           ))}
-        </div>
       </section>
 
       <section className={styles.textInsert} aria-labelledby="insert-title">
@@ -261,10 +263,29 @@ export function WireframeExperience({ product, relatedProducts }: WireframeExper
 }
 
 function ProductRail({ title, products }: { title: string; products: typeof orthoMattressProducts }) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const titleId = `${title.toLowerCase().replace(/\s+/g, "-")}-title`;
+
+  function scrollProducts(direction: -1 | 1) {
+    const track = trackRef.current;
+    if (!track) return;
+    track.scrollBy({ left: direction * Math.max(220, track.clientWidth * 0.78), behavior: "smooth" });
+  }
+
   return (
-    <section className={styles.rail} aria-labelledby={`${title.toLowerCase().replace(/\s+/g, "-")}-title`}>
-      <h2 id={`${title.toLowerCase().replace(/\s+/g, "-")}-title`}>{title}</h2>
-      <div>
+    <section className={styles.rail} aria-labelledby={titleId}>
+      <div className={styles.railHeader}>
+        <h2 id={titleId}>{title}</h2>
+        <div className={styles.railControls} aria-label={`${title} carousel controls`}>
+          <button type="button" aria-label={`Previous ${title.toLowerCase()}`} onClick={() => scrollProducts(-1)}>
+            &larr;
+          </button>
+          <button type="button" aria-label={`Next ${title.toLowerCase()}`} onClick={() => scrollProducts(1)}>
+            &rarr;
+          </button>
+        </div>
+      </div>
+      <div className={styles.railTrack} ref={trackRef}>
         {products.map((item) => (
           <Link href={`/collections/bedroom/mattresses/${item.slug}/`} key={item.slug}>
             <img src={item.gallery?.[1]?.src ?? item.image} alt={item.imageAlt} />

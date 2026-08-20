@@ -24,9 +24,17 @@
 
 .topGrid {
   display: grid;
-  grid-template-columns: minmax(0, 1.12fr) minmax(300px, .88fr);
+  grid-template-columns: minmax(0, 1.18fr) minmax(340px, .82fr);
   gap: 20px;
   align-items: start;
+}
+
+.leftColumn,
+.rightColumn {
+  min-width: 0;
+  display: grid;
+  gap: 20px;
+  align-content: start;
 }
 
 .galleryCard,
@@ -207,7 +215,6 @@
 }
 
 .buyCard {
-  grid-column: 2;
   padding: 24px;
 }
 
@@ -385,13 +392,6 @@
   vertical-align: -1px;
 }
 
-.detailGrid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: 20px;
-  margin-top: 20px;
-}
-
 .accordionCard {
   padding: 8px 0;
 }
@@ -448,6 +448,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
+  margin-top: 20px;
   overflow: hidden;
 }
 
@@ -691,11 +692,45 @@
   transform: translateY(-1px);
 }
 
-.rail > div {
+.railTrack {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 14px;
   margin-top: 18px;
+}
+
+.railHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.railControls {
+  display: none;
+  align-items: center;
+  gap: 8px;
+}
+
+.railControls button {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--bdr);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--navy);
+  font: 900 18px/1 var(--sans);
+  cursor: pointer;
+  box-shadow: var(--sh1);
+}
+
+.railControls button:hover,
+.railControls button:focus-visible {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: #fff;
 }
 
 .rail a {
@@ -755,15 +790,54 @@
 
 @media (max-width: 920px) {
   .topGrid,
-  .reviewGrid,
-  .faq > div,
-  .compareGrid,
-  .rail > div {
+  .faq > div {
     grid-template-columns: 1fr;
   }
 
-  .buyCard {
-    grid-column: auto;
+  .reviewGrid {
+    grid-template-columns: 160px repeat(3, minmax(220px, 1fr));
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x proximity;
+    padding: 2px 2px 12px;
+  }
+
+  .reviewGrid > * {
+    scroll-snap-align: start;
+  }
+
+  .compareGrid {
+    grid-template-columns: repeat(3, minmax(180px, 1fr)) minmax(220px, 1fr);
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x proximity;
+    padding: 2px 2px 12px;
+  }
+
+  .compareGrid > * {
+    scroll-snap-align: start;
+  }
+
+  .railTrack {
+    display: flex;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    padding: 2px 2px 12px;
+  }
+
+  .railTrack::-webkit-scrollbar {
+    display: none;
+  }
+
+  .railControls {
+    display: flex;
+  }
+
+  .rail a {
+    flex: 0 0 min(260px, 42vw);
+    scroll-snap-align: start;
   }
 
   .trustStrip {
@@ -773,7 +847,33 @@
 
 @media (max-width: 560px) {
   .page {
-    padding: 36px 14px 56px;
+    padding: calc(var(--nav) + 24px) 12px 56px;
+  }
+
+  .topGrid {
+    gap: 12px;
+  }
+
+  .leftColumn,
+  .rightColumn {
+    display: contents;
+  }
+
+  .galleryCard {
+    order: 1;
+    padding: 10px;
+  }
+
+  .summaryCard {
+    order: 2;
+  }
+
+  .buyCard {
+    order: 3;
+  }
+
+  .accordionCard {
+    order: 4;
   }
 
   .summaryCard,
@@ -783,22 +883,131 @@
   .faq,
   .compare,
   .rail {
-    padding: 20px;
+    padding: 18px;
+  }
+
+  .summaryCard,
+  .buyCard {
+    padding: 18px;
   }
 
   .summaryCard h1 {
-    font-size: 26px;
+    font-size: 25px;
   }
 
+  .summaryCard p {
+    margin-top: 12px;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  .summaryCard h2 {
+    margin-top: 16px;
+  }
+
+  .benefits {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px 10px;
+  }
+
+  .benefits li {
+    font-size: 12px;
+  }
+
+  .media {
+    aspect-ratio: 16 / 9;
+  }
+
+  .playButton {
+    width: 48px;
+    height: 48px;
+  }
+
+  .trustStrip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .thumbs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .thumbs button {
+    height: 58px;
+  }
+
+  .qty {
+    margin-top: 12px;
+  }
+
+  .priceRow {
+    margin: 16px 0;
+  }
+
+  .accordionCard summary {
+    padding: 15px 18px;
+  }
+
+  .rail img {
+    height: 130px;
+  }
+
+  .rail a {
+    flex-basis: min(230px, 78vw);
+  }
+
+  .reviewGrid {
+    grid-template-columns: 150px repeat(3, minmax(210px, 78vw));
+  }
+
+  .compareGrid {
+    grid-template-columns: repeat(3, minmax(190px, 76vw)) minmax(220px, 82vw);
+  }
+
+  .priceRow {
+    gap: 8px;
+  }
+
+  .priceRow strong {
+    width: 100%;
+  }
+
+  .faq a,
+  .compareButton {
+    width: 100%;
+  }
+
+  .textInsert,
+  .reviews,
+  .faq,
+  .compare,
+  .rail {
+    margin-top: 12px;
+  }
+
+  .railHeader h2 {
+    font-size: 20px;
+  }
+
+  .railControls button {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 380px) {
   .trustStrip {
     grid-template-columns: 1fr;
   }
 
-  .thumbs {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .rail img {
-    height: 150px;
+  .summaryCard,
+  .buyCard,
+  .textInsert,
+  .reviews,
+  .faq,
+  .compare,
+  .rail {
+    padding: 17px;
   }
 }
