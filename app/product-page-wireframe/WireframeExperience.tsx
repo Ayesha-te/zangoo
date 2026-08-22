@@ -9,28 +9,32 @@ import styles from "./productPageWireframe.module.css";
 type WireframeExperienceProps = {
   product: MattressProduct;
   relatedProducts: MattressProduct[];
+  isPreview?: boolean;
 };
 
-const benefits = [
-  "Orthopaedic support",
-  "Breathable fabric",
-  "Pressure relief",
-  "Spinal alignment",
-  "Made in the UK",
+const SIZE_TIERS = [
+  { id: "single", label: "Single (90 x 190cm)", multiplier: 1 },
+  { id: "double", label: "Double (135 x 190cm)", multiplier: 1.13 },
+  { id: "king", label: "King (150 x 200cm)", multiplier: 1.27 },
+  { id: "super-king", label: "Super King (180 x 200cm)", multiplier: 1.47 },
 ];
 
-const sizes = [
-  { id: "single", label: "Single (90 x 190cm)", price: 299, compare: 349 },
-  { id: "double", label: "Double (135 x 190cm)", price: 379, compare: 449 },
-  { id: "king", label: "King (150 x 200cm)", price: 449, compare: 529 },
-  { id: "super-king", label: "Super King (180 x 200cm)", price: 549, compare: 649 },
-];
+function buildSizes(product: MattressProduct) {
+  const basePrice = Number(product.price.replace(/[^0-9]/g, "")) || 499;
 
-export function WireframeExperience({ product, relatedProducts }: WireframeExperienceProps) {
+  return SIZE_TIERS.map((tier) => {
+    const price = Math.round((basePrice * tier.multiplier) / 10) * 10;
+    const compare = Math.round(price / 0.85 / 10) * 10;
+    return { id: tier.id, label: tier.label, price, compare };
+  });
+}
+
+export function WireframeExperience({ product, relatedProducts, isPreview = true }: WireframeExperienceProps) {
   const gallery = useMemo(
     () => (product.gallery?.length ? product.gallery : [{ src: product.image, alt: product.imageAlt }]),
     [product.gallery, product.image, product.imageAlt],
   );
+  const sizes = useMemo(() => buildSizes(product), [product]);
   const [activeImage, setActiveImage] = useState(0);
   const [size, setSize] = useState("king");
   const [quantity, setQuantity] = useState(1);
@@ -42,14 +46,19 @@ export function WireframeExperience({ product, relatedProducts }: WireframeExper
   const activeSize = sizes.find((item) => item.id === size) ?? sizes[2];
   const total = activeSize.price * quantity;
   const thumbnails = [...gallery, ...gallery].slice(0, 4);
+  const comparisonSecondary = relatedProducts[0];
   const comparisonItems = [
     { name: product.shortName, slug: product.slug, price: `£${activeSize.price}`, image: gallery[0] },
-    {
-      name: "Premium Hybrid Mattress",
-      slug: "premium-hybrid-preview",
-      price: "£649",
-      image: { src: "/capri-ortho-mattress-product-cutout.webp", alt: "Hybrid mattress product view" },
-    },
+    ...(comparisonSecondary
+      ? [
+          {
+            name: comparisonSecondary.shortName,
+            slug: comparisonSecondary.slug,
+            price: comparisonSecondary.price.replace("From ", ""),
+            image: comparisonSecondary.gallery?.[0] ?? { src: comparisonSecondary.image, alt: comparisonSecondary.imageAlt },
+          },
+        ]
+      : []),
   ];
 
   const accordions = [
@@ -77,7 +86,7 @@ export function WireframeExperience({ product, relatedProducts }: WireframeExper
 
   return (
     <div className={styles.wrap}>
-      <p className={styles.kicker}>Product page wireframe preview</p>
+      {isPreview ? <p className={styles.kicker}>Product page wireframe preview</p> : null}
 
       <section className={styles.topGrid} aria-labelledby="wireframe-title">
         <div className={styles.leftColumn}>
@@ -118,7 +127,7 @@ export function WireframeExperience({ product, relatedProducts }: WireframeExper
 
         <div className={styles.rightColumn}>
           <article className={styles.summaryCard}>
-          <p className={styles.sku}>SKU: CAPRI-ORTHO-PREVIEW</p>
+          <p className={styles.sku}>SKU: {product.slug.toUpperCase()}</p>
           <h1 id="wireframe-title">{product.name}</h1>
           <div className={styles.rating} aria-label="Rated 4.8 out of 5 from 358 reviews">
             <span>*****</span>
@@ -128,7 +137,7 @@ export function WireframeExperience({ product, relatedProducts }: WireframeExper
           <p>{product.description}</p>
           <h2>Features You Will Love</h2>
           <ul className={styles.benefits} role="list">
-            {benefits.map((benefit) => (
+            {product.bullets.map((benefit) => (
               <li key={benefit}>{benefit}</li>
             ))}
           </ul>
@@ -181,7 +190,7 @@ export function WireframeExperience({ product, relatedProducts }: WireframeExper
       </section>
 
       <section className={styles.trustStrip} aria-label="Purchase benefits" role="list">
-          {["100-night sleep trial", "10-year warranty", "Free delivery", "Free returns"].map((item) => (
+          {["60-night sleep trial", "1-year guarantee", "Free delivery", "Free returns"].map((item) => (
             <article key={item} role="listitem">
               <span aria-hidden="true">+</span>
               <strong>{item}</strong>
@@ -191,10 +200,10 @@ export function WireframeExperience({ product, relatedProducts }: WireframeExper
       </section>
 
       <section className={styles.textInsert} aria-labelledby="insert-title">
-        <p className={styles.kicker}>Flexible content section</p>
-        <h2 id="insert-title">Space for SEO text, internal links, or buying guidance.</h2>
+        <p className={styles.kicker}>Free UK delivery &bull; 60-night trial &bull; WhatsApp support</p>
+        <h2 id="insert-title">Why choose {product.shortName}?</h2>
         <p>
-          This compact section can hold extra copy between the core product details and lower-page modules without pushing the main purchase controls too far down.
+          {product.description} Message our team on WhatsApp for size and firmness guidance, or browse the full mattress range to compare support options before you buy.
         </p>
       </section>
 

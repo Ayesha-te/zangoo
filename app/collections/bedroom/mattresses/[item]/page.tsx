@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
-import ProductLandingPage, { generateMetadata as generateProductMetadata } from "../../../[slug]/[product]/[item]/page";
-import { orthoMattressProducts } from "@/app/data/mattressProducts";
+import { notFound } from "next/navigation";
+import { generateMetadata as generateProductMetadata } from "../../../[slug]/[product]/[item]/page";
+import { getMattressProduct, orthoMattressProducts } from "@/app/data/mattressProducts";
+import { SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
+import { WireframeExperience } from "@/app/product-page-wireframe/WireframeExperience";
+import wireframeStyles from "@/app/product-page-wireframe/productPageWireframe.module.css";
 
 type BedroomMattressPageProps = {
   params: Promise<{ item: string }>;
@@ -22,10 +26,18 @@ export async function generateMetadata({ params }: BedroomMattressPageProps): Pr
 
 export default async function BedroomMattressPage({ params }: BedroomMattressPageProps) {
   const { item } = await params;
+  const product = getMattressProduct(item);
+  if (!product) notFound();
+
+  const relatedProducts = orthoMattressProducts.filter((mattress) => mattress.slug !== product.slug).slice(0, 4);
 
   return (
-    <ProductLandingPage
-      params={Promise.resolve({ slug: "bedroom", product: "mattresses", item })}
-    />
+    <>
+      <SiteHeader />
+      <main className={wireframeStyles.page}>
+        <WireframeExperience product={product} relatedProducts={relatedProducts} isPreview={false} />
+      </main>
+      <SiteFooter />
+    </>
   );
 }
