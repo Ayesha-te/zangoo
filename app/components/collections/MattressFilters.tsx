@@ -8,13 +8,29 @@ type MattressFiltersProps = {
   needFilters: string[];
   feelFilters: string[];
   sizeFilters: string[];
+  selectedNeed: string[];
+  selectedFeel: string[];
+  selectedSize: string[];
+  onToggleNeed: (filter: string) => void;
+  onToggleFeel: (filter: string) => void;
+  onToggleSize: (filter: string) => void;
+  onClearAll: () => void;
 };
 
-export function MattressFilters({ needFilters, feelFilters, sizeFilters }: MattressFiltersProps) {
+export function MattressFilters({
+  needFilters,
+  feelFilters,
+  sizeFilters,
+  selectedNeed,
+  selectedFeel,
+  selectedSize,
+  onToggleNeed,
+  onToggleFeel,
+  onToggleSize,
+  onClearAll,
+}: MattressFiltersProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedNeed, setSelectedNeed] = useState<string[]>(needFilters.slice(0, 1));
-  const [selectedFeel, setSelectedFeel] = useState<string[]>(feelFilters.slice(1, 2));
-  const [selectedSize, setSelectedSize] = useState<string[]>(sizeFilters.slice(2, 3));
+  const hasSelection = selectedNeed.length > 0 || selectedFeel.length > 0 || selectedSize.length > 0;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -31,16 +47,6 @@ export function MattressFilters({ needFilters, feelFilters, sizeFilters }: Mattr
     };
   }, [isOpen]);
 
-  const toggle = (list: string[], setList: (value: string[]) => void, filter: string) => {
-    setList(list.includes(filter) ? list.filter((entry) => entry !== filter) : [...list, filter]);
-  };
-
-  const clearAll = () => {
-    setSelectedNeed([]);
-    setSelectedFeel([]);
-    setSelectedSize([]);
-  };
-
   return (
     <>
       <button type="button" className={styles.filterTrigger} onClick={() => setIsOpen(true)}>
@@ -55,7 +61,7 @@ export function MattressFilters({ needFilters, feelFilters, sizeFilters }: Mattr
         <div className={styles.filterHead}>
           <strong>Filter by</strong>
           <div className={styles.filterHeadActions}>
-            <button type="button" onClick={clearAll}>
+            <button type="button" onClick={onClearAll}>
               Clear all
             </button>
             <button
@@ -76,7 +82,7 @@ export function MattressFilters({ needFilters, feelFilters, sizeFilters }: Mattr
               <input
                 type="checkbox"
                 checked={selectedNeed.includes(filter)}
-                onChange={() => toggle(selectedNeed, setSelectedNeed, filter)}
+                onChange={() => onToggleNeed(filter)}
               />
               <span>{filter}</span>
             </label>
@@ -90,7 +96,7 @@ export function MattressFilters({ needFilters, feelFilters, sizeFilters }: Mattr
               <input
                 type="checkbox"
                 checked={selectedFeel.includes(filter)}
-                onChange={() => toggle(selectedFeel, setSelectedFeel, filter)}
+                onChange={() => onToggleFeel(filter)}
               />
               <span>{filter}</span>
             </label>
@@ -104,7 +110,7 @@ export function MattressFilters({ needFilters, feelFilters, sizeFilters }: Mattr
               <input
                 type="checkbox"
                 checked={selectedSize.includes(filter)}
-                onChange={() => toggle(selectedSize, setSelectedSize, filter)}
+                onChange={() => onToggleSize(filter)}
               />
               <span>{filter}</span>
             </label>
@@ -117,9 +123,11 @@ export function MattressFilters({ needFilters, feelFilters, sizeFilters }: Mattr
           <Link href="/contact/">Contact Us</Link>
         </div>
 
-        <button type="button" className={styles.filterApplyBtn} onClick={() => setIsOpen(false)}>
-          Apply Filters
-        </button>
+        {hasSelection ? (
+          <button type="button" className={styles.filterApplyBtn} onClick={() => setIsOpen(false)}>
+            Apply Filters
+          </button>
+        ) : null}
       </aside>
     </>
   );

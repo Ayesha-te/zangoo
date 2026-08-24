@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 import type { MattressProduct } from "@/app/data/mattressProducts";
 import { orthoMattressProducts } from "@/app/data/mattressProducts";
+import { MattressCompareModal } from "@/app/components/collections/MattressCompareModal";
+import { FirmnessBar } from "@/app/components/collections/FirmnessBar";
 import styles from "./productPageWireframe.module.css";
 
 type WireframeExperienceProps = {
@@ -29,6 +31,19 @@ function buildSizes(product: MattressProduct) {
   });
 }
 
+function getStockState(count: number) {
+  if (count <= 0) {
+    return { label: "Out of stock", sub: null, className: styles.stockOut, pulse: false };
+  }
+  if (count === 1) {
+    return { label: "Last one — hurry!", sub: "Once it's gone, it's gone", className: styles.stockLast, pulse: true };
+  }
+  if (count <= 5) {
+    return { label: `Only ${count} left in stock`, sub: "Selling fast — order soon", className: styles.stockLow, pulse: true };
+  }
+  return { label: `${count} in stock`, sub: null, className: styles.stockOk, pulse: false };
+}
+
 export function WireframeExperience({ product, relatedProducts, isPreview = true }: WireframeExperienceProps) {
   const gallery = useMemo(
     () => (product.gallery?.length ? product.gallery : [{ src: product.image, alt: product.imageAlt }]),
@@ -40,26 +55,20 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   const [quantity, setQuantity] = useState(1);
   const [favourite, setFavourite] = useState(false);
   const [added, setAdded] = useState(false);
-  const [compare, setCompare] = useState<Set<string>>(() => new Set([product.slug]));
-  const [selectHint, setSelectHint] = useState("Select another product");
+  const [comparisonSlug, setComparisonSlug] = useState<string | null>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const activeSize = sizes.find((item) => item.id === size) ?? sizes[2];
   const total = activeSize.price * quantity;
   const thumbnails = [...gallery, ...gallery].slice(0, 4);
-  const comparisonSecondary = relatedProducts[0];
-  const comparisonItems = [
-    { name: product.shortName, slug: product.slug, price: `£${activeSize.price}`, image: gallery[0] },
-    ...(comparisonSecondary
-      ? [
-          {
-            name: comparisonSecondary.shortName,
-            slug: comparisonSecondary.slug,
-            price: comparisonSecondary.price.replace("From ", ""),
-            image: comparisonSecondary.gallery?.[0] ?? { src: comparisonSecondary.image, alt: comparisonSecondary.imageAlt },
-          },
-        ]
-      : []),
-  ];
+  const comparisonProduct = relatedProducts.find((item) => item.slug === comparisonSlug) ?? null;
+  const stockState = getStockState(product.stockCount);
+
+  function chooseComparison(slug: string) {
+    setComparisonSlug(slug);
+    setPickerOpen(false);
+  }
 
   const accordions = [
     { title: "Description", body: product.description },
@@ -74,15 +83,6 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
       body: "Free UK delivery, clear support before purchase, and simple return guidance can be shown here.",
     },
   ];
-
-  function toggleCompare(slug: string) {
-    setCompare((current) => {
-      const next = new Set(current);
-      if (next.has(slug)) next.delete(slug);
-      else next.add(slug);
-      return next;
-    });
-  }
 
   return (
     <div className={styles.wrap}>
@@ -129,6 +129,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
           <article className={styles.summaryCard}>
           <p className={styles.sku}>SKU: {product.slug.toUpperCase()}</p>
           <h1 id="wireframe-title">{product.name}</h1>
+          <FirmnessBar firmness={product.firmness} />
           <div className={styles.rating} aria-label="Rated 4.8 out of 5 from 358 reviews">
             <span>*****</span>
             <strong>4.8</strong>
@@ -184,7 +185,11 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             </button>
           </div>
           <button className={styles.buyButton} type="button">Buy Now</button>
-          <small className={styles.stockNote}><span aria-hidden="true"></span>4 left in stock</small>
+          <small className={`${styles.stockNote} ${stockState.className}`}>
+            <span className={stockState.pulse ? styles.stockDotPulse : undefined} aria-hidden="true" />
+            {stockState.label}
+            {stockState.sub ? <em>{stockState.sub}</em> : null}
+          </small>
           </aside>
         </div>
       </section>
@@ -240,30 +245,81 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
       </section>
 
       <section className={styles.compare} aria-labelledby="compare-title">
-        <h2 id="compare-title">Compare</h2>
-        <div className={styles.compareGrid}>
-          {comparisonItems.map((item) => (
-            <button
-              className={`${styles.compareProduct} ${compare.has(item.slug) ? styles.compareActive : ""}`}
-              type="button"
-              key={item.name}
-              aria-pressed={compare.has(item.slug)}
-              onClick={() => toggleCompare(item.slug)}
-            >
-              <img src={item.image.src} alt={item.image.alt} />
-              <strong>{item.name}</strong>
-              <span>{item.price}</span>
+        <h2 id="compare-title">Compare This Mattress</h2>
+        <p className={styles.compareHint}>Select another mattress to see the differences side by side.</p>
+
+        <div className={styles.comparePicker}>
+          <div className={`${styles.compareSlot} ${styles.compareSlotActive}`}>
+            <span className={styles.compareSlotBadge}>This product</span>
+            <img src={gallery[0].src} alt={gallery[0].alt} />
+            <strong>{product.shortName}</strong>
+            <small>{product.firmness}</small>
+            <span>{product.price.replace("From ", "")}</span>
+          </div>
+
+          <span className={styles.compareVs} aria-hidden="true">VS</span>
+
+          {comparisonProduct ? (
+            <div className={styles.compareSlot}>
+              <button
+                type="button"
+                className={styles.compareSlotRemove}
+                aria-label={`Remove ${comparisonProduct.shortName} from comparison`}
+                onClick={() => setComparisonSlug(null)}
+              >
+                &times;
+              </button>
+              <img src={comparisonProduct.gallery?.[0]?.src ?? comparisonProduct.image} alt={comparisonProduct.imageAlt} />
+              <strong>{comparisonProduct.shortName}</strong>
+              <small>{comparisonProduct.firmness}</small>
+              <span>{comparisonProduct.price.replace("From ", "")}</span>
+              <button type="button" className={styles.compareSlotChange} onClick={() => setPickerOpen(true)}>
+                &#8635; Change
+              </button>
+            </div>
+          ) : (
+            <button type="button" className={styles.compareSlotEmpty} onClick={() => setPickerOpen(true)}>
+              Select a mattress
             </button>
-          ))}
-          <button className={styles.selectProduct} type="button" onClick={() => setSelectHint("Product selector opened")}>{selectHint}</button>
-          <ul role="list">
-            {["Support & comfort", "Materials & layers", "Trial & warranty", "Delivery & returns"].map((item) => (
-              <li key={item}>+ {item}</li>
-            ))}
-          </ul>
+          )}
         </div>
-        <button className={styles.compareButton} type="button">Compare Products ({compare.size})</button>
+
+        {pickerOpen ? (
+          <div className={styles.comparePickerList} role="listbox" aria-label="Choose a mattress to compare">
+            <p>Choose a mattress to compare:</p>
+            <ul role="list">
+              {relatedProducts.map((item) => (
+                <li key={item.slug}>
+                  <button type="button" onClick={() => chooseComparison(item.slug)}>
+                    <img src={item.gallery?.[0]?.src ?? item.image} alt="" />
+                    <span>
+                      <strong>{item.shortName}</strong>
+                      <small>{item.firmness}</small>
+                    </span>
+                    <em>{item.price.replace("From ", "")}</em>
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <button type="button" className={styles.comparePickerClose} onClick={() => setPickerOpen(false)}>
+              Cancel
+            </button>
+          </div>
+        ) : null}
+
+        <button
+          className={styles.compareButton}
+          type="button"
+          disabled={!comparisonProduct}
+          onClick={() => setModalOpen(true)}
+        >
+          Compare Products {comparisonProduct ? "(2)" : "(1)"}
+        </button>
       </section>
+
+      {modalOpen && comparisonProduct ? (
+        <MattressCompareModal products={[product, comparisonProduct]} onClose={() => setModalOpen(false)} />
+      ) : null}
 
       <ProductRail title="Related Products" products={relatedProducts} />
       <ProductRail title="Recently Viewed" products={[product, ...relatedProducts].slice(0, 5)} />

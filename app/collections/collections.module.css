@@ -40,7 +40,6 @@
 
 .categoryImageBanner {
   width: 100%;
-  max-width: 940px;
   aspect-ratio: 16 / 5;
   margin: 24px 0 0;
   border: 1px solid var(--bdr);
@@ -393,8 +392,8 @@
 .mattressImage img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  padding: 26px 20px 12px;
+  object-fit: cover;
+  object-position: center;
   transition: transform 0.25s ease;
 }
 
@@ -873,15 +872,24 @@
   min-width: 0;
 }
 
+.mattressCount {
+  margin: 0 0 14px;
+}
+
+.mattressCount strong {
+  color: var(--navy);
+  font: 900 15px/1.2 var(--sans);
+}
+
 .mattressToolbar {
   width: 100%;
-  margin: 0 0 18px;
+  margin: 16px 0 18px;
   padding: 14px 16px;
   border: 1px solid var(--bdr);
   border-radius: 10px;
   background: #fff;
   box-shadow: var(--sh1);
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .mattressTrustSummary,
@@ -897,7 +905,7 @@
   align-items: center;
   gap: 8px;
   color: var(--muted);
-  font: 900 11px/1 var(--sans);
+  font: 900 13px/1 var(--sans);
   letter-spacing: 0;
   text-transform: none;
 }
@@ -906,9 +914,15 @@
   min-height: 38px;
   border: 1px solid var(--bdr);
   border-radius: var(--r);
-  background: #fff;
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%231A2E44' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 10px 6px;
+  appearance: none;
+  -webkit-appearance: none;
   color: var(--navy);
-  padding: 0 12px;
+  padding: 0 32px 0 12px;
   font: 900 13px/1 var(--sans);
   letter-spacing: 0;
   text-transform: none;
@@ -972,7 +986,7 @@
   display: none;
 }
 
-.filterCloseBtn {
+.filterHead .filterCloseBtn {
   display: none;
 }
 
@@ -1036,22 +1050,23 @@
     cursor: pointer;
   }
 
-  .filterCloseBtn {
+  .filterHead .filterCloseBtn {
     display: grid;
     place-items: center;
-    width: 28px;
-    height: 28px;
-    border: 1px solid rgba(26, 46, 68, .12);
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    border: 1px solid rgba(26, 46, 68, .16);
     border-radius: 50%;
     background: var(--bg1);
     color: var(--navy);
-    font-size: 16px;
+    font-size: 28px;
     line-height: 1;
     cursor: pointer;
   }
 
-  .filterCloseBtn:hover,
-  .filterCloseBtn:focus-visible {
+  .filterHead .filterCloseBtn:hover,
+  .filterHead .filterCloseBtn:focus-visible {
     background: var(--bg4);
     color: var(--blue);
   }
@@ -1112,7 +1127,6 @@
 /* Mattress category wireframe refinements */
 .categoryImageBanner {
   width: 100%;
-  max-width: 940px;
   aspect-ratio: 16 / 5;
   margin: 24px 0 0;
   border: 1px solid var(--bdr);
@@ -1472,17 +1486,13 @@
   .mattressImage {
     height: 250px;
     aspect-ratio: auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 54px 24px 22px;
   }
 
   .mattressImage img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    padding: 0;
+    object-fit: cover;
+    object-position: center;
   }
 
   .saleBadge {

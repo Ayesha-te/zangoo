@@ -1,0 +1,29 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0;
+}
+
+.track {
+  flex: 1;
+  display: block;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--bdr);
+  overflow: hidden;
+}
+
+.fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--blue);
+}
+
+.wrap small {
+  flex-shrink: 0;
+  color: var(--muted);
+  font: 800 11px/1 var(--sans);
+  white-space: nowrap;
+}

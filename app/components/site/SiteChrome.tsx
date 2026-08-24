@@ -364,21 +364,28 @@ export function SiteHeader() {
                   <ul className="mob-sub-links" role="list" aria-label="Collection subcategories">
                     {collectionCategories.map((item) => (
                       <li key={item.label}>
-                        <button
-                          className="mob-category-btn"
-                          type="button"
-                          aria-expanded={openMobileCategory === item.label}
-                          onClick={() => {
-                            setOpenMobileCategory((current) => (current === item.label ? null : item.label));
-                            setOpenMobileGroup(null);
-                          }}
-                        >
-                          <span>{item.label}</span>
-                          <span className="mob-category-meta">
+                        <div className="mob-category-btn">
+                          <Link
+                            href={item.href}
+                            className="mob-category-label"
+                            onClick={() => setMenuOpen(false)}
+                          >
+                            {item.label}
+                          </Link>
+                          <button
+                            className="mob-category-meta"
+                            type="button"
+                            aria-label={`Toggle ${item.label} subcategories`}
+                            aria-expanded={openMobileCategory === item.label}
+                            onClick={() => {
+                              setOpenMobileCategory((current) => (current === item.label ? null : item.label));
+                              setOpenMobileGroup(null);
+                            }}
+                          >
                             <em className={item.label === "Bedroom" ? "is-active" : undefined}>{item.badge}</em>
                             <b aria-hidden="true">&gt;</b>
-                          </span>
-                        </button>
+                          </button>
+                        </div>
                         {openMobileCategory === item.label ? (
                           <ul className="mob-product-links" role="list" aria-label={`${item.label} products`}>
                             <li>
@@ -392,15 +399,24 @@ export function SiteHeader() {
                               return (
                                 <li key={group.label}>
                                   {hasProducts ? (
-                                    <button
-                                      className="mob-product-btn"
-                                      type="button"
-                                      aria-expanded={openMobileGroup === groupKey}
-                                      onClick={() => setOpenMobileGroup((current) => (current === groupKey ? null : groupKey))}
-                                    >
-                                      <span>{group.label}</span>
-                                      <b aria-hidden="true">&gt;</b>
-                                    </button>
+                                    <div className="mob-product-btn">
+                                      <Link
+                                        href={group.href}
+                                        className="mob-product-label"
+                                        onClick={() => setMenuOpen(false)}
+                                      >
+                                        {group.label}
+                                      </Link>
+                                      <button
+                                        className="mob-product-toggle"
+                                        type="button"
+                                        aria-label={`Toggle ${group.label} subcategories`}
+                                        aria-expanded={openMobileGroup === groupKey}
+                                        onClick={() => setOpenMobileGroup((current) => (current === groupKey ? null : groupKey))}
+                                      >
+                                        <b aria-hidden="true">&gt;</b>
+                                      </button>
+                                    </div>
                                   ) : (
                                     <Link href={group.href} onClick={() => setMenuOpen(false)}>{group.label}</Link>
                                   )}

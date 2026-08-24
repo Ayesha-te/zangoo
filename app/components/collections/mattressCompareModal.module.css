@@ -1,0 +1,211 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(15, 26, 41, .56);
+  animation: fadeIn .15s ease;
+}
+
+.modal {
+  width: min(100%, 640px);
+  max-height: min(88vh, 760px);
+  overflow-y: auto;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: var(--sh2);
+  padding: 26px;
+  animation: riseIn .18s ease;
+}
+
+.modalHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.modalHead h2 {
+  margin: 0;
+  color: var(--navy);
+  font: 900 22px/1.15 var(--sans);
+}
+
+.closeButton {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--bdr);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--navy);
+  font: 900 18px/1 var(--sans);
+  cursor: pointer;
+  transition: background var(--tr), color var(--tr), border-color var(--tr);
+}
+
+.closeButton:hover,
+.closeButton:focus-visible {
+  border-color: var(--blue);
+  background: var(--blue);
+  color: #fff;
+}
+
+.productHeads {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 12px;
+}
+
+.productHead {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding: 14px;
+  border: 1px solid var(--bdr);
+  border-radius: 10px;
+  background: #f8fbff;
+  text-align: center;
+}
+
+.productVisual {
+  width: 100%;
+  height: 90px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #e8eff7;
+}
+
+.productVisual img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.productHead strong {
+  color: var(--navy);
+  font: 900 15px/1.2 var(--sans);
+}
+
+.productHead small {
+  color: var(--muted);
+  font: 700 11px/1 var(--sans);
+}
+
+.specRows {
+  border: 1px solid var(--bdr);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.specRow {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  align-items: center;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--bdr);
+}
+
+.specRow:nth-child(odd) {
+  background: #f8fbff;
+}
+
+.specRow:last-child {
+  border-bottom: 0;
+}
+
+.specLabel {
+  color: var(--muted);
+  font: 800 12px/1.3 var(--sans);
+}
+
+.specValue {
+  color: var(--navy);
+  font: 700 13px/1.35 var(--sans);
+}
+
+.firmnessCell {
+  display: grid;
+  gap: 6px;
+}
+
+.firmnessBar {
+  display: block;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--bdr);
+  overflow: hidden;
+}
+
+.firmnessBar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--blue);
+}
+
+.ratingCell {
+  color: var(--gold);
+}
+
+.modalActions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.viewButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border-radius: 8px;
+  background: var(--navy);
+  color: #fff;
+  text-decoration: none;
+  font: 900 13px/1 var(--sans);
+  text-align: center;
+  transition: background var(--tr), transform var(--tr);
+}
+
+.viewButton:hover,
+.viewButton:focus-visible {
+  background: var(--blue);
+  transform: translateY(-1px);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(10px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (max-width: 560px) {
+  .modal {
+    padding: 18px;
+  }
+
+  .specRow {
+    grid-template-columns: minmax(0, .7fr) repeat(2, minmax(0, 1fr));
+    padding: 10px;
+  }
+
+  .productVisual {
+    height: 70px;
+  }
+}

@@ -67,7 +67,6 @@
 
 .media img,
 .thumbs img,
-.compareGrid img,
 .rail img {
   width: 100%;
   height: 100%;
@@ -388,8 +387,66 @@
   margin-right: 8px;
   border: 2px solid rgba(46, 125, 50, .22);
   border-radius: 50%;
-  background: var(--ok);
+  background: currentColor;
   vertical-align: -1px;
+}
+
+.stockNote em {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.stockOk {
+  color: var(--ok);
+}
+
+.stockLow {
+  color: #C6791A;
+}
+
+.stockLow span {
+  border-color: rgba(198, 121, 26, .22);
+}
+
+.stockLast {
+  color: var(--err);
+}
+
+.stockLast span {
+  border-color: rgba(198, 40, 40, .22);
+}
+
+.stockOut {
+  color: var(--muted);
+}
+
+.stockOut span {
+  background: transparent;
+  border-color: var(--muted);
+}
+
+.stockOut span::after {
+  content: "";
+  position: absolute;
+}
+
+.stockDotPulse {
+  animation: stockPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes stockPulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 currentColor;
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 0 5px transparent;
+    opacity: .55;
+  }
 }
 
 .accordionCard {
@@ -401,8 +458,7 @@
   border-bottom: 1px solid var(--bdr);
 }
 
-.accordionCard details:last-child,
-.faq details:last-of-type {
+.accordionCard details:last-child {
   border-bottom: 0;
 }
 
@@ -577,96 +633,224 @@
   white-space: nowrap;
 }
 
-.compareGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 170px) 170px 1fr;
-  gap: 14px;
-  margin-top: 18px;
-  align-items: stretch;
-}
-
-.compareGrid article,
-.compareGrid button,
-.compareGrid ul,
 .rail a {
   border: 1px solid var(--bdr);
   border-radius: 8px;
   background: #fff;
 }
 
-.compareProduct {
-  padding: 12px;
-  text-align: center;
-  cursor: pointer;
-  transition: border-color var(--tr), box-shadow var(--tr), transform var(--tr), background var(--tr);
-}
-
-.compareProduct:hover,
-.compareProduct:focus-visible,
-.compareActive {
-  border-color: var(--blue);
-  background: #f8fbff;
-  box-shadow: 0 0 0 3px rgba(21, 87, 167, .1);
-  transform: translateY(-2px);
-}
-
-.compareActive::before {
-  content: "Selected";
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 24px;
-  margin-bottom: 8px;
-  padding: 0 9px;
-  border-radius: 999px;
-  background: var(--blue);
-  color: #fff;
-  font: 900 10px/1 var(--sans);
-}
-
-.compareProduct img {
-  height: 95px;
-}
-
-.compareProduct strong,
-.compareProduct span,
 .rail strong,
 .rail span {
   display: block;
 }
 
-.compareProduct strong {
+.compareHint {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font: 600 13px/1.5 var(--sans);
+}
+
+.comparePicker {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 16px;
+  align-items: center;
+  margin-top: 18px;
+}
+
+.compareSlot {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  padding: 16px;
+  border: 1px solid var(--bdr);
+  border-radius: 10px;
+  background: #fff;
+  text-align: center;
+}
+
+.compareSlotActive {
+  border-color: var(--navy);
+  background: #f8fbff;
+}
+
+.compareSlotBadge {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--navy);
+  color: #fff;
+  font: 900 10px/1 var(--sans);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+
+.compareSlot img {
+  height: 72px;
+  object-fit: contain;
+}
+
+.compareSlot strong {
   color: var(--navy);
   font: 900 13px/1.25 var(--sans);
 }
 
-.compareProduct span {
-  margin-top: 4px;
-  color: var(--body);
-  font: 800 12px/1 var(--sans);
+.compareSlot small {
+  color: var(--muted);
+  font: 700 11px/1 var(--sans);
 }
 
-.selectProduct {
+.compareSlot > span {
+  color: var(--body);
+  font: 900 14px/1 var(--sans);
+}
+
+.compareVs {
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--navy);
+  color: #fff;
+  font: 900 12px/1 var(--sans);
+}
+
+.compareSlotRemove {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 26px;
+  height: 26px;
+  display: grid;
+  place-items: center;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--err);
+  color: #fff;
+  font: 900 14px/1 var(--sans);
+  cursor: pointer;
+  box-shadow: var(--sh1);
+  transition: transform var(--tr);
+}
+
+.compareSlotRemove:hover,
+.compareSlotRemove:focus-visible {
+  transform: scale(1.08);
+}
+
+.compareSlotChange {
+  margin-top: 6px;
+  border: 0;
+  background: transparent;
+  color: var(--blue);
+  font: 900 12px/1 var(--sans);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.compareSlotEmpty {
+  min-height: 118px;
+  border: 2px dashed var(--bdr);
+  border-radius: 10px;
+  background: #f8fbff;
   color: var(--muted);
   font: 900 13px/1.2 var(--sans);
-  border-style: dashed;
   cursor: pointer;
   transition: border-color var(--tr), color var(--tr), background var(--tr);
 }
 
-.selectProduct:hover,
-.selectProduct:focus-visible {
+.compareSlotEmpty:hover,
+.compareSlotEmpty:focus-visible {
   border-color: var(--blue);
   color: var(--blue);
   background: var(--bg4);
 }
 
-.compareGrid ul {
+.comparePickerList {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--bdr);
+  border-radius: 10px;
+  background: #f8fbff;
+}
+
+.comparePickerList > p {
+  margin: 0 0 10px;
+  color: var(--navy);
+  font: 900 13px/1.2 var(--sans);
+}
+
+.comparePickerList ul {
+  display: grid;
+  gap: 8px;
   margin: 0;
-  padding: 16px 18px;
+  padding: 0;
   list-style: none;
+}
+
+.comparePickerList li button {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--bdr);
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--tr), box-shadow var(--tr);
+}
+
+.comparePickerList li button:hover,
+.comparePickerList li button:focus-visible {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(21, 87, 167, .1);
+}
+
+.comparePickerList li img {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  object-fit: contain;
+  background: var(--bg1);
+}
+
+.comparePickerList li span {
+  display: grid;
+}
+
+.comparePickerList li strong {
+  color: var(--navy);
+  font: 900 13px/1.2 var(--sans);
+}
+
+.comparePickerList li small {
+  color: var(--muted);
+  font: 700 11px/1 var(--sans);
+}
+
+.comparePickerList li em {
   color: var(--body);
-  font: 800 13px/1.7 var(--sans);
+  font: 900 13px/1 var(--sans);
+  font-style: normal;
+}
+
+.comparePickerClose {
+  margin-top: 12px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font: 800 12px/1 var(--sans);
+  cursor: pointer;
+  text-decoration: underline;
 }
 
 .compareButton {
@@ -690,6 +874,14 @@
   border-color: var(--blue);
   background: var(--blue);
   transform: translateY(-1px);
+}
+
+.compareButton:disabled {
+  border-color: var(--bdr);
+  background: var(--bdr);
+  color: var(--muted);
+  cursor: not-allowed;
+  transform: none;
 }
 
 .railTrack {
@@ -806,16 +998,13 @@
     scroll-snap-align: start;
   }
 
-  .compareGrid {
-    grid-template-columns: repeat(3, minmax(180px, 1fr)) minmax(220px, 1fr);
-    overflow-x: auto;
-    overscroll-behavior-inline: contain;
-    scroll-snap-type: x proximity;
-    padding: 2px 2px 12px;
+  .comparePicker {
+    grid-template-columns: 1fr auto 1fr;
+    gap: 10px;
   }
 
-  .compareGrid > * {
-    scroll-snap-align: start;
+  .compareSlot img {
+    height: 56px;
   }
 
   .railTrack {
@@ -961,8 +1150,13 @@
     grid-template-columns: 150px repeat(3, minmax(210px, 78vw));
   }
 
-  .compareGrid {
-    grid-template-columns: repeat(3, minmax(190px, 76vw)) minmax(220px, 82vw);
+  .comparePicker {
+    grid-template-columns: 1fr auto 1fr;
+    gap: 8px;
+  }
+
+  .compareSlot {
+    padding: 10px;
   }
 
   .priceRow {
