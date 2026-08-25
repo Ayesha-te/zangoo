@@ -5,6 +5,8 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { MattressProduct } from "@/app/data/mattressProducts";
 import { getFirmnessRank } from "@/app/utils/firmness";
+import { getFirmnessColor } from "@/app/utils/firmness";
+import { FavoriteButton } from "@/app/components/favorites/FavoriteButton";
 import { FirmnessBar } from "./FirmnessBar";
 import { MattressFilters } from "./MattressFilters";
 import { MattressCompareModal } from "./MattressCompareModal";
@@ -121,14 +123,19 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
               <div className={styles.mattressCardBody}>
                 <span className={styles.mattressImage}>
                   <img src={mattress.gallery?.[1]?.src ?? mattress.image} alt="" />
-                  <span className={styles.saleBadge}>{mattress.firmness}</span>
-                  <button
-                    type="button"
+                  <span className={styles.saleBadge} style={{ backgroundColor: getFirmnessColor(mattress.firmness) }}>{mattress.firmness}</span>
+                  <FavoriteButton
                     className={styles.heartBadge}
-                    aria-label={`Add ${mattress.shortName} to favourites`}
-                  >
-                    <span aria-hidden="true">&#9825;</span>
-                  </button>
+                    activeClassName={styles.heartBadgeActive}
+                    item={{
+                      slug: mattress.slug,
+                      name: mattress.shortName,
+                      href: `/collections/bedroom/mattresses/${mattress.slug}/`,
+                      image: mattress.gallery?.[1]?.src ?? mattress.image,
+                      price: cleanPrice(mattress.price),
+                      firmness: mattress.firmness,
+                    }}
+                  />
                 </span>
                 <span className={styles.mattressInfo}>
                   <strong>{mattress.shortName}</strong>
@@ -180,14 +187,6 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
         </div>
 
         <section className={styles.categorySupportGrid} aria-label="Mattress category support">
-          <div className={styles.categoryCompare}>
-            <strong>Not sure which one is right for you?</strong>
-            <p>Compare key support, comfort, delivery, and warranty details side by side.</p>
-            <button type="button" disabled={!canCompare} onClick={() => setModalOpen(true)}>
-              {canCompare ? "Compare Mattresses" : "Select 2 mattresses above to compare"}
-            </button>
-          </div>
-
           {children}
         </section>
       </section>

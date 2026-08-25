@@ -7,6 +7,7 @@ import { awards, blogPosts, collections, faqs, reviews } from "@/app/data/home";
 import { primaryButtonClasses, secondaryButtonClasses } from "@/app/components/site/buttonClasses";
 import { SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { AwardIcon, BlogVisual } from "./Illustrations";
+import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
 
 type HomepageBlogPost = {
   id: number | string;
@@ -553,7 +554,6 @@ function Awards() {
 }
 
 function Reviews() {
-  const sliderRef = useRef<HTMLDivElement>(null);
   const [reviewItems, setReviewItems] = useState<HomepageReview[]>(
     reviews.map((review) => ({
       ...review,
@@ -596,53 +596,19 @@ function Reviews() {
   }, []);
 
   return (
-    <section className="why" id="reviews" aria-labelledby="why-h">
-      <div className="wrap">
-        <div className="sec-hdr">
-          <div>
-            <span className="sec-lbl">Customer Stories</span>
-            <h2 className="h2dk rv" id="why-h">Why Choose Us</h2>
-          </div>
-          <div className="carousel-actions" aria-label="Review carousel controls">
-            <button type="button" aria-label="Previous review" onClick={() => scrollCarousel(sliderRef, -1)}>
-              &larr;
-            </button>
-            <button type="button" aria-label="Next review" onClick={() => scrollCarousel(sliderRef, 1)}>
-              &rarr;
-            </button>
-          </div>
-        </div>
-        <div className="why-grid carousel-track" ref={sliderRef}>
-          {reviewItems.map((review, index) => (
-            <article className="rc rv" style={{ transitionDelay: `${index * 0.1}s` }} key={review.title}>
-              <div>
-                <span className="rc-lbl">{review.label}</span>
-                <span className="rc-date">{review.date}</span>
-                <h3 className="rc-title">{review.title}</h3>
-                <span className="rc-stars" role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-                {review.body.map((paragraph) => (
-                  <p className="rc-txt" key={paragraph}>{paragraph}</p>
-                ))}
-                <div className="rc-auth">
-                  <div className="avatar" aria-hidden="true">{review.initial}</div>
-                  <div>
-                    <span className="auth-name">{review.author}</span>
-                    <span className="auth-vfy">&#10003; Verified Homeowner</span>
-                  </div>
-                </div>
-              </div>
-              <div
-                className={`rc-photo ${review.photoClass} rc-photo-img`}
-                style={imageStyle(remoteImages.reviews[review.photo])}
-                role="img"
-                aria-label="Customer room"
-                aria-hidden="true"
-              />
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
+    <CustomerReviews
+      key={reviewItems.map((review) => review.title).join("|")}
+      intro="Recent verified customer feedback, including reviews with room photos."
+      reviews={reviewItems.map((review, index) => ({
+        id: `${review.author}-${index}`,
+        name: review.author,
+        date: Number.isNaN(Date.parse(review.date)) ? ["2026-08-16", "2026-08-02"][index % 2] : review.date,
+        rating: 5,
+        verified: true,
+        comment: review.body.join(" "),
+        media: index === 0 ? ["/capri-ortho-mattress-bedroom-lifestyle.jpeg"] : undefined,
+      }))}
+    />
   );
 }
 
@@ -1188,12 +1154,6 @@ function BackToTop() {
 
   return (
     <>
-      <a className="whatsapp-float" href={whatsappHref} target="_blank" rel="noopener noreferrer" aria-label="Contact us on WhatsApp at +44 7830 376489">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M19.1 4.9A9.8 9.8 0 0 0 3.8 16.7L3 21l4.4-.8A9.8 9.8 0 0 0 19.1 4.9Z" />
-          <path d="M8.6 8.2c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.7 1.7c.1.2.1.4-.1.6l-.4.5c-.1.1-.2.3 0 .5.5.9 1.3 1.7 2.3 2.2.2.1.4.1.5-.1l.7-.8c.2-.2.4-.2.6-.1l1.7.8c.3.1.4.3.4.5 0 .7-.5 1.5-1.1 1.8-.5.3-1.4.4-3.1-.3-2.6-1.1-4.4-3.5-4.8-4.1-.4-.5-1.1-1.7-1-2.5 0-.7.5-1.1.7-1.3Z" />
-        </svg>
-      </a>
       <a
         href="#page-top"
         className={`btt${visible ? " show" : ""}`}

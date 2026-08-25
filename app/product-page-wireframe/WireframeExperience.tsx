@@ -6,6 +6,8 @@ import type { MattressProduct } from "@/app/data/mattressProducts";
 import { orthoMattressProducts } from "@/app/data/mattressProducts";
 import { MattressCompareModal } from "@/app/components/collections/MattressCompareModal";
 import { FirmnessBar } from "@/app/components/collections/FirmnessBar";
+import { FavoriteButton } from "@/app/components/favorites/FavoriteButton";
+import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
 import styles from "./productPageWireframe.module.css";
 
 type WireframeExperienceProps = {
@@ -53,7 +55,6 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   const [activeImage, setActiveImage] = useState(0);
   const [size, setSize] = useState("king");
   const [quantity, setQuantity] = useState(1);
-  const [favourite, setFavourite] = useState(false);
   const [added, setAdded] = useState(false);
   const [comparisonSlug, setComparisonSlug] = useState<string | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -61,7 +62,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
 
   const activeSize = sizes.find((item) => item.id === size) ?? sizes[2];
   const total = activeSize.price * quantity;
-  const thumbnails = [...gallery, ...gallery].slice(0, 4);
+  const thumbnails = gallery.slice(0, 4);
   const comparisonProduct = relatedProducts.find((item) => item.slug === comparisonSlug) ?? null;
   const stockState = getStockState(product.stockCount);
 
@@ -130,11 +131,11 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
           <p className={styles.sku}>SKU: {product.slug.toUpperCase()}</p>
           <h1 id="wireframe-title">{product.name}</h1>
           <FirmnessBar firmness={product.firmness} />
-          <div className={styles.rating} aria-label="Rated 4.8 out of 5 from 358 reviews">
-            <span>*****</span>
+          <Link className={styles.rating} href="#reviews" aria-label="Rated 4.8 out of 5. Read 358 reviews">
+            <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
             <strong>4.8</strong>
             <small>(358 reviews)</small>
-          </div>
+          </Link>
           <p>{product.description}</p>
           <h2>Features You Will Love</h2>
           <ul className={styles.benefits} role="list">
@@ -174,15 +175,11 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             <button className={`${styles.addButton} ${added ? styles.addedButton : ""}`} type="button" onClick={() => setAdded(true)}>
               {added ? "Added to Basket" : "Add to Basket"}
             </button>
-            <button
-              className={`${styles.favoriteButton} ${favourite ? styles.favoriteActive : ""}`}
-              type="button"
-              aria-label="Add Capri Ortho Mattress to favourites"
-              aria-pressed={favourite}
-              onClick={() => setFavourite((value) => !value)}
-            >
-              &#9825;
-            </button>
+            <FavoriteButton
+              className={styles.favoriteButton}
+              activeClassName={styles.favoriteActive}
+              item={{ slug: product.slug, name: product.shortName, href: `/collections/bedroom/mattresses/${product.slug}/`, image: gallery[0].src, price: product.price, firmness: product.firmness }}
+            />
           </div>
           <button className={styles.buyButton} type="button">Buy Now</button>
           <small className={`${styles.stockNote} ${stockState.className}`}>
@@ -195,10 +192,10 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
       </section>
 
       <section className={styles.trustStrip} aria-label="Purchase benefits" role="list">
-          {["60-night sleep trial", "1-year guarantee", "Free delivery", "Free returns"].map((item) => (
-            <article key={item} role="listitem">
-              <span aria-hidden="true">+</span>
-              <strong>{item}</strong>
+          {[["↺", "60-night sleep trial"], ["♢", "1-year guarantee"], ["▰", "Free delivery"], ["↩", "Free returns"]].map(([icon, label]) => (
+            <article key={label} role="listitem">
+              <span aria-hidden="true">{icon}</span>
+              <strong>{label}</strong>
               <small>Clear support included</small>
             </article>
           ))}
@@ -212,24 +209,15 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
         </p>
       </section>
 
-      <section className={styles.reviews} aria-labelledby="reviews-title">
-        <h2 id="reviews-title">Customer Reviews</h2>
-        <div className={styles.reviewGrid}>
-          <div className={styles.score}>
-            <strong>4.8</strong>
-            <span>*****</span>
-            <small>358 reviews</small>
-          </div>
-          {["James T.", "Emma K.", "Michael L."].map((name) => (
-            <article key={name}>
-              <span>*****</span>
-              <strong>{name}</strong>
-              <small>Verified buyer</small>
-              <p>Comfortable support and a simple buying process.</p>
-            </article>
-          ))}
-        </div>
-      </section>
+      <CustomerReviews
+        title="What Our Customers Say"
+        intro={`Verified feedback from customers who chose ${product.shortName}.`}
+        reviews={[
+          { id: "james", name: "James T.", date: "2026-08-20", rating: 5, verified: true, comment: "Comfortable support and a simple buying process." },
+          { id: "emma", name: "Emma K.", date: "2026-08-11", rating: 5, verified: true, comment: "The firmness guidance was accurate and delivery was straightforward.", media: [gallery[0].src] },
+          { id: "michael", name: "Michael L.", date: "2026-07-29", rating: 4, verified: true, comment: "Good support, clean finish, and helpful service throughout." },
+        ]}
+      />
 
       <section className={styles.faq} aria-labelledby="faq-title">
         <h2 id="faq-title">FAQ</h2>

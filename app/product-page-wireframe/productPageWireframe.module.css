@@ -134,13 +134,15 @@
 
 .thumbs {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(76px, 1fr));
   gap: 10px;
   margin-top: 12px;
 }
 
 .thumbs button {
   height: 74px;
+  min-width: 0;
+  overflow: hidden;
   border: 1px solid var(--bdr);
   border-radius: 7px;
   background: #f8fbff;
@@ -180,12 +182,32 @@
   gap: 8px;
   margin-top: 14px;
   color: var(--gold);
+  width: max-content;
+  max-width: 100%;
+  text-decoration: none;
+}
+
+.thumbs img {
+  max-width: 100%;
+  max-height: 100%;
+  object-position: center;
+}
+
+.rating > span {
+  font-size: 18px;
+  letter-spacing: 2px;
+  line-height: 1;
 }
 
 .rating strong,
 .rating small {
   color: var(--body);
   font: 800 13px/1 var(--sans);
+}
+
+.rating small {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .summaryCard h2 {
@@ -350,12 +372,27 @@
 }
 
 .favoriteButton:hover,
-.favoriteButton:focus-visible,
-.favoriteActive {
-  border-color: var(--blue);
-  background: var(--bg4);
-  color: var(--blue);
+.favoriteButton:focus-visible {
+  border-color: #c62828;
+  color: #c62828;
   transform: translateY(-1px);
+}
+
+.favoriteActive,
+.favoriteActive:hover,
+.favoriteActive:focus-visible {
+  border-color: #c62828;
+  background: #fff1f1;
+  color: #c62828;
+}
+
+.favoriteActive span {
+  font-size: 0;
+}
+
+.favoriteActive span::after {
+  content: "\2665";
+  font-size: 24px;
 }
 
 .buyButton {
@@ -562,6 +599,15 @@
   margin: 12px 0 0;
   color: var(--body);
   font: 500 15px/1.7 var(--sans);
+}
+
+.wrap :global(.customer-reviews) {
+  margin-top: 20px;
+  padding: 26px;
+  border: 1px solid var(--bdr);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: var(--sh1);
 }
 
 .reviewGrid {
@@ -1117,7 +1163,7 @@
   }
 
   .thumbs {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(64px, 1fr));
     gap: 6px;
     margin-top: 8px;
   }

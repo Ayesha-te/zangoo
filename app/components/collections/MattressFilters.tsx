@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
 import styles from "../../collections/collections.module.css";
 
@@ -120,7 +119,7 @@ export function MattressFilters({
         <div className={styles.helpBox}>
           <strong>Need help choosing?</strong>
           <p>Our sleep experts can help you find the right mattress.</p>
-          <Link href="/contact/">Contact Us</Link>
+          <a href="mailto:sales@zaango.co.uk?subject=Help%20choosing%20a%20mattress">Contact Us</a>
         </div>
 
         {hasSelection ? (

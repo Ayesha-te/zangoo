@@ -1,17 +1,19 @@
 .overlay {
   position: fixed;
   inset: 0;
-  z-index: 90;
+  z-index: 1200;
   display: grid;
-  place-items: center;
-  padding: 20px;
+  place-items: start center;
+  padding: calc(var(--nav-h, 132px) + 20px) 20px 20px;
   background: rgba(15, 26, 41, .56);
   animation: fadeIn .15s ease;
 }
 
 .modal {
+  position: relative;
+  z-index: 1201;
   width: min(100%, 640px);
-  max-height: min(88vh, 760px);
+  max-height: min(calc(100svh - var(--nav-h, 132px) - 40px), 760px);
   overflow-y: auto;
   border-radius: 14px;
   background: #fff;
@@ -21,6 +23,9 @@
 }
 
 .modalHead {
+  position: sticky;
+  top: -26px;
+  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;

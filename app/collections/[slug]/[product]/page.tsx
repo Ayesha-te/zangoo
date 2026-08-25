@@ -7,6 +7,7 @@ import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteC
 import { collectionCategories } from "@/app/data/home";
 import { orthoMattressProducts } from "@/app/data/mattressProducts";
 import { getSentencePreview } from "@/app/utils/collapsibleIntro";
+import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
 import styles from "../../collections.module.css";
 
 type ProductPageProps = {
@@ -175,21 +176,14 @@ export default async function CollectionProductPage({ params }: ProductPageProps
               </div>
             </div>
 
-            <div className={styles.categoryReviews}>
-              <div className={styles.supportHeading}>
-                <h2>What Our Customers Say</h2>
-                <Link href="/#reviews">View all reviews &rarr;</Link>
-              </div>
-              <div className={styles.reviewMiniGrid}>
-                {["Great support and really comfortable. Woke up without back pain.", "Excellent quality and very well made. You can feel the difference.", "Fast delivery and brilliant customer service. Highly recommend Zaango."].map((review, index) => (
-                  <article className={styles.reviewMiniCard} key={review}>
-                    <span aria-hidden="true">★★★★★</span>
-                    <p>&ldquo;{review}&rdquo;</p>
-                    <small>{["James, Manchester", "Sarah, Leeds", "David, Birmingham"][index]}</small>
-                  </article>
-                ))}
-              </div>
-            </div>
+            <CustomerReviews
+              intro="Sort verified feedback or view reviews that include customer photos."
+              reviews={[
+                { id: "james", name: "James, Manchester", date: "2026-08-19", rating: 5, verified: true, comment: "Great support and really comfortable. Woke up without back pain." },
+                { id: "sarah", name: "Sarah, Leeds", date: "2026-08-12", rating: 5, verified: true, comment: "Excellent quality and very well made. You can feel the difference.", media: ["/capri-ortho-mattress-bedroom-lifestyle.jpeg"] },
+                { id: "david", name: "David, Birmingham", date: "2026-07-28", rating: 4, verified: true, comment: "Fast delivery and brilliant customer service. Highly recommend Zaango." },
+              ]}
+            />
           </MattressCatalog>
         ) : null}
       </main>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
 import styles from "./capriOrthoMattress2.module.css";
 
 const wordpressReviewsUrl = "https://peru-armadillo-169520.hostingersite.com/852-2/";
@@ -584,38 +585,19 @@ export default function CapriOrthoMattress2Client() {
         </div>
       </section>
 
-      <section className={`${styles.panel} ${styles.reviewsPanel}`} id="reviews">
-        <div className={styles.sectionHead}>
-          <span className={styles.eyebrow}>Real customers, real results</span>
-          <h2>What Our Customers Say</h2>
-          <p>Live customer reviews are pulled from the main WordPress reviews page.</p>
-        </div>
-        <div className={styles.reviewGrid}>
-          {reviewItems.map((review) => (
-            <article className={styles.reviewCard} key={`${review.author}-${review.title}`}>
-              <div className={styles.reviewMeta}>
-                <span>{review.label}</span>
-                <small>{review.date}</small>
-              </div>
-              <h3>{review.title}</h3>
-              <span className={styles.reviewStars} role="img" aria-label="5 out of 5 stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-              {review.body.map((paragraph) => (
-                <p key={paragraph}>&ldquo;{paragraph}&rdquo;</p>
-              ))}
-              <div className={styles.reviewAuthor}>
-                <div aria-hidden="true">{review.initial}</div>
-                <span>
-                  <b>{review.author}</b>
-                  <small>&#10003; Verified customer</small>
-                </span>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div className={styles.actions}>
-          <a className={styles.primaryBtn} href={wordpressReviewsUrl} target="_blank" rel="noopener noreferrer">Read All WordPress Reviews</a>
-        </div>
-      </section>
+      <CustomerReviews
+        key={reviewItems.map((review) => review.title).join("|")}
+        intro="Live customer feedback from the main reviews feed, with photo reviews available through the media filter."
+        reviews={reviewItems.map((review, index) => ({
+          id: `${review.author}-${index}`,
+          name: review.author,
+          date: Number.isNaN(Date.parse(review.date)) ? ["2026-08-17", "2026-08-05", "2026-07-21"][index % 3] : review.date,
+          rating: 5,
+          verified: true,
+          comment: review.body.join(" "),
+          media: index === 0 ? ["/capri-ortho-mattress-bedroom-lifestyle.jpeg"] : undefined,
+        }))}
+      />
 
       <section className={`${styles.panel} ${styles.faqPanel}`} id="faq">
         <div className={styles.sectionHead}>

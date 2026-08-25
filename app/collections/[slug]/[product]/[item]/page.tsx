@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ProductFaq } from "@/app/components/site/ProductFaq";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
+import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
 import { getMattressProduct, orthoMattressProducts, type MattressProduct } from "@/app/data/mattressProducts";
 import "./productLanding.module.css";
 
@@ -29,30 +30,6 @@ export async function generateMetadata({ params }: ProductLandingPageProps): Pro
     description: item?.description,
   };
 }
-
-const reviews = [
-  {
-    initial: "M",
-    name: "Margaret T.",
-    condition: "Had chronic lower back pain for 3 years",
-    text:
-      "After years of waking up stiff, the support felt different within the first week. I wake up more settled and my lower back feels properly supported.",
-  },
-  {
-    initial: "D",
-    name: "David R.",
-    condition: "Recovering from disc discomfort",
-    text:
-      "The mattress feels supportive without being harsh. The consultation helped me choose the right firmness and the delivery was straightforward.",
-  },
-  {
-    initial: "S",
-    name: "Sarah K.",
-    condition: "Couples use with different sleep needs",
-    text:
-      "My partner moves a lot and I sleep warm. This gives us a steadier, cooler sleep surface and the difference is easy to notice.",
-  },
-];
 
 const certifications = [
   ["ISO 9001", "Quality Management"],
@@ -372,28 +349,13 @@ export default async function ProductLandingPage({ params }: ProductLandingPageP
           </div>
         </section>
 
-        <section className="lp-reviews" id="reviews" aria-labelledby="reviews-title">
-          <div className="lp-section-head">
-            <span>Real sleepers, real results</span>
-            <h2 id="reviews-title">What customers say</h2>
-          </div>
-          <div className="lp-review-grid">
-            {reviews.map((review) => (
-              <article key={review.name}>
-                <span className="lp-review-stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-                <p>&ldquo;{review.text}&rdquo;</p>
-                <div>
-                  <strong>{review.initial}</strong>
-                  <span>
-                    <b>{review.name}</b>
-                    <small>&#10003; Verified purchase</small>
-                    <em>{review.condition}</em>
-                  </span>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
+        <CustomerReviews
+          reviews={[
+            { id: "margaret", name: "Margaret T.", date: "2026-08-18", rating: 5, verified: true, comment: "After years of waking up stiff, the support felt different within the first week. I wake up more settled and my lower back feels properly supported." },
+            { id: "david", name: "David R.", date: "2026-08-07", rating: 5, verified: true, comment: "The mattress feels supportive without being harsh. The consultation helped me choose the right firmness and the delivery was straightforward." },
+            { id: "sarah", name: "Sarah K.", date: "2026-07-22", rating: 4, verified: true, comment: "My partner moves a lot and I sleep warm. This gives us a steadier, cooler sleep surface.", media: [item.gallery?.[0]?.src ?? item.image] },
+          ]}
+        />
 
         <section className="lp-certs" aria-labelledby="certs-title">
           <div className="lp-section-head lp-section-head-dark">
