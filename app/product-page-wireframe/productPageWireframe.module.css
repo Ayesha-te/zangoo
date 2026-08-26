@@ -417,14 +417,8 @@
   font-weight: 800;
 }
 
-.stockNote span {
-  width: 11px;
-  height: 11px;
-  display: inline-block;
-  margin-right: 8px;
+.stockNote .stockDot {
   border: 2px solid rgba(46, 125, 50, .22);
-  border-radius: 50%;
-  background: currentColor;
   vertical-align: -1px;
 }
 
@@ -1250,4 +1244,418 @@
   .rail {
     padding: 17px;
   }
+}
+
+/* ---- Zoom lightbox ---- */
+
+.zoomTrigger {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  cursor: zoom-in;
+}
+
+.zoomOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: grid;
+  place-items: center;
+  padding: 40px;
+  background: rgba(10, 18, 30, .82);
+}
+
+.zoomImage {
+  max-width: min(92vw, 1000px);
+  max-height: 88vh;
+  border-radius: 10px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .4);
+  cursor: default;
+}
+
+.zoomClose {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .16);
+  color: #fff;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background var(--tr);
+}
+
+.zoomClose:hover,
+.zoomClose:focus-visible {
+  background: rgba(255, 255, 255, .3);
+}
+
+/* ---- Controlled accordion (Description / Features / Benefits ...) ---- */
+
+.accordionItem {
+  border-bottom: 1px solid var(--bdr);
+}
+
+.accordionItem:last-child {
+  border-bottom: 0;
+}
+
+.accordionSummary {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  list-style: none;
+  padding: 18px 22px;
+  color: var(--navy);
+  font: 900 14px/1.2 var(--sans);
+  transition: background var(--tr), color var(--tr);
+  position: relative;
+}
+
+.accordionSummary::after {
+  content: "+";
+  position: absolute;
+  right: 22px;
+  color: var(--blue);
+}
+
+.accordionSummary[aria-expanded="true"]::after {
+  content: "\2212";
+}
+
+.accordionSummary:hover,
+.accordionSummary:focus-visible {
+  background: var(--bg4);
+  color: var(--blue);
+}
+
+.accordionPanel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--tr);
+}
+
+.accordionPanel[data-open] {
+  grid-template-rows: 1fr;
+}
+
+.accordionPanelInner {
+  overflow: hidden;
+}
+
+.accordionPanelInner p {
+  margin: 0;
+  padding: 0 22px 18px;
+  color: var(--body);
+  font: 500 14px/1.65 var(--sans);
+}
+
+/* ---- Controlled FAQ accordion (single-open, boxed items) ---- */
+
+.faqItem {
+  border: 1px solid var(--bdr);
+  border-radius: 8px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.faqSummary {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  padding: 18px 22px;
+  color: var(--navy);
+  font: 900 14px/1.2 var(--sans);
+  transition: background var(--tr), color var(--tr);
+  position: relative;
+}
+
+.faqSummary::after {
+  content: "+";
+  position: absolute;
+  right: 22px;
+  color: var(--blue);
+}
+
+.faqSummary[aria-expanded="true"]::after {
+  content: "\2212";
+}
+
+.faqSummary:hover,
+.faqSummary:focus-visible {
+  background: var(--bg4);
+  color: var(--blue);
+}
+
+.faqPanel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--tr);
+}
+
+.faqPanel[data-open] {
+  grid-template-rows: 1fr;
+}
+
+.faqPanelInner {
+  overflow: hidden;
+}
+
+.faqPanelInner p {
+  margin: 0;
+  padding: 0 22px 18px;
+  color: var(--body);
+  font: 500 14px/1.65 var(--sans);
+}
+
+/* ---- Stock states: animated dots + out-of-stock CTA ---- */
+
+.stockDot {
+  position: relative;
+  width: 11px;
+  height: 11px;
+  display: inline-block;
+  margin-right: 8px;
+  border-radius: 50%;
+  vertical-align: -1px;
+}
+
+.stockLabel {
+  display: inline;
+}
+
+.stockOk .stockDot {
+  background: var(--ok);
+  animation: stockPulseOk 2.5s ease-in-out infinite;
+}
+
+.stockLow .stockDot {
+  background: #C6791A;
+  animation: stockPulseLow 1.8s ease-in-out infinite;
+}
+
+.stockLast .stockDot {
+  background: var(--err);
+  animation: stockPulseLast 1.5s ease-in-out infinite;
+}
+
+.stockLast .stockLabel {
+  animation: stockTextPulse 1.5s ease-in-out infinite;
+}
+
+.stockOut .stockDot {
+  background: var(--muted);
+  animation: stockFadeOut 2.5s ease-in-out infinite;
+}
+
+.stockOut .stockDot::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-top: 2px solid var(--muted);
+  transform: rotate(45deg);
+}
+
+@keyframes stockPulseOk {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(46, 125, 50, .35);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(46, 125, 50, 0);
+  }
+}
+
+@keyframes stockPulseLow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(198, 121, 26, .4);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(198, 121, 26, 0);
+  }
+}
+
+@keyframes stockPulseLast {
+  0%, 40%, 100% {
+    box-shadow: 0 0 0 0 rgba(198, 40, 40, .45);
+  }
+  20%, 60% {
+    box-shadow: 0 0 0 6px rgba(198, 40, 40, 0);
+  }
+}
+
+@keyframes stockTextPulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .55;
+  }
+}
+
+@keyframes stockFadeOut {
+  0%, 100% {
+    opacity: .45;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.notifyButton {
+  margin-top: 10px;
+  min-height: 46px;
+  width: 100%;
+  border: 0;
+  border-radius: 8px;
+  background: linear-gradient(100deg, var(--blue) 40%, #3f7fc4 50%, var(--blue) 60%);
+  background-size: 220% 100%;
+  color: #fff;
+  font: 900 13px/1 var(--sans);
+  text-transform: uppercase;
+  cursor: pointer;
+  animation: notifyShimmer 2.4s linear infinite;
+}
+
+@keyframes notifyShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -20% 0;
+  }
+}
+
+/* ---- Inline compare table (product page) ---- */
+
+.compareSlot[role="button"] {
+  cursor: pointer;
+}
+
+.compareInline {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--bdr);
+}
+
+.compareInlineRows {
+  display: grid;
+  gap: 1px;
+  background: var(--bdr);
+  border: 1px solid var(--bdr);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.compareInlineRow {
+  display: grid;
+  grid-template-columns: minmax(120px, .8fr) 1fr 1fr;
+  background: #fff;
+}
+
+.compareInlineLabel,
+.compareInlineValue {
+  padding: 12px 14px;
+  font: 700 13px/1.4 var(--sans);
+  color: var(--body);
+}
+
+.compareInlineLabel {
+  color: var(--navy);
+  font-weight: 900;
+  background: var(--bg1);
+}
+
+.compareInlineValue {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.compareInlineDiffer {
+  background: #FFF6EA;
+  color: #A8590F;
+  font-weight: 900;
+}
+
+.compareInlineDot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #E08A2A;
+}
+
+.compareInlineActions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.compareInlineBuy,
+.compareInlineView {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  border-radius: 8px;
+  font: 900 13px/1 var(--sans);
+  text-decoration: none;
+  transition: background var(--tr), color var(--tr), transform var(--tr);
+}
+
+.compareInlineBuy {
+  background: var(--navy);
+  color: #fff;
+}
+
+.compareInlineBuy:hover,
+.compareInlineBuy:focus-visible {
+  background: var(--blue);
+  transform: translateY(-1px);
+}
+
+.compareInlineView {
+  border: 2px solid var(--blue);
+  color: var(--blue);
+}
+
+.compareInlineView:hover,
+.compareInlineView:focus-visible {
+  background: var(--blue);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 560px) {
+  .compareInlineRow {
+    grid-template-columns: 100px 1fr 1fr;
+  }
+
+  .compareInlineLabel,
+  .compareInlineValue {
+    padding: 10px;
+    font-size: 12px;
+  }
+
+  .compareInlineActions {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Rail controls always visible ---- */
+
+.railControls {
+  display: flex !important;
 }

@@ -29,7 +29,7 @@ export default async function BedroomMattressPage({ params }: BedroomMattressPag
   const product = getMattressProduct(item);
   if (!product) notFound();
 
-  const relatedProducts = orthoMattressProducts.filter((mattress) => mattress.slug !== product.slug).slice(0, 4);
+  const relatedProducts = orthoMattressProducts.filter((mattress) => mattress.slug !== product.slug);
 
   return (
     <>

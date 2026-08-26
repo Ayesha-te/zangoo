@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useMemo, useRef, useState } from "react";
 import type { MattressProduct } from "@/app/data/mattressProducts";
 import { orthoMattressProducts } from "@/app/data/mattressProducts";
-import { MattressCompareModal } from "@/app/components/collections/MattressCompareModal";
 import { FirmnessBar } from "@/app/components/collections/FirmnessBar";
 import { FavoriteButton } from "@/app/components/favorites/FavoriteButton";
 import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
@@ -33,18 +32,43 @@ function buildSizes(product: MattressProduct) {
   });
 }
 
-function getStockState(count: number) {
+type StockTone = "ok" | "low" | "last" | "out";
+
+function getStockState(count: number): { label: string; sub: string | null; tone: StockTone } {
   if (count <= 0) {
-    return { label: "Out of stock", sub: null, className: styles.stockOut, pulse: false };
+    return { label: "Out of stock", sub: null, tone: "out" };
   }
   if (count === 1) {
-    return { label: "Last one — hurry!", sub: "Once it's gone, it's gone", className: styles.stockLast, pulse: true };
+    return { label: "Last one — hurry!", sub: "Once it's gone, it's gone", tone: "last" };
   }
-  if (count <= 5) {
-    return { label: `Only ${count} left in stock`, sub: "Selling fast — order soon", className: styles.stockLow, pulse: true };
+  if (count <= 4) {
+    return { label: `Only ${count} left in stock`, sub: "Selling fast — order soon", tone: "low" };
   }
-  return { label: `${count} in stock`, sub: null, className: styles.stockOk, pulse: false };
+  return { label: `${count} in stock`, sub: null, tone: "ok" };
 }
+
+const STOCK_CLASS: Record<StockTone, string> = {
+  ok: "stockOk",
+  low: "stockLow",
+  last: "stockLast",
+  out: "stockOut",
+};
+
+type CompareRow = {
+  label: string;
+  value: (item: MattressProduct) => string;
+  display?: (item: MattressProduct) => string;
+};
+
+const COMPARE_ROWS: CompareRow[] = [
+  { label: "Firmness", value: (item) => item.firmness },
+  { label: "Price", value: (item) => item.price.replace("From ", "") },
+  { label: "Spring type", value: (item) => item.compareSpecs.springType },
+  { label: "Comfort layers", value: (item) => item.compareSpecs.comfortLayer },
+  { label: "Cover", value: (item) => item.compareSpecs.cover },
+  { label: "Turnable", value: (item) => (item.compareSpecs.turnable ? "Yes" : "No") },
+  { label: "Weight", value: (item) => item.compareSpecs.weight },
+];
 
 export function WireframeExperience({ product, relatedProducts, isPreview = true }: WireframeExperienceProps) {
   const gallery = useMemo(
@@ -53,18 +77,21 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   );
   const sizes = useMemo(() => buildSizes(product), [product]);
   const [activeImage, setActiveImage] = useState(0);
+  const [zoomOpen, setZoomOpen] = useState(false);
   const [size, setSize] = useState("king");
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const [openAccordion, setOpenAccordion] = useState<number | null>(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [comparisonSlug, setComparisonSlug] = useState<string | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
 
   const activeSize = sizes.find((item) => item.id === size) ?? sizes[2];
   const total = activeSize.price * quantity;
   const thumbnails = gallery.slice(0, 4);
   const comparisonProduct = relatedProducts.find((item) => item.slug === comparisonSlug) ?? null;
   const stockState = getStockState(product.stockCount);
+  const outOfStock = stockState.tone === "out";
 
   function chooseComparison(slug: string) {
     setComparisonSlug(slug);
@@ -94,7 +121,14 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
           <div className={styles.galleryCard}>
           <div className={styles.media}>
             <span className={styles.saleBadge}>-15%</span>
-            <img src={gallery[activeImage]?.src ?? gallery[0].src} alt={gallery[activeImage]?.alt ?? gallery[0].alt} />
+            <button
+              type="button"
+              className={styles.zoomTrigger}
+              onClick={() => setZoomOpen(true)}
+              aria-label="Zoom into product image"
+            >
+              <img src={gallery[activeImage]?.src ?? gallery[0].src} alt={gallery[activeImage]?.alt ?? gallery[0].alt} />
+            </button>
             <button className={styles.playButton} type="button" aria-label="Play product video">
               <span>&#9654;</span>
             </button>
@@ -116,13 +150,41 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
           </div>
           </div>
 
+          {zoomOpen ? (
+            <div className={styles.zoomOverlay} role="presentation" onClick={() => setZoomOpen(false)}>
+              <button type="button" className={styles.zoomClose} aria-label="Close zoomed image" onClick={() => setZoomOpen(false)}>
+                &times;
+              </button>
+              <img
+                className={styles.zoomImage}
+                src={gallery[activeImage]?.src ?? gallery[0].src}
+                alt={gallery[activeImage]?.alt ?? gallery[0].alt}
+                onClick={(event) => event.stopPropagation()}
+              />
+            </div>
+          ) : null}
+
           <div className={styles.accordionCard} aria-label="Product information">
-            {accordions.map((item) => (
-              <details key={item.title}>
-                <summary>{item.title}</summary>
-                <p>{item.body}</p>
-              </details>
-            ))}
+            {accordions.map((item, index) => {
+              const isOpen = openAccordion === index;
+              return (
+                <div className={styles.accordionItem} key={item.title}>
+                  <button
+                    type="button"
+                    className={styles.accordionSummary}
+                    aria-expanded={isOpen}
+                    onClick={() => setOpenAccordion(isOpen ? null : index)}
+                  >
+                    {item.title}
+                  </button>
+                  <div className={styles.accordionPanel} data-open={isOpen || undefined}>
+                    <div className={styles.accordionPanelInner}>
+                      <p>{item.body}</p>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -172,8 +234,13 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             <em>You Save £{(activeSize.compare - activeSize.price) * quantity}</em>
           </div>
           <div className={styles.buyActions}>
-            <button className={`${styles.addButton} ${added ? styles.addedButton : ""}`} type="button" onClick={() => setAdded(true)}>
-              {added ? "Added to Basket" : "Add to Basket"}
+            <button
+              className={`${styles.addButton} ${added ? styles.addedButton : ""}`}
+              type="button"
+              disabled={outOfStock}
+              onClick={() => setAdded(true)}
+            >
+              {outOfStock ? "Out of Stock" : added ? "Added to Basket" : "Add to Basket"}
             </button>
             <FavoriteButton
               className={styles.favoriteButton}
@@ -181,24 +248,27 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
               item={{ slug: product.slug, name: product.shortName, href: `/collections/bedroom/mattresses/${product.slug}/`, image: gallery[0].src, price: product.price, firmness: product.firmness }}
             />
           </div>
-          <button className={styles.buyButton} type="button">Buy Now</button>
-          <small className={`${styles.stockNote} ${stockState.className}`}>
-            <span className={stockState.pulse ? styles.stockDotPulse : undefined} aria-hidden="true" />
-            {stockState.label}
+          {outOfStock ? (
+            <button className={styles.notifyButton} type="button">Notify Me When Available</button>
+          ) : (
+            <button className={styles.buyButton} type="button">Buy Now</button>
+          )}
+          <small className={`${styles.stockNote} ${styles[STOCK_CLASS[stockState.tone]]}`}>
+            <span className={styles.stockDot} aria-hidden="true" />
+            <span className={styles.stockLabel}>{stockState.label}</span>
             {stockState.sub ? <em>{stockState.sub}</em> : null}
           </small>
           </aside>
         </div>
       </section>
 
-      <section className={styles.trustStrip} aria-label="Purchase benefits" role="list">
-          {[["↺", "60-night sleep trial"], ["♢", "1-year guarantee"], ["▰", "Free delivery"], ["↩", "Free returns"]].map(([icon, label]) => (
-            <article key={label} role="listitem">
-              <span aria-hidden="true">{icon}</span>
-              <strong>{label}</strong>
-              <small>Clear support included</small>
-            </article>
-          ))}
+      <section className="trust-bar" aria-label="Purchase benefits">
+        <div className="trust-bar-in" role="list">
+          <span role="listitem">🌙 60-night sleep trial</span>
+          <span role="listitem">🛡️ 1-year guarantee</span>
+          <span role="listitem">🚚 Free delivery</span>
+          <span role="listitem">↩️ Free returns</span>
+        </div>
       </section>
 
       <section className={styles.textInsert} aria-labelledby="insert-title">
@@ -214,7 +284,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
         intro={`Verified feedback from customers who chose ${product.shortName}.`}
         reviews={[
           { id: "james", name: "James T.", date: "2026-08-20", rating: 5, verified: true, comment: "Comfortable support and a simple buying process." },
-          { id: "emma", name: "Emma K.", date: "2026-08-11", rating: 5, verified: true, comment: "The firmness guidance was accurate and delivery was straightforward.", media: [gallery[0].src] },
+          { id: "emma", name: "Emma K.", date: "2026-08-11", rating: 5, verified: true, comment: "The firmness guidance was accurate and delivery was straightforward." },
           { id: "michael", name: "Michael L.", date: "2026-07-29", rating: 4, verified: true, comment: "Good support, clean finish, and helpful service throughout." },
         ]}
       />
@@ -222,12 +292,26 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
       <section className={styles.faq} aria-labelledby="faq-title">
         <h2 id="faq-title">FAQ</h2>
         <div>
-          {product.faqs.map((faq) => (
-            <details key={faq.question}>
-              <summary>{faq.question}</summary>
-              <p>{faq.answer}</p>
-            </details>
-          ))}
+          {product.faqs.map((faq, index) => {
+            const isOpen = openFaq === index;
+            return (
+              <div className={styles.faqItem} key={faq.question}>
+                <button
+                  type="button"
+                  className={styles.faqSummary}
+                  aria-expanded={isOpen}
+                  onClick={() => setOpenFaq(isOpen ? null : index)}
+                >
+                  {faq.question}
+                </button>
+                <div className={styles.faqPanel} data-open={isOpen || undefined}>
+                  <div className={styles.faqPanelInner}>
+                    <p>{faq.answer}</p>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
           <Link href="/faq/">View all FAQs</Link>
         </div>
       </section>
@@ -248,12 +332,24 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
           <span className={styles.compareVs} aria-hidden="true">VS</span>
 
           {comparisonProduct ? (
-            <div className={styles.compareSlot}>
+            <div
+              className={styles.compareSlot}
+              role="button"
+              tabIndex={0}
+              aria-label={`Change the mattress compared against ${product.shortName}`}
+              onClick={() => setPickerOpen(true)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") setPickerOpen(true);
+              }}
+            >
               <button
                 type="button"
                 className={styles.compareSlotRemove}
                 aria-label={`Remove ${comparisonProduct.shortName} from comparison`}
-                onClick={() => setComparisonSlug(null)}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  setComparisonSlug(null);
+                }}
               >
                 &times;
               </button>
@@ -261,9 +357,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
               <strong>{comparisonProduct.shortName}</strong>
               <small>{comparisonProduct.firmness}</small>
               <span>{comparisonProduct.price.replace("From ", "")}</span>
-              <button type="button" className={styles.compareSlotChange} onClick={() => setPickerOpen(true)}>
-                &#8635; Change
-              </button>
+              <span className={styles.compareSlotChange}>&#8635; Change</span>
             </div>
           ) : (
             <button type="button" className={styles.compareSlotEmpty} onClick={() => setPickerOpen(true)}>
@@ -295,22 +389,43 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
           </div>
         ) : null}
 
-        <button
-          className={styles.compareButton}
-          type="button"
-          disabled={!comparisonProduct}
-          onClick={() => setModalOpen(true)}
-        >
-          Compare Products {comparisonProduct ? "(2)" : "(1)"}
-        </button>
+        {comparisonProduct ? (
+          <div className={styles.compareInline}>
+            <div className={styles.compareInlineRows}>
+              {COMPARE_ROWS.map((row) => {
+                const a = row.value(product);
+                const b = row.value(comparisonProduct);
+                const differs = a !== b;
+                return (
+                  <div className={styles.compareInlineRow} key={row.label}>
+                    <span className={styles.compareInlineLabel}>{row.label}</span>
+                    <span className={`${styles.compareInlineValue} ${differs ? styles.compareInlineDiffer : ""}`}>
+                      {differs ? <em className={styles.compareInlineDot} aria-hidden="true" /> : null}
+                      {a}
+                    </span>
+                    <span className={`${styles.compareInlineValue} ${differs ? styles.compareInlineDiffer : ""}`}>
+                      {differs ? <em className={styles.compareInlineDot} aria-hidden="true" /> : null}
+                      {b}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className={styles.compareInlineActions}>
+              <a className={styles.compareInlineBuy} href="#wireframe-title">
+                Buy {product.shortName}
+              </a>
+              <Link className={styles.compareInlineView} href={`/collections/bedroom/mattresses/${comparisonProduct.slug}/`}>
+                View {comparisonProduct.shortName}
+              </Link>
+            </div>
+          </div>
+        ) : null}
       </section>
 
-      {modalOpen && comparisonProduct ? (
-        <MattressCompareModal products={[product, comparisonProduct]} onClose={() => setModalOpen(false)} />
-      ) : null}
-
       <ProductRail title="Related Products" products={relatedProducts} />
-      <ProductRail title="Recently Viewed" products={[product, ...relatedProducts].slice(0, 5)} />
+      <ProductRail title="Recently Viewed" products={[product, ...relatedProducts].slice(0, 6)} />
     </div>
   );
 }
@@ -340,7 +455,12 @@ function ProductRail({ title, products }: { title: string; products: typeof orth
       </div>
       <div className={styles.railTrack} ref={trackRef}>
         {products.map((item) => (
-          <Link href={`/collections/bedroom/mattresses/${item.slug}/`} key={item.slug}>
+          <Link
+            href={`/collections/bedroom/mattresses/${item.slug}/`}
+            key={item.slug}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img src={item.gallery?.[1]?.src ?? item.image} alt={item.imageAlt} />
             <strong>{item.shortName}</strong>
             <small>{item.firmness} support</small>

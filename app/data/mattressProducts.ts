@@ -34,6 +34,11 @@ export const orthoMattressProducts: MattressProduct[] = [
       "An orthopaedic mattress designed for balanced spinal alignment, everyday pressure relief, and reliable support through the night.",
     image: "https://images.pexels.com/photos/1454806/pexels-photo-1454806.jpeg?auto=compress&cs=tinysrgb&w=1400",
     imageAlt: "Neutral bedroom with a dressed mattress and bedside lighting",
+    gallery: [
+      { src: "https://images.pexels.com/photos/1454806/pexels-photo-1454806.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "RestCore Ortho styled in a neutral bedroom" },
+      { src: "https://images.pexels.com/photos/6585760/pexels-photo-6585760.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "RestCore Ortho close-up in a bright bedroom" },
+      { src: "https://images.pexels.com/photos/6782567/pexels-photo-6782567.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "RestCore Ortho styled with pillows and soft lighting" },
+    ],
     bullets: ["7-zone support feel", "Breathable comfort layers", "Free UK delivery", "1-year guarantee"],
     specs: [
       { label: "Firmness", value: "6.5/10", note: "Medium-firm support" },
@@ -77,6 +82,11 @@ export const orthoMattressProducts: MattressProduct[] = [
       "A firmer orthopaedic mattress for sleepers who prefer a more lifted, stable feel across the hips, shoulders, and lower back.",
     image: "https://images.pexels.com/photos/6585760/pexels-photo-6585760.jpeg?auto=compress&cs=tinysrgb&w=1400",
     imageAlt: "Bright bedroom with a neatly styled bed",
+    gallery: [
+      { src: "https://images.pexels.com/photos/6585760/pexels-photo-6585760.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "AlignPlus Ortho styled in a bright bedroom" },
+      { src: "https://images.pexels.com/photos/1454806/pexels-photo-1454806.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "AlignPlus Ortho close-up with bedside lighting" },
+      { src: "https://images.pexels.com/photos/262048/pexels-photo-262048.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "AlignPlus Ortho styled in a minimal bedroom" },
+    ],
     bullets: ["Firm orthopaedic feel", "Reinforced support core", "Made for back support", "Mattress sale active"],
     specs: [
       { label: "Firmness", value: "7.5/10", note: "Firm support" },
@@ -120,6 +130,11 @@ export const orthoMattressProducts: MattressProduct[] = [
       "A pocket-sprung orthopaedic mattress made for independent support, reduced partner disturbance, and a more responsive sleep feel.",
     image: "https://images.pexels.com/photos/6782567/pexels-photo-6782567.jpeg?auto=compress&cs=tinysrgb&w=1400",
     imageAlt: "Comfortable bedroom with pillows and soft natural light",
+    gallery: [
+      { src: "https://images.pexels.com/photos/6782567/pexels-photo-6782567.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "OrthoLux Pocket styled with pillows and soft light" },
+      { src: "https://images.pexels.com/photos/6474471/pexels-photo-6474471.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "OrthoLux Pocket close-up in a simple bedroom" },
+      { src: "https://images.pexels.com/photos/6316526/pexels-photo-6316526.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "OrthoLux Pocket styled in a bright bedroom" },
+    ],
     bullets: ["Pocket spring response", "Reduced motion transfer", "Supportive comfort top", "Free UK delivery"],
     specs: [
       { label: "Feel", value: "Pocket", note: "Responsive support" },
@@ -163,6 +178,11 @@ export const orthoMattressProducts: MattressProduct[] = [
       "The firmest orthopaedic option in the launch range, created for customers who want maximum lift and a highly supportive sleep surface.",
     image: "https://images.pexels.com/photos/262048/pexels-photo-262048.jpeg?auto=compress&cs=tinysrgb&w=1400",
     imageAlt: "Minimal bedroom with white bedding and calm decor",
+    gallery: [
+      { src: "https://images.pexels.com/photos/262048/pexels-photo-262048.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "SpineGuard Ortho styled in a minimal bedroom" },
+      { src: "https://images.pexels.com/photos/6580227/pexels-photo-6580227.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "SpineGuard Ortho close-up on a bed frame" },
+      { src: "https://images.pexels.com/photos/6585760/pexels-photo-6585760.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "SpineGuard Ortho styled in a bright bedroom" },
+    ],
     bullets: ["Extra-firm support", "Maximum lifted feel", "Reinforced structure", "Bedroom sale product"],
     specs: [
       { label: "Firmness", value: "8.5/10", note: "Extra-firm support" },
@@ -259,6 +279,11 @@ export const orthoMattressProducts: MattressProduct[] = [
       "The entry orthopaedic mattress in the range, built for balanced everyday support with a traditional turnable construction.",
     image: "https://images.pexels.com/photos/6474471/pexels-photo-6474471.jpeg?auto=compress&cs=tinysrgb&w=1400",
     imageAlt: "Simple bedroom with a neatly made bed",
+    gallery: [
+      { src: "https://images.pexels.com/photos/6474471/pexels-photo-6474471.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "Classic Ortho styled in a simple bedroom" },
+      { src: "https://images.pexels.com/photos/6782567/pexels-photo-6782567.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "Classic Ortho close-up with pillows" },
+      { src: "https://images.pexels.com/photos/262048/pexels-photo-262048.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "Classic Ortho styled in a minimal bedroom" },
+    ],
     bullets: ["Medium to firm support", "Traditional turnable build", "Free UK delivery", "1-year guarantee"],
     specs: [
       { label: "Firmness", value: "6/10", note: "Medium to firm support" },
@@ -302,6 +327,11 @@ export const orthoMattressProducts: MattressProduct[] = [
       "A firm orthopaedic mattress with a non-turn construction, built for sleepers who want a settled, low-maintenance firm feel.",
     image: "https://images.pexels.com/photos/6316526/pexels-photo-6316526.jpeg?auto=compress&cs=tinysrgb&w=1400",
     imageAlt: "Bright bedroom with a firm mattress styled on a bed frame",
+    gallery: [
+      { src: "https://images.pexels.com/photos/6316526/pexels-photo-6316526.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "Hampton Ortho styled on a bed frame" },
+      { src: "https://images.pexels.com/photos/6580227/pexels-photo-6580227.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "Hampton Ortho close-up in a well-appointed bedroom" },
+      { src: "https://images.pexels.com/photos/1454806/pexels-photo-1454806.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "Hampton Ortho styled with bedside lighting" },
+    ],
     bullets: ["Firm support feel", "Non-turn construction", "Free UK delivery", "1-year guarantee"],
     specs: [
       { label: "Firmness", value: "7.5/10", note: "Firm support" },
@@ -345,6 +375,11 @@ export const orthoMattressProducts: MattressProduct[] = [
       "The top-tier orthopaedic mattress in the range, built extra firm with reinforced support for heavier sleepers and maximum lift.",
     image: "https://images.pexels.com/photos/6580227/pexels-photo-6580227.jpeg?auto=compress&cs=tinysrgb&w=1400",
     imageAlt: "Well-appointed bedroom with a premium mattress styled on a bed frame",
+    gallery: [
+      { src: "https://images.pexels.com/photos/6580227/pexels-photo-6580227.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "Deluxe Ortho styled in a well-appointed bedroom" },
+      { src: "https://images.pexels.com/photos/6316526/pexels-photo-6316526.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "Deluxe Ortho close-up on a bed frame" },
+      { src: "https://images.pexels.com/photos/6474471/pexels-photo-6474471.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "Deluxe Ortho styled in a simple bedroom" },
+    ],
     bullets: ["Extra-firm support", "Reinforced heavy-duty build", "Free UK delivery", "1-year guarantee"],
     specs: [
       { label: "Firmness", value: "9/10", note: "Extra-firm support" },
