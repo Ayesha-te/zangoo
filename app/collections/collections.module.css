@@ -1672,15 +1672,30 @@
   right: 0;
   bottom: 0;
   z-index: 60;
+  padding: 14px 0;
+  background: var(--blue);
+  box-shadow: 0 -8px 24px rgba(26, 46, 68, .2);
+  transform: translateY(110%);
+  opacity: 0;
+  pointer-events: none;
+  transition: transform var(--tr), opacity var(--tr);
+}
+
+.compareTrayVisible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.compareTrayInner {
+  width: min(100%, 1200px);
+  margin: 0 auto;
+  padding: 0 max(16px, calc((100% - 1200px) / 2 + 16px));
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 14px;
-  padding: 12px max(16px, calc((100% - 1200px) / 2));
-  border-top: 1px solid var(--bdr);
-  background: #fff;
-  box-shadow: 0 -8px 24px rgba(26, 46, 68, .12);
 }
 
 .compareTraySlots {
@@ -1694,12 +1709,24 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  min-width: 170px;
+  width: 190px;
   min-height: 52px;
   padding: 6px 28px 6px 6px;
-  border: 1px solid var(--bdr);
+  border: 1px solid rgba(255, 255, 255, .3);
   border-radius: 8px;
-  background: var(--bg1);
+  background: rgba(255, 255, 255, .12);
+  transition: background var(--tr), border-color var(--tr);
+}
+
+.compareTraySlot span {
+  min-width: 0;
+}
+
+.compareTraySlot strong,
+.compareTraySlot small {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .compareTraySlot img {
@@ -1712,21 +1739,21 @@
 
 .compareTraySlot strong {
   display: block;
-  color: var(--navy);
+  color: #fff;
   font: 900 12px/1.25 var(--sans);
 }
 
 .compareTraySlot small {
   display: block;
   margin-top: 2px;
-  color: var(--body);
+  color: rgba(255, 255, 255, .85);
   font: 800 11px/1 var(--sans);
 }
 
 .compareTraySlotEmpty {
   align-items: center;
   justify-content: center;
-  color: var(--muted);
+  color: rgba(255, 255, 255, .75);
   font: 800 12px/1.2 var(--sans);
   border-style: dashed;
   padding: 6px;
@@ -1742,17 +1769,17 @@
   place-items: center;
   border: 0;
   border-radius: 50%;
-  background: rgba(26, 46, 68, .1);
-  color: var(--navy);
+  background: rgba(255, 255, 255, .25);
+  color: #fff;
   font-size: 12px;
   line-height: 1;
   cursor: pointer;
+  transition: background var(--tr);
 }
 
 .compareTrayRemove:hover,
 .compareTrayRemove:focus-visible {
   background: var(--err);
-  color: #fff;
 }
 
 .compareTrayActions {
@@ -1762,7 +1789,7 @@
 }
 
 .compareTrayCount {
-  color: var(--muted);
+  color: rgba(255, 255, 255, .85);
   font: 800 12px/1 var(--sans);
   white-space: nowrap;
 }
@@ -1775,45 +1802,52 @@
   font: 900 12px/1 var(--sans);
   cursor: pointer;
   white-space: nowrap;
-  transition: background var(--tr), color var(--tr), border-color var(--tr), opacity var(--tr);
+  transition: background var(--tr), color var(--tr), border-color var(--tr), opacity var(--tr), transform var(--tr);
 }
 
 .compareTrayClear {
-  border: 1px solid var(--bdr);
-  background: #fff;
-  color: var(--navy);
+  border: 1px solid rgba(255, 255, 255, .4);
+  background: transparent;
+  color: #fff;
 }
 
 .compareTrayClear:hover,
 .compareTrayClear:focus-visible {
-  border-color: var(--blue);
-  color: var(--blue);
+  border-color: #fff;
+  background: rgba(255, 255, 255, .12);
 }
 
 .compareTrayButton {
-  border: 2px solid var(--navy);
-  background: var(--navy);
-  color: #fff;
+  border: 2px solid #fff;
+  background: #fff;
+  color: var(--blue);
 }
 
 .compareTrayButton:hover,
 .compareTrayButton:focus-visible {
-  border-color: var(--blue);
-  background: var(--blue);
+  transform: translateY(-1px);
+  border-color: #fff;
+  background: var(--navy);
+  color: #fff;
 }
 
 .compareTrayButton:disabled {
-  border-color: var(--bdr);
-  background: var(--bg1);
-  color: var(--muted);
+  border-color: rgba(255, 255, 255, .35);
+  background: transparent;
+  color: rgba(255, 255, 255, .65);
   cursor: not-allowed;
+  transform: none;
 }
 
 @media (max-width: 640px) {
   .compareTray {
+    padding: 10px 0 12px;
+  }
+
+  .compareTrayInner {
     flex-direction: column;
     align-items: stretch;
-    padding: 10px 14px 12px;
+    padding: 0 14px;
   }
 
   .compareTraySlots {
@@ -1821,6 +1855,7 @@
   }
 
   .compareTraySlot {
+    width: auto;
     min-width: 0;
     flex: 1;
   }

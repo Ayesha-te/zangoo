@@ -188,8 +188,13 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
         </section>
       </section>
 
-      {compareSelection.length > 0 ? (
-        <div className={styles.compareTray} role="region" aria-label="Mattress comparison tray">
+      <div
+        className={`${styles.compareTray} ${compareSelection.length > 0 ? styles.compareTrayVisible : ""}`}
+        role="region"
+        aria-label="Mattress comparison tray"
+        aria-hidden={compareSelection.length === 0}
+      >
+        <div className={styles.compareTrayInner}>
           <div className={styles.compareTraySlots}>
             {[0, 1].map((slot) => {
               const item = compareProducts[slot];
@@ -231,7 +236,7 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
             </button>
           </div>
         </div>
-      ) : null}
+      </div>
 
       {modalOpen && compareProducts.length === 2 ? (
         <MattressCompareModal
