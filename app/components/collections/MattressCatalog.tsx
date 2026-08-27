@@ -111,9 +111,6 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
                 <option value="firmness">Firmness</option>
               </select>
             </label>
-            <button type="button" disabled={!canCompare} onClick={() => setModalOpen(true)}>
-              Compare ({compareSelection.length})
-            </button>
           </div>
         </div>
 
@@ -190,6 +187,51 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
           {children}
         </section>
       </section>
+
+      {compareSelection.length > 0 ? (
+        <div className={styles.compareTray} role="region" aria-label="Mattress comparison tray">
+          <div className={styles.compareTraySlots}>
+            {[0, 1].map((slot) => {
+              const item = compareProducts[slot];
+              return item ? (
+                <div className={styles.compareTraySlot} key={item.slug}>
+                  <img src={item.gallery?.[0]?.src ?? item.image} alt="" />
+                  <span>
+                    <strong>{item.shortName}</strong>
+                    <small>{cleanPrice(item.price)}</small>
+                  </span>
+                  <button
+                    type="button"
+                    className={styles.compareTrayRemove}
+                    aria-label={`Remove ${item.shortName} from comparison`}
+                    onClick={() => toggleCompare(item.slug)}
+                  >
+                    &times;
+                  </button>
+                </div>
+              ) : (
+                <div className={`${styles.compareTraySlot} ${styles.compareTraySlotEmpty}`} key={`empty-${slot}`}>
+                  Select a mattress
+                </div>
+              );
+            })}
+          </div>
+          <div className={styles.compareTrayActions}>
+            <span className={styles.compareTrayCount}>{compareSelection.length}/2 selected</span>
+            <button type="button" className={styles.compareTrayClear} onClick={() => setCompareSelection([])}>
+              Clear
+            </button>
+            <button
+              type="button"
+              className={styles.compareTrayButton}
+              disabled={!canCompare}
+              onClick={() => setModalOpen(true)}
+            >
+              {canCompare ? "Compare" : `Compare (${2 - compareSelection.length} more)`}
+            </button>
+          </div>
+        </div>
+      ) : null}
 
       {modalOpen && compareProducts.length === 2 ? (
         <MattressCompareModal
