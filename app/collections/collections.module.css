@@ -1694,13 +1694,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 14px;
+  overflow-x: auto;
 }
 
 .compareTraySlots {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
   gap: 10px;
 }
 
@@ -1785,6 +1787,7 @@
 .compareTrayActions {
   display: flex;
   align-items: center;
+  flex-shrink: 0;
   gap: 12px;
 }
 
@@ -1839,7 +1842,7 @@
   transform: none;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 780px) {
   .compareTray {
     padding: 10px 0 12px;
   }
@@ -1848,6 +1851,7 @@
     flex-direction: column;
     align-items: stretch;
     padding: 0 14px;
+    overflow-x: visible;
   }
 
   .compareTraySlots {
@@ -1861,9 +1865,17 @@
   }
 
   .compareTrayActions {
+    flex-wrap: wrap;
     justify-content: space-between;
   }
 
+  .compareTrayCount {
+    flex: 1 0 100%;
+    order: -1;
+    text-align: center;
+  }
+
+  .compareTrayClear,
   .compareTrayButton {
     flex: 1;
   }
