@@ -1466,6 +1466,16 @@
     width: 100%;
     margin: 0 auto 16px;
     display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    border: 1px solid var(--bdr);
+    border-radius: var(--r);
+    background: #fff;
+    color: var(--navy);
+    font: 900 13px/1 var(--sans);
+    cursor: pointer;
   }
 
   .mattressToolbar {
