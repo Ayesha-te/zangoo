@@ -51,9 +51,7 @@ export default function CollectionsPage() {
                 </div>
                 <div className={styles.cardBottom}>
                   <span>{collection.count}</span>
-                  <Link href={`/collections/${collection.slug}/`} aria-label={`${collection.name} collection details`}>
-                    {isLive ? "Enquire Now" : "Coming Soon"}
-                  </Link>
+                  {isLive ? <Link href={`/collections/${collection.slug}/`} aria-label={`${collection.name} collection details`}>Enquire Now</Link> : <span>Coming Soon</span>}
                 </div>
               </article>
             );

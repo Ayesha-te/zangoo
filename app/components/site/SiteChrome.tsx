@@ -285,22 +285,9 @@ export function SiteHeader() {
                               </Link>
                               <ul className="mega-products" role="list">
                                 {desktopCategory.groups.map((group) => (
-                              <li className={`mega-product-group${"products" in group && group.products ? " has-products" : ""}`} key={group.label}>
-                                <Link href={group.href}>{group.label}</Link>
-                                {"products" in group && group.products ? (
-                                  <ul
-                                    className="mega-sub-products"
-                                    role="list"
-                                    aria-label={`${group.label} product pages`}
-                                  >
-                                    {group.products.map((product) => (
-                                      <li key={product.label}>
-                                        <Link href={product.href}>{product.label}</Link>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                ) : null}
-                              </li>
+                                  <li className="mega-product-group" key={group.label}>
+                                    <Link href={group.href}>{group.label}</Link>
+                                  </li>
                                 ))}
                               </ul>
                             </>
@@ -395,46 +382,9 @@ export function SiteHeader() {
                               <Link href={item.href} onClick={() => setMenuOpen(false)}>View {item.label}</Link>
                             </li>
                             {item.groups.map((group) => {
-                              const groupKey = `${item.label}:${group.label}`;
-                              const products = "products" in group ? group.products : undefined;
-                              const hasProducts = Boolean(products);
-
                               return (
                                 <li key={group.label}>
-                                  {hasProducts ? (
-                                    <div className="mob-product-btn">
-                                      <Link
-                                        href={group.href}
-                                        className="mob-product-label"
-                                        onClick={() => setMenuOpen(false)}
-                                      >
-                                        {group.label}
-                                      </Link>
-                                      <button
-                                        className="mob-product-toggle"
-                                        type="button"
-                                        aria-label={`Toggle ${group.label} subcategories`}
-                                        aria-expanded={openMobileGroup === groupKey}
-                                        onClick={() => setOpenMobileGroup((current) => (current === groupKey ? null : groupKey))}
-                                      >
-                                        <b aria-hidden="true">&gt;</b>
-                                      </button>
-                                    </div>
-                                  ) : (
-                                    <Link href={group.href} onClick={() => setMenuOpen(false)}>{group.label}</Link>
-                                  )}
-                                  {hasProducts && openMobileGroup === groupKey ? (
-                                    <ul className="mob-product-sub-links" role="list" aria-label={`${group.label} product pages`}>
-                                      <li>
-                                        <Link href={group.href} onClick={() => setMenuOpen(false)}>View {group.label}</Link>
-                                      </li>
-                                      {products?.map((product) => (
-                                        <li key={product.label}>
-                                          <Link href={product.href} onClick={() => setMenuOpen(false)}>{product.label}</Link>
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  ) : null}
+                                  <Link href={group.href} onClick={() => setMenuOpen(false)}>{group.label}</Link>
                               </li>
                               );
                             })}

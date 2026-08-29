@@ -393,7 +393,8 @@ function Collections() {
             <div className="coll-grid" role="list">
               {collections.map((collection, index) => (
                 <a
-                  href={`/collections/${collection.slug}/`}
+                  href={collection.name === "Bedroom" ? `/collections/${collection.slug}/` : "#"}
+                  onClick={collection.name === "Bedroom" ? undefined : (event) => event.preventDefault()}
                   className="cc rv"
                   role="listitem"
                   aria-label={`${collection.name}, ${collection.count}`}

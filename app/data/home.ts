@@ -9,33 +9,13 @@ export const navLinks = [
 ];
 
 export const collections = [
-  { name: "Living Room", slug: "living-room", count: "220 products", className: "cc-living", kind: "sofa", badge: "Coming Soon", description: "Sofas, lounge chairs, media units, and relaxed living pieces." },
-  { name: "Dining", slug: "dining", count: "158 products", className: "cc-dining", kind: "dining", badge: "Coming Soon", description: "Dining tables, chairs, benches, and hosting-ready storage." },
   { name: "Bedroom", slug: "bedroom", count: "310 products", className: "cc-bedroom", kind: "bed", badge: "Mattress Sale", description: "Mattresses, beds, bedside tables, wardrobes, and sleep essentials." },
+  { name: "Dining", slug: "dining", count: "158 products", className: "cc-dining", kind: "dining", badge: "Coming Soon", description: "Dining tables, chairs, benches, and hosting-ready storage." },
   { name: "Lighting", slug: "lighting", count: "117 products", className: "cc-lighting", kind: "lamp", badge: "Coming Soon", description: "Floor lamps, pendants, table lamps, and layered lighting." },
+  { name: "Living Room", slug: "living-room", count: "220 products", className: "cc-living", kind: "sofa", badge: "Coming Soon", description: "Sofas, lounge chairs, media units, and relaxed living pieces." },
 ] as const;
 
 export const collectionCategories = [
-  {
-    label: "Living Room",
-    href: "/collections/living-room/",
-    badge: "Coming Soon",
-    groups: [
-      { label: "Sofas", href: "/collections/living-room/sofas/" },
-      { label: "Lounge Chairs", href: "/collections/living-room/lounge-chairs/" },
-      { label: "Media Units", href: "/collections/living-room/media-units/" },
-    ],
-  },
-  {
-    label: "Dining",
-    href: "/collections/dining/",
-    badge: "Coming Soon",
-    groups: [
-      { label: "Dining Tables", href: "/collections/dining/tables/" },
-      { label: "Dining Chairs", href: "/collections/dining/chairs/" },
-      { label: "Benches", href: "/collections/dining/benches/" },
-    ],
-  },
   {
     label: "Bedroom",
     href: "/collections/bedroom/",
@@ -54,6 +34,16 @@ export const collectionCategories = [
     ],
   },
   {
+    label: "Dining",
+    href: "/collections/dining/",
+    badge: "Coming Soon",
+    groups: [
+      { label: "Benches", href: "/collections/dining/benches/" },
+      { label: "Dining Chairs", href: "/collections/dining/chairs/" },
+      { label: "Dining Tables", href: "/collections/dining/tables/" },
+    ],
+  },
+  {
     label: "Lighting",
     href: "/collections/lighting/",
     badge: "Coming Soon",
@@ -61,6 +51,16 @@ export const collectionCategories = [
       { label: "Floor Lamps", href: "/collections/lighting/floor-lamps/" },
       { label: "Pendant Lights", href: "/collections/lighting/pendants/" },
       { label: "Table Lamps", href: "/collections/lighting/table-lamps/" },
+    ],
+  },
+  {
+    label: "Living Room",
+    href: "/collections/living-room/",
+    badge: "Coming Soon",
+    groups: [
+      { label: "Lounge Chairs", href: "/collections/living-room/lounge-chairs/" },
+      { label: "Media Units", href: "/collections/living-room/media-units/" },
+      { label: "Sofas", href: "/collections/living-room/sofas/" },
     ],
   },
 ] as const;

@@ -13,13 +13,16 @@ Open [https://www.zaango.co.uk](https://www.zaango.co.uk).
 ## Landing Pages
 
 - [Mattresses category](https://www.zaango.co.uk/collections/bedroom/mattresses/)
+- [Product page wireframe preview](https://www.zaango.co.uk/product-page-wireframe/)
+
+## Product Pages
+
 - [RestCore Ortho](https://www.zaango.co.uk/collections/bedroom/mattresses/restcore-ortho/)
 - [AlignPlus Ortho](https://www.zaango.co.uk/collections/bedroom/mattresses/alignplus-ortho/)
 - [OrthoLux Pocket](https://www.zaango.co.uk/collections/bedroom/mattresses/ortholux-pocket/)
 - [SpineGuard Ortho](https://www.zaango.co.uk/collections/bedroom/mattresses/spineguard-ortho/)
 - [Capri Ortho Mattress](https://www.zaango.co.uk/collections/bedroom/mattresses/capri-ortho-mattress/)
 - [Capri Ortho Mattress 2](https://www.zaango.co.uk/collections/bedroom/mattresses/capri-ortho-mattress2/)
-- [Product page wireframe preview](https://www.zaango.co.uk/product-page-wireframe/)
 
 ## Image Assets
 
