@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type ChangeEvent, type FormEvent } from "react";
+import { useMemo, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 
 export type CustomerReview = {
   id: string;
@@ -29,6 +29,14 @@ export function CustomerReviews({
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(5);
   const [uploads, setUploads] = useState<string[]>([]);
+  const [uploadError, setUploadError] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+  const reviewGridRef = useRef<HTMLDivElement>(null);
+  const reviewFormRef = useRef<HTMLDetailsElement>(null);
+
+  const moveReviews = (direction: number) => {
+    reviewGridRef.current?.scrollBy({ left: direction * reviewGridRef.current.clientWidth, behavior: "smooth" });
+  };
 
   const visibleReviews = useMemo(() => {
     const result = sort === "media" ? reviews.filter((review) => review.media?.length) : [...reviews];
@@ -40,7 +48,9 @@ export function CustomerReviews({
   }, [reviews, sort]);
 
   function onFiles(event: ChangeEvent<HTMLInputElement>) {
-    const files = Array.from(event.target.files ?? []).slice(0, 3);
+    const selected = Array.from(event.target.files ?? []).slice(0, 3);
+    const files = selected.filter((file) => file.size <= 5 * 1024 * 1024);
+    setUploadError(files.length < selected.length ? "Each image must be 5MB or smaller." : "");
     setUploads(files.map((file) => URL.createObjectURL(file)));
   }
 
@@ -59,7 +69,10 @@ export function CustomerReviews({
     setComment("");
     setRating(5);
     setUploads([]);
+    setUploadError("");
     setSort("recent");
+    setSubmitted(true);
+    if (reviewFormRef.current) reviewFormRef.current.open = false;
   }
 
   return (
@@ -79,9 +92,11 @@ export function CustomerReviews({
           </select>
         </label>
       </div>
+      {submitted ? <p className="customer-review-success" role="status">Your review was sent successfully.</p> : null}
 
-      <div className="customer-review-grid">
-        {visibleReviews.map((review) => (
+      <div className="customer-review-slider">
+        <div className="customer-review-grid" ref={reviewGridRef}>
+          {visibleReviews.map((review) => (
           <article className="customer-review-card" key={review.id}>
             <div className="customer-review-author">
               <span aria-hidden="true">{review.name.charAt(0).toUpperCase()}</span>
@@ -98,11 +113,16 @@ export function CustomerReviews({
               </div>
             ) : null}
           </article>
-        ))}
-        {!visibleReviews.length ? <p className="customer-review-empty">No reviews with photos yet.</p> : null}
+          ))}
+          {!visibleReviews.length ? <p className="customer-review-empty">No reviews with photos yet.</p> : null}
+        </div>
+        <div className="customer-review-slider-controls" aria-label="Review navigation">
+          <button className="customer-review-prev" type="button" onClick={() => moveReviews(-1)} aria-label="Previous reviews">&#8249;</button>
+          <button className="customer-review-next" type="button" onClick={() => moveReviews(1)} aria-label="Next reviews">&#8250;</button>
+        </div>
       </div>
 
-      <details className="customer-review-form-wrap">
+      <details className="customer-review-form-wrap" ref={reviewFormRef}>
         <summary>Leave a review</summary>
         <form className="customer-review-form" onSubmit={submitReview}>
           <label>Name<input required value={name} onChange={(event) => setName(event.target.value)} /></label>
@@ -114,6 +134,7 @@ export function CustomerReviews({
             <span className="customer-review-file-name">{uploads.length ? `${uploads.length} photo${uploads.length === 1 ? "" : "s"} selected` : "No file chosen"}</span>
             <input type="file" accept="image/*" multiple onChange={onFiles} />
           </label>
+          {uploadError ? <small className="customer-review-upload-error">{uploadError}</small> : null}
           {uploads.length ? <div className="customer-review-media customer-review-preview">{uploads.map((source) => <img src={source} alt="Review upload preview" key={source} />)}</div> : null}
           <button type="submit">Submit review</button>
         </form>

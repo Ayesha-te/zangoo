@@ -1409,6 +1409,20 @@
   font: 500 13px/1.55 var(--sans);
 }
 
+/* Category card polish and stable horizontal review presentation */
+.mattressInfo > strong { margin-top: 12px; display: block; }
+.mattressInfo > span { width: 100%; }
+.mattressRating { margin-top: 16px; }
+.deliveryNote { margin-top: 14px; }
+.mattressPrice { margin-top: 14px; }
+.mattressPrice small { margin-top: 8px; }
+.reviewMiniGrid { overflow-x: auto; grid-auto-flow: column; grid-auto-columns: minmax(260px, 1fr); }
+.categoryFaqGrid { align-items: start; }
+@media (max-width: 700px) {
+  .categoryCompare { grid-template-columns: 1fr; }
+  .categoryCompare button { width: 100%; }
+}
+
 .reviewMiniGrid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }

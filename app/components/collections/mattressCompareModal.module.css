@@ -4,7 +4,7 @@
   z-index: 1200;
   display: grid;
   place-items: start center;
-  padding: calc(var(--nav-h, 132px) + 20px) 20px 20px;
+  padding: 8px 20px;
   background: rgba(15, 26, 41, .56);
   animation: fadeIn .15s ease;
 }
@@ -13,7 +13,7 @@
   position: relative;
   z-index: 1201;
   width: min(100%, 640px);
-  max-height: min(calc(100svh - var(--nav-h, 132px) - 40px), 760px);
+  max-height: min(calc(100svh - 16px), 860px);
   overflow-y: auto;
   border-radius: 14px;
   background: #fff;
@@ -23,9 +23,6 @@
 }
 
 .modalHead {
-  position: sticky;
-  top: -26px;
-  z-index: 2;
   display: flex;
   align-items: center;
   justify-content: space-between;

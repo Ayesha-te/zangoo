@@ -96,8 +96,9 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
           <div className="trust-bar-in" role="list">
             <span role="listitem">🇬🇧 Made in the UK</span>
             <span role="listitem">🚚 Free UK Delivery</span>
-            <span role="listitem">💳 0% Finance</span>
+            <span role="listitem">💳 0% Interest-Free Finance</span>
             <span role="listitem">🛡️ 1-Year Guarantee</span>
+            <span role="listitem">🌱 FSC Certified &amp; Carbon Neutral</span>
           </div>
         </section>
 

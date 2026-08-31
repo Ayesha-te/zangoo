@@ -1,16 +1,20 @@
 .wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
   margin: 6px 0;
+  width: 100%;
+  min-width: 0;
 }
 
 .track {
-  flex: 1;
   display: block;
-  height: 4px;
+  width: 100%;
+  min-width: 100%;
+  display: block;
+  height: 7px;
   border-radius: 999px;
-  background: var(--bdr);
+  background: #c7d9ea;
   overflow: hidden;
 }
 
