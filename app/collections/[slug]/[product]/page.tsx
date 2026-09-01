@@ -167,11 +167,15 @@ export default async function CollectionProductPage({ params }: ProductPageProps
                 <Link href="/faq/">View all FAQs &rarr;</Link>
               </div>
               <div className={styles.categoryFaqGrid}>
-                {mattressFaqs.map((question) => (
-                  <details className={styles.categoryFaqItem} key={question}>
-                    <summary>{question}<span aria-hidden="true">+</span></summary>
-                    <p>Our team can confirm the best option for your body type, sleep position, and delivery needs before you order.</p>
-                  </details>
+                {[mattressFaqs.filter((_, index) => index % 2 === 0), mattressFaqs.filter((_, index) => index % 2 === 1)].map((questions, column) => (
+                  <div className={styles.categoryFaqColumn} key={`faq-column-${column}`}>
+                    {questions.map((question) => (
+                      <details className={styles.categoryFaqItem} key={question}>
+                        <summary>{question}<span aria-hidden="true">+</span></summary>
+                        <p>Our team can confirm the best option for your body type, sleep position, and delivery needs before you order.</p>
+                      </details>
+                    ))}
+                  </div>
                 ))}
               </div>
             </div>

@@ -21,7 +21,7 @@ export function FavoriteButton({ item, className, activeClassName }: FavoriteBut
       aria-pressed={active}
       onClick={() => toggleFavorite(item)}
     >
-      <span aria-hidden="true">&#9825;</span>
+      <span aria-hidden="true">{active ? "\u2665" : "\u2661"}</span>
     </button>
   );
 }

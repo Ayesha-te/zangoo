@@ -386,14 +386,6 @@
   color: #c62828;
 }
 
-.favoriteActive span {
-  font-size: 0;
-}
-
-.favoriteActive span::after {
-  content: "\2665";
-  font-size: 24px;
-}
 
 .buyButton {
   margin-top: 10px;

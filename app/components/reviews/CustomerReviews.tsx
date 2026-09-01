@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent } from "react";
 
 export type CustomerReview = {
   id: string;
@@ -13,6 +13,27 @@ export type CustomerReview = {
 };
 
 type ReviewSort = "recent" | "highest" | "lowest" | "media";
+
+const MAX_SOURCE_BYTES = 12 * 1024 * 1024;
+const MAX_OUTPUT_BYTES = 2.5 * 1024 * 1024;
+const MAX_IMAGE_EDGE = 1600;
+
+async function compressReviewImage(file: File) {
+  if (!file.type.startsWith("image/") || file.size > MAX_SOURCE_BYTES) return null;
+  try {
+    const bitmap = await createImageBitmap(file);
+    const scale = Math.min(1, MAX_IMAGE_EDGE / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+    canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+    canvas.getContext("2d")?.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    bitmap.close();
+    const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob(resolve, "image/webp", 0.78));
+    return blob && blob.size <= MAX_OUTPUT_BYTES ? URL.createObjectURL(blob) : null;
+  } catch {
+    return null;
+  }
+}
 
 export function CustomerReviews({
   reviews: initialReviews,
@@ -34,6 +55,12 @@ export function CustomerReviews({
   const reviewGridRef = useRef<HTMLDivElement>(null);
   const reviewFormRef = useRef<HTMLDetailsElement>(null);
 
+  useEffect(() => {
+    if (!submitted) return;
+    const timeout = window.setTimeout(() => setSubmitted(false), 4000);
+    return () => window.clearTimeout(timeout);
+  }, [submitted]);
+
   const moveReviews = (direction: number) => {
     reviewGridRef.current?.scrollBy({ left: direction * reviewGridRef.current.clientWidth, behavior: "smooth" });
   };
@@ -47,11 +74,12 @@ export function CustomerReviews({
     });
   }, [reviews, sort]);
 
-  function onFiles(event: ChangeEvent<HTMLInputElement>) {
+  async function onFiles(event: ChangeEvent<HTMLInputElement>) {
     const selected = Array.from(event.target.files ?? []).slice(0, 3);
-    const files = selected.filter((file) => file.size <= 5 * 1024 * 1024);
-    setUploadError(files.length < selected.length ? "Each image must be 5MB or smaller." : "");
-    setUploads(files.map((file) => URL.createObjectURL(file)));
+    const compressed = await Promise.all(selected.map(compressReviewImage));
+    const accepted = compressed.filter((source): source is string => Boolean(source));
+    setUploadError(accepted.length < selected.length ? "Some images could not be added. Choose image files under 12MB." : "");
+    setUploads(accepted);
   }
 
   function submitReview(event: FormEvent<HTMLFormElement>) {

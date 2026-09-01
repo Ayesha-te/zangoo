@@ -264,10 +264,11 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
 
       <section className="trust-bar" aria-label="Purchase benefits">
         <div className="trust-bar-in" role="list">
-          <span role="listitem">🌙 60-night sleep trial</span>
-          <span role="listitem">🛡️ 1-year guarantee</span>
-          <span role="listitem">🚚 Free delivery</span>
-          <span role="listitem">↩️ Free returns</span>
+          <span role="listitem">🇬🇧 Made in the UK</span>
+          <span role="listitem">🚚 Free UK Delivery</span>
+          <span role="listitem">💳 0% Interest-Free Finance</span>
+          <span role="listitem">🛡️ 1-Year Guarantee</span>
+          <span role="listitem">🌱 FSC Certified &amp; Carbon Neutral</span>
         </div>
       </section>
 

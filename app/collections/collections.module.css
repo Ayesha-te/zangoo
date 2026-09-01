@@ -453,14 +453,6 @@
   color: #c62828;
 }
 
-.heartBadgeActive span {
-  font-size: 0;
-}
-
-.heartBadgeActive span::after {
-  content: "\2665";
-  font-size: 20px;
-}
 
 .mattressInfo {
   flex: 1;
@@ -1418,6 +1410,7 @@
 .mattressPrice small { margin-top: 8px; }
 .reviewMiniGrid { overflow-x: auto; grid-auto-flow: column; grid-auto-columns: minmax(260px, 1fr); }
 .categoryFaqGrid { align-items: start; }
+.categoryFaqColumn { display: grid; align-content: start; gap: 12px; }
 @media (max-width: 700px) {
   .categoryCompare { grid-template-columns: 1fr; }
   .categoryCompare button { width: 100%; }
