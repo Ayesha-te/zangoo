@@ -567,6 +567,8 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .customer-review-upload-error{grid-column:1/-1;color:#b42318;font-weight:700}
 .cc[href="#"]{cursor:not-allowed!important}
 .customer-review-form-wrap{margin-top:20px;border:1px solid var(--bdr);border-radius:var(--rl);background:#fff;overflow:hidden}.customer-review-form-wrap summary{padding:16px 20px;color:var(--navy);font-weight:900;cursor:pointer}.customer-review-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 20px 20px}.customer-review-form label{display:grid;gap:6px;color:var(--navy);font-size:12px;font-weight:900}.customer-review-comment,.customer-review-upload,.customer-review-preview,.customer-review-form button{grid-column:1/-1}.customer-review-upload{position:relative;display:flex!important;align-items:center;gap:12px;flex-wrap:wrap}.customer-review-upload input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}.customer-review-file-button{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:8px;background:var(--blue);color:#fff;font-weight:900;cursor:pointer}.customer-review-file-name{color:var(--muted);font-weight:700}.customer-review-form button{min-height:44px;border:0;border-radius:var(--r);background:var(--blue);color:#fff;font-weight:900;cursor:pointer}.customer-review-empty{grid-column:1/-1;padding:24px;border:1px dashed var(--bdr);border-radius:var(--r);text-align:center}
+.customer-review-form-wrap::details-content{block-size:0;opacity:0;overflow:hidden;transition:block-size .32s ease,opacity .24s ease;transition-behavior:allow-discrete}
+.customer-review-form-wrap[open]::details-content{block-size:auto;opacity:1}
 @media(max-width:900px){.customer-review-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.customer-reviews{padding:56px 24px}}
 @media(max-width:580px){.customer-reviews{padding:44px 16px}.customer-reviews-head{align-items:stretch;flex-direction:column}.customer-reviews-head label{width:100%;align-self:stretch;flex-basis:auto}.customer-review-grid{grid-template-columns:1fr}.customer-review-form{grid-template-columns:1fr}.customer-review-form>*{grid-column:1}}
 @media(max-width:580px){.customer-review-grid{grid-template-columns:none;grid-auto-columns:minmax(280px,88%)}}
@@ -760,7 +762,7 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .btt:active{transform:translateY(0)}
 .whatsapp-float{
   position:fixed;
-  bottom:88px;
+  bottom:24px;
   right:24px;
   z-index:500;
   width:48px;
@@ -782,9 +784,9 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
   box-shadow:0 6px 20px rgba(37,211,102,.32);
 }
 @media(max-width:580px){
-  .btt{bottom:20px;right:16px;width:44px;height:44px}
+  .btt{bottom:20px;right:72px;width:44px;height:44px}
   .btt svg{width:18px;height:18px}
-  .whatsapp-float{bottom:76px;right:16px;width:44px;height:44px}
+  .whatsapp-float{bottom:20px;right:16px;width:44px;height:44px}
   .whatsapp-float svg{width:23px;height:23px}
 }
 

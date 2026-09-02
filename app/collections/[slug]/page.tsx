@@ -64,7 +64,7 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
               {isLive ? "Enquire About Mattress Sale" : "Join Launch List"}
             </Link>
             <Link className={styles.secondaryLink} href="/collections/">
-              View All Collections
+              &larr; Back to Collections
             </Link>
           </div>
         </section>

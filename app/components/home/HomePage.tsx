@@ -1003,8 +1003,16 @@ function CampaignPopup() {
   const [subscribed, setSubscribed] = useState(false);
 
   useEffect(() => {
-    const timer = window.setTimeout(() => setVisible(true), 900);
-    return () => window.clearTimeout(timer);
+    const collectionsSection = document.getElementById("collections");
+    if (!collectionsSection) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+        setVisible(true);
+        observer.disconnect();
+      }
+    }, { threshold: [0.5] });
+    observer.observe(collectionsSection);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {

@@ -387,7 +387,6 @@ export function BlogDetailPage({
       <BlogShell>
         <main className="blog-page">
           <div className="wrap">
-            <Link className="blog-back" href="/blog/">Back to blog</Link>
             <span className="sec-lbl">Ideas &amp; Inspiration</span>
             <h1>Latest Blog Posts</h1>
             <div className="blog-list">

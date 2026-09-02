@@ -918,9 +918,14 @@
 
 .railTrack {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-auto-flow: column;
+  grid-auto-columns: calc((100% - 56px) / 5);
+  grid-template-columns: none;
   gap: 14px;
   margin-top: 18px;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
 }
 
 .railHeader {
@@ -931,10 +936,19 @@
 }
 
 .railControls {
-  display: none;
+  display: flex;
   align-items: center;
   gap: 8px;
 }
+
+.railTrack > a { scroll-snap-align: start; }
+
+.paymentMethods { display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;margin-top:10px; }
+.paymentMethods span { min-width:62px;padding:7px 10px;border:1px solid var(--bdr);border-radius:6px;background:#fff;color:var(--navy);font:900 12px/1 var(--sans);text-align:center; }
+.wrap :global(.trust-bar) { margin:24px 0; }
+
+@media (max-width: 900px) { .railTrack { grid-auto-columns:calc((100% - 28px) / 3); } }
+@media (max-width: 580px) { .railTrack { grid-auto-columns:78%; } }
 
 .railControls button {
   width: 40px;

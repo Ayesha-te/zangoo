@@ -82,7 +82,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
   const [openAccordion, setOpenAccordion] = useState<number | null>(0);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [openFaqs, setOpenFaqs] = useState<Set<number>>(() => new Set());
   const [comparisonSlug, setComparisonSlug] = useState<string | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
 
@@ -258,6 +258,9 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             <span className={styles.stockLabel}>{stockState.label}</span>
             {stockState.sub ? <em>{stockState.sub}</em> : null}
           </small>
+          <div className={styles.paymentMethods} aria-label="Accepted payment methods">
+            <span>VISA</span><span>PayPal</span><span>Klarna.</span>
+          </div>
           </aside>
         </div>
       </section>
@@ -293,15 +296,24 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
       <section className={styles.faq} aria-labelledby="faq-title">
         <h2 id="faq-title">FAQ</h2>
         <div>
-          {product.faqs.map((faq, index) => {
-            const isOpen = openFaq === index;
+          {[...product.faqs,
+            { question: "How long does delivery take?", answer: "Standard UK delivery is free, with timing confirmed before dispatch." },
+            { question: "Can I use this mattress on my existing bed?", answer: "Yes. It works with supportive divan, platform, and correctly spaced slatted bases." },
+            { question: "How should I care for the mattress?", answer: "Rotate it regularly and follow the turning guidance supplied with your selected model." },
+            { question: "What happens if I need help after ordering?", answer: "Our support team can assist with delivery, setup, care, and product questions." },
+          ].map((faq, index) => {
+            const isOpen = openFaqs.has(index);
             return (
               <div className={styles.faqItem} key={faq.question}>
                 <button
                   type="button"
                   className={styles.faqSummary}
                   aria-expanded={isOpen}
-                  onClick={() => setOpenFaq(isOpen ? null : index)}
+                  onClick={() => setOpenFaqs((current) => {
+                    const next = new Set(current);
+                    if (next.has(index)) next.delete(index); else next.add(index);
+                    return next;
+                  })}
                 >
                   {faq.question}
                 </button>
