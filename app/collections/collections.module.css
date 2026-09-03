@@ -778,6 +778,21 @@
   align-items: start;
 }
 
+.hero .categoryBackLink {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  width:max-content;
+  margin:0 0 24px;
+  color:var(--blue);
+  font:700 14px/1.2 var(--sans);
+  text-decoration:none;
+}
+
+.hero .categoryBackLink::before { content:"\2190"; }
+.hero .categoryBackLink:hover,
+.hero .categoryBackLink:focus-visible { text-decoration:underline;text-underline-offset:3px; }
+
 @media (max-width: 1024px) {
   .filterTrigger { display:flex!important; }
 }

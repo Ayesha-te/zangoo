@@ -253,17 +253,18 @@ export function SiteHeader() {
                         <ul className="mega-links" role="list">
                           {collectionCategories.map((item) => (
                             <li
-                              className={`mega-category${openDesktopCategory === item.label ? " open" : ""}`}
+                              className={`mega-category${openDesktopCategory === item.label ? " open" : ""}${item.label !== "Bedroom" ? " is-disabled" : ""}`}
                               key={item.label}
-                              onMouseEnter={() => setOpenDesktopCategory(item.label)}
-                              onFocus={() => setOpenDesktopCategory(item.label)}
+                              onMouseEnter={() => item.label === "Bedroom" && setOpenDesktopCategory(item.label)}
+                              onFocus={() => item.label === "Bedroom" && setOpenDesktopCategory(item.label)}
                             >
                               <button
                                 type="button"
                                 className="mega-link"
+                                disabled={item.label !== "Bedroom"}
                                 aria-current={openDesktopCategory === item.label ? "true" : undefined}
                                 aria-expanded={openDesktopCategory === item.label}
-                                onClick={() => setOpenDesktopCategory(item.label)}
+                                onClick={() => item.label === "Bedroom" && setOpenDesktopCategory(item.label)}
                               >
                                 <span className="mega-link-copy">
                                   <strong>{item.label}</strong>
@@ -353,18 +354,23 @@ export function SiteHeader() {
                 {hasCollections ? (
                   <ul className="mob-sub-links" role="list" aria-label="Collection subcategories">
                     {collectionCategories.map((item) => (
-                      <li key={item.label}>
+                      <li className={item.label === "Bedroom" ? undefined : "is-disabled"} key={item.label}>
                         <div className="mob-category-btn">
                           <Link
                             href={item.href}
                             className="mob-category-label"
-                            onClick={() => setMenuOpen(false)}
+                            aria-disabled={item.label !== "Bedroom"}
+                            onClick={(event) => {
+                              if (item.label !== "Bedroom") event.preventDefault();
+                              else setMenuOpen(false);
+                            }}
                           >
                             {item.label}
                           </Link>
                           <button
                             className="mob-category-meta"
                             type="button"
+                            disabled={item.label !== "Bedroom"}
                             aria-label={`Toggle ${item.label} subcategories`}
                             aria-expanded={openMobileCategory === item.label}
                             onClick={() => {

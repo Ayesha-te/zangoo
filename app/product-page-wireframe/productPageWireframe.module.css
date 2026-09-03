@@ -1665,3 +1665,24 @@
 .railControls {
   display: flex !important;
 }
+
+/* Keep every product rail on one line; five cards are visible on desktop. */
+.railTrack {
+  display:flex;
+  flex-wrap:nowrap;
+  overflow-x:hidden;
+  scroll-behavior:smooth;
+  scroll-snap-type:x mandatory;
+  scrollbar-width:none;
+}
+
+.railTrack::-webkit-scrollbar { display:none; }
+.railTrack > a { flex:0 0 calc((100% - 56px) / 5);min-width:0;scroll-snap-align:start; }
+
+@media (max-width:900px) {
+  .railTrack > a { flex-basis:calc((100% - 28px) / 3); }
+}
+
+@media (max-width:580px) {
+  .railTrack > a { flex-basis:78%; }
+}

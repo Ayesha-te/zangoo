@@ -395,8 +395,10 @@ function Collections() {
                 <a
                   href={collection.name === "Bedroom" ? `/collections/${collection.slug}/` : "#"}
                   onClick={collection.name === "Bedroom" ? undefined : (event) => event.preventDefault()}
-                  className="cc rv"
+                  className={`cc rv${collection.name === "Bedroom" ? "" : " cc-disabled"}`}
                   role="listitem"
+                  aria-disabled={collection.name === "Bedroom" ? undefined : true}
+                  tabIndex={collection.name === "Bedroom" ? undefined : -1}
                   aria-label={`${collection.name}, ${collection.count}`}
                   style={{ transitionDelay: `${index * 0.08}s` }}
                   key={collection.name}

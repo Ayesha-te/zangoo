@@ -45,6 +45,9 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
       <Breadcrumbs items={[{ label: "Collections", href: "/collections/" }, { label: collection.name }]} />
       <main className={styles.page}>
         <section className={styles.hero} aria-labelledby="collection-title">
+          <Link className={styles.categoryBackLink} href="/collections/">
+            View All Collections
+          </Link>
           <span>{collection.badge}</span>
           <h1 id="collection-title">{collection.name}</h1>
           {introPreview.shouldCollapse ? (
@@ -62,9 +65,6 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
           <div className={styles.detailActions}>
             <Link className={styles.primaryLink} href="/contact/">
               {isLive ? "Enquire About Mattress Sale" : "Join Launch List"}
-            </Link>
-            <Link className={styles.secondaryLink} href="/collections/">
-              &larr; Back to Collections
             </Link>
           </div>
         </section>

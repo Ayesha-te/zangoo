@@ -108,6 +108,9 @@ export default async function CollectionProductPage({ params }: ProductPageProps
       />
       <main className={styles.page}>
         <section className={styles.hero} aria-labelledby="product-title">
+          <Link className={styles.categoryBackLink} href={item.category.href}>
+            Back to {item.category.label}
+          </Link>
           <span>{item.category.badge}</span>
           <h1 id="product-title">{item.group.label}</h1>
           {isMattressRange ? (
@@ -130,12 +133,6 @@ export default async function CollectionProductPage({ params }: ProductPageProps
           ) : (
             <p>{intro}</p>
           )}
-          <div className={styles.detailActions}>
-            <Link className={styles.secondaryLink} href={item.category.href}>
-              <span aria-hidden="true">&larr;</span>
-              Back to {item.category.label}
-            </Link>
-          </div>
         </section>
 
         {isMattressRange ? (

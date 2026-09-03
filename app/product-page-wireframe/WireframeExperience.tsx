@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { MattressProduct } from "@/app/data/mattressProducts";
 import { orthoMattressProducts } from "@/app/data/mattressProducts";
 import { FirmnessBar } from "@/app/components/collections/FirmnessBar";
@@ -259,7 +259,13 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             {stockState.sub ? <em>{stockState.sub}</em> : null}
           </small>
           <div className={styles.paymentMethods} aria-label="Accepted payment methods">
-            <span>VISA</span><span>PayPal</span><span>Klarna.</span>
+            <span>VISA</span>
+            <span>Mastercard</span>
+            <span>AMEX</span>
+            <span>Maestro</span>
+            <span>Klarna.</span>
+            <span>Apple Pay</span>
+            <span>Google Pay</span>
           </div>
           </aside>
         </div>
@@ -446,6 +452,17 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
 function ProductRail({ title, products }: { title: string; products: typeof orthoMattressProducts }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const titleId = `${title.toLowerCase().replace(/\s+/g, "-")}-title`;
+
+  useEffect(() => {
+    if (products.length <= 5 || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const timer = window.setInterval(() => {
+      const track = trackRef.current;
+      if (!track) return;
+      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+      track.scrollTo({ left: atEnd ? 0 : track.scrollLeft + track.clientWidth / 5, behavior: "smooth" });
+    }, 4500);
+    return () => window.clearInterval(timer);
+  }, [products.length]);
 
   function scrollProducts(direction: -1 | 1) {
     const track = trackRef.current;
