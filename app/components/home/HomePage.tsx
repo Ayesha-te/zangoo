@@ -326,15 +326,15 @@ function Hero() {
         aria-label="Modern living room with a sofa, warm lighting and contemporary furniture"
       >
         <div className="hero-photo-shade" aria-hidden="true" />
-        <div className="hero-badge" aria-hidden="true">
-          <i><AwardIcon kind="trophy" /></i>
-          <div>
-            <strong>ISO 9001, ISO 14001</strong>
-            <s>ISO 27001, ISO 45001 supplier</s>
+        <div className="hero-certifications" aria-label="Supplier certifications">
+          <div className="hero-badge">
+            <i aria-hidden="true"><AwardIcon kind="trophy" /></i>
+            <strong>ISO 9001</strong>
           </div>
-        </div>
-        <div className="hero-trust" aria-hidden="true">
-          FSC Certified &bull; Carbon Neutral
+          <div className="hero-trust">
+            <i aria-hidden="true">🌱</i>
+            <strong>FSC Certified &amp; Carbon Neutral</strong>
+          </div>
         </div>
       </div>
       <div className="scroll-hint" aria-hidden="true">
@@ -342,21 +342,6 @@ function Hero() {
         <svg viewBox="0 0 24 24">
           <path d="M12 5v14M5 12l7 7 7-7" />
         </svg>
-      </div>
-      <TrustBar />
-    </section>
-  );
-}
-
-function TrustBar() {
-  return (
-    <section className="trust-bar" aria-label="Furniture Co. trust benefits">
-      <div className="trust-bar-in" role="list">
-        <span role="listitem">🇬🇧 Made in the UK</span>
-        <span role="listitem">🚚 Free UK Delivery</span>
-        <span role="listitem">💳 0% Interest-Free Finance</span>
-        <span role="listitem">🛡️ 1-Year Guarantee</span>
-        <span role="listitem">🌱 FSC Certified &amp; Carbon Neutral</span>
       </div>
     </section>
   );
@@ -390,13 +375,12 @@ function Collections() {
                 View All
               </Link>
             </div>
-            <div className="coll-grid" role="list">
+            <div className="coll-grid">
               {collections.map((collection, index) => (
                 <a
                   href={collection.name === "Bedroom" ? `/collections/${collection.slug}/` : "#"}
                   onClick={collection.name === "Bedroom" ? undefined : (event) => event.preventDefault()}
                   className={`cc rv${collection.name === "Bedroom" ? "" : " cc-disabled"}`}
-                  role="listitem"
                   aria-disabled={collection.name === "Bedroom" ? undefined : true}
                   tabIndex={collection.name === "Bedroom" ? undefined : -1}
                   aria-label={`${collection.name}, ${collection.count}`}

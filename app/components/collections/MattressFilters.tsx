@@ -75,7 +75,7 @@ export function MattressFilters({
         </div>
 
         <div className={styles.filterGroup}>
-          <strong>Shop by Need</strong>
+          <strong>Mattress Type</strong>
           {needFilters.map((filter) => (
             <label className={styles.filterOption} key={filter}>
               <input
@@ -102,7 +102,7 @@ export function MattressFilters({
           ))}
         </div>
 
-        <div className={styles.filterGroup}>
+        <div className={`${styles.filterGroup} ${styles.sizeFilterGroup}`}>
           <strong>Size</strong>
           {sizeFilters.map((filter) => (
             <label className={styles.filterOption} key={filter}>

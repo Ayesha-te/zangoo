@@ -10,6 +10,7 @@ import { FavoriteButton } from "@/app/components/favorites/FavoriteButton";
 import { FirmnessBar } from "./FirmnessBar";
 import { MattressFilters } from "./MattressFilters";
 import { MattressCompareModal } from "./MattressCompareModal";
+import { getStockState } from "@/app/utils/stockState";
 import styles from "../../collections/collections.module.css";
 
 type MattressCatalogProps = {
@@ -24,6 +25,16 @@ const cleanPrice = (price: string) => price.replace("From ", "").replace("Â£",
 const priceNumber = (price: string) => Number(price.replace(/[^0-9]/g, "")) || 0;
 
 type SortOption = "best-selling" | "price-low" | "firmness";
+
+function CatalogStockNote({ count }: { count: number }) {
+  const stock = getStockState(count);
+  return (
+    <span className={`${styles.deliveryNote} ${styles[`stock${stock.tone[0].toUpperCase()}${stock.tone.slice(1)}`]}`}>
+      <strong>{stock.label}</strong>
+      {stock.sub ? <small>{stock.sub}</small> : null}
+    </span>
+  );
+}
 
 export function MattressCatalog({ products, needFilters, feelFilters, sizeFilters, children }: MattressCatalogProps) {
   const [selectedNeed, setSelectedNeed] = useState<string[]>([]);
@@ -45,7 +56,11 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
 
   const filteredProducts = useMemo(() => {
     const matches = products.filter((product) => {
-      const needMatch = selectedNeed.length === 0 || selectedNeed.some((filter) => product.bestFor.includes(filter));
+      const needMatch = selectedNeed.length === 0 || selectedNeed.some((filter) => {
+        if (filter === "Orthopaedic") return true;
+        if (filter === "Non-orthopaedic") return false;
+        return product.bestFor.includes(filter);
+      });
       const feelMatch = selectedFeel.length === 0 || selectedFeel.includes(product.firmness);
       return needMatch && feelMatch;
     });
@@ -92,16 +107,6 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
           <strong>{filteredProducts.length} Mattresses</strong>
         </p>
 
-        <section className="trust-bar" aria-label="Mattress category trust benefits">
-          <div className="trust-bar-in" role="list">
-            <span role="listitem">🇬🇧 Made in the UK</span>
-            <span role="listitem">🚚 Free UK Delivery</span>
-            <span role="listitem">💳 0% Interest-Free Finance</span>
-            <span role="listitem">🛡️ 1-Year Guarantee</span>
-            <span role="listitem">🌱 FSC Certified &amp; Carbon Neutral</span>
-          </div>
-        </section>
-
         <div className={styles.mattressToolbar}>
           <div className={styles.mattressToolbarActions}>
             <label>
@@ -145,16 +150,7 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
                     <span><span aria-hidden="true">▧</span>Wire edge</span>
                     <span><span aria-hidden="true">◇</span>Approx. 26cm deep</span>
                   </span>
-                  <Link
-                    className={styles.mattressRating}
-                    href={`/collections/bedroom/mattresses/${mattress.slug}/#reviews`}
-                    aria-label={`Read ${mattress.shortName} reviews`}
-                  >
-                    <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-                    <b>4.8</b>
-                    <small>({mattress.slug === "capri-ortho-mattress" ? "358" : "27"} reviews)</small>
-                  </Link>
-                  <span className={styles.deliveryNote}>In stock - Free delivery from Tomorrow</span>
+                  <CatalogStockNote count={mattress.stockCount} />
                   <span className={styles.mattressPrice}>
                     {cleanPrice(mattress.price)}
                     <small><s>RRP £249.00</s> <b>Save £50 (15%)</b></small>

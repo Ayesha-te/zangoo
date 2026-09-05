@@ -7,6 +7,7 @@ import { orthoMattressProducts } from "@/app/data/mattressProducts";
 import { FirmnessBar } from "@/app/components/collections/FirmnessBar";
 import { FavoriteButton } from "@/app/components/favorites/FavoriteButton";
 import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
+import { getStockState, type StockTone } from "@/app/utils/stockState";
 import styles from "./productPageWireframe.module.css";
 
 type WireframeExperienceProps = {
@@ -30,21 +31,6 @@ function buildSizes(product: MattressProduct) {
     const compare = Math.round(price / 0.85 / 10) * 10;
     return { id: tier.id, label: tier.label, price, compare };
   });
-}
-
-type StockTone = "ok" | "low" | "last" | "out";
-
-function getStockState(count: number): { label: string; sub: string | null; tone: StockTone } {
-  if (count <= 0) {
-    return { label: "Out of stock", sub: null, tone: "out" };
-  }
-  if (count === 1) {
-    return { label: "Last one — hurry!", sub: "Once it's gone, it's gone", tone: "last" };
-  }
-  if (count <= 4) {
-    return { label: `Only ${count} left in stock`, sub: "Selling fast — order soon", tone: "low" };
-  }
-  return { label: `${count} in stock`, sub: null, tone: "ok" };
 }
 
 const STOCK_CLASS: Record<StockTone, string> = {
@@ -193,11 +179,6 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
           <p className={styles.sku}>SKU: {product.slug.toUpperCase()}</p>
           <h1 id="wireframe-title">{product.name}</h1>
           <FirmnessBar firmness={product.firmness} />
-          <Link className={styles.rating} href="#reviews" aria-label="Rated 4.8 out of 5. Read 358 reviews">
-            <span aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-            <strong>4.8</strong>
-            <small>(358 reviews)</small>
-          </Link>
           <p>{product.description}</p>
           <h2>Features You Will Love</h2>
           <ul className={styles.benefits} role="list">
@@ -268,16 +249,6 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             <span>Google Pay</span>
           </div>
           </aside>
-        </div>
-      </section>
-
-      <section className="trust-bar" aria-label="Purchase benefits">
-        <div className="trust-bar-in" role="list">
-          <span role="listitem">🇬🇧 Made in the UK</span>
-          <span role="listitem">🚚 Free UK Delivery</span>
-          <span role="listitem">💳 0% Interest-Free Finance</span>
-          <span role="listitem">🛡️ 1-Year Guarantee</span>
-          <span role="listitem">🌱 FSC Certified &amp; Carbon Neutral</span>
         </div>
       </section>
 

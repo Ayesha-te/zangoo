@@ -57,8 +57,8 @@ export default async function CollectionProductPage({ params }: ProductPageProps
   const needFilters = [
     "Back Pain",
     "Side Sleepers",
-    "Firm Support",
-    "Couples",
+    "Orthopaedic",
+    "Non-orthopaedic",
     "Turnable / Double-Sided",
     "Stomach Sleepers",
     "Heavy Sleepers (90kg+)",

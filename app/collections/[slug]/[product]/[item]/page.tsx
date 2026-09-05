@@ -195,16 +195,6 @@ export default async function ProductLandingPage({ params }: ProductLandingPageP
           </div>
         </section>
 
-        <section className="trust-bar" aria-label="Purchase benefits">
-          <div className="trust-bar-in" role="list">
-            <span role="listitem">🇬🇧 Made in the UK</span>
-            <span role="listitem">🚚 Free UK Delivery</span>
-            <span role="listitem">💳 0% Interest-Free Finance</span>
-            <span role="listitem">🛡️ 1-Year Guarantee</span>
-            <span role="listitem">🌱 FSC Certified &amp; Carbon Neutral</span>
-          </div>
-        </section>
-
         <section className="lp-features" id="features" aria-labelledby="features-title">
           <div className="lp-section-head lp-section-head-dark">
             <span>How it works</span>

@@ -286,8 +286,15 @@ export function SiteHeader() {
                               </Link>
                               <ul className="mega-products" role="list">
                                 {desktopCategory.groups.map((group) => (
-                                  <li className="mega-product-group" key={group.label}>
-                                    <Link href={group.href}>{group.label}</Link>
+                                  <li className={`mega-product-group${group.label === "Mattresses" ? "" : " is-disabled"}`} key={group.label}>
+                                    {group.label === "Mattresses" ? (
+                                      <Link href={group.href}>{group.label}</Link>
+                                    ) : (
+                                      <>
+                                        {/* Future route retained for launch: <Link href={group.href}>{group.label}</Link> */}
+                                        <span aria-disabled="true">{group.label}</span>
+                                      </>
+                                    )}
                                   </li>
                                 ))}
                               </ul>
@@ -330,6 +337,15 @@ export function SiteHeader() {
             <span />
             <span />
           </button>
+        </div>
+        <div className="site-trust-bar" aria-label="Furniture Co. trust benefits">
+          <div className="site-trust-bar-in" role="list">
+            <span role="listitem">🇬🇧 Made in the UK</span>
+            <span role="listitem">🚚 Free UK Delivery</span>
+            <span role="listitem">💳 0% Interest-Free Finance</span>
+            <span role="listitem">🛡️ 1-Year Guarantee</span>
+            <span role="listitem">🌱 FSC Certified &amp; Carbon Neutral</span>
+          </div>
         </div>
       </nav>
       <div className={`mob-menu${menuOpen ? " open" : ""}`} id="mob" aria-hidden={!menuOpen} aria-label="Mobile navigation">
@@ -388,9 +404,17 @@ export function SiteHeader() {
                               <Link href={item.href} onClick={() => setMenuOpen(false)}>View {item.label}</Link>
                             </li>
                             {item.groups.map((group) => {
+                              const isLiveGroup = group.label === "Mattresses";
                               return (
-                                <li key={group.label}>
-                                  <Link href={group.href} onClick={() => setMenuOpen(false)}>{group.label}</Link>
+                                <li className={isLiveGroup ? undefined : "is-disabled"} key={group.label}>
+                                  {isLiveGroup ? (
+                                    <Link href={group.href} onClick={() => setMenuOpen(false)}>{group.label}</Link>
+                                  ) : (
+                                    <>
+                                      {/* Future route retained for launch: <Link href={group.href}>{group.label}</Link> */}
+                                      <span aria-disabled="true">{group.label}</span>
+                                    </>
+                                  )}
                               </li>
                               );
                             })}

@@ -778,6 +778,25 @@
   align-items: start;
 }
 
+.deliveryNote strong,
+.deliveryNote small {
+  display: block;
+}
+
+.stockOk { color: #2e7d32; }
+.stockLow { color: #a85f00; }
+.stockLast,
+.stockOut { color: #c62828; }
+
+.stockLow,
+.stockLast {
+  animation: catalogStockPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes catalogStockPulse {
+  50% { opacity: .68; }
+}
+
 .hero .categoryBackLink {
   display:inline-flex;
   align-items:center;
@@ -1418,6 +1437,36 @@
   padding: 0 16px 14px;
   color: var(--body);
   font: 500 13px/1.55 var(--sans);
+}
+
+@media (max-width: 1024px) {
+  .sizeFilterGroup { display: none; }
+}
+
+/* Stock messaging stays compact inside catalogue cards. */
+.mattressCard .deliveryNote {
+  display: grid !important;
+  grid-template-columns: 18px minmax(0, 1fr);
+  column-gap: 8px;
+  row-gap: 2px;
+  align-items: center;
+  font-size: 12px;
+  line-height: 1.25;
+}
+.mattressCard .deliveryNote::before {
+  grid-row: 1 / span 2;
+  width: 18px;
+  height: 18px;
+  font-size: 11px;
+}
+.mattressCard .deliveryNote strong {
+  font-size: 13px;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.mattressCard .deliveryNote small {
+  font-size: 11px;
+  line-height: 1.2;
 }
 
 /* Category card polish and stable horizontal review presentation */

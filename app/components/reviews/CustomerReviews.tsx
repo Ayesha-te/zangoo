@@ -110,10 +110,7 @@ export function CustomerReviews({
           <h2 id="customer-reviews-title">{title}</h2>
           {intro ? <p>{intro}</p> : null}
         </div>
-      </div>
-
-      <div className="customer-review-toolbar">
-        <label>
+        <label className="customer-review-sort">
           <span>Sort reviews</span>
           <select value={sort} onChange={(event) => setSort(event.target.value as ReviewSort)}>
             <option value="recent">Recent</option>
@@ -122,6 +119,8 @@ export function CustomerReviews({
             <option value="media">Reviews with media</option>
           </select>
         </label>
+      </div>
+      <div className="customer-review-toolbar">
         <div className="customer-review-slider-controls" aria-label="Review navigation">
           <button className="customer-review-prev" type="button" onClick={() => moveReviews(-1)} aria-label="Previous reviews">&#8249;</button>
           <button className="customer-review-next" type="button" onClick={() => moveReviews(1)} aria-label="Next reviews">&#8250;</button>
