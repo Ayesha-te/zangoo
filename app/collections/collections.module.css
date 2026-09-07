@@ -449,7 +449,7 @@
 .heartBadgeActive:hover,
 .heartBadgeActive:focus-visible {
   border-color: #c62828;
-  background: #fff1f1;
+  background: rgba(255,255,255,.92);
   color: #c62828;
 }
 
@@ -787,15 +787,6 @@
 .stockLow { color: #a85f00; }
 .stockLast,
 .stockOut { color: #c62828; }
-
-.stockLow,
-.stockLast {
-  animation: catalogStockPulse 1.8s ease-in-out infinite;
-}
-
-@keyframes catalogStockPulse {
-  50% { opacity: .68; }
-}
 
 .hero .categoryBackLink {
   display:inline-flex;
@@ -1432,6 +1423,11 @@
   display: none;
 }
 
+.categoryFaqItem summary { min-height:58px; align-items:center; background:#fff; }
+.categoryFaqItem[open] summary { background:#e8f0f8; color:var(--blue); }
+.categoryFaqItem summary > span { width:36px; height:36px; display:grid; place-items:center; flex:0 0 36px; border-radius:50%; background:#e8f0f8; color:var(--blue); font-size:22px; font-weight:900; }
+.categoryFaqItem[open] summary > span { background:var(--blue); color:#fff; }
+
 .categoryFaqItem p {
   margin: 0;
   padding: 0 16px 14px;
@@ -1439,7 +1435,7 @@
   font: 500 13px/1.55 var(--sans);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1280px) {
   .sizeFilterGroup { display: none; }
 }
 
@@ -1454,10 +1450,15 @@
   line-height: 1.25;
 }
 .mattressCard .deliveryNote::before {
+  display: none;
+}
+.mattressCard .stockDot {
   grid-row: 1 / span 2;
-  width: 18px;
-  height: 18px;
-  font-size: 11px;
+  position: relative;
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
 }
 .mattressCard .deliveryNote strong {
   font-size: 13px;
@@ -1468,6 +1469,17 @@
   font-size: 11px;
   line-height: 1.2;
 }
+.mattressCard .stockOk .stockDot { background: #2e7d32; animation: categoryStockPulseOk 2.5s ease-in-out infinite; }
+.mattressCard .stockLow .stockDot { background: #c6791a; animation: categoryStockPulseLow 1.8s ease-in-out infinite; }
+.mattressCard .stockLast .stockDot { background: #c62828; animation: categoryStockPulseLast 1.5s ease-in-out infinite; }
+.mattressCard .stockLast .stockLabel { animation: categoryStockTextPulse 1.5s ease-in-out infinite; }
+.mattressCard .stockOut .stockDot { background: var(--muted); animation: categoryStockFadeOut 2.5s ease-in-out infinite; }
+.mattressCard .stockOut .stockDot::after { content:""; position:absolute; inset:-1px; border-top:2px solid var(--muted); transform:rotate(45deg); }
+@keyframes categoryStockPulseOk { 0%,100%{box-shadow:0 0 0 0 rgba(46,125,50,.35)} 50%{box-shadow:0 0 0 6px rgba(46,125,50,0)} }
+@keyframes categoryStockPulseLow { 0%,100%{box-shadow:0 0 0 0 rgba(198,121,26,.4)} 50%{box-shadow:0 0 0 6px rgba(198,121,26,0)} }
+@keyframes categoryStockPulseLast { 0%,40%,100%{box-shadow:0 0 0 0 rgba(198,40,40,.45)} 20%,60%{box-shadow:0 0 0 6px rgba(198,40,40,0)} }
+@keyframes categoryStockTextPulse { 0%,100%{opacity:1} 50%{opacity:.55} }
+@keyframes categoryStockFadeOut { 0%,100%{opacity:.45} 50%{opacity:1} }
 
 /* Category card polish and stable horizontal review presentation */
 .mattressInfo > strong { margin-top: 12px; display: block; }

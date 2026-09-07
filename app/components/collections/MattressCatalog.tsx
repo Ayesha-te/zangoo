@@ -30,7 +30,8 @@ function CatalogStockNote({ count }: { count: number }) {
   const stock = getStockState(count);
   return (
     <span className={`${styles.deliveryNote} ${styles[`stock${stock.tone[0].toUpperCase()}${stock.tone.slice(1)}`]}`}>
-      <strong>{stock.label}</strong>
+      <i className={styles.stockDot} aria-hidden="true" />
+      <strong className={styles.stockLabel}>{stock.label}</strong>
       {stock.sub ? <small>{stock.sub}</small> : null}
     </span>
   );
@@ -125,7 +126,7 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
             <article className={styles.mattressCard} key={mattress.slug}>
               <div className={styles.mattressCardBody}>
                 <span className={styles.mattressImage}>
-                  <img src={mattress.gallery?.[1]?.src ?? mattress.image} alt="" />
+                  <img src={mattress.image} alt={mattress.imageAlt} />
                   <span className={styles.saleBadge} style={{ backgroundColor: getFirmnessColor(mattress.firmness) }}>{mattress.firmness}</span>
                   <FavoriteButton
                     className={styles.heartBadge}
@@ -134,7 +135,7 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
                       slug: mattress.slug,
                       name: mattress.shortName,
                       href: `/collections/bedroom/mattresses/${mattress.slug}/`,
-                      image: mattress.gallery?.[1]?.src ?? mattress.image,
+                      image: mattress.image,
                       price: cleanPrice(mattress.price),
                       firmness: mattress.firmness,
                     }}

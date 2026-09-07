@@ -581,6 +581,11 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .cc-disabled,.cc-disabled *{cursor:not-allowed!important}
 .cc-disabled:hover,.cc-disabled:focus,.cc-disabled:focus-visible{border-color:var(--bdr-dk)!important;box-shadow:none!important;outline:none!important;transform:none!important}
 .customer-review-form-wrap{margin-top:20px;border:1px solid var(--bdr);border-radius:var(--rl);background:#fff;overflow:hidden}.customer-review-form-wrap summary{padding:16px 20px;color:var(--navy);font-weight:900;cursor:pointer}.customer-review-form{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:0 20px 20px}.customer-review-form label{display:grid;gap:6px;color:var(--navy);font-size:12px;font-weight:900}.customer-review-comment,.customer-review-upload,.customer-review-preview,.customer-review-form button{grid-column:1/-1}.customer-review-upload{position:relative;display:flex!important;align-items:center;gap:12px;flex-wrap:wrap}.customer-review-upload input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}.customer-review-file-button{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border-radius:8px;background:var(--blue);color:#fff;font-weight:900;cursor:pointer}.customer-review-file-name{color:var(--muted);font-weight:700}.customer-review-form button{min-height:44px;border:0;border-radius:var(--r);background:var(--blue);color:#fff;font-weight:900;cursor:pointer}.customer-review-empty{grid-column:1/-1;padding:24px;border:1px dashed var(--bdr);border-radius:var(--r);text-align:center}
+.customer-review-form-wrap summary{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 18px;background:#fff;color:var(--navy);font:900 15px/1.3 var(--sans);list-style:none}
+.customer-review-form-wrap summary::-webkit-details-marker{display:none}
+.customer-review-form-wrap summary::after{content:"+";width:36px;height:36px;display:grid;place-items:center;flex:0 0 36px;border-radius:50%;background:#e8f0f8;color:var(--blue);font:900 22px/1 var(--sans)}
+.customer-review-form-wrap[open] summary{background:#e8f0f8;color:var(--blue)}
+.customer-review-form-wrap[open] summary::after{content:"−";background:var(--blue);color:#fff}
 .customer-review-form-wrap::details-content{block-size:0;opacity:0;overflow:hidden;transition:block-size .32s ease,opacity .24s ease;transition-behavior:allow-discrete}
 .customer-review-form-wrap[open]::details-content{block-size:auto;opacity:1}
 @media(max-width:900px){.customer-review-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.customer-reviews{padding:56px 24px}}
@@ -782,7 +787,7 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .whatsapp-float{
   position:fixed;
   bottom:24px;
-  right:24px;
+  left:24px;
   z-index:500;
   width:48px;
   height:48px;
@@ -805,7 +810,7 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 @media(max-width:580px){
   .btt{bottom:20px;right:72px;width:44px;height:44px}
   .btt svg{width:18px;height:18px}
-  .whatsapp-float{bottom:20px;right:16px;width:44px;height:44px}
+  .whatsapp-float{bottom:20px;left:16px;right:auto;width:44px;height:44px}
   .whatsapp-float svg{width:23px;height:23px}
 }
 
@@ -836,18 +841,27 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .hero-vis .hero-certifications .hero-trust{position:static;inset:auto;transform:none;width:100%;max-width:none;height:64px;min-height:64px;margin:0}
 
 /* Review title and compact sort control share one row at every viewport. */
-.customer-reviews-head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:16px}
+.customer-reviews-head{display:block}
 .customer-reviews-head .customer-review-sort{display:flex;align-items:center;align-self:center;width:auto;gap:10px;white-space:nowrap}
 .customer-reviews-head .customer-review-sort select{width:132px;min-height:40px;appearance:none;-webkit-appearance:none;padding:8px 34px 8px 12px;background-image:linear-gradient(45deg,transparent 50%,var(--navy) 50%),linear-gradient(135deg,var(--navy) 50%,transparent 50%);background-position:calc(100% - 16px) 50%,calc(100% - 11px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
-.customer-review-toolbar{justify-content:flex-end}
+.customer-review-toolbar{justify-content:flex-start;align-items:center}
 @media(max-width:580px){
-  .customer-reviews-head{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:10px}
+  .customer-reviews-head{display:block}
   .customer-reviews-head h2{font-size:clamp(24px,7vw,32px)}
   .customer-reviews-head p{font-size:12px;line-height:1.45}
   .customer-reviews-head .customer-review-sort{display:grid;gap:4px;width:auto;align-self:start}
   .customer-reviews-head .customer-review-sort span{font-size:10px}
   .customer-reviews-head .customer-review-sort select{width:104px;min-height:38px;padding-left:10px}
 }
+
+.customer-review-slider .customer-review-grid{align-items:start}
+.customer-review-slider .customer-review-card{min-height:0;height:auto}
+.customer-review-read-more{align-self:flex-start;margin-top:8px;padding:0;border:0;background:transparent;color:var(--blue);font:800 12px/1.3 var(--sans);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.customer-review-modal-backdrop{position:fixed;inset:0;z-index:2600;display:grid;place-items:center;padding:20px;background:rgba(14,35,56,.62)}
+.customer-review-modal{position:relative;width:min(560px,100%);max-height:min(75vh,620px);overflow:auto;padding:28px;border-radius:16px;background:#fff;box-shadow:0 24px 70px rgba(14,35,56,.3)}
+.customer-review-modal h3{margin:0 42px 14px 0;color:var(--navy)}
+.customer-review-modal p{margin:0;color:var(--body);line-height:1.7}
+.customer-review-modal-close{position:absolute;top:12px;right:12px;width:36px;height:36px;border:1px solid var(--bdr);border-radius:50%;background:#fff;color:var(--navy);font-size:24px;cursor:pointer}
 
 /* Mattress product landing pages */
 .mattress-landing{

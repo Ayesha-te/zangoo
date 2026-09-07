@@ -17,6 +17,7 @@ type ReviewSort = "recent" | "highest" | "lowest" | "media";
 const MAX_SOURCE_BYTES = 12 * 1024 * 1024;
 const MAX_OUTPUT_BYTES = 2.5 * 1024 * 1024;
 const MAX_IMAGE_EDGE = 1600;
+const REVIEW_PREVIEW_WORDS = 28;
 
 async function compressReviewImage(file: File) {
   if (!file.type.startsWith("image/") || file.size > MAX_SOURCE_BYTES) return null;
@@ -52,6 +53,7 @@ export function CustomerReviews({
   const [uploads, setUploads] = useState<string[]>([]);
   const [uploadError, setUploadError] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [expandedReview, setExpandedReview] = useState<CustomerReview | null>(null);
   const reviewGridRef = useRef<HTMLDivElement>(null);
   const reviewFormRef = useRef<HTMLDetailsElement>(null);
 
@@ -110,6 +112,8 @@ export function CustomerReviews({
           <h2 id="customer-reviews-title">{title}</h2>
           {intro ? <p>{intro}</p> : null}
         </div>
+      </div>
+      <div className="customer-review-toolbar">
         <label className="customer-review-sort">
           <span>Sort reviews</span>
           <select value={sort} onChange={(event) => setSort(event.target.value as ReviewSort)}>
@@ -119,8 +123,6 @@ export function CustomerReviews({
             <option value="media">Reviews with media</option>
           </select>
         </label>
-      </div>
-      <div className="customer-review-toolbar">
         <div className="customer-review-slider-controls" aria-label="Review navigation">
           <button className="customer-review-prev" type="button" onClick={() => moveReviews(-1)} aria-label="Previous reviews">&#8249;</button>
           <button className="customer-review-next" type="button" onClick={() => moveReviews(1)} aria-label="Next reviews">&#8250;</button>
@@ -140,7 +142,10 @@ export function CustomerReviews({
               <span role="img" aria-label={`${review.rating} out of 5 stars`}>{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span>
               <time dateTime={review.date}>{new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric" }).format(new Date(review.date))}</time>
             </div>
-            <p>&ldquo;{review.comment}&rdquo;</p>
+            <p>&ldquo;{review.comment.split(/\s+/).slice(0, REVIEW_PREVIEW_WORDS).join(" ")}{review.comment.split(/\s+/).length > REVIEW_PREVIEW_WORDS ? "…" : ""}&rdquo;</p>
+            {review.comment.split(/\s+/).length > REVIEW_PREVIEW_WORDS ? (
+              <button className="customer-review-read-more" type="button" onClick={() => setExpandedReview(review)}>Read more</button>
+            ) : null}
             {review.media?.length ? (
               <div className="customer-review-media">
                 {review.media.map((source, index) => <img src={source} alt={`Photo attached to ${review.name}'s review ${index + 1}`} key={`${source}-${index}`} />)}
@@ -169,6 +174,15 @@ export function CustomerReviews({
           <button type="submit">Submit review</button>
         </form>
       </details>
+      {expandedReview ? (
+        <div className="customer-review-modal-backdrop" role="presentation" onMouseDown={() => setExpandedReview(null)}>
+          <section className="customer-review-modal" role="dialog" aria-modal="true" aria-labelledby="full-review-title" onMouseDown={(event) => event.stopPropagation()}>
+            <button className="customer-review-modal-close" type="button" onClick={() => setExpandedReview(null)} aria-label="Close full review">&times;</button>
+            <h3 id="full-review-title">{expandedReview.name}&apos;s review</h3>
+            <p>&ldquo;{expandedReview.comment}&rdquo;</p>
+          </section>
+        </div>
+      ) : null}
     </section>
   );
 }
