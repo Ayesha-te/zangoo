@@ -76,7 +76,7 @@
   display: inline-flex;
   width: max-content;
   max-width: 100%;
-  margin-top: 8px;
+  margin: 0 0 0 2px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -86,9 +86,13 @@
   font-size: 13px;
   font-weight: 900;
   line-height: 1.2;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration: none;
+  text-underline-offset: 0;
+  vertical-align: baseline;
+  border-radius: 4px;
+  transition: background .2s ease, color .2s ease;
 }
+.collapsibleButton:hover,.collapsibleButton:focus-visible{background:var(--blue);color:#fff;outline:none}
 
 .grid {
   width: min(100%, 1200px);
@@ -133,8 +137,9 @@
 }
 
 .badge {
-  background: rgba(77, 102, 125, 0.1);
-  color: var(--muted);
+  background: #1f63b5;
+  color: #fff;
+  box-shadow: 0 2px 0 rgba(15,58,110,.25);
 }
 
 .liveBadge {
@@ -1427,6 +1432,9 @@
 .categoryFaqItem[open] summary { background:#e8f0f8; color:var(--blue); }
 .categoryFaqItem summary > span { width:36px; height:36px; display:grid; place-items:center; flex:0 0 36px; border-radius:50%; background:#e8f0f8; color:var(--blue); font-size:22px; font-weight:900; }
 .categoryFaqItem[open] summary > span { background:var(--blue); color:#fff; }
+.categoryFaqItem summary > span{font-size:0}
+.categoryFaqItem summary > span::after{content:"+";font-size:22px}
+.categoryFaqItem[open] summary > span::after{content:"−"}
 
 .categoryFaqItem p {
   margin: 0;
@@ -1438,6 +1446,9 @@
 @media (max-width: 1280px) {
   .sizeFilterGroup { display: none; }
 }
+
+/* Size filtering is intentionally disabled until size variants are launched. */
+.sizeFilterGroup{display:none !important}
 
 /* Stock messaging stays compact inside catalogue cards. */
 .mattressCard .deliveryNote {
