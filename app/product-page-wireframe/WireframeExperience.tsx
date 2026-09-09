@@ -306,7 +306,8 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
         </div>
       </section>
 
-      <section className={styles.compare} aria-labelledby="compare-title">
+      {/* Compare section retained for future re-enable; intentionally hidden for launch. */}
+      {false && <section className={styles.compare} aria-labelledby="compare-title">
         <h2 id="compare-title">Compare This Mattress</h2>
         <p className={styles.compareHint}>Select another mattress to see the differences side by side.</p>
 
@@ -412,7 +413,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             </div>
           </div>
         ) : null}
-      </section>
+      </section>}
 
       <ProductRail title="Related Products" products={relatedProducts} />
       <ProductRail title="Recently Viewed" products={[product, ...relatedProducts].slice(0, 6)} />

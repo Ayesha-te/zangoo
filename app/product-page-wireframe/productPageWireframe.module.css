@@ -364,7 +364,8 @@
   border: 1px solid var(--bdr);
   border-radius: 8px;
   background: #fff;
-  color: var(--navy);
+  color: rgba(26,46,68,.5);
+  opacity:.72;
   cursor: pointer;
   font: 900 24px/1 var(--sans);
   box-shadow: var(--sh1);
@@ -384,6 +385,7 @@
   border-color: #c62828;
   background: #fff;
   color: #c62828;
+  opacity:1;
 }
 
 /* Shared accordion treatment. */

@@ -639,7 +639,7 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
     async function loadWordPressPosts() {
       try {
         const response = await fetch(postsUrl.toString(), {
-          cache: "force-cache",
+          cache: "no-store",
           signal: controller.signal,
         });
 

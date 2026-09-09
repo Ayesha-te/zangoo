@@ -32,7 +32,8 @@ export async function getBlogPosts(): Promise<WordPressPost[]> {
   url.searchParams.set("order", "desc");
 
   try {
-    const response = await fetch(url, { next: { revalidate: 300 } });
+    // Always fetch the latest featured image/content from WordPress.
+    const response = await fetch(url, { cache: "no-store" });
     if (!response.ok) throw new Error(`WordPress returned ${response.status}`);
     const posts = (await response.json()) as WordPressPost[];
     return posts.length ? posts : localWordPressPosts;
@@ -51,7 +52,7 @@ export async function getBlogPost(slug: string): Promise<WordPressPost | null> {
   url.searchParams.set("per_page", "1");
 
   try {
-    const response = await fetch(url, { next: { revalidate: 300 } });
+    const response = await fetch(url, { cache: "no-store" });
     if (!response.ok) throw new Error(`WordPress returned ${response.status}`);
     const posts = (await response.json()) as WordPressPost[];
     return posts[0] ?? null;

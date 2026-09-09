@@ -507,6 +507,15 @@ section[id]{scroll-margin-top:calc(var(--nav) + 16px)}
 @media(max-width:580px){.campaign-popup{right:12px;left:12px;bottom:12px;width:auto;padding:20px}.campaign-popup h2{font-size:22px}}
 /* ── FOOTER ── */
 footer{background:var(--bg2);padding:42px 0 28px;border-top:1px solid rgba(184,203,224,.1)}
+.simple-faq-list article{border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;margin:0 0 12px;background:#fff}
+.simple-faq-list article button{width:100%;display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border:0;background:transparent;color:var(--navy);font:700 17px var(--sans);text-align:left;cursor:pointer}
+.simple-faq-list article button i{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:#e8f0f8;color:var(--blue);font-style:normal;font-size:22px;transition:background .3s ease,color .3s ease,transform .3s ease}
+.simple-faq-list article.is-open button i{background:var(--blue);color:#fff}
+.simple-faq-answer{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s ease}
+.simple-faq-answer p{overflow:hidden;margin:0;padding:0 22px;color:var(--body)}
+.simple-faq-list article.is-open .simple-faq-answer{grid-template-rows:1fr}
+.simple-faq-list article.is-open .simple-faq-answer p{padding:0 22px 20px}
+.fi-icon,.lp-faq-icon{transition:background .3s ease,color .3s ease,transform .3s ease}
 .foot-in{max-width:1200px;margin:0 auto;padding:0 64px;display:grid;grid-template-columns:minmax(240px,1.25fr) minmax(120px,.55fr) minmax(180px,.75fr) minmax(240px,1fr);grid-template-areas:"brand main support news" "copy copy copy copy";align-items:start;gap:28px 34px}
 .foot-brand{grid-area:brand;max-width:340px;min-width:0}
 .foot-logo{display:inline-flex;font-family:var(--serif);font-size:20px;font-weight:600;line-height:1.2;color:rgba(255,255,255,.94)}

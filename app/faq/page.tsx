@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { faqs } from "@/app/data/home";
+import { FaqAccordion } from "@/app/components/site/FaqAccordion";
 
 export const metadata: Metadata = {
   title: "FAQ | Furniture Co.",
@@ -16,14 +17,7 @@ export default function FaqPage() {
         <section className="wrap simple-page-inner">
           <span className="sec-lbl">Help Centre</span>
           <h1>Frequently Asked Questions</h1>
-          <div className="simple-faq-list">
-            {faqs.map(([question, answer]) => (
-              <article key={question}>
-                <h2>{question}</h2>
-                <p>{answer}</p>
-              </article>
-            ))}
-          </div>
+          <FaqAccordion faqs={faqs} />
         </section>
       </main>
       <SiteFooter />

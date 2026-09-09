@@ -29,7 +29,19 @@ export function MattressFilters({
   onClearAll,
 }: MattressFiltersProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const hasSelection = selectedNeed.length > 0 || selectedFeel.length > 0 || selectedSize.length > 0;
+  const [isMobile, setIsMobile] = useState(false);
+  const [draftNeed, setDraftNeed] = useState(selectedNeed);
+  const [draftFeel, setDraftFeel] = useState(selectedFeel);
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 1024px)");
+    const update = () => setIsMobile(query.matches);
+    update(); query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  useEffect(() => { if (!isOpen) { setDraftNeed(selectedNeed); setDraftFeel(selectedFeel); } }, [isOpen, selectedNeed, selectedFeel]);
+  const hasSelection = (isMobile ? draftNeed.length > 0 || draftFeel.length > 0 : selectedNeed.length > 0 || selectedFeel.length > 0) || selectedSize.length > 0;
+  const shownNeed = isMobile ? draftNeed : selectedNeed;
+  const shownFeel = isMobile ? draftFeel : selectedFeel;
 
   useEffect(() => {
     if (!isOpen) return;
@@ -73,6 +85,7 @@ export function MattressFilters({
             </button>
           </div>
         </div>
+        {isMobile && (draftNeed.length || draftFeel.length) ? <div className={styles.activeFilterChips}>{[...draftNeed, ...draftFeel].map((filter) => <button type="button" key={filter} onClick={() => { setDraftNeed((v) => v.filter((x) => x !== filter)); setDraftFeel((v) => v.filter((x) => x !== filter)); }} aria-label={`Remove ${filter}`}>{filter} <span>×</span></button>)}</div> : null}
 
         <div className={styles.filterGroup}>
           <strong>Mattress Type</strong>
@@ -80,8 +93,8 @@ export function MattressFilters({
             <label className={styles.filterOption} key={filter}>
               <input
                 type="checkbox"
-                checked={selectedNeed.includes(filter)}
-                onChange={() => onToggleNeed(filter)}
+              checked={shownNeed.includes(filter)}
+                onChange={() => isMobile ? setDraftNeed((v) => v.includes(filter) ? v.filter((x) => x !== filter) : [...v, filter]) : onToggleNeed(filter)}
               />
               <span>{filter}</span>
             </label>
@@ -94,8 +107,8 @@ export function MattressFilters({
             <label className={styles.filterOption} key={filter}>
               <input
                 type="checkbox"
-                checked={selectedFeel.includes(filter)}
-                onChange={() => onToggleFeel(filter)}
+              checked={shownFeel.includes(filter)}
+              onChange={() => isMobile ? setDraftFeel((v) => v.includes(filter) ? v.filter((x) => x !== filter) : [...v, filter]) : onToggleFeel(filter)}
               />
               <span>{filter}</span>
             </label>
@@ -123,7 +136,7 @@ export function MattressFilters({
         </div>
 
         {hasSelection ? (
-          <button type="button" className={styles.filterApplyBtn} onClick={() => setIsOpen(false)}>
+            <button type="button" className={styles.filterApplyBtn} onClick={() => { if (isMobile) { onClearAll(); draftNeed.forEach(onToggleNeed); draftFeel.forEach(onToggleFeel); } setIsOpen(false); }}>
             Apply Filters
           </button>
         ) : null}
