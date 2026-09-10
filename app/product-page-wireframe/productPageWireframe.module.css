@@ -1424,6 +1424,7 @@
 .faqPanel[data-open] {
   grid-template-rows: 1fr;
 }
+.faqPanel:not([data-open]) .faqPanelInner{max-height:0;padding-top:0;padding-bottom:0}
 
 .faqPanelInner {
   overflow: hidden;

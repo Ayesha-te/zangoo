@@ -516,6 +516,9 @@ footer{background:var(--bg2);padding:42px 0 28px;border-top:1px solid rgba(184,2
 .simple-faq-list article.is-open .simple-faq-answer{grid-template-rows:1fr}
 .simple-faq-list article.is-open .simple-faq-answer p{padding:0 22px 20px}
 .fi-icon,.lp-faq-icon{transition:background .3s ease,color .3s ease,transform .3s ease}
+button[aria-pressed="false"]:has(> span){opacity:.72;color:rgba(26,46,68,.5)}
+button[aria-pressed="false"]:has(> span):hover,button[aria-pressed="false"]:has(> span):focus-visible{opacity:1;color:#c62828;border-color:#c62828}
+button[aria-pressed="true"]:has(> span){opacity:1!important;color:#c62828!important;border-color:#c62828!important}
 .foot-in{max-width:1200px;margin:0 auto;padding:0 64px;display:grid;grid-template-columns:minmax(240px,1.25fr) minmax(120px,.55fr) minmax(180px,.75fr) minmax(240px,1fr);grid-template-areas:"brand main support news" "copy copy copy copy";align-items:start;gap:28px 34px}
 .foot-brand{grid-area:brand;max-width:340px;min-width:0}
 .foot-logo{display:inline-flex;font-family:var(--serif);font-size:20px;font-weight:600;line-height:1.2;color:rgba(255,255,255,.94)}

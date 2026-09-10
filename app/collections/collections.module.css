@@ -1437,6 +1437,7 @@
 .categoryFaqItem summary > span{font-size:0}
 .categoryFaqItem summary > span::after{content:"+";font-size:22px}
 .categoryFaqItem[open] summary > span::after{content:"−"}
+.categoryFaqItem:not([open]) summary + p{display:none}
 
 .categoryFaqItem p {
   margin: 0;
@@ -1452,6 +1453,14 @@
 /* Size filtering is intentionally disabled until size variants are launched. */
 .sizeFilterGroup{display:none !important}
 .activeFilterChips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 4px}.activeFilterChips button{border:1px solid var(--blue);border-radius:999px;background:#e8f0f8;color:var(--blue);padding:5px 9px;font:700 12px var(--sans);cursor:pointer}.activeFilterChips span{font-size:15px;margin-left:3px}
+@media (min-width:901px) and (max-width:1024px){
+  .mattressLayout{grid-template-columns:1fr;padding:0 24px 72px}
+  .filterTrigger{display:flex!important;align-items:center;justify-content:center;gap:8px;width:100%;min-height:44px;margin:0 auto 16px;border:1px solid var(--bdr);border-radius:var(--r);background:#fff;color:var(--navy);font:900 13px/1 var(--sans);cursor:pointer}
+  .filterSidebar{display:none}
+  .filterSidebarOpen{display:flex;flex-direction:column;position:fixed;inset:0;z-index:800;width:100%;max-height:100vh;overflow-y:auto;background:#fff;padding:18px 18px 100px}
+  .filterHead .filterCloseBtn{display:grid;place-items:center;width:46px;height:46px;border:1px solid rgba(26,46,68,.16);border-radius:50%;background:var(--bg1);color:var(--navy);font-size:28px;cursor:pointer}
+  .filterApplyBtn{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:801;min-height:52px;align-items:center;justify-content:center;background:var(--navy);color:#fff;border:0;font:900 14px/1 var(--sans);cursor:pointer}
+}
 
 /* Stock messaging stays compact inside catalogue cards. */
 .mattressCard .deliveryNote {
