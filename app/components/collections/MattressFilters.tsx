@@ -14,6 +14,7 @@ type MattressFiltersProps = {
   onToggleFeel: (filter: string) => void;
   onToggleSize: (filter: string) => void;
   onClearAll: () => void;
+  onApplyFilters?: (need: string[], feel: string[]) => void;
 };
 
 export function MattressFilters({
@@ -27,6 +28,7 @@ export function MattressFilters({
   onToggleFeel,
   onToggleSize,
   onClearAll,
+  onApplyFilters,
 }: MattressFiltersProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -136,7 +138,7 @@ export function MattressFilters({
         </div>
 
         {hasSelection ? (
-            <button type="button" className={styles.filterApplyBtn} onClick={() => { if (isMobile) { onClearAll(); draftNeed.forEach(onToggleNeed); draftFeel.forEach(onToggleFeel); } setIsOpen(false); }}>
+            <button type="button" className={styles.filterApplyBtn} onClick={() => { if (isMobile) onApplyFilters?.(draftNeed, draftFeel); setIsOpen(false); }}>
             Apply Filters
           </button>
         ) : null}

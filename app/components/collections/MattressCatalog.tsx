@@ -42,6 +42,7 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
   const [selectedFeel, setSelectedFeel] = useState<string[]>([]);
   const [selectedSize, setSelectedSize] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<SortOption>("best-selling");
+  const [pendingSort, setPendingSort] = useState<SortOption>("best-selling");
   const [compareSelection, setCompareSelection] = useState<string[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -101,6 +102,7 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
         onToggleFeel={(filter) => toggle(selectedFeel, setSelectedFeel, filter)}
         onToggleSize={(filter) => toggle(selectedSize, setSelectedSize, filter)}
         onClearAll={clearAll}
+        onApplyFilters={(need, feel) => { setSelectedNeed(need); setSelectedFeel(feel); }}
       />
 
       <section className={styles.mattressResults} aria-label="Orthopaedic mattress results">
@@ -112,11 +114,12 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
           <div className={styles.mattressToolbarActions}>
             <label>
               Sort by:
-              <select value={sortBy} onChange={(event) => setSortBy(event.target.value as SortOption)}>
+              <select value={pendingSort} onChange={(event) => { const value = event.target.value as SortOption; setPendingSort(value); setSortBy(value); }}>
                 <option value="best-selling">Best selling</option>
                 <option value="price-low">Price low to high</option>
                 <option value="firmness">Firmness</option>
               </select>
+              <button type="button" className={styles.sortApplyBtn} onClick={() => setSortBy(pendingSort)}>Apply</button>
             </label>
           </div>
         </div>

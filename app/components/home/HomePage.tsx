@@ -730,7 +730,7 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
 }
 
 function Faq() {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [activeIndex, setActiveIndex] = useState<Set<number>>(new Set());
   const columns = [
     faqs.filter((_, index) => index % 2 === 0),
     faqs.filter((_, index) => index % 2 === 1),
@@ -749,7 +749,7 @@ function Faq() {
             <div className="faq-col" key={columnIndex}>
               {column.map(([question, answer]) => {
                 const index = faqs.findIndex(([faqQuestion]) => faqQuestion === question);
-                const isOpen = activeIndex === index;
+                const isOpen = activeIndex.has(index);
                 const answerId = `faq-answer-${index}`;
 
                 return (
@@ -759,7 +759,11 @@ function Faq() {
                       aria-expanded={isOpen}
                       aria-controls={answerId}
                       type="button"
-                      onClick={() => setActiveIndex(isOpen ? null : index)}
+                      onClick={() => setActiveIndex((current) => {
+                        const next = new Set(current);
+                        if (next.has(index)) next.delete(index); else next.add(index);
+                        return next;
+                      })}
                     >
                       <span className="fi-q">{question}</span>
                       <span className="fi-icon" aria-hidden="true">+</span>
