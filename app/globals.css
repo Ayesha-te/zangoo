@@ -556,11 +556,13 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .simple-faq-list p{font-size:15px;line-height:1.7}
 .wishlist-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:28px}
 .wishlist-card{overflow:hidden;border:1px solid var(--bdr);border-radius:var(--rl);background:#fff;box-shadow:var(--sh1)}
+.wishlist-card{transition:transform .25s ease,box-shadow .25s ease}.wishlist-card:hover{transform:translateY(-4px);box-shadow:0 14px 30px rgba(26,46,68,.14)}
 .wishlist-card>img{width:100%;height:190px;display:block;object-fit:contain;background:var(--bg1)}
 .wishlist-card>div{padding:18px}
 .wishlist-card h2{margin:5px 0 10px;color:var(--navy);font:900 20px/1.2 var(--sans)}
 .wishlist-card>div>span{color:var(--blue);font-size:11px;font-weight:900;text-transform:uppercase}
 .wishlist-card>div>strong{color:var(--navy);font-size:20px}
+.wishlist-actions{display:flex;gap:10px;margin-top:16px}.wishlist-actions a,.wishlist-actions button{flex:1;display:inline-flex;justify-content:center;align-items:center;min-height:40px;padding:8px 12px;border-radius:8px;font:800 12px var(--sans);text-decoration:none;cursor:pointer}.wishlist-actions a{background:var(--navy);color:#fff}.wishlist-actions button{border:1px solid #d9a0a0;background:#fff;color:#b5222b}.wishlist-actions button:hover{background:#fff0f0}
 .wishlist-actions{display:flex;gap:8px;margin-top:16px}
 .wishlist-actions a,.wishlist-actions button{min-height:40px;display:inline-flex;align-items:center;justify-content:center;flex:1;border:1px solid var(--blue);border-radius:var(--r);padding:8px 12px;font:900 12px/1 var(--sans);cursor:pointer}
 .wishlist-actions a{background:var(--blue);color:#fff}.wishlist-actions button{background:#fff;color:#c62828;border-color:#c62828}

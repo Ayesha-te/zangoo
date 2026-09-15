@@ -224,17 +224,10 @@ const allOrthoMattressProducts: MattressProduct[] = [
     firmness: "Medium to Firm",
     description:
       "This UK-crafted, double-sided orthopaedic mattress features a medium-to-firm open coil spring system reinforced with wire edge support. It is layered with deep polyester filling, finished in quality damask fabric with deep tufting, and measures approximately 26cm in depth.",
-    image: "/capri.png",
-    imageAlt: "Capri Ortho Mattress styled on a divan bed in a bright bedroom",
+    image: "/Capri Ortho Product Images/px-conversions/Capri Ortho Double Morning.webp",
+    imageAlt: "Capri Ortho Double Morning product image",
     gallery: [
-      {
-        src: "/capri.png",
-        alt: "Capri Ortho Mattress styled on a divan bed in a bright bedroom",
-      },
-      {
-        src: "/capri-ortho-mattress-product-cutout.webp",
-        alt: "Capri Ortho Mattress product view on a white background",
-      },
+      ...["Double Morning", "Double Evening", "King Morning", "King Evening", "Single Morning", "Single Evening"].map((view) => ({ src: `/Capri Ortho Product Images/px-conversions/Capri Ortho ${view}.webp`, alt: `Capri Ortho ${view} product image` })),
     ],
     bullets: ["Firm orthopaedic support", "Quilted comfort surface", "Free UK delivery", "Mattress sale active"],
     specs: [
@@ -277,12 +270,10 @@ const allOrthoMattressProducts: MattressProduct[] = [
     firmness: "Medium to Firm",
     description:
       "This UK-crafted, double-sided orthopaedic mattress features a medium-to-firm open coil spring system with wire edge support and a deep polyester filling. Measuring approximately 26cm in depth, the design is finished with hand tufting and a quality damask fabric.",
-    image: "/classic.png",
-    imageAlt: "Simple bedroom with a neatly made bed",
+    image: "/classic ortho product images/classic/Classic Ortho Double Morning.webp",
+    imageAlt: "Classic Ortho Double Morning product image",
     gallery: [
-      { src: "/classic.png", alt: "Classic Ortho mattress" },
-      { src: "https://images.pexels.com/photos/6782567/pexels-photo-6782567.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "Classic Ortho close-up with pillows" },
-      { src: "https://images.pexels.com/photos/262048/pexels-photo-262048.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "Classic Ortho styled in a minimal bedroom" },
+      ...["Double Morning", "Double Evening", "King Morning", "King Evening", "Single Morning", "Single Evening"].map((view) => ({ src: `/classic ortho product images/classic/Classic Ortho ${view}.webp`, alt: `Classic Ortho ${view} product image` })),
     ],
     bullets: ["Medium to firm support", "Traditional turnable build", "Free UK delivery", "1-year guarantee"],
     specs: [
@@ -325,12 +316,10 @@ const allOrthoMattressProducts: MattressProduct[] = [
     firmness: "Firm",
     description:
       "Crafted in the UK, this firm single-sided orthopaedic spring mattress features an approximate depth of 26cm and a deep adaptive memory foam layer. The hand-tufted design is finished with luxurious knitted fabric and complete with foam encapsulation.",
-    image: "/hampton.png",
-    imageAlt: "Bright bedroom with a firm mattress styled on a bed frame",
+    image: "/Hampton Ortho Product Images/hampton/Hampton Ortho Double Morning.webp",
+    imageAlt: "Hampton Ortho Double Morning product image",
     gallery: [
-      { src: "/hampton.png", alt: "Hampton Ortho mattress" },
-      { src: "https://images.pexels.com/photos/6580227/pexels-photo-6580227.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "Hampton Ortho close-up in a well-appointed bedroom" },
-      { src: "https://images.pexels.com/photos/1454806/pexels-photo-1454806.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "Hampton Ortho styled with bedside lighting" },
+      ...["Double Morning", "Double Evening", "King Morning", "King Evening", "Single Morning", "Single Evening"].map((view) => ({ src: `/Hampton Ortho Product Images/hampton/Hampton Ortho ${view}.webp`, alt: `Hampton Ortho ${view} product image` })),
     ],
     bullets: ["Firm support feel", "Non-turn construction", "Free UK delivery", "1-year guarantee"],
     specs: [
@@ -373,12 +362,10 @@ const allOrthoMattressProducts: MattressProduct[] = [
     firmness: "Extra Firm",
     description:
       "This extra-firm orthopaedic open coil spring mattress features quality damask fabric, a wire edge and butterfly support, coir filling, a deep polyester layer, and hand tufting. It has an approximate depth of 26cm and is crafted in the UK.",
-    image: "/deluxe.png",
-    imageAlt: "Well-appointed bedroom with a premium mattress styled on a bed frame",
+    image: "/Deluxe Ortho Product Images/deluxe/Deluxe Ortho Double Morning.webp",
+    imageAlt: "Deluxe Ortho Double Morning product image",
     gallery: [
-      { src: "/deluxe.png", alt: "Deluxe Ortho mattress" },
-      { src: "https://images.pexels.com/photos/6316526/pexels-photo-6316526.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "Deluxe Ortho close-up on a bed frame" },
-      { src: "https://images.pexels.com/photos/6474471/pexels-photo-6474471.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "Deluxe Ortho styled in a simple bedroom" },
+      ...["Double Morning", "Double Evening", "King Morning", "King Evening", "Single Morning", "Single Evening"].map((view) => ({ src: `/Deluxe Ortho Product Images/deluxe/Deluxe Ortho ${view}.webp`, alt: `Deluxe Ortho ${view} product image` })),
     ],
     bullets: ["Extra-firm support", "Reinforced heavy-duty build", "Free UK delivery", "1-year guarantee"],
     specs: [

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-export function FaqAccordion({ faqs }: { faqs: Array<[string, string]> }) {
+export function FaqAccordion({ faqs }: { faqs: ReadonlyArray<readonly [string, string]> }) {
   const [open, setOpen] = useState<number | null>(null);
   return <div className="simple-faq-list">{faqs.map(([question, answer], index) => {
     const active = open === index;

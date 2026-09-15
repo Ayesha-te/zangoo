@@ -797,25 +797,25 @@
 
 :global(.mattress-landing .lp-faq-item){
   border:1px solid var(--bdr)!important;
-  border-radius:var(--rl)!important;
+  border-radius:16px!important;
   background:#fff!important;
   overflow:hidden!important;
 }
 
 :global(.mattress-landing .lp-faq-btn){
   width:100%!important;
-  min-height:60px!important;
+  min-height:72px!important;
   cursor:pointer!important;
   border:0!important;
   background:none!important;
-  padding:18px 22px!important;
+  padding:18px 28px!important;
   display:flex!important;
   align-items:center!important;
   justify-content:space-between!important;
   gap:16px!important;
   text-align:left!important;
   color:var(--navy)!important;
-  font:900 14px/1.4 var(--sans)!important;
+  font:900 15px/1.35 var(--sans)!important;
   transition:background var(--tr)!important;
 }
 
@@ -828,20 +828,19 @@
 }
 
 :global(.mattress-landing .lp-faq-icon){
-  width:28px!important;
-  height:28px!important;
-  flex:0 0 28px!important;
+  width:36px!important;
+  height:36px!important;
+  flex:0 0 36px!important;
   border-radius:50%!important;
   background:var(--bg4)!important;
   display:grid!important;
   place-items:center!important;
   color:var(--blue)!important;
-  font:400 17px/1 var(--sans)!important;
-  transition:transform var(--tr),background var(--tr),color var(--tr)!important;
+  font:900 22px/1 var(--sans)!important;
+  transition:background var(--tr),color var(--tr)!important;
 }
 
 :global(.mattress-landing .lp-faq-btn[aria-expanded=true] .lp-faq-icon){
-  transform:rotate(45deg)!important;
   background:var(--blue)!important;
   color:#fff!important;
 }
@@ -849,23 +848,40 @@
 :global(.mattress-landing .lp-faq-body){
   display:grid!important;
   grid-template-rows:0fr!important;
-  padding:0 22px!important;
+  padding:0 28px!important;
   transition:grid-template-rows .3s cubic-bezier(.22,1,.36,1),padding .3s cubic-bezier(.22,1,.36,1)!important;
 }
 
 :global(.mattress-landing .lp-faq-body[aria-hidden=false]){
   grid-template-rows:1fr!important;
-  padding:0 22px 18px!important;
+  padding:0 28px 18px!important;
 }
 
 :global(.mattress-landing .lp-faq-body p){
   min-height:0!important;
   overflow:hidden!important;
   margin:0!important;
-  padding-top:14px!important;
+  padding-top:16px!important;
   border-top:1px solid var(--bdr)!important;
   color:var(--body)!important;
-  font:500 14px/1.7 var(--sans)!important;
+  font:500 14px/1.65 var(--sans)!important;
+}
+
+@media (max-width: 700px){
+  :global(.mattress-landing .lp-faq-btn){
+    padding:16px!important;
+    padding-right:58px!important;
+    position:relative!important;
+  }
+  :global(.mattress-landing .lp-faq-icon){
+    position:absolute!important;
+    right:14px!important;
+  }
+  :global(.mattress-landing .lp-faq-body),
+  :global(.mattress-landing .lp-faq-body[aria-hidden=false]){
+    padding-left:16px!important;
+    padding-right:16px!important;
+  }
 }
 
 :global(.mattress-landing .lp-cta){

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MattressCatalog } from "@/app/components/collections/MattressCatalog";
 import { CollapsibleIntro } from "@/app/components/site/CollapsibleIntro";
+import { ProductFaq } from "@/app/components/site/ProductFaq";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { collectionCategories } from "@/app/data/home";
 import { orthoMattressProducts } from "@/app/data/mattressProducts";
@@ -88,13 +89,13 @@ export default async function CollectionProductPage({ params }: ProductPageProps
     },
   ];
   const mattressFaqs = [
-    "Does an orthopaedic mattress help with back pain?",
-    "What type of mattress is best for side sleepers?",
-    "What is the difference between orthopaedic and normal mattress?",
-    "Is an orthopaedic mattress worth it?",
-    "Which firmness level is right for me?",
-    "How do I care for my orthopaedic mattress?",
-  ];
+    ["Does an orthopaedic mattress help with back pain?", "The supportive orthopaedic construction is designed to maintain spinal alignment and reduce pressure points. Our team can also help you choose the right firmness for your needs."],
+    ["What type of mattress is best for side sleepers?", "Side sleepers usually benefit from a medium to firm mattress with enough comfort on the shoulder and hip areas. Message us for guidance based on your preferred feel."],
+    ["What is the difference between orthopaedic and normal mattress?", "An orthopaedic mattress is built around firmer, more supportive materials to help keep the body evenly supported, while a standard mattress may prioritise a softer comfort feel."],
+    ["Is an orthopaedic mattress worth it?", "It can be a strong choice if you prefer stable support, less sinking, and a firmer sleep surface. The right option depends on your sleeping position and comfort preference."],
+    ["Which firmness level is right for me?", "Back and stomach sleepers often prefer medium-firm or firm support, while side sleepers may prefer a little more cushioning. We can help compare Capri, Classic, Hampton, and Deluxe Ortho."],
+    ["How do I care for my orthopaedic mattress?", "Rotate the mattress regularly and follow the care and turning guidance supplied with your selected model. Hampton Ortho is non-turn, so it only needs occasional rotation."],
+  ] as const;
 
   return (
     <>
@@ -116,7 +117,7 @@ export default async function CollectionProductPage({ params }: ProductPageProps
           {isMattressRange ? (
             <div className={styles.categoryImageBanner} aria-label="Orthopaedic mattresses category image">
               <img
-                src="/capri-ortho-mattress-bedroom-hero.webp"
+                src="/category page banner.jpeg"
                 alt="Orthopaedic mattress styled in a bright bedroom"
               />
             </div>
@@ -163,18 +164,7 @@ export default async function CollectionProductPage({ params }: ProductPageProps
                 <h2>Frequently Asked Questions</h2>
                 <Link href="/faq/">View all FAQs &rarr;</Link>
               </div>
-              <div className={styles.categoryFaqGrid}>
-                {[mattressFaqs.filter((_, index) => index % 2 === 0), mattressFaqs.filter((_, index) => index % 2 === 1)].map((questions, column) => (
-                  <div className={styles.categoryFaqColumn} key={`faq-column-${column}`}>
-                    {questions.map((question) => (
-                      <details className={styles.categoryFaqItem} key={question}>
-                        <summary>{question}<span aria-hidden="true">+</span></summary>
-                        <p>Our team can confirm the best option for your body type, sleep position, and delivery needs before you order.</p>
-                      </details>
-                    ))}
-                  </div>
-                ))}
-              </div>
+              <ProductFaq faqs={mattressFaqs.map(([question, answer]) => ({ question, answer }))} />
             </div>
 
             <CustomerReviews

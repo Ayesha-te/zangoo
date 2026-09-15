@@ -71,6 +71,14 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   const [openFaqs, setOpenFaqs] = useState<Set<number>>(() => new Set());
   const [comparisonSlug, setComparisonSlug] = useState<string | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [recentSlugs, setRecentSlugs] = useState<string[]>([]);
+  useEffect(() => {
+    const key = "furnitureCoRecentlyViewed";
+    const previous = JSON.parse(localStorage.getItem(key) || "[]") as string[];
+    const next = [product.slug, ...previous.filter((slug) => slug !== product.slug)].slice(0, 4);
+    localStorage.setItem(key, JSON.stringify(next));
+    setRecentSlugs(next);
+  }, [product.slug]);
 
   const activeSize = sizes.find((item) => item.id === size) ?? sizes[2];
   const total = activeSize.price * quantity;
@@ -97,6 +105,40 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
       body: "Free UK delivery, clear support before purchase, and simple return guidance can be shown here.",
     },
   ];
+
+  const faqItems = [
+    ...product.faqs,
+    { question: "How long does delivery take?", answer: "Standard UK delivery is free, with timing confirmed before dispatch." },
+    { question: "Can I use this mattress on my existing bed?", answer: "Yes. It works with supportive divan, platform, and correctly spaced slatted bases." },
+    { question: "How should I care for the mattress?", answer: "Rotate it regularly and follow the turning guidance supplied with your selected model." },
+    { question: "What happens if I need help after ordering?", answer: "Our support team can assist with delivery, setup, care, and product questions." },
+  ];
+
+  function renderFaqItems(items: typeof faqItems, offset: number) {
+    return items.map((faq, itemIndex) => {
+      const index = offset + itemIndex * 2;
+      const isOpen = openFaqs.has(index);
+      return (
+        <div className={styles.faqItem} key={faq.question}>
+          <button
+            type="button"
+            className={styles.faqSummary}
+            aria-expanded={isOpen}
+            onClick={() => setOpenFaqs((current) => {
+              const next = new Set(current);
+              if (next.has(index)) next.delete(index); else next.add(index);
+              return next;
+            })}
+          >
+            {faq.question}
+          </button>
+          <div className={styles.faqPanel} data-open={isOpen || undefined}>
+            <div className={styles.faqPanelInner}><p>{faq.answer}</p></div>
+          </div>
+        </div>
+      );
+    });
+  }
 
   return (
     <div className={styles.wrap}>
@@ -273,35 +315,8 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
       <section className={styles.faq} aria-labelledby="faq-title">
         <h2 id="faq-title">FAQ</h2>
         <div>
-          {[...product.faqs,
-            { question: "How long does delivery take?", answer: "Standard UK delivery is free, with timing confirmed before dispatch." },
-            { question: "Can I use this mattress on my existing bed?", answer: "Yes. It works with supportive divan, platform, and correctly spaced slatted bases." },
-            { question: "How should I care for the mattress?", answer: "Rotate it regularly and follow the turning guidance supplied with your selected model." },
-            { question: "What happens if I need help after ordering?", answer: "Our support team can assist with delivery, setup, care, and product questions." },
-          ].map((faq, index) => {
-            const isOpen = openFaqs.has(index);
-            return (
-              <div className={styles.faqItem} key={faq.question}>
-                <button
-                  type="button"
-                  className={styles.faqSummary}
-                  aria-expanded={isOpen}
-                  onClick={() => setOpenFaqs((current) => {
-                    const next = new Set(current);
-                    if (next.has(index)) next.delete(index); else next.add(index);
-                    return next;
-                  })}
-                >
-                  {faq.question}
-                </button>
-                <div className={styles.faqPanel} data-open={isOpen || undefined}>
-                  <div className={styles.faqPanelInner}>
-                    <p>{faq.answer}</p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+          <div className={styles.faqColumn}>{renderFaqItems(faqItems.filter((_, index) => index % 2 === 0), 0)}</div>
+          <div className={styles.faqColumn}>{renderFaqItems(faqItems.filter((_, index) => index % 2 === 1), 1)}</div>
           <Link href="/faq/">View all FAQs</Link>
         </div>
       </section>
@@ -336,7 +351,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
               <button
                 type="button"
                 className={styles.compareSlotRemove}
-                aria-label={`Remove ${comparisonProduct.shortName} from comparison`}
+                aria-label={`Remove ${comparisonProduct?.shortName ?? "selected mattress"} from comparison`}
                 onClick={(event) => {
                   event.stopPropagation();
                   setComparisonSlug(null);
@@ -344,10 +359,10 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
               >
                 &times;
               </button>
-              <img src={comparisonProduct.gallery?.[0]?.src ?? comparisonProduct.image} alt={comparisonProduct.imageAlt} />
-              <strong>{comparisonProduct.shortName}</strong>
-              <small>{comparisonProduct.firmness}</small>
-              <span>{comparisonProduct.price.replace("From ", "")}</span>
+              <img src={comparisonProduct!.gallery?.[0]?.src ?? comparisonProduct!.image} alt={comparisonProduct!.imageAlt} />
+              <strong>{comparisonProduct!.shortName}</strong>
+              <small>{comparisonProduct!.firmness}</small>
+              <span>{comparisonProduct!.price.replace("From ", "")}</span>
               <span className={styles.compareSlotChange}>&#8635; Change</span>
             </div>
           ) : (
@@ -385,7 +400,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             <div className={styles.compareInlineRows}>
               {COMPARE_ROWS.map((row) => {
                 const a = row.value(product);
-                const b = row.value(comparisonProduct);
+                const b = row.value(comparisonProduct!);
                 const differs = a !== b;
                 return (
                   <div className={styles.compareInlineRow} key={row.label}>
@@ -407,8 +422,8 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
               <a className={styles.compareInlineBuy} href="#wireframe-title">
                 Buy {product.shortName}
               </a>
-              <Link className={styles.compareInlineView} href={`/collections/bedroom/mattresses/${comparisonProduct.slug}/`}>
-                View {comparisonProduct.shortName}
+              <Link className={styles.compareInlineView} href={`/collections/bedroom/mattresses/${comparisonProduct!.slug}/`}>
+                View {comparisonProduct!.shortName}
               </Link>
             </div>
           </div>
@@ -416,7 +431,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
       </section>}
 
       <ProductRail title="Related Products" products={relatedProducts} />
-      <ProductRail title="Recently Viewed" products={[product, ...relatedProducts].slice(0, 6)} />
+      <ProductRail title="Recently Viewed" products={recentSlugs.map((slug) => [product, ...relatedProducts].find((item) => item.slug === slug)).filter((item): item is MattressProduct => Boolean(item))} />
     </div>
   );
 }
@@ -463,7 +478,8 @@ function ProductRail({ title, products }: { title: string; products: typeof orth
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img src={item.gallery?.[1]?.src ?? item.image} alt={item.imageAlt} />
+            {/* Keep rails consistent with catalogue cards by using the canonical product image. */}
+            <img src={item.image} alt={item.imageAlt} />
             <strong>{item.shortName}</strong>
             <small>{item.firmness} support</small>
             <span>{item.price.replace("From ", "").replace("\u00c2\u00a3", "\u00a3")}</span>

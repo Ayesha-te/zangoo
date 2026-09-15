@@ -25,7 +25,7 @@ export function ProductFaq({ faqs }: ProductFaqProps) {
               onClick={() => setActiveIndex(isOpen ? null : index)}
             >
               <span>{faq.question}</span>
-              <span className="lp-faq-icon" aria-hidden="true">+</span>
+              <span className="lp-faq-icon" aria-hidden="true">{isOpen ? "−" : "+"}</span>
             </button>
             <div className="lp-faq-body" id={answerId} aria-hidden={!isOpen}>
               <p>{faq.answer}</p>
