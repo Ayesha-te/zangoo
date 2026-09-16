@@ -65,7 +65,7 @@ export default async function CollectionProductPage({ params }: ProductPageProps
     "Heavy Sleepers (90kg+)",
   ];
   const feelFilters = ["Medium to Firm", "Firm", "Extra Firm"];
-  const sizeFilters = ["Single", "Double", "King", "Super King"];
+  const sizeFilters = ["Single", "Double", "King"];
   const mattressGuides = [
     {
       title: "What is an Orthopaedic Mattress?",

@@ -74,25 +74,28 @@
 
 .collapsibleButton {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: max-content;
   max-width: 100%;
-  margin: 0 0 0 2px;
+  margin: 0 0 0 8px;
   padding: 0;
   border: 0;
   background: transparent;
   cursor: pointer;
   color: var(--blue);
   font-family: var(--sans);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 900;
-  line-height: 1.2;
-  text-decoration: none;
-  text-underline-offset: 0;
+  line-height: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  border-radius: 0;
+  box-shadow: none;
   vertical-align: baseline;
-  border-radius: 4px;
-  transition: background .2s ease, color .2s ease;
+  transition: color .2s ease;
 }
-.collapsibleButton:hover,.collapsibleButton:focus-visible{background:var(--blue);color:#fff;outline:none}
+.collapsibleButton:hover,.collapsibleButton:focus-visible{color:var(--navy);outline:none}
 
 .grid {
   width: min(100%, 1200px);
@@ -442,6 +445,33 @@
   font-family: inherit;
   cursor: pointer;
   transition: border-color var(--tr), transform var(--tr);
+}
+
+.heartBadge span {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+}
+
+.heartBadge svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+  overflow: visible;
+}
+
+.heartBadge path {
+  fill: transparent;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: fill var(--tr), stroke var(--tr);
+}
+
+.heartBadge span[data-active="true"] path {
+  fill: currentColor;
 }
 
 .heartBadge:hover,
@@ -1238,6 +1268,16 @@
   box-shadow: 0 4px 14px rgba(26, 46, 68, .14);
 }
 
+.heartBadge span {
+  width: 21px;
+  height: 21px;
+}
+
+.heartBadge svg {
+  width: 21px;
+  height: 21px;
+}
+
 .mattressSpecs > span::before {
   content: none;
 }
@@ -1443,7 +1483,7 @@
 .categoryFaqItem summary > span::after{content:"+";font-size:22px}
 .categoryFaqItem[open] summary > span::after{content:"−"}
 .categoryFaqItem:not([open]) summary + p{display:none}
-.categoryFaqs{border:0;background:transparent;box-shadow:none;padding:0}
+.categoryFaqs{border:0;background:transparent;box-shadow:none;padding:0;margin-top:72px}
 .categoryFaqs .supportHeading h2{font:400 clamp(30px,4vw,42px)/1.1 var(--serif)!important}
 .categoryFaqGrid{gap:22px}
 .categoryFaqColumn{gap:22px}
@@ -1472,6 +1512,7 @@
   border-radius: 16px;
   background: #fff;
   overflow: hidden;
+  box-shadow: var(--sh1);
 }
 
 .categoryFaqs :global(.lp-faq-btn) {
@@ -1483,40 +1524,43 @@
   justify-content: space-between;
   gap: 16px;
   border: 0;
-  background: transparent;
+  background: #fff;
   color: var(--navy);
-  font: 900 15px/1.35 var(--sans);
+  font: 900 18px/1.35 var(--sans);
   text-align: left;
   cursor: pointer;
+  transition: background .3s cubic-bezier(.22,1,.36,1), color .3s ease;
 }
 
 .categoryFaqs :global(.lp-faq-btn[aria-expanded="true"]) {
-  background: #e8f0f8;
+  background: rgba(21, 87, 167, .07);
   color: var(--blue);
 }
 
 .categoryFaqs :global(.lp-faq-icon) {
-  width: 36px;
-  height: 36px;
-  flex: 0 0 36px;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
   display: grid;
   place-items: center;
   border-radius: 50%;
   background: #e8f0f8;
   color: var(--blue);
-  font: 900 22px/1 var(--sans);
+  font: 900 24px/1 var(--sans);
+  transition: background .3s ease, color .3s ease, transform .3s ease;
 }
 
 .categoryFaqs :global(.lp-faq-btn[aria-expanded="true"] .lp-faq-icon) {
   background: var(--blue);
   color: #fff;
+  transform: rotate(180deg);
 }
 
 .categoryFaqs :global(.lp-faq-body) {
   display: grid;
   grid-template-rows: 0fr;
   padding: 0 28px;
-  transition: grid-template-rows .3s ease, padding .3s ease;
+  transition: grid-template-rows .3s cubic-bezier(.22,1,.36,1), padding .3s cubic-bezier(.22,1,.36,1);
 }
 
 .categoryFaqs :global(.lp-faq-body[aria-hidden="false"]) {

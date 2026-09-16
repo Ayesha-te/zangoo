@@ -21,7 +21,11 @@ export function FavoriteButton({ item, className, activeClassName }: FavoriteBut
       aria-pressed={active}
       onClick={() => toggleFavorite(item)}
     >
-      <span aria-hidden="true">{active ? "♥" : "♡"}</span>
+      <span aria-hidden="true" data-active={active ? "true" : "false"}>
+        <svg viewBox="0 0 24 24" focusable="false">
+          <path d="M12 20.2s-6.9-4.3-9.2-8.1C.9 9 .9 5.5 3.3 3.7c2.1-1.6 5.1-.9 6.7 1.1L12 7.3l2-2.5c1.6-2 4.6-2.7 6.7-1.1 2.4 1.8 2.4 5.3.5 8.4-2.3 3.8-9.2 8.1-9.2 8.1Z" />
+        </svg>
+      </span>
     </button>
   );
 }

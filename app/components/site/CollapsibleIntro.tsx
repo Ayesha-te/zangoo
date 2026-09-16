@@ -16,22 +16,23 @@ type CollapsibleIntroProps = {
 
 export function CollapsibleIntro({ text, classes }: CollapsibleIntroProps) {
   const [open, setOpen] = useState(false);
-  const preview = getSentencePreview(text).preview.replace(/[.!?]+$/, "");
+  const preview = getSentencePreview(text).preview;
 
   return (
     <div
       className={classes.collapsibleText}
       data-open={open ? "true" : "false"}
-      role="button"
-      tabIndex={0}
-      onClick={() => setOpen((value) => !value)}
-      onKeyDown={(event) => {
-        if (event.key === "Enter" || event.key === " ") setOpen((value) => !value);
-      }}
-      aria-expanded={open}
     >
       <p className={classes.collapsiblePanel}>
-        {open ? text : <>{preview}<button className={classes.collapsibleButton} type="button" onClick={(event) => { event.stopPropagation(); setOpen(true); }}>...</button></>}
+        {open ? text : preview}
+        {!open ? (
+          <>
+            {" "}
+            <button className={classes.collapsibleButton} type="button" onClick={() => setOpen(true)} aria-expanded={open}>
+              Show more
+            </button>
+          </>
+        ) : null}
       </p>
     </div>
   );

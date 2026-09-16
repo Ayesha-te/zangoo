@@ -7,7 +7,7 @@ export function FaqAccordion({ faqs }: { faqs: ReadonlyArray<readonly [string, s
     const active = open === index;
     return <article className={active ? "is-open" : ""} key={question}>
       <button type="button" aria-expanded={active} onClick={() => setOpen(active ? null : index)}>
-        <span>{question}</span><i aria-hidden="true">{active ? "−" : "+"}</i>
+        <span>{question}</span><i aria-hidden="true">{active ? "-" : "+"}</i>
       </button>
       <div className="simple-faq-answer"><p>{answer}</p></div>
     </article>;

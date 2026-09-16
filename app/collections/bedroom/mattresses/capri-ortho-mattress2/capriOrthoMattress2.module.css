@@ -863,20 +863,36 @@
   gap: 12px;
 }
 
+.faqLink {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 18px;
+  color: var(--blue);
+  font: 900 15px/1.2 var(--sans);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.faqLink:hover,
+.faqLink:focus-visible {
+  color: var(--navy);
+}
+
 .faqItem {
   min-width: 0;
   overflow: hidden;
-  border-radius: 10px;
+  border-radius: 16px;
   border: 1px solid var(--border);
   background: #fff;
+  box-shadow: var(--shadow);
 }
 
 .faqItem button {
   width: 100%;
-  min-height: 58px;
+  min-height: 72px;
   border: 0;
   cursor: pointer;
-  padding: 16px 20px;
+  padding: 18px 28px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -884,24 +900,30 @@
   color: var(--navy);
   background: transparent;
   text-align: left;
-  font: 900 13px/1.35 var(--sans);
+  font: 900 18px/1.35 var(--sans);
+  transition: background 0.3s cubic-bezier(.22,1,.36,1), color 0.3s ease;
+}
+
+.faqItem button:hover,
+.faqItem button:focus-visible {
+  background: rgba(21, 87, 167, 0.05);
 }
 
 .faqItem b {
-  width: 26px;
-  height: 26px;
-  flex: 0 0 26px;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
   display: grid;
   place-items: center;
   border-radius: 50%;
   color: var(--blue);
   background: var(--mist);
-  font: 500 18px/1 var(--sans);
-  transition: transform 0.25s ease, color 0.25s ease, background 0.25s ease;
+  font: 900 24px/1 var(--sans);
+  transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease;
 }
 
 .faqItem button[aria-expanded="true"] b {
-  transform: rotate(45deg);
+  transform: rotate(180deg);
   color: #fff;
   background: var(--blue);
 }
@@ -909,13 +931,13 @@
 .faqBody {
   display: grid;
   grid-template-rows: 0fr;
-  padding: 0 20px;
-  transition: grid-template-rows 0.3s ease, padding 0.3s ease;
+  padding: 0 28px;
+  transition: grid-template-rows 0.3s cubic-bezier(.22,1,.36,1), padding 0.3s cubic-bezier(.22,1,.36,1);
 }
 
 .faqBody[aria-hidden="false"] {
   grid-template-rows: 1fr;
-  padding-bottom: 16px;
+  padding-bottom: 18px;
 }
 
 .faqBody p {
@@ -926,6 +948,11 @@
   border-top: 1px solid var(--border);
   color: var(--body);
   font: 600 13px/1.65 var(--sans);
+}
+
+.faqBody[aria-hidden="true"] p {
+  padding-top: 0;
+  border-top: 0;
 }
 
 .orderPanel {

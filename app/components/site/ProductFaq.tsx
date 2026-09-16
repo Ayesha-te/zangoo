@@ -1,19 +1,20 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 
 type ProductFaqProps = {
   faqs: Array<{ question: string; answer: string }>;
 };
 
 export function ProductFaq({ faqs }: ProductFaqProps) {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const instanceId = useId().replace(/:/g, "");
+  const [openIndexes, setOpenIndexes] = useState<Set<number>>(new Set());
 
   return (
     <div className="lp-faq-grid" role="list">
       {faqs.map((faq, index) => {
-        const isOpen = activeIndex === index;
-        const answerId = `product-faq-answer-${index}`;
+        const isOpen = openIndexes.has(index);
+        const answerId = `product-faq-answer-${instanceId}-${index}`;
 
         return (
           <div className="lp-faq-item" role="listitem" key={faq.question}>
@@ -22,10 +23,20 @@ export function ProductFaq({ faqs }: ProductFaqProps) {
               type="button"
               aria-expanded={isOpen}
               aria-controls={answerId}
-              onClick={() => setActiveIndex(isOpen ? null : index)}
+              onClick={() =>
+                setOpenIndexes((current) => {
+                  const next = new Set(current);
+                  if (next.has(index)) {
+                    next.delete(index);
+                  } else {
+                    next.add(index);
+                  }
+                  return next;
+                })
+              }
             >
               <span>{faq.question}</span>
-              <span className="lp-faq-icon" aria-hidden="true">{isOpen ? "−" : "+"}</span>
+              <span className="lp-faq-icon" aria-hidden="true">{isOpen ? "-" : "+"}</span>
             </button>
             <div className="lp-faq-body" id={answerId} aria-hidden={!isOpen}>
               <p>{faq.answer}</p>

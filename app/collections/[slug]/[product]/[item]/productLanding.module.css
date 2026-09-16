@@ -800,6 +800,7 @@
   border-radius:16px!important;
   background:#fff!important;
   overflow:hidden!important;
+  box-shadow:var(--sh1)!important;
 }
 
 :global(.mattress-landing .lp-faq-btn){
@@ -807,7 +808,7 @@
   min-height:72px!important;
   cursor:pointer!important;
   border:0!important;
-  background:none!important;
+  background:#fff!important;
   padding:18px 28px!important;
   display:flex!important;
   align-items:center!important;
@@ -815,8 +816,8 @@
   gap:16px!important;
   text-align:left!important;
   color:var(--navy)!important;
-  font:900 15px/1.35 var(--sans)!important;
-  transition:background var(--tr)!important;
+  font:900 18px/1.35 var(--sans)!important;
+  transition:background .3s cubic-bezier(.22,1,.36,1),color .3s ease!important;
 }
 
 :global(.mattress-landing .lp-faq-btn:hover){
@@ -825,24 +826,26 @@
 
 :global(.mattress-landing .lp-faq-btn[aria-expanded=true]){
   background:rgba(21,87,167,.07)!important;
+  color:var(--blue)!important;
 }
 
 :global(.mattress-landing .lp-faq-icon){
-  width:36px!important;
-  height:36px!important;
-  flex:0 0 36px!important;
+  width:42px!important;
+  height:42px!important;
+  flex:0 0 42px!important;
   border-radius:50%!important;
   background:var(--bg4)!important;
   display:grid!important;
   place-items:center!important;
   color:var(--blue)!important;
-  font:900 22px/1 var(--sans)!important;
-  transition:background var(--tr),color var(--tr)!important;
+  font:900 24px/1 var(--sans)!important;
+  transition:background .3s ease,color .3s ease,transform .3s ease!important;
 }
 
 :global(.mattress-landing .lp-faq-btn[aria-expanded=true] .lp-faq-icon){
   background:var(--blue)!important;
   color:#fff!important;
+  transform:rotate(180deg)!important;
 }
 
 :global(.mattress-landing .lp-faq-body){
@@ -865,6 +868,11 @@
   border-top:1px solid var(--bdr)!important;
   color:var(--body)!important;
   font:500 14px/1.65 var(--sans)!important;
+}
+
+:global(.mattress-landing .lp-faq-body[aria-hidden=true] p){
+  padding-top:0!important;
+  border-top:0!important;
 }
 
 @media (max-width: 700px){

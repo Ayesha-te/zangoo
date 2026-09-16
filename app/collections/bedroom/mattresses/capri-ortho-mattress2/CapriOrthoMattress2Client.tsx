@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
 import styles from "./capriOrthoMattress2.module.css";
 
@@ -403,7 +404,7 @@ function DoubleSideVisual() {
 export default function CapriOrthoMattress2Client() {
   const [selectedSize, setSelectedSize] = useState<SizeKey>("single");
   const [baseAdded, setBaseAdded] = useState(false);
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [openFaqs, setOpenFaqs] = useState<Set<number>>(new Set());
   const [reviewItems, setReviewItems] = useState<ReviewItem[]>(fallbackReviews);
 
   const size = sizes[selectedSize];
@@ -604,17 +605,34 @@ export default function CapriOrthoMattress2Client() {
           <span className={styles.eyebrow}>Your questions answered</span>
           <h2>Frequently Asked Questions</h2>
           <p>Everything you need to know before you buy, no jargon, just honest answers.</p>
+          <Link className={styles.faqLink} href="/faq/">View all FAQs &rarr;</Link>
         </div>
         <div className={styles.faqGrid}>
           {faqs.map(([question, answer], index) => {
-            const open = openFaq === index;
+            const open = openFaqs.has(index);
+            const answerId = `capri-faq-answer-${index}`;
             return (
               <article className={styles.faqItem} key={question}>
-                <button type="button" aria-expanded={open} onClick={() => setOpenFaq(open ? null : index)}>
+                <button
+                  type="button"
+                  aria-expanded={open}
+                  aria-controls={answerId}
+                  onClick={() =>
+                    setOpenFaqs((current) => {
+                      const next = new Set(current);
+                      if (next.has(index)) {
+                        next.delete(index);
+                      } else {
+                        next.add(index);
+                      }
+                      return next;
+                    })
+                  }
+                >
                   <span>{question}</span>
-                  <b aria-hidden="true">+</b>
+                  <b aria-hidden="true">{open ? "-" : "+"}</b>
                 </button>
-                <div className={styles.faqBody} aria-hidden={!open}>
+                <div className={styles.faqBody} id={answerId} aria-hidden={!open}>
                   <p>{answer}</p>
                 </div>
               </article>

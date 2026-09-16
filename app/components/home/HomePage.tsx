@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, type CSSProperties, type RefObject, useEffect, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, type CSSProperties, type RefObject, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { awards, blogPosts, collections, faqs, reviews } from "@/app/data/home";
@@ -289,6 +289,12 @@ function isReviewCategoryPost(post: WordPressPost) {
       }),
     ),
   );
+}
+
+function mergeBlogPostsWithFallback(posts: HomepageBlogPost[], fallbackPosts: HomepageBlogPost[]) {
+  const seen = new Set(posts.map((post) => post.href));
+  const fallbackFill = fallbackPosts.filter((post) => !seen.has(post.href));
+  return [...posts, ...fallbackFill].slice(0, Math.max(3, posts.length));
 }
 
 function Hero() {
@@ -601,18 +607,26 @@ function Reviews() {
 
 function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
   const sliderRef = useRef<HTMLDivElement>(null);
-  const fallbackPosts = blogPosts.map((post, index) => ({
-    id: post.title,
-    title: post.title,
-    excerpt: post.excerpt,
-    meta: post.meta,
-    href: `/blog/${post.slug}/`,
-    tag: post.tag,
-    className: post.className,
-    visual: post.visual,
-  })).map((post, index) => ({ ...post, id: `${post.id}-${index}` }));
+  const fallbackPosts = useMemo(
+    () =>
+      blogPosts
+        .map((post) => ({
+          id: post.title,
+          title: post.title,
+          excerpt: post.excerpt,
+          meta: post.meta,
+          href: `/blog/${post.slug}/`,
+          tag: post.tag,
+          className: post.className,
+          visual: post.visual,
+        }))
+        .map((post, index) => ({ ...post, id: `${post.id}-${index}` })),
+    [],
+  );
   const [posts, setPosts] = useState<HomepageBlogPost[]>(() =>
-    initialPosts.length ? initialPosts.map(mapWordPressPost) : fallbackPosts,
+    initialPosts.length
+      ? mergeBlogPostsWithFallback(initialPosts.filter((post) => !isReviewCategoryPost(post)).map(mapWordPressPost), fallbackPosts)
+      : fallbackPosts,
   );
 
   useEffect(() => {
@@ -623,7 +637,7 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
       prefetch.href = post.href;
       document.head.appendChild(prefetch);
     });
-  }, []);
+  }, [fallbackPosts]);
 
   useEffect(() => {
     if (initialPosts.length) return;
@@ -651,7 +665,7 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
         const blogOnlyPosts = data.filter((post) => !isReviewCategoryPost(post));
         if (!blogOnlyPosts.length) return;
 
-        setPosts(blogOnlyPosts.map(mapWordPressPost));
+        setPosts(mergeBlogPostsWithFallback(blogOnlyPosts.map(mapWordPressPost), fallbackPosts));
       } catch {
         // Keep the local fallback cards when the WordPress host rejects a browser request.
       }
@@ -670,7 +684,7 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
         globalThis.clearTimeout(idleId);
       }
     };
-  }, [initialPosts.length]);
+  }, [fallbackPosts, initialPosts.length]);
 
   return (
     <section className="blog" id="blog" aria-labelledby="blog-h">
@@ -743,6 +757,7 @@ function Faq() {
           <span className="sec-lbl">Common Questions</span>
           <h2 id="faq-h" className="h2dk">Frequently Asked Questions</h2>
           <p>Everything you need to know before you buy - answered clearly and honestly.</p>
+          <Link className="faq-link" href="/faq/">View all FAQs &rarr;</Link>
         </div>
         <div className="faq-grid" role="list">
           {columns.map((column, columnIndex) => (
@@ -766,7 +781,7 @@ function Faq() {
                       })}
                     >
                       <span className="fi-q">{question}</span>
-                      <span className="fi-icon" aria-hidden="true">+</span>
+                      <span className="fi-icon" aria-hidden="true">{isOpen ? "-" : "+"}</span>
                     </button>
                     <div className="fi-body" id={answerId} aria-hidden={!isOpen}>
                       <p className="fi-a">{answer}</p>

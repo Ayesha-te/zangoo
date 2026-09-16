@@ -71,6 +71,15 @@
   width: 100%;
   height: 100%;
   display: block;
+}
+
+.media img,
+.thumbs img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.rail img {
   object-fit: contain;
 }
 
@@ -84,31 +93,6 @@
   background: #d5242a;
   color: #fff;
   font: 900 13px/1 var(--sans);
-}
-
-.playButton {
-  position: absolute;
-  inset: 50% auto auto 50%;
-  width: 58px;
-  height: 58px;
-  border: 0;
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  background: rgba(26, 46, 68, .72);
-  color: #fff;
-  cursor: pointer;
-  transition: background var(--tr), transform var(--tr), box-shadow var(--tr);
-}
-
-.playButton span {
-  margin-left: 4px;
-}
-
-.playButton:hover,
-.playButton:focus-visible {
-  background: var(--blue);
-  transform: translate(-50%, -50%) scale(1.05);
-  box-shadow: var(--sh2);
 }
 
 .view360 {
@@ -185,12 +169,6 @@
   width: max-content;
   max-width: 100%;
   text-decoration: none;
-}
-
-.thumbs img {
-  max-width: 100%;
-  max-height: 100%;
-  object-position: center;
 }
 
 .rating > span {
@@ -370,6 +348,34 @@
   font: 900 24px/1 var(--sans);
   box-shadow: var(--sh1);
   transition: background var(--tr), color var(--tr), border-color var(--tr), transform var(--tr);
+}
+
+.favoriteButton span {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+}
+
+.favoriteButton svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+  overflow: visible;
+}
+
+.favoriteButton path {
+  fill: transparent;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: fill var(--tr), stroke var(--tr);
+}
+
+.favoriteButton span[data-active="true"] path {
+  fill: currentColor;
 }
 
 .favoriteButton:hover,
@@ -1052,9 +1058,9 @@
 }
 
 @media (max-width: 920px) {
-  .topGrid,
-  .faq > div {
-    grid-template-columns: 1fr;
+  .topGrid {
+    grid-template-columns: minmax(0, 1.1fr) minmax(280px, .9fr);
+    gap: 16px;
   }
 
   .faq > div {
@@ -1109,13 +1115,13 @@
   }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 700px) {
   .page {
     padding: calc(var(--nav) + 24px) 12px 56px;
   }
 
   .topGrid {
-    gap: 12px;
+    grid-template-columns: 1fr;
   }
 
   .leftColumn,
@@ -1125,7 +1131,6 @@
 
   .galleryCard {
     order: 1;
-    padding: 10px;
   }
 
   .summaryCard {
@@ -1138,6 +1143,16 @@
 
   .accordionCard {
     order: 4;
+  }
+}
+
+@media (max-width: 560px) {
+  .topGrid {
+    gap: 12px;
+  }
+
+  .galleryCard {
+    padding: 10px;
   }
 
   .summaryCard,
@@ -1180,11 +1195,6 @@
 
   .media {
     aspect-ratio: 16 / 9;
-  }
-
-  .playButton {
-    width: 48px;
-    height: 48px;
   }
 
   .trustStrip {

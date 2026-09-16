@@ -16,7 +16,7 @@ export function getSentencePreview(text: string, targetLength = defaultTargetLen
   const shouldCollapse = preview.length < trimmed.length - 12;
 
   return {
-    preview: shouldCollapse && !/[.!?]$/.test(preview) ? `${preview}...` : preview,
+    preview: shouldCollapse ? `${preview.replace(/[.!?]+$/, "")}...` : preview,
     shouldCollapse,
   };
 }

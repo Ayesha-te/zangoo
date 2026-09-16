@@ -20,7 +20,6 @@ const SIZE_TIERS = [
   { id: "single", label: "Single (90 x 190cm)", multiplier: 1 },
   { id: "double", label: "Double (135 x 190cm)", multiplier: 1.13 },
   { id: "king", label: "King (150 x 200cm)", multiplier: 1.27 },
-  { id: "super-king", label: "Super King (180 x 200cm)", multiplier: 1.47 },
 ];
 
 function buildSizes(product: MattressProduct) {
@@ -98,7 +97,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
     { title: "Benefits", body: product.bullets.join(". ") },
     {
       title: "Dimensions and Size Guide",
-      body: "Single, Double, King and Super King sizes can be supported in this structure. The section is ready for a full size table later.",
+      body: "Single, Double, and King sizes can be supported in this structure. The section is ready for a full size table later.",
     },
     {
       title: "Delivery and Returns",
@@ -156,9 +155,6 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
               aria-label="Zoom into product image"
             >
               <img src={gallery[activeImage]?.src ?? gallery[0].src} alt={gallery[activeImage]?.alt ?? gallery[0].alt} />
-            </button>
-            <button className={styles.playButton} type="button" aria-label="Play product video">
-              <span>&#9654;</span>
             </button>
             <button className={styles.view360} type="button">360&deg; View</button>
           </div>
@@ -313,7 +309,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
       />
 
       <section className={styles.faq} aria-labelledby="faq-title">
-        <h2 id="faq-title">FAQ</h2>
+        <h2 id="faq-title">Frequently Asked Questions</h2>
         <div>
           <div className={styles.faqColumn}>{renderFaqItems(faqItems.filter((_, index) => index % 2 === 0), 0)}</div>
           <div className={styles.faqColumn}>{renderFaqItems(faqItems.filter((_, index) => index % 2 === 1), 1)}</div>

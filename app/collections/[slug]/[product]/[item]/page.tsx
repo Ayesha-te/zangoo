@@ -378,15 +378,16 @@ export default async function ProductLandingPage({ params }: ProductLandingPageP
         <section className="lp-faq" id="faq" aria-labelledby="faq-title">
           <div className="lp-section-head">
             <span>Your questions, answered</span>
-            <h2 id="faq-title">Everything you need to know</h2>
+            <h2 id="faq-title">Frequently Asked Questions</h2>
             <p>Helpful answers about {item.shortName} before you commit.</p>
+            <Link href="/faq/">View all FAQs &rarr;</Link>
           </div>
           <ProductFaq
             faqs={[
               ...item.faqs,
               {
                 question: "What sizes are available?",
-                answer: "Single, Double, King and Super King options can be discussed through WhatsApp before ordering.",
+                answer: "Single, Double, and King options can be discussed through WhatsApp before ordering.",
               },
               {
                 question: "Can I get help choosing firmness?",

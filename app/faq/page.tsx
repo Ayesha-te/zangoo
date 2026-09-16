@@ -13,7 +13,7 @@ export default function FaqPage() {
     <>
       <SiteHeader />
       <Breadcrumbs items={[{ label: "FAQ" }]} />
-      <main className="simple-page">
+      <main className="simple-page faq-page">
         <section className="wrap simple-page-inner">
           <span className="sec-lbl">Help Centre</span>
           <h1>Frequently Asked Questions</h1>
