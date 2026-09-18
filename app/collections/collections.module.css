@@ -97,6 +97,11 @@
 }
 .collapsibleButton:hover,.collapsibleButton:focus-visible{color:var(--navy);outline:none}
 
+.collapsibleText[data-open="true"] .collapsibleButton {
+  display: block;
+  margin: 14px 0 0;
+}
+
 .grid {
   width: min(100%, 1200px);
   margin: 0 auto;
@@ -140,7 +145,7 @@
 }
 
 .badge {
-  background: #1f63b5;
+  background: #1557A7;
   color: #fff;
   box-shadow: 0 2px 0 rgba(15,58,110,.25);
 }
@@ -1501,17 +1506,25 @@
 .categoryFaqs :global(.lp-faq-grid) {
   width: 100%;
   margin: 0;
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  align-items: start;
+  column-count: 2;
+  column-gap: 12px;
 }
+
+.catalogSearch { display:grid; gap:4px; min-width:min(100%,300px); color:var(--navy); font:900 12px/1.2 var(--sans); }
+.catalogSearch input { height:40px; border:1px solid var(--bdr); border-radius:8px; padding:0 12px; background:#fff; color:var(--navy); font:500 14px var(--sans); }
+.mattressToolbar{display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap}
+.catalogSearch{display:grid;flex:1 1 300px;width:min(100%,360px);min-width:240px;gap:6px}
+.catalogSearch input{box-sizing:border-box;width:100%;min-width:0;height:48px;padding:0 16px;font-size:16px}
+.catalogSearch input::placeholder{color:var(--muted);opacity:1}
+@media(max-width:580px){.mattressToolbar{display:grid;gap:14px}.catalogSearch{width:100%;min-width:0}.mattressToolbarActions{margin-left:0;width:100%}}
 
 .categoryFaqs :global(.lp-faq-item) {
   border: 1px solid var(--bdr);
   border-radius: 16px;
   background: #fff;
   overflow: hidden;
+  break-inside: avoid;
+  margin: 0 0 12px;
   box-shadow: var(--sh1);
 }
 
@@ -1526,7 +1539,7 @@
   border: 0;
   background: #fff;
   color: var(--navy);
-  font: 900 18px/1.35 var(--sans);
+  font: 900 15px/1.35 var(--sans);
   text-align: left;
   cursor: pointer;
   transition: background .3s cubic-bezier(.22,1,.36,1), color .3s ease;
@@ -1538,16 +1551,16 @@
 }
 
 .categoryFaqs :global(.lp-faq-icon) {
-  width: 42px;
-  height: 42px;
-  flex: 0 0 42px;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
   display: grid;
   place-items: center;
   border-radius: 50%;
   background: #e8f0f8;
   color: var(--blue);
-  font: 900 24px/1 var(--sans);
-  transition: background .3s ease, color .3s ease, transform .3s ease;
+  font: 900 22px/1 var(--sans);
+  transition: transform .3s ease, background .35s ease, color .35s ease;
 }
 
 .categoryFaqs :global(.lp-faq-btn[aria-expanded="true"] .lp-faq-icon) {
@@ -1560,7 +1573,8 @@
   display: grid;
   grid-template-rows: 0fr;
   padding: 0 28px;
-  transition: grid-template-rows .3s cubic-bezier(.22,1,.36,1), padding .3s cubic-bezier(.22,1,.36,1);
+  overflow: hidden;
+  transition: grid-template-rows .35s cubic-bezier(.22,1,.36,1), padding .35s cubic-bezier(.22,1,.36,1);
 }
 
 .categoryFaqs :global(.lp-faq-body[aria-hidden="false"]) {
@@ -1572,10 +1586,16 @@
   min-height: 0;
   overflow: hidden;
   margin: 0;
-  padding-top: 16px;
-  border-top: 1px solid var(--bdr);
+  padding-top: 0;
+  border-top: 1px solid transparent;
   color: var(--body);
   font: 500 14px/1.65 var(--sans);
+  transition: padding-top .35s ease, border-color .35s ease;
+}
+
+.categoryFaqs :global(.lp-faq-body[aria-hidden="false"] p) {
+  padding-top: 16px;
+  border-top-color: var(--bdr);
 }
 
 .categoryFaqs :global(.lp-faq-body[aria-hidden="true"] p) {
@@ -1584,7 +1604,7 @@
 }
 
 @media (max-width: 700px) {
-  .categoryFaqs :global(.lp-faq-grid) { grid-template-columns: 1fr; }
+  .categoryFaqs :global(.lp-faq-grid) { column-count: 1; }
   .categoryFaqs :global(.lp-faq-btn) { padding: 16px; padding-right: 58px; position: relative; }
   .categoryFaqs :global(.lp-faq-icon) { position: absolute; right: 14px; }
   .categoryFaqs :global(.lp-faq-body),

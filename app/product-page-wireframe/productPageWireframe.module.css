@@ -79,6 +79,18 @@
   object-position: center;
 }
 
+.thumbSaleBadge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  z-index: 1;
+  padding: 3px 5px;
+  border-radius: 4px;
+  background: #d5242a;
+  color: #fff;
+  font: 900 8px/1 var(--sans);
+}
+
 .rail img {
   object-fit: contain;
 }
@@ -87,7 +99,7 @@
   position: absolute;
   top: 14px;
   right: 14px;
-  z-index: 1;
+  z-index: 3;
   padding: 7px 10px;
   border-radius: 7px;
   background: #d5242a;
@@ -347,6 +359,8 @@
   cursor: pointer;
   font: 900 24px/1 var(--sans);
   box-shadow: var(--sh1);
+  display: grid;
+  place-items: center;
   transition: background var(--tr), color var(--tr), border-color var(--tr), transform var(--tr);
 }
 
@@ -670,6 +684,59 @@
   margin-top: 18px;
 }
 
+.faqHeader {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.faqHeader a {
+  display: inline-flex;
+  width: auto !important;
+  max-width: 220px !important;
+  flex: 0 0 auto;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  min-height: 42px !important;
+  margin: 0;
+  padding: 0 20px !important;
+  border: 2px solid var(--navy) !important;
+  border-radius: 8px;
+  background: var(--navy) !important;
+  color: #fff !important;
+  font: 900 13px/1 var(--sans);
+  text-transform: none !important;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background var(--tr), border-color var(--tr), color var(--tr), transform var(--tr);
+}
+
+.faqHeader a:hover,
+.faqHeader a:focus-visible {
+  border-color: var(--blue) !important;
+  background: var(--blue) !important;
+  color: #fff !important;
+  transform: translateY(calc(-50% - 1px));
+}
+
+.faq :global(.lp-faq-grid) { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; align-items:start; margin-top:18px; }
+.faq :global(.lp-faq-column) { display:grid; gap:12px; align-content:start; }
+.faq :global(.lp-faq-item) { border:1px solid var(--bdr); border-radius:16px; background:#fff; overflow:hidden; }
+.faq :global(.lp-faq-btn) { width:100%; min-height:72px; padding:18px 28px; display:flex; align-items:center; justify-content:space-between; gap:16px; border:0; background:#fff; color:var(--navy); font:900 15px/1.35 var(--sans); text-align:left; cursor:pointer; }
+.faq :global(.lp-faq-btn[aria-expanded="true"]) { background:#e8f0f8; color:var(--blue); }
+.faq :global(.lp-faq-icon) { width:36px; height:36px; flex:0 0 36px; display:grid; place-items:center; border-radius:50%; background:#e8f0f8; color:var(--blue); font:900 22px/1 var(--sans); transition:transform .3s ease,background .3s ease,color .3s ease; }
+.faq :global(.lp-faq-btn[aria-expanded="true"] .lp-faq-icon) { background:var(--blue); color:#fff; transform:rotate(180deg); }
+.faq :global(.lp-faq-body) { display:grid; grid-template-rows:0fr; padding:0 28px; overflow:hidden; transition:grid-template-rows .35s cubic-bezier(.22,1,.36,1),padding .35s ease; }
+.faq :global(.lp-faq-body[aria-hidden="true"]) { display:none; }
+.faq :global(.lp-faq-body[aria-hidden="false"]) { grid-template-rows:1fr; padding:0 28px 18px; }
+.faq :global(.lp-faq-body p) { min-height:0; overflow:hidden; margin:0; padding-top:0; border-top:1px solid transparent; color:var(--body); font:500 14px/1.65 var(--sans); transition:padding-top .35s ease,border-color .35s ease; }
+.faq :global(.lp-faq-body[aria-hidden="false"] p) { padding-top:16px; border-top-color:var(--bdr); }
+
 .faqColumn {
   display: grid;
   gap: 12px;
@@ -957,8 +1024,6 @@
   scroll-behavior: smooth;
   scroll-snap-type: x mandatory;
 }
-.faq > div > a { grid-column: 1 / -1; width: min(100%, 420px); }
-
 .railHeader {
   display: flex;
   align-items: center;
@@ -1147,6 +1212,8 @@
 }
 
 @media (max-width: 560px) {
+  .faq :global(.lp-faq-grid) { grid-template-columns:1fr; }
+
   .topGrid {
     gap: 12px;
   }
@@ -1257,6 +1324,10 @@
     width: 100%;
   }
 
+  .faqHeader a {
+    width: auto;
+  }
+
   .textInsert,
   .reviews,
   .faq,
@@ -1292,6 +1363,10 @@
 }
 
 /* ---- Zoom lightbox ---- */
+
+/* Compact media labels. */
+.saleBadge { top:12px; right:12px; padding:5px 8px; border-radius:6px; font-size:11px; }
+.view360 { right:10px; bottom:10px; padding:6px 9px; font-size:10px; }
 
 .zoomTrigger {
   display: block;

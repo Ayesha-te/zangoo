@@ -53,9 +53,9 @@ export function CustomerReviews({
   const [uploads, setUploads] = useState<string[]>([]);
   const [uploadError, setUploadError] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [reviewFormOpen, setReviewFormOpen] = useState(false);
   const [expandedReview, setExpandedReview] = useState<CustomerReview | null>(null);
   const reviewGridRef = useRef<HTMLDivElement>(null);
-  const reviewFormRef = useRef<HTMLDetailsElement>(null);
 
   useEffect(() => {
     if (!submitted) return;
@@ -102,7 +102,7 @@ export function CustomerReviews({
     setUploadError("");
     setSort("recent");
     setSubmitted(true);
-    if (reviewFormRef.current) reviewFormRef.current.open = false;
+    setReviewFormOpen(false);
   }
 
   return (
@@ -157,9 +157,19 @@ export function CustomerReviews({
         </div>
       </div>
 
-      <details className="customer-review-form-wrap" ref={reviewFormRef}>
-        <summary>Leave a review</summary>
-        <form className="customer-review-form" onSubmit={submitReview}>
+      <div className={`customer-review-form-wrap${reviewFormOpen ? " is-open" : ""}`}>
+        <button
+          className="customer-review-form-toggle"
+          type="button"
+          aria-expanded={reviewFormOpen}
+          aria-controls="customer-review-form-panel"
+          onClick={() => setReviewFormOpen((open) => !open)}
+        >
+          <span>Leave a review</span>
+          <span className="customer-review-form-toggle-icon" aria-hidden="true">{reviewFormOpen ? "\u2212" : "+"}</span>
+        </button>
+        <div className="customer-review-form-panel" id="customer-review-form-panel" aria-hidden={!reviewFormOpen}>
+          <form className="customer-review-form" onSubmit={submitReview}>
           <label>Name<input required value={name} onChange={(event) => setName(event.target.value)} /></label>
           <label>Rating<select value={rating} onChange={(event) => setRating(Number(event.target.value))}>{[5, 4, 3, 2, 1].map((value) => <option value={value} key={value}>{value} stars</option>)}</select></label>
           <label className="customer-review-comment">Your feedback<textarea required rows={4} value={comment} onChange={(event) => setComment(event.target.value)} /></label>
@@ -172,8 +182,9 @@ export function CustomerReviews({
           {uploadError ? <small className="customer-review-upload-error">{uploadError}</small> : null}
           {uploads.length ? <div className="customer-review-media customer-review-preview">{uploads.map((source) => <img src={source} alt="Review upload preview" key={source} />)}</div> : null}
           <button type="submit">Submit review</button>
-        </form>
-      </details>
+          </form>
+        </div>
+      </div>
       {expandedReview ? (
         <div className="customer-review-modal-backdrop" role="presentation" onMouseDown={() => setExpandedReview(null)}>
           <section className="customer-review-modal" role="dialog" aria-modal="true" aria-labelledby="full-review-title" onMouseDown={(event) => event.stopPropagation()}>

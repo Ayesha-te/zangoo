@@ -20,11 +20,15 @@ export function WishlistContent() {
     <div className="wishlist-grid">
       {favorites.map((item) => (
         <article className="wishlist-card" key={item.slug}>
-          <img src={item.image} alt="" />
+          <div className="wishlist-media">
+            <img src={item.image} alt="" />
+            <span className="wishlist-firmness-badge">{item.firmness || "Medium to Firm"}</span>
+            <span className="wishlist-heart" aria-hidden="true">♡</span>
+          </div>
           <div>
-            {item.firmness ? <span>{item.firmness}</span> : null}
+            <span className="wishlist-firmness">{item.firmness || "Medium to Firm"}</span>
             <h2>{item.name}</h2>
-            <strong>{item.price}</strong>
+            <strong>{item.price.startsWith("From") ? item.price : `From ${item.price}`}</strong>
             <div className="wishlist-actions">
               <Link href={item.href}>View item</Link>
               <button type="button" onClick={() => removeFavorite(item.slug)}>Remove</button>

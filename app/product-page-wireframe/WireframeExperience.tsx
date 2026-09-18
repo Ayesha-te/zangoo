@@ -7,6 +7,8 @@ import { orthoMattressProducts } from "@/app/data/mattressProducts";
 import { FirmnessBar } from "@/app/components/collections/FirmnessBar";
 import { FavoriteButton } from "@/app/components/favorites/FavoriteButton";
 import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
+import { ProductFaq } from "@/app/components/site/ProductFaq";
+import { useCart } from "@/app/components/cart/CartProvider";
 import { getStockState, type StockTone } from "@/app/utils/stockState";
 import styles from "./productPageWireframe.module.css";
 
@@ -66,8 +68,8 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   const [size, setSize] = useState("king");
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
+  const { addItem } = useCart();
   const [openAccordion, setOpenAccordion] = useState<number | null>(0);
-  const [openFaqs, setOpenFaqs] = useState<Set<number>>(() => new Set());
   const [comparisonSlug, setComparisonSlug] = useState<string | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [recentSlugs, setRecentSlugs] = useState<string[]>([]);
@@ -113,32 +115,6 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
     { question: "What happens if I need help after ordering?", answer: "Our support team can assist with delivery, setup, care, and product questions." },
   ];
 
-  function renderFaqItems(items: typeof faqItems, offset: number) {
-    return items.map((faq, itemIndex) => {
-      const index = offset + itemIndex * 2;
-      const isOpen = openFaqs.has(index);
-      return (
-        <div className={styles.faqItem} key={faq.question}>
-          <button
-            type="button"
-            className={styles.faqSummary}
-            aria-expanded={isOpen}
-            onClick={() => setOpenFaqs((current) => {
-              const next = new Set(current);
-              if (next.has(index)) next.delete(index); else next.add(index);
-              return next;
-            })}
-          >
-            {faq.question}
-          </button>
-          <div className={styles.faqPanel} data-open={isOpen || undefined}>
-            <div className={styles.faqPanelInner}><p>{faq.answer}</p></div>
-          </div>
-        </div>
-      );
-    });
-  }
-
   return (
     <div className={styles.wrap}>
       {isPreview ? <p className={styles.kicker}>Product page wireframe preview</p> : null}
@@ -168,6 +144,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
                 aria-pressed={index === activeImage}
                 onClick={() => setActiveImage(index)}
               >
+                <span className={styles.thumbSaleBadge}>-15%</span>
                 <img src={image.src} alt="" />
               </button>
             ))}
@@ -257,7 +234,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
               className={`${styles.addButton} ${added ? styles.addedButton : ""}`}
               type="button"
               disabled={outOfStock}
-              onClick={() => setAdded(true)}
+              onClick={() => { addItem({ slug: product.slug, name: product.shortName, image: gallery[0].src, price: activeSize.price, size, href: `/collections/bedroom/mattresses/${product.slug}/` }, quantity); setAdded(true); }}
             >
               {outOfStock ? "Out of Stock" : added ? "Added to Basket" : "Add to Basket"}
             </button>
@@ -309,12 +286,11 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
       />
 
       <section className={styles.faq} aria-labelledby="faq-title">
-        <h2 id="faq-title">Frequently Asked Questions</h2>
-        <div>
-          <div className={styles.faqColumn}>{renderFaqItems(faqItems.filter((_, index) => index % 2 === 0), 0)}</div>
-          <div className={styles.faqColumn}>{renderFaqItems(faqItems.filter((_, index) => index % 2 === 1), 1)}</div>
-          <Link href="/faq/">View all FAQs</Link>
+        <div className={styles.faqHeader}>
+          <h2 id="faq-title">Frequently Asked Questions</h2>
+          <Link href="/faq/">View all FAQs &rarr;</Link>
         </div>
+        <ProductFaq faqs={faqItems} />
       </section>
 
       {/* Compare section retained for future re-enable; intentionally hidden for launch. */}

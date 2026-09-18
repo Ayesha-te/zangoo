@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { collections } from "@/app/data/home";
+import { orthoMattressProducts } from "@/app/data/mattressProducts";
 import { CollapsibleIntro } from "@/app/components/site/CollapsibleIntro";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { getSentencePreview } from "@/app/utils/collapsibleIntro";
@@ -50,8 +51,7 @@ export default function CollectionsPage() {
                   <p>{collection.description}</p>
                 </div>
                 <div className={styles.cardBottom}>
-                  <span>{collection.count}</span>
-                  {isLive ? <Link href={`/collections/${collection.slug}/`} aria-label={`${collection.name} collection details`}>Enquire Now</Link> : <span>Coming Soon</span>}
+                  {isLive ? <><span>{orthoMattressProducts.length} products</span><Link href={`/collections/${collection.slug}/`} aria-label={`${collection.name} collection details`}>Enquire Now</Link></> : null}
                 </div>
               </article>
             );

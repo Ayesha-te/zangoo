@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, Playfair_Display } from "next/font/google";
 import { FavoritesProvider } from "@/app/components/favorites/FavoritesProvider";
+import { CartProvider } from "@/app/components/cart/CartProvider";
 import { FloatingWhatsApp } from "@/app/components/site/FloatingWhatsApp";
 import "./globals.css";
 
@@ -30,10 +31,7 @@ export default function RootLayout({
       className={`${dmSans.variable} ${playfair.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <FavoritesProvider>
-          {children}
-          <FloatingWhatsApp />
-        </FavoritesProvider>
+        <FavoritesProvider><CartProvider>{children}<FloatingWhatsApp /></CartProvider></FavoritesProvider>
       </body>
     </html>
   );

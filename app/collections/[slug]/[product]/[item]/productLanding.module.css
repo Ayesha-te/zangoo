@@ -790,9 +790,8 @@
 :global(.mattress-landing .lp-faq-grid){
   width:min(100%,960px)!important;
   margin:40px auto 0!important;
-  display:grid!important;
-  grid-template-columns:repeat(2,minmax(0,1fr))!important;
-  gap:12px!important;
+  column-count:2!important;
+  column-gap:12px!important;
 }
 
 :global(.mattress-landing .lp-faq-item){
@@ -852,7 +851,10 @@
   display:grid!important;
   grid-template-rows:0fr!important;
   padding:0 28px!important;
-  transition:grid-template-rows .3s cubic-bezier(.22,1,.36,1),padding .3s cubic-bezier(.22,1,.36,1)!important;
+  overflow:hidden!important;
+  break-inside:avoid!important;
+  margin:0 0 12px!important;
+  transition:grid-template-rows .35s cubic-bezier(.22,1,.36,1),padding .35s cubic-bezier(.22,1,.36,1)!important;
 }
 
 :global(.mattress-landing .lp-faq-body[aria-hidden=false]){
@@ -864,10 +866,16 @@
   min-height:0!important;
   overflow:hidden!important;
   margin:0!important;
-  padding-top:16px!important;
-  border-top:1px solid var(--bdr)!important;
+  padding-top:0!important;
+  border-top:1px solid transparent!important;
   color:var(--body)!important;
   font:500 14px/1.65 var(--sans)!important;
+  transition:padding-top .35s ease,border-color .35s ease!important;
+}
+
+:global(.mattress-landing .lp-faq-body[aria-hidden=false] p){
+  padding-top:16px!important;
+  border-top-color:var(--bdr)!important;
 }
 
 :global(.mattress-landing .lp-faq-body[aria-hidden=true] p){
@@ -876,6 +884,7 @@
 }
 
 @media (max-width: 700px){
+  :global(.mattress-landing .lp-faq-grid){column-count:1!important;}
   :global(.mattress-landing .lp-faq-btn){
     padding:16px!important;
     padding-right:58px!important;

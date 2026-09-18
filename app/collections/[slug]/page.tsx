@@ -87,12 +87,7 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
                         : `${group.label} products are being prepared for launch.`}
                     </p>
                   </div>
-                  <div className={styles.cardBottom}>
-                    <span>{isMattresses ? `${orthoMattressProducts.length} products live` : "Launching soon"}</span>
-                    <Link href={group.href} aria-label={`View ${group.label} in ${collection.name}`}>
-                      {isMattresses ? "View Mattresses" : "View Category"}
-                    </Link>
-                  </div>
+                  {isMattresses ? <div className={styles.cardBottom}><span>{orthoMattressProducts.length} products live</span><Link href={group.href} aria-label={`View ${group.label} in ${collection.name}`}>View Mattresses</Link></div> : null}
                 </article>
               );
             })}

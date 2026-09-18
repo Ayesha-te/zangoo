@@ -25,14 +25,10 @@ export function CollapsibleIntro({ text, classes }: CollapsibleIntroProps) {
     >
       <p className={classes.collapsiblePanel}>
         {open ? text : preview}
-        {!open ? (
-          <>
-            {" "}
-            <button className={classes.collapsibleButton} type="button" onClick={() => setOpen(true)} aria-expanded={open}>
-              Show more
-            </button>
-          </>
-        ) : null}
+        {" "}
+        <button className={classes.collapsibleButton} type="button" onClick={() => setOpen((current) => !current)} aria-expanded={open}>
+          {open ? "Show less" : "Show more"}
+        </button>
       </p>
     </div>
   );

@@ -1,11 +1,9 @@
-import type { Metadata } from "next";
+"use client";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
-
-export const metadata: Metadata = {
-  title: "Cart | Furniture Co.",
-};
+import { useCart } from "@/app/components/cart/CartProvider";
 
 export default function CartPage() {
+  const { items, removeItem } = useCart();
   return (
     <>
       <SiteHeader />
@@ -14,7 +12,7 @@ export default function CartPage() {
         <section className="wrap simple-page-inner">
           <span className="sec-lbl">Cart</span>
           <h1>Your cart.</h1>
-          <p>The cart is ready for the upcoming ecommerce flow. Mattress sale enquiries are handled through contact support for now.</p>
+          {!items.length ? <p>Your basket is currently empty.</p> : <div className="cart-list">{items.map((item) => <article className="cart-item" key={`${item.slug}-${item.size}`}><img src={item.image} alt="" /><div><h2>{item.name}</h2><p>{item.size} · £{item.price} × {item.quantity}</p><button type="button" onClick={() => removeItem(item.slug, item.size)}>Remove</button></div></article>)}</div>}
         </section>
       </main>
       <SiteFooter />

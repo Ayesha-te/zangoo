@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { collectionCategories, footerMainLinks, footerSocialLinks, navLinks } from "@/app/data/home";
 import { useFavorites } from "@/app/components/favorites/FavoritesProvider";
+import { useCart } from "@/app/components/cart/CartProvider";
 
 const pendingSectionKey = "furnitureCoPendingSection";
 const whatsappHref = "https://wa.me/447830376489";
@@ -58,6 +59,7 @@ function observedSectionId(href: string) {
 
 export function SiteHeader() {
   const { favorites } = useFavorites();
+  const { count: cartCount } = useCart();
   const pathname = usePathname();
   const isHome = pathname === "/";
   const [menuOpen, setMenuOpen] = useState(false);
@@ -321,8 +323,9 @@ export function SiteHeader() {
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 0 0-7.1 7.1L12 21l8.8-8.3a5 5 0 0 0 0-7.1Z" /></svg>
               {favorites.length ? <span className="nav-wishlist-count">{favorites.length}</span> : null}
             </Link>
-            <Link href="/cart/" aria-label="Cart">
+            <Link href="/cart/" aria-label={`Cart, ${cartCount} items`} className="nav-cart">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h15l-2 8H8L6 3H3m6 16a1 1 0 1 0 0 .1m9-.1a1 1 0 1 0 0 .1" /></svg>
+              {cartCount ? <span className="nav-cart-count">{cartCount}</span> : null}
             </Link>
           </div>
           <button

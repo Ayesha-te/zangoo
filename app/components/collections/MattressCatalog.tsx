@@ -43,6 +43,7 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
   const [selectedSize, setSelectedSize] = useState<string[]>([]);
   const [sortBy, setSortBy] = useState<SortOption>("best-selling");
   const [pendingSort, setPendingSort] = useState<SortOption>("best-selling");
+  const [search, setSearch] = useState("");
   const [compareSelection, setCompareSelection] = useState<string[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -57,14 +58,16 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
   };
 
   const filteredProducts = useMemo(() => {
+    const query = search.trim().toLowerCase();
     const matches = products.filter((product) => {
+      const searchMatch = !query || `${product.name} ${product.shortName} ${product.description} ${product.firmness}`.toLowerCase().includes(query);
       const needMatch = selectedNeed.length === 0 || selectedNeed.some((filter) => {
         if (filter === "Orthopaedic") return true;
         if (filter === "Non-orthopaedic") return false;
         return product.bestFor.includes(filter);
       });
       const feelMatch = selectedFeel.length === 0 || selectedFeel.includes(product.firmness);
-      return needMatch && feelMatch;
+      return searchMatch && needMatch && feelMatch;
     });
 
     const sorted = [...matches];
@@ -74,7 +77,7 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
       sorted.sort((a, b) => getFirmnessRank(a.firmness) - getFirmnessRank(b.firmness));
     }
     return sorted;
-  }, [products, selectedNeed, selectedFeel, sortBy]);
+  }, [products, selectedNeed, selectedFeel, sortBy, search]);
 
   function toggleCompare(slug: string) {
     setCompareSelection((current) => {
@@ -111,6 +114,10 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
         </p>
 
         <div className={styles.mattressToolbar}>
+          <label className={styles.catalogSearch}>
+            <span>Search mattresses</span>
+            <input aria-label="Search mattresses by name or firmness" type="search" value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Search by name or firmness" />
+          </label>
           <div className={styles.mattressToolbarActions}>
             <label>
               Sort by:
