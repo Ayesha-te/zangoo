@@ -33,11 +33,18 @@ export async function getBlogPosts(): Promise<WordPressPost[]> {
 
   try {
     // Always fetch the latest featured image/content from WordPress.
-    const response = await fetch(url, { cache: "no-store" });
+    const response = await fetch(url, {
+      cache: "no-store",
+      headers: {
+        "User-Agent": "Mozilla/5.0 (compatible; ZangooBot/1.0; +https://zangoo.vercel.app)",
+        Accept: "application/json",
+      },
+    });
     if (!response.ok) throw new Error(`WordPress returned ${response.status}`);
     const posts = (await response.json()) as WordPressPost[];
     return posts.length ? posts : localWordPressPosts;
-  } catch {
+  } catch (error) {
+    console.error("getBlogPosts: falling back to local posts", error);
     return localWordPressPosts;
   }
 }
@@ -52,11 +59,18 @@ export async function getBlogPost(slug: string): Promise<WordPressPost | null> {
   url.searchParams.set("per_page", "1");
 
   try {
-    const response = await fetch(url, { cache: "no-store" });
+    const response = await fetch(url, {
+      cache: "no-store",
+      headers: {
+        "User-Agent": "Mozilla/5.0 (compatible; ZangooBot/1.0; +https://zangoo.vercel.app)",
+        Accept: "application/json",
+      },
+    });
     if (!response.ok) throw new Error(`WordPress returned ${response.status}`);
     const posts = (await response.json()) as WordPressPost[];
     return posts[0] ?? null;
-  } catch {
+  } catch (error) {
+    console.error(`getBlogPost: failed to fetch slug "${slug}"`, error);
     return null;
   }
 }

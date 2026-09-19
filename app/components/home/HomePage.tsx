@@ -610,7 +610,7 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
   const fallbackPosts = useMemo(
     () =>
       blogPosts
-        .map((post) => ({
+        .map((post, index) => ({
           id: post.title,
           title: post.title,
           excerpt: post.excerpt,
@@ -619,6 +619,8 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
           tag: post.tag,
           className: post.className,
           visual: post.visual,
+          imageUrl: remoteImages.featured[index % remoteImages.featured.length],
+          imageAlt: `${post.title} image`,
         }))
         .map((post, index) => ({ ...post, id: `${post.id}-${index}` })),
     [],
@@ -655,9 +657,13 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
         const response = await fetch(postsUrl.toString(), {
           cache: "no-store",
           signal: controller.signal,
+          headers: { Accept: "application/json" },
         });
 
-        if (!response.ok) return;
+        if (!response.ok) {
+          console.error(`Blog client refetch: WordPress returned ${response.status}`);
+          return;
+        }
 
         const data = (await response.json()) as WordPressPost[];
         if (!Array.isArray(data) || data.length === 0) return;
@@ -666,8 +672,11 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
         if (!blogOnlyPosts.length) return;
 
         setPosts(mergeBlogPostsWithFallback(blogOnlyPosts.map(mapWordPressPost), fallbackPosts));
-      } catch {
+      } catch (error) {
         // Keep the local fallback cards when the WordPress host rejects a browser request.
+        if ((error as Error)?.name !== "AbortError") {
+          console.error("Blog client refetch failed", error);
+        }
       }
     }
 
