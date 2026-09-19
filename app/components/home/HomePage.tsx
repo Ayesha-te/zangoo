@@ -625,6 +625,7 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
         .map((post, index) => ({ ...post, id: `${post.id}-${index}` })),
     [],
   );
+  const hasRealInitialPosts = initialPosts.some((post) => post.id > 0);
   const [posts, setPosts] = useState<HomepageBlogPost[]>(() =>
     initialPosts.length
       ? mergeBlogPostsWithFallback(initialPosts.filter((post) => !isReviewCategoryPost(post)).map(mapWordPressPost), fallbackPosts)
@@ -642,7 +643,10 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
   }, [fallbackPosts]);
 
   useEffect(() => {
-    if (initialPosts.length) return;
+    // The build-time (static export) fetch to WordPress can fail from Vercel's build
+    // network even though the host serves real browsers fine, so re-fetch client-side
+    // here whenever we only have the local fallback content.
+    if (hasRealInitialPosts) return;
 
     const controller = new AbortController();
     const postsUrl = new URL("https://peru-armadillo-169520.hostingersite.com/wp-json/wp/v2/posts");
@@ -693,7 +697,7 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
         globalThis.clearTimeout(idleId);
       }
     };
-  }, [fallbackPosts, initialPosts.length]);
+  }, [fallbackPosts, hasRealInitialPosts]);
 
   return (
     <section className="blog" id="blog" aria-labelledby="blog-h">
