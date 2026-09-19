@@ -431,7 +431,7 @@ function FeaturedMattresses() {
             <span className="sec-lbl">Featured Collections &amp; Trends</span>
             <h2 className="h2dk rv" id="featured-h">Mattress sale highlights</h2>
           </div>
-          <Link href="/collections/bedroom/mattresses/" className="sec-lnk">Shop Mattresses</Link>
+          <Link href="/collections/bedroom/mattresses/" className="sec-lnk shared-section-link">Shop Mattresses</Link>
         </div>
         <div className="featured-grid">
           {featured.map(([title, copy, price, image], index) => (
@@ -703,7 +703,7 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
                 &rarr;
               </button>
             </div>
-            <Link href="/blog/" className="sec-lnk sec-lnk-lt" aria-label="View all blog articles">View All</Link>
+          <Link href="/blog/" className="sec-lnk sec-lnk-lt shared-section-link" aria-label="View all blog articles">View All</Link>
           </div>
         </div>
         <div className="blog-grid carousel-track" ref={sliderRef}>
@@ -757,7 +757,7 @@ function Faq() {
           <span className="sec-lbl">Common Questions</span>
           <h2 id="faq-h" className="h2dk">Frequently Asked Questions</h2>
           <p>Everything you need to know before you buy - answered clearly and honestly.</p>
-          <Link className="faq-link" href="/faq/">View all FAQs &rarr;</Link>
+          <Link className="faq-link shared-section-link" href="/faq/">View all FAQs &rarr;</Link>
         </div>
         <div className="faq-grid" role="list">
           {columns.map((column, columnIndex) => (
@@ -780,8 +780,8 @@ function Faq() {
                         return next;
                       })}
                     >
-                      <span className="fi-q">{question}</span>
-                      <span className="fi-icon" aria-hidden="true">{isOpen ? "-" : "+"}</span>
+                      <span className="fi-q" style={{ fontSize: "15px", lineHeight: 1.35 }}>{question}</span>
+                      <span className="fi-icon" style={{ width: 36, height: 36, fontSize: 22 }} aria-hidden="true">{isOpen ? "-" : "+"}</span>
                     </button>
                     <div className="fi-body" id={answerId} aria-hidden={!isOpen}>
                       <p className="fi-a">{answer}</p>

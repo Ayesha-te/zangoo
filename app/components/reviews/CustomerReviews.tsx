@@ -53,7 +53,7 @@ export function CustomerReviews({
   const [uploads, setUploads] = useState<string[]>([]);
   const [uploadError, setUploadError] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const [reviewFormOpen, setReviewFormOpen] = useState(false);
+  const [reviewFormOpen, setReviewFormOpen] = useState(true);
   const [expandedReview, setExpandedReview] = useState<CustomerReview | null>(null);
   const reviewGridRef = useRef<HTMLDivElement>(null);
 

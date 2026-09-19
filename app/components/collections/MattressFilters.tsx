@@ -70,6 +70,7 @@ export function MattressFilters({
       <aside
         className={isOpen ? `${styles.filterSidebar} ${styles.filterSidebarOpen}` : styles.filterSidebar}
         aria-label="Mattress filters"
+        style={{ alignSelf: "start", height: "fit-content" }}
       >
         <div className={styles.filterHead}>
           <strong>Filter by</strong>

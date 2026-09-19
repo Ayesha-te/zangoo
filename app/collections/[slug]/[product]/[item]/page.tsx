@@ -380,7 +380,7 @@ export default async function ProductLandingPage({ params }: ProductLandingPageP
             <span>Your questions, answered</span>
             <h2 id="faq-title">Frequently Asked Questions</h2>
             <p>Helpful answers about {item.shortName} before you commit.</p>
-            <Link href="/faq/">View all FAQs &rarr;</Link>
+            <Link className="shared-section-link" href="/faq/">View all FAQs &rarr;</Link>
           </div>
           <ProductFaq
             faqs={[

@@ -146,7 +146,7 @@ export default async function CollectionProductPage({ params }: ProductPageProps
             <div className={styles.categoryGuides}>
               <div className={styles.supportHeading}>
                 <h2>Related Guides &amp; Resources</h2>
-                <Link href="/blog/">View all guides &rarr;</Link>
+                <Link className="shared-section-link" href="/blog/">View all guides &rarr;</Link>
               </div>
               <div className={styles.guideGrid}>
                 {mattressGuides.map((guide) => (
@@ -162,7 +162,7 @@ export default async function CollectionProductPage({ params }: ProductPageProps
             <div className={styles.categoryFaqs}>
               <div className={styles.supportHeading}>
                 <h2>Frequently Asked Questions</h2>
-                <Link href="/faq/">View all FAQs &rarr;</Link>
+                <Link className="shared-section-link" href="/faq/">View all FAQs &rarr;</Link>
               </div>
               <ProductFaq faqs={mattressFaqs.map(([question, answer]) => ({ question, answer }))} />
             </div>

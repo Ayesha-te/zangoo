@@ -144,7 +144,6 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
                 aria-pressed={index === activeImage}
                 onClick={() => setActiveImage(index)}
               >
-                <span className={styles.thumbSaleBadge}>-15%</span>
                 <img src={image.src} alt="" />
               </button>
             ))}
@@ -288,7 +287,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
       <section className={styles.faq} aria-labelledby="faq-title">
         <div className={styles.faqHeader}>
           <h2 id="faq-title">Frequently Asked Questions</h2>
-          <Link href="/faq/">View all FAQs &rarr;</Link>
+          <Link className={styles.faqHeaderLink} href="/faq/"><span style={{ textTransform: "none" }}>View all FAQs &rarr;</span></Link>
         </div>
         <ProductFaq faqs={faqItems} />
       </section>
