@@ -44,6 +44,11 @@ export function MattressFilters({
   const hasSelection = (isMobile ? draftNeed.length > 0 || draftFeel.length > 0 : selectedNeed.length > 0 || selectedFeel.length > 0) || selectedSize.length > 0;
   const shownNeed = isMobile ? draftNeed : selectedNeed;
   const shownFeel = isMobile ? draftFeel : selectedFeel;
+  const clearFilters = () => {
+    setDraftNeed([]);
+    setDraftFeel([]);
+    onClearAll();
+  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -75,7 +80,7 @@ export function MattressFilters({
         <div className={styles.filterHead}>
           <strong>Filter by</strong>
           <div className={styles.filterHeadActions}>
-            <button type="button" onClick={onClearAll}>
+            <button type="button" onClick={clearFilters}>
               Clear all
             </button>
             <button

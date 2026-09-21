@@ -431,7 +431,7 @@ function FeaturedMattresses() {
             <span className="sec-lbl">Featured Collections &amp; Trends</span>
             <h2 className="h2dk rv" id="featured-h">Mattress sale highlights</h2>
           </div>
-          <Link href="/collections/bedroom/mattresses/" className="sec-lnk shared-section-link">Shop Mattresses</Link>
+          <Link href="/collections/bedroom/mattresses/" className="sec-lnk shared-section-link">Shop Mattresses &rarr;</Link>
         </div>
         <div className="featured-grid">
           {featured.map(([title, copy, price, image], index) => (
@@ -716,7 +716,7 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
                 &rarr;
               </button>
             </div>
-          <Link href="/blog/" className="sec-lnk sec-lnk-lt shared-section-link" aria-label="View all blog articles">View All</Link>
+          <Link href="/blog/" className="sec-lnk sec-lnk-lt shared-section-link" aria-label="View all blog articles">View All &rarr;</Link>
           </div>
         </div>
         <div className="blog-grid carousel-track" ref={sliderRef}>
