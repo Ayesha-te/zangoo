@@ -292,6 +292,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
       <section className={styles.faq} aria-labelledby="faq-title">
         <div className={styles.faqHeader}>
           <h2 id="faq-title">Frequently Asked Questions</h2>
+          <p>Helpful answers about comfort, delivery, support, and caring for your mattress.</p>
           <Link className={styles.faqHeaderLink} href="/faq/"><span style={{ textTransform: "none" }}>View all FAQs</span></Link>
         </div>
         <ProductFaq faqs={faqItems} />

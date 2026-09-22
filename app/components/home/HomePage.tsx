@@ -376,10 +376,11 @@ function Collections() {
                 <h2 className="h2lt rv" id="coll-h">
                   Explore Our Collections
                 </h2>
+                <p>Browse room-led edits and find the range that matches the way you live.</p>
+                <Link href="/collections/" className="sec-lnk sec-lnk-lt shared-section-link rv" aria-label="View all collections">
+                  View All
+                </Link>
               </div>
-              <Link href="/collections/" className="sec-lnk sec-lnk-lt shared-section-link rv" aria-label="View all collections">
-                View All
-              </Link>
             </div>
             <div className="coll-grid">
               {collections.map((collection, index) => (
@@ -430,8 +431,9 @@ function FeaturedMattresses() {
           <div>
             <span className="sec-lbl">Featured Collections &amp; Trends</span>
             <h2 className="h2dk rv" id="featured-h">Mattress sale highlights</h2>
+            <p>Compare featured mattress picks, current offers, and popular comfort styles.</p>
+            <Link href="/collections/bedroom/mattresses/" className="sec-lnk shared-section-link">Shop Mattresses</Link>
           </div>
-          <Link href="/collections/bedroom/mattresses/" className="sec-lnk shared-section-link">Shop Mattresses</Link>
         </div>
         <div className="featured-grid">
           {featured.map(([title, copy, price, image], index) => (
@@ -706,17 +708,18 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
           <div>
             <span className="sec-lbl sec-lbl-lt">Ideas &amp; Inspiration</span>
             <h2 className="h2lt" id="blog-h">From Our Blog</h2>
-          </div>
-          <div className="blog-head-actions">
-            <div className="carousel-actions carousel-actions-lt" aria-label="Blog carousel controls">
-              <button type="button" aria-label="Previous blog post" onClick={() => scrollCarousel(sliderRef, -1)}>
-                &larr;
-              </button>
-              <button type="button" aria-label="Next blog post" onClick={() => scrollCarousel(sliderRef, 1)}>
-                &rarr;
-              </button>
+            <p>Practical guides for choosing, caring for, and getting more from your mattress.</p>
+            <div className="blog-head-actions">
+              <Link href="/blog/" className="sec-lnk sec-lnk-lt shared-section-link" aria-label="View all blog articles">View All</Link>
+              <div className="carousel-actions carousel-actions-lt" aria-label="Blog carousel controls">
+                <button type="button" aria-label="Previous blog post" onClick={() => scrollCarousel(sliderRef, -1)}>
+                  &larr;
+                </button>
+                <button type="button" aria-label="Next blog post" onClick={() => scrollCarousel(sliderRef, 1)}>
+                  &rarr;
+                </button>
+              </div>
             </div>
-          <Link href="/blog/" className="sec-lnk sec-lnk-lt shared-section-link" aria-label="View all blog articles">View All</Link>
           </div>
         </div>
         <div className="blog-grid carousel-track" ref={sliderRef}>
