@@ -45,7 +45,7 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
       <Breadcrumbs items={[{ label: "Collections", href: "/collections/" }, { label: collection.name }]} />
       <main className={styles.page}>
         <section className={styles.hero} aria-labelledby="collection-title">
-          <Link className={styles.categoryBackLink} href="/collections/">
+          <Link className={`${styles.categoryBackLink} ${styles.categoryForwardLink}`} href="/collections/">
             View All Collections
           </Link>
           <span>{collection.badge}</span>

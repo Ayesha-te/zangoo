@@ -605,7 +605,7 @@ export default function CapriOrthoMattress2Client() {
           <span className={styles.eyebrow}>Your questions answered</span>
           <h2>Frequently Asked Questions</h2>
           <p>Everything you need to know before you buy, no jargon, just honest answers.</p>
-          <Link className={styles.faqLink} href="/faq/">View all FAQs &rarr;</Link>
+          <Link className={styles.faqLink} href="/faq/">View all FAQs</Link>
         </div>
         <div className={styles.faqGrid}>
           {faqs.map(([question, answer], index) => {

@@ -377,7 +377,7 @@ function Collections() {
                   Explore Our Collections
                 </h2>
               </div>
-              <Link href="/collections/" className="sec-lnk sec-lnk-lt rv" aria-label="View all collections">
+              <Link href="/collections/" className="sec-lnk sec-lnk-lt shared-section-link rv" aria-label="View all collections">
                 View All
               </Link>
             </div>
@@ -431,7 +431,7 @@ function FeaturedMattresses() {
             <span className="sec-lbl">Featured Collections &amp; Trends</span>
             <h2 className="h2dk rv" id="featured-h">Mattress sale highlights</h2>
           </div>
-          <Link href="/collections/bedroom/mattresses/" className="sec-lnk shared-section-link">Shop Mattresses &rarr;</Link>
+          <Link href="/collections/bedroom/mattresses/" className="sec-lnk shared-section-link">Shop Mattresses</Link>
         </div>
         <div className="featured-grid">
           {featured.map(([title, copy, price, image], index) => (
@@ -716,7 +716,7 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
                 &rarr;
               </button>
             </div>
-          <Link href="/blog/" className="sec-lnk sec-lnk-lt shared-section-link" aria-label="View all blog articles">View All &rarr;</Link>
+          <Link href="/blog/" className="sec-lnk sec-lnk-lt shared-section-link" aria-label="View all blog articles">View All</Link>
           </div>
         </div>
         <div className="blog-grid carousel-track" ref={sliderRef}>
@@ -770,7 +770,7 @@ function Faq() {
           <span className="sec-lbl">Common Questions</span>
           <h2 id="faq-h" className="h2dk">Frequently Asked Questions</h2>
           <p>Everything you need to know before you buy - answered clearly and honestly.</p>
-          <Link className="faq-link shared-section-link" href="/faq/">View all FAQs &rarr;</Link>
+          <Link className="faq-link shared-section-link" href="/faq/">View all FAQs</Link>
         </div>
         <div className="faq-grid" role="list">
           {columns.map((column, columnIndex) => (

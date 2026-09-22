@@ -88,14 +88,23 @@
   font-size: 14px;
   font-weight: 900;
   line-height: inherit;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration: none;
   border-radius: 0;
   box-shadow: none;
   vertical-align: baseline;
   transition: color .2s ease;
 }
-.collapsibleButton:hover,.collapsibleButton:focus-visible{color:var(--navy);outline:none}
+
+.collapsibleButton::after {
+  content: "\2192";
+  display: inline-block;
+  margin-left: 6px;
+  line-height: 1;
+  transition: transform var(--tr);
+}
+
+.collapsibleButton:hover,.collapsibleButton:focus-visible{color:var(--navy);outline:none;text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px}
+.collapsibleButton:hover::after,.collapsibleButton:focus-visible::after{transform:translateX(4px)}
 
 .collapsibleText[data-open="true"] .collapsibleButton {
   display: block;
@@ -189,13 +198,14 @@
 .cardBottom a {
   width: max-content;
   max-width: 100%;
-  min-height: 42px;
-  padding: 9px 18px;
-  border-radius: var(--r);
-  border: 2px solid var(--blue);
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   text-align: center;
   font-size: 13px;
   font-weight: 800;
@@ -203,13 +213,28 @@
   color: var(--blue);
   white-space: normal;
   overflow-wrap: anywhere;
-  transition: background var(--tr), color var(--tr);
+  text-decoration: none;
+  transition: color var(--tr);
+}
+
+.cardBottom a::after {
+  content: "\2192";
+  display: inline-block;
+  line-height: 1;
+  transition: transform var(--tr);
 }
 
 .cardBottom a:hover,
 .cardBottom a:focus-visible {
-  background: var(--blue);
-  color: #fff;
+  color: var(--blue);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+}
+
+.cardBottom a:hover::after,
+.cardBottom a:focus-visible::after {
+  transform: translateX(4px);
 }
 
 .detailActions {
@@ -626,28 +651,45 @@
 }
 
 .mattressButton {
-  width: 100%;
-  min-height: 40px;
+  width: max-content;
+  max-width: 100%;
+  min-height: 0;
   margin-top: 12px;
-  border: 2px solid var(--navy);
-  border-radius: 5px;
+  border: 0;
+  border-radius: 0;
   display: flex !important;
   align-items: center;
-  justify-content: space-between;
-  padding: 0 16px;
-  background: var(--navy);
-  color: #fff;
+  justify-content: flex-start;
+  gap: 6px;
+  padding: 0;
+  background: transparent;
+  color: var(--blue);
   font: 900 13px/1.2 var(--sans);
   text-decoration: none;
   cursor: pointer;
-  transition: background var(--tr), border-color var(--tr), color var(--tr);
+  transition: color var(--tr);
+}
+
+.mattressButton::after {
+  content: "\2192";
+  display: inline-block;
+  line-height: 1;
+  transition: transform var(--tr);
 }
 
 .mattressButton:hover,
 .mattressButton:focus-visible {
-  background: var(--blue);
-  border-color: var(--blue);
-  color: #fff;
+  background: transparent;
+  border-color: transparent;
+  color: var(--blue);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+}
+
+.mattressButton:hover::after,
+.mattressButton:focus-visible::after {
+  transform: translateX(4px);
 }
 
 .compareCheck {
@@ -841,9 +883,15 @@
   text-decoration:none;
 }
 
-.hero .categoryBackLink::before { content:"\2190"; }
+.hero .categoryBackLink::before { content:"\2190";display:inline-block;line-height:1;transition:transform var(--tr); }
+.hero .categoryForwardLink::before { content:none; }
+.hero .categoryForwardLink::after { content:"\2192";display:inline-block;line-height:1;transition:transform var(--tr); }
 .hero .categoryBackLink:hover,
-.hero .categoryBackLink:focus-visible { text-decoration:underline;text-underline-offset:3px; }
+.hero .categoryBackLink:focus-visible { text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px; }
+.hero .categoryBackLink:hover::before,
+.hero .categoryBackLink:focus-visible::before { transform:translateX(-4px); }
+.hero .categoryForwardLink:hover::after,
+.hero .categoryForwardLink:focus-visible::after { transform:translateX(4px); }
 
 @media (max-width: 1024px) {
   .filterTrigger { display:flex!important; }
@@ -1418,8 +1466,7 @@
 .supportHeading a {
   color: var(--blue);
   font: 900 13px/1.2 var(--sans);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+  text-decoration: none;
   white-space: nowrap;
 }
 

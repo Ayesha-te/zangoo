@@ -866,16 +866,31 @@
 .faqLink {
   display: inline-flex;
   align-items: center;
+  gap: 6px;
   margin-top: 18px;
   color: var(--blue);
   font: 900 15px/1.2 var(--sans);
-  text-decoration: underline;
-  text-underline-offset: 4px;
+  text-decoration: none;
+}
+
+.faqLink::after {
+  content: "\2192";
+  display: inline-block;
+  line-height: 1;
+  transition: transform var(--tr);
 }
 
 .faqLink:hover,
 .faqLink:focus-visible {
   color: var(--navy);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+}
+
+.faqLink:hover::after,
+.faqLink:focus-visible::after {
+  transform: translateX(4px);
 }
 
 .faqItem {

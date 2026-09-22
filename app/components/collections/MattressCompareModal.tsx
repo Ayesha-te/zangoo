@@ -95,7 +95,7 @@ export function MattressCompareModal({ products, onClose }: MattressCompareModal
               key={item.slug}
               onClick={onClose}
             >
-              View {item.shortName} &rarr;
+              View {item.shortName}
             </Link>
           ))}
         </div>

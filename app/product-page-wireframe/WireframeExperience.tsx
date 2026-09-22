@@ -72,14 +72,19 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   const [openAccordion, setOpenAccordion] = useState<number | null>(0);
   const [comparisonSlug, setComparisonSlug] = useState<string | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
-  const [recentSlugs, setRecentSlugs] = useState<string[]>([]);
+  const [recentSlugs] = useState<string[]>(() => {
+    if (typeof window === "undefined") return [product.slug];
+    try {
+      const previous = JSON.parse(localStorage.getItem("furnitureCoRecentlyViewed") || "[]") as string[];
+      return [product.slug, ...previous.filter((slug) => slug !== product.slug)].slice(0, 4);
+    } catch {
+      localStorage.removeItem("furnitureCoRecentlyViewed");
+      return [product.slug];
+    }
+  });
   useEffect(() => {
-    const key = "furnitureCoRecentlyViewed";
-    const previous = JSON.parse(localStorage.getItem(key) || "[]") as string[];
-    const next = [product.slug, ...previous.filter((slug) => slug !== product.slug)].slice(0, 4);
-    localStorage.setItem(key, JSON.stringify(next));
-    setRecentSlugs(next);
-  }, [product.slug]);
+    localStorage.setItem("furnitureCoRecentlyViewed", JSON.stringify(recentSlugs));
+  }, [recentSlugs]);
 
   const activeSize = sizes.find((item) => item.id === size) ?? sizes[2];
   const total = activeSize.price * quantity;
@@ -287,7 +292,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
       <section className={styles.faq} aria-labelledby="faq-title">
         <div className={styles.faqHeader}>
           <h2 id="faq-title">Frequently Asked Questions</h2>
-          <Link className={styles.faqHeaderLink} href="/faq/"><span style={{ textTransform: "none" }}>View all FAQs &rarr;</span></Link>
+          <Link className={styles.faqHeaderLink} href="/faq/"><span style={{ textTransform: "none" }}>View all FAQs</span></Link>
         </div>
         <ProductFaq faqs={faqItems} />
       </section>

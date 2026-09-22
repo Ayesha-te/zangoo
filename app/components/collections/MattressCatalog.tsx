@@ -163,7 +163,7 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
                     className={styles.mattressButton}
                     href={`/collections/bedroom/mattresses/${mattress.slug}/`}
                   >
-                    View Mattress <span aria-hidden="true">&rsaquo;</span>
+                    View Mattress
                   </Link>
                 </span>
               </div>

@@ -171,6 +171,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 6px;
   min-height: 44px;
   border-radius: 8px;
   background: var(--navy);
@@ -181,10 +182,25 @@
   transition: background var(--tr), transform var(--tr);
 }
 
+.viewButton::after {
+  content: "\2192";
+  display: inline-block;
+  line-height: 1;
+  transition: transform var(--tr);
+}
+
 .viewButton:hover,
 .viewButton:focus-visible {
   background: var(--blue);
   transform: translateY(-1px);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 5px;
+}
+
+.viewButton:hover::after,
+.viewButton:focus-visible::after {
+  transform: translateX(4px);
 }
 
 @keyframes fadeIn {
