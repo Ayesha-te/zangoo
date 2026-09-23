@@ -651,45 +651,28 @@
 }
 
 .mattressButton {
-  width: max-content;
-  max-width: 100%;
-  min-height: 0;
+  width: 100%;
+  min-height: 40px;
   margin-top: 12px;
-  border: 0;
-  border-radius: 0;
+  border: 2px solid var(--navy);
+  border-radius: 5px;
   display: flex !important;
   align-items: center;
-  justify-content: flex-start;
-  gap: 6px;
-  padding: 0;
-  background: transparent;
-  color: var(--blue);
+  justify-content: space-between;
+  padding: 0 16px;
+  background: var(--navy);
+  color: #fff;
   font: 900 13px/1.2 var(--sans);
   text-decoration: none;
   cursor: pointer;
-  transition: color var(--tr);
-}
-
-.mattressButton::after {
-  content: "\2192";
-  display: inline-block;
-  line-height: 1;
-  transition: transform var(--tr);
+  transition: background var(--tr), border-color var(--tr), color var(--tr);
 }
 
 .mattressButton:hover,
 .mattressButton:focus-visible {
-  background: transparent;
-  border-color: transparent;
-  color: var(--blue);
-  text-decoration: underline;
-  text-decoration-thickness: 1.5px;
-  text-underline-offset: 5px;
-}
-
-.mattressButton:hover::after,
-.mattressButton:focus-visible::after {
-  transform: translateX(4px);
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
 }
 
 .compareCheck {
