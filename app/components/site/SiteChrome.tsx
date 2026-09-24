@@ -1,11 +1,13 @@
 "use client";
 
-import { type MouseEvent, useEffect, useState } from "react";
+import { type MouseEvent, useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { collectionCategories, footerMainLinks, footerSocialLinks, navLinks } from "@/app/data/home";
 import { useFavorites } from "@/app/components/favorites/FavoritesProvider";
 import { useCart } from "@/app/components/cart/CartProvider";
+import { NavSearch } from "@/app/components/site/NavSearch";
 
 const pendingSectionKey = "furnitureCoPendingSection";
 const whatsappHref = "https://wa.me/447830376489";
@@ -68,6 +70,56 @@ export function SiteHeader() {
   const [openDesktopCategory, setOpenDesktopCategory] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
   const [activeHref, setActiveHref] = useState("#");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchTop, setSearchTop] = useState(0);
+  const navRef = useRef<HTMLElement>(null);
+  const searchToggleRef = useRef<HTMLButtonElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const measureSearchTop = () => {
+    const bottom = navRef.current?.getBoundingClientRect().bottom;
+    if (bottom) setSearchTop(Math.round(bottom));
+  };
+
+  const openSearch = () => {
+    // flushSync makes the panel focusable before focus() so mobile Safari opens the keyboard.
+    flushSync(() => {
+      measureSearchTop();
+      setMenuOpen(false);
+      setSearchOpen(true);
+    });
+    searchInputRef.current?.focus({ preventScroll: true });
+  };
+
+  const closeSearch = (returnFocus = true) => {
+    setSearchOpen(false);
+    if (returnFocus) searchToggleRef.current?.focus({ preventScroll: true });
+  };
+
+  // Close search whenever the route changes.
+  const [searchPathname, setSearchPathname] = useState(pathname);
+  if (searchPathname !== pathname) {
+    setSearchPathname(pathname);
+    setSearchOpen(false);
+  }
+
+  useEffect(() => {
+    if (!searchOpen) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeSearch();
+    };
+    const onResize = () => measureSearchTop();
+    document.addEventListener("keydown", onKeyDown);
+    window.addEventListener("resize", onResize);
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      window.removeEventListener("resize", onResize);
+      document.body.style.overflow = "";
+    };
+  }, [searchOpen]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -213,7 +265,7 @@ export function SiteHeader() {
 
   return (
     <header>
-      <nav className={`nav${scrolled ? " up" : ""}`} aria-label="Main navigation">
+      <nav ref={navRef} className={`nav${scrolled || searchOpen ? " up" : ""}`} aria-label="Main navigation">
         <div className="announce-bar" aria-label="Store announcements">
           <div className="announce-track">
             <span>Summer mattress sale now live</span>
@@ -260,20 +312,23 @@ export function SiteHeader() {
                               onMouseEnter={() => item.label === "Bedroom" && setOpenDesktopCategory(item.label)}
                               onFocus={() => item.label === "Bedroom" && setOpenDesktopCategory(item.label)}
                             >
-                              <button
-                                type="button"
-                                className="mega-link"
-                                disabled={item.label !== "Bedroom"}
-                                aria-current={openDesktopCategory === item.label ? "true" : undefined}
-                                aria-expanded={openDesktopCategory === item.label}
-                                onClick={() => item.label === "Bedroom" && setOpenDesktopCategory(item.label)}
-                              >
-                                <span className="mega-link-copy">
-                                  <strong>{item.label}</strong>
-                                  <small>{item.groups.map((group) => group.label).join(", ")}</small>
-                                </span>
-                                <em className={`mega-link-badge${item.label === "Bedroom" ? " is-active" : ""}`}>{item.badge}</em>
-                              </button>
+                              {item.label === "Bedroom" ? (
+                                <Link className="mega-link" href={item.href}>
+                                  <span className="mega-link-copy">
+                                    <strong>{item.label}</strong>
+                                    <small>{item.groups.map((group) => group.label).join(", ")}</small>
+                                  </span>
+                                  <em className="mega-link-badge is-active">{item.badge}</em>
+                                </Link>
+                              ) : (
+                                <button type="button" className="mega-link" disabled>
+                                  <span className="mega-link-copy">
+                                    <strong>{item.label}</strong>
+                                    <small>{item.groups.map((group) => group.label).join(", ")}</small>
+                                  </span>
+                                  <em className="mega-link-badge">{item.badge}</em>
+                                </button>
+                              )}
                             </li>
                           ))}
                         </ul>
@@ -283,9 +338,6 @@ export function SiteHeader() {
                         >
                           {desktopCategory ? (
                             <>
-                              <Link className="mega-panel-title" href={desktopCategory.href}>
-                                View {desktopCategory.label}
-                              </Link>
                               <ul className="mega-products" role="list">
                                 {desktopCategory.groups.map((group) => (
                                   <li className={`mega-product-group${group.label === "Mattresses" ? "" : " is-disabled"}`} key={group.label}>
@@ -313,9 +365,16 @@ export function SiteHeader() {
             })}
           </ul>
           <div className="nav-tools" aria-label="Shopping tools">
-            <Link href="/search/" aria-label="Search">
+            <button
+              ref={searchToggleRef}
+              type="button"
+              className={`nav-search-toggle${searchOpen ? " is-active" : ""}`}
+              aria-label={searchOpen ? "Close search" : "Search"}
+              aria-expanded={searchOpen}
+              onClick={() => (searchOpen ? closeSearch(false) : openSearch())}
+            >
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-5-5m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" /></svg>
-            </Link>
+            </button>
             <Link href="/account/" aria-label="Account">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21a8 8 0 0 0-16 0m12-13a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" /></svg>
             </Link>
@@ -334,7 +393,10 @@ export function SiteHeader() {
             aria-controls="mob"
             aria-label="Toggle menu"
             type="button"
-            onClick={() => setMenuOpen((open) => !open)}
+            onClick={() => {
+              setSearchOpen(false);
+              setMenuOpen((open) => !open);
+            }}
           >
             <span />
             <span />
@@ -435,6 +497,7 @@ export function SiteHeader() {
           Book a free consultation
         </a>
       </div>
+      <NavSearch open={searchOpen} top={searchTop} inputRef={searchInputRef} onClose={() => closeSearch()} />
     </header>
   );
 }

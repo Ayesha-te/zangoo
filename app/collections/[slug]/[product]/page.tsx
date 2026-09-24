@@ -142,6 +142,16 @@ export default async function CollectionProductPage({ params }: ProductPageProps
             needFilters={needFilters}
             feelFilters={feelFilters}
             sizeFilters={sizeFilters}
+            reviews={
+              <CustomerReviews
+                intro="Sort verified feedback or view reviews that include customer photos."
+                reviews={[
+                  { id: "james", name: "James, Manchester", date: "2026-08-19", rating: 5, verified: true, comment: "Great support and really comfortable. Woke up without back pain.", media: ["/capri-ortho-mattress-product-cutout.webp"] },
+                  { id: "sarah", name: "Sarah, Leeds", date: "2026-08-12", rating: 5, verified: true, comment: "Excellent quality and very well made. You can feel the difference.", media: ["/capri-ortho-mattress-bedroom-hero.webp"] },
+                  { id: "david", name: "David, Birmingham", date: "2026-07-28", rating: 4, verified: true, comment: "Fast delivery and brilliant customer service. Highly recommend Zaango.", media: ["/capri-ortho-mattress-bedroom-lifestyle.jpeg"] },
+                ]}
+              />
+            }
           >
             <div className={styles.categoryGuides}>
               <div className={styles.supportHeading}>
@@ -172,15 +182,6 @@ export default async function CollectionProductPage({ params }: ProductPageProps
               </div>
               <ProductFaq faqs={mattressFaqs.map(([question, answer]) => ({ question, answer }))} />
             </div>
-
-            <CustomerReviews
-              intro="Sort verified feedback or view reviews that include customer photos."
-              reviews={[
-                { id: "james", name: "James, Manchester", date: "2026-08-19", rating: 5, verified: true, comment: "Great support and really comfortable. Woke up without back pain.", media: ["/capri-ortho-mattress-product-cutout.webp"] },
-                { id: "sarah", name: "Sarah, Leeds", date: "2026-08-12", rating: 5, verified: true, comment: "Excellent quality and very well made. You can feel the difference.", media: ["/capri-ortho-mattress-bedroom-hero.webp"] },
-                { id: "david", name: "David, Birmingham", date: "2026-07-28", rating: 4, verified: true, comment: "Fast delivery and brilliant customer service. Highly recommend Zaango.", media: ["/capri-ortho-mattress-bedroom-lifestyle.jpeg"] },
-              ]}
-            />
           </MattressCatalog>
         ) : null}
       </main>

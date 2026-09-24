@@ -1542,6 +1542,7 @@
 .categoryFaqItem[open] summary > span::after{content:"−"}
 .categoryFaqItem:not([open]) summary + p{display:none}
 .categoryFaqs{border:0;background:transparent;box-shadow:none;padding:0;margin-top:72px}
+.categoryGuides .supportHeading h2,
 .categoryFaqs .supportHeading h2{font:400 clamp(30px,4vw,42px)/1.1 var(--serif)!important}
 .categoryFaqGrid{gap:22px}
 .categoryFaqColumn{gap:22px}
@@ -2218,5 +2219,100 @@
   .compareTrayClear,
   .compareTrayButton {
     flex: 1;
+  }
+}
+
+/* Drawer "Clear all": sits above the help box on mobile/tablet; the header link is desktop-only. */
+.filterClearBtn {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .filterHead .filterHeadClear {
+    display: none;
+  }
+
+  .filterHeadActions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .filterClearBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 40px;
+    margin-top: 16px;
+    padding: 0 16px;
+    border: 2px solid var(--blue);
+    border-radius: var(--r);
+    background: #fff;
+    color: var(--blue);
+    font: 900 12px/1 var(--sans);
+    cursor: pointer;
+    transition: background .2s ease, color .2s ease;
+  }
+
+  .filterClearBtn:hover,
+  .filterClearBtn:focus-visible {
+    background: var(--blue);
+    color: #fff;
+  }
+}
+
+/* Heart badge: even-sized icon keeps it on whole pixels inside the bordered circle at every breakpoint. */
+.heartBadge {
+  box-sizing: border-box;
+  font-size: 0;
+  line-height: 0;
+}
+
+.heartBadge span,
+.heartBadge svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Support content sits in its own row under the results, so the sticky sidebar's range ends at the product grid. */
+.mattressLayout > .categorySupportGrid {
+  margin-top: 10px;
+}
+
+@media (min-width: 1025px) {
+  .mattressLayout > .categorySupportGrid {
+    grid-column: 2;
+  }
+}
+
+/* Sticky is bounded by the parent box, not the grid cell, so the sidebar gets a rail that stretches only the product row. */
+.filterSidebarRail {
+  min-width: 0;
+  align-self: stretch;
+}
+
+@media (max-width: 1024px) {
+  .filterSidebarRail {
+    display: contents;
+  }
+}
+
+/* Sidebar stays sticky through products, guides and FAQs; reviews ("What Our Customers Say") sit in a row below the rail. */
+.catalogReviews {
+  min-width: 0;
+}
+
+.catalogReviews :global(.customer-reviews) {
+  margin-top: 0;
+}
+
+@media (min-width: 1025px) {
+  .filterSidebarRail {
+    grid-row: 1 / span 2;
+  }
+
+  .catalogReviews {
+    grid-column: 2;
   }
 }

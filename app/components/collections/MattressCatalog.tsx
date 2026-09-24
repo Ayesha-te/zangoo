@@ -19,6 +19,7 @@ type MattressCatalogProps = {
   feelFilters: string[];
   sizeFilters: string[];
   children?: ReactNode;
+  reviews?: ReactNode;
 };
 
 const cleanPrice = (price: string) => price.replace("From ", "").replace("Â£", "£");
@@ -37,7 +38,7 @@ function CatalogStockNote({ count }: { count: number }) {
   );
 }
 
-export function MattressCatalog({ products, needFilters, feelFilters, sizeFilters, children }: MattressCatalogProps) {
+export function MattressCatalog({ products, needFilters, feelFilters, sizeFilters, children, reviews }: MattressCatalogProps) {
   const [selectedNeed, setSelectedNeed] = useState<string[]>([]);
   const [selectedFeel, setSelectedFeel] = useState<string[]>([]);
   const [selectedSize, setSelectedSize] = useState<string[]>([]);
@@ -183,11 +184,14 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
             <p role="status">No mattresses match the selected filters. Try clearing a filter to see more results.</p>
           ) : null}
         </div>
-
-        <section className={styles.categorySupportGrid} aria-label="Mattress category support">
-          {children}
-        </section>
       </section>
+
+      <section className={styles.categorySupportGrid} aria-label="Mattress category support">
+        {children}
+      </section>
+
+      {/* Reviews get their own row below the sidebar rail, so the sticky filters stop before them. */}
+      {reviews ? <div className={styles.catalogReviews}>{reviews}</div> : null}
 
       <div
         className={`${styles.compareTray} ${compareSelection.length > 0 ? styles.compareTrayVisible : ""}`}

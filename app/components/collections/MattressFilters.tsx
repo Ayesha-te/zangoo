@@ -72,83 +72,89 @@ export function MattressFilters({
         Filter
       </button>
 
-      <aside
-        className={isOpen ? `${styles.filterSidebar} ${styles.filterSidebarOpen}` : styles.filterSidebar}
-        aria-label="Mattress filters"
-        style={{ alignSelf: "start", height: "fit-content" }}
-      >
-        <div className={styles.filterHead}>
-          <strong>Filter by</strong>
-          <div className={styles.filterHeadActions}>
-            <button type="button" onClick={clearFilters}>
-              Clear all
-            </button>
-            <button
-              type="button"
-              className={styles.filterCloseBtn}
-              onClick={() => setIsOpen(false)}
-              aria-label="Close filters"
-            >
-              &times;
-            </button>
+      {/* The rail spans only the product row, so the sticky sidebar can't follow content below it. */}
+      <div className={styles.filterSidebarRail}>
+        <aside
+          className={isOpen ? `${styles.filterSidebar} ${styles.filterSidebarOpen}` : styles.filterSidebar}
+          aria-label="Mattress filters"
+        >
+          <div className={styles.filterHead}>
+            <strong>Filter by</strong>
+            <div className={styles.filterHeadActions}>
+              <button type="button" className={styles.filterHeadClear} onClick={clearFilters}>
+                Clear all
+              </button>
+              <button
+                type="button"
+                className={styles.filterCloseBtn}
+                onClick={() => setIsOpen(false)}
+                aria-label="Close filters"
+              >
+                &times;
+              </button>
+            </div>
           </div>
-        </div>
-        {isMobile && (draftNeed.length || draftFeel.length) ? <div className={styles.activeFilterChips}>{[...draftNeed, ...draftFeel].map((filter) => <button type="button" key={filter} onClick={() => { setDraftNeed((v) => v.filter((x) => x !== filter)); setDraftFeel((v) => v.filter((x) => x !== filter)); }} aria-label={`Remove ${filter}`}>{filter} <span>×</span></button>)}</div> : null}
+          {isMobile && (draftNeed.length || draftFeel.length) ? <div className={styles.activeFilterChips}>{[...draftNeed, ...draftFeel].map((filter) => <button type="button" key={filter} onClick={() => { setDraftNeed((v) => v.filter((x) => x !== filter)); setDraftFeel((v) => v.filter((x) => x !== filter)); }} aria-label={`Remove ${filter}`}>{filter} <span>×</span></button>)}</div> : null}
 
-        <div className={styles.filterGroup}>
-          <strong>Mattress Type</strong>
-          {needFilters.map((filter) => (
-            <label className={styles.filterOption} key={filter}>
-              <input
-                type="checkbox"
-              checked={shownNeed.includes(filter)}
-                onChange={() => isMobile ? setDraftNeed((v) => v.includes(filter) ? v.filter((x) => x !== filter) : [...v, filter]) : onToggleNeed(filter)}
-              />
-              <span>{filter}</span>
-            </label>
-          ))}
-        </div>
+          <div className={styles.filterGroup}>
+            <strong>Mattress Type</strong>
+            {needFilters.map((filter) => (
+              <label className={styles.filterOption} key={filter}>
+                <input
+                  type="checkbox"
+                checked={shownNeed.includes(filter)}
+                  onChange={() => isMobile ? setDraftNeed((v) => v.includes(filter) ? v.filter((x) => x !== filter) : [...v, filter]) : onToggleNeed(filter)}
+                />
+                <span>{filter}</span>
+              </label>
+            ))}
+          </div>
 
-        <div className={styles.filterGroup}>
-          <strong>Feel</strong>
-          {feelFilters.map((filter) => (
-            <label className={styles.filterOption} key={filter}>
-              <input
-                type="checkbox"
-              checked={shownFeel.includes(filter)}
-              onChange={() => isMobile ? setDraftFeel((v) => v.includes(filter) ? v.filter((x) => x !== filter) : [...v, filter]) : onToggleFeel(filter)}
-              />
-              <span>{filter}</span>
-            </label>
-          ))}
-        </div>
+          <div className={styles.filterGroup}>
+            <strong>Feel</strong>
+            {feelFilters.map((filter) => (
+              <label className={styles.filterOption} key={filter}>
+                <input
+                  type="checkbox"
+                checked={shownFeel.includes(filter)}
+                onChange={() => isMobile ? setDraftFeel((v) => v.includes(filter) ? v.filter((x) => x !== filter) : [...v, filter]) : onToggleFeel(filter)}
+                />
+                <span>{filter}</span>
+              </label>
+            ))}
+          </div>
 
-        <div className={`${styles.filterGroup} ${styles.sizeFilterGroup}`}>
-          <strong>Size</strong>
-          {sizeFilters.map((filter) => (
-            <label className={styles.filterOption} key={filter}>
-              <input
-                type="checkbox"
-                checked={selectedSize.includes(filter)}
-                onChange={() => onToggleSize(filter)}
-              />
-              <span>{filter}</span>
-            </label>
-          ))}
-        </div>
+          <div className={`${styles.filterGroup} ${styles.sizeFilterGroup}`}>
+            <strong>Size</strong>
+            {sizeFilters.map((filter) => (
+              <label className={styles.filterOption} key={filter}>
+                <input
+                  type="checkbox"
+                  checked={selectedSize.includes(filter)}
+                  onChange={() => onToggleSize(filter)}
+                />
+                <span>{filter}</span>
+              </label>
+            ))}
+          </div>
 
-        <div className={styles.helpBox}>
-          <strong>Need help choosing?</strong>
-          <p>Our sleep experts can help you find the right mattress.</p>
-          <a href="mailto:sales@zaango.co.uk?subject=Help%20choosing%20a%20mattress">Contact Us</a>
-        </div>
-
-        {hasSelection ? (
-            <button type="button" className={styles.filterApplyBtn} onClick={() => { if (isMobile) onApplyFilters?.(draftNeed, draftFeel); setIsOpen(false); }}>
-            Apply Filters
+          <button type="button" className={styles.filterClearBtn} onClick={clearFilters}>
+            Clear all
           </button>
-        ) : null}
-      </aside>
+
+          <div className={styles.helpBox}>
+            <strong>Need help choosing?</strong>
+            <p>Our sleep experts can help you find the right mattress.</p>
+            <a href="mailto:sales@zaango.co.uk?subject=Help%20choosing%20a%20mattress">Contact Us</a>
+          </div>
+
+          {hasSelection ? (
+              <button type="button" className={styles.filterApplyBtn} onClick={() => { if (isMobile) onApplyFilters?.(draftNeed, draftFeel); setIsOpen(false); }}>
+              Apply Filters
+            </button>
+          ) : null}
+        </aside>
+      </div>
     </>
   );
 }
