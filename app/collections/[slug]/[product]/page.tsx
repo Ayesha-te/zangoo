@@ -144,6 +144,7 @@ export default async function CollectionProductPage({ params }: ProductPageProps
             sizeFilters={sizeFilters}
             reviews={
               <CustomerReviews
+                detachForm
                 intro="Sort verified feedback or view reviews that include customer photos."
                 reviews={[
                   { id: "james", name: "James, Manchester", date: "2026-08-19", rating: 5, verified: true, comment: "Great support and really comfortable. Woke up without back pain.", media: ["/capri-ortho-mattress-product-cutout.webp"] },

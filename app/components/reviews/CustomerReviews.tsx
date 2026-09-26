@@ -40,10 +40,13 @@ export function CustomerReviews({
   reviews: initialReviews,
   title = "What Our Customers Say",
   intro,
+  detachForm = false,
 }: {
   reviews: CustomerReview[];
   title?: string;
   intro?: string;
+  /** Render "Leave a review" as a sibling after the section so a layout can place it separately. */
+  detachForm?: boolean;
 }) {
   const [reviews, setReviews] = useState(initialReviews);
   const [sort, setSort] = useState<ReviewSort>("recent");
@@ -105,95 +108,104 @@ export function CustomerReviews({
     setReviewFormOpen(false);
   }
 
-  return (
-    <section className="customer-reviews" id="reviews" aria-labelledby="customer-reviews-title">
-      <div className="customer-reviews-head">
-        <div>
-          <h2 id="customer-reviews-title">{title}</h2>
-          {intro ? <p>{intro}</p> : null}
-        </div>
-      </div>
-      <div className="customer-review-toolbar">
-        <label className="customer-review-sort">
-          <span>Sort reviews</span>
-          <select value={sort} onChange={(event) => setSort(event.target.value as ReviewSort)}>
-            <option value="recent">Recent</option>
-            <option value="highest">Highest</option>
-            <option value="lowest">Lowest</option>
-            <option value="media">Reviews with media</option>
-          </select>
+  const reviewForm = (
+    <div className={`customer-review-form-wrap${reviewFormOpen ? " is-open" : ""}`}>
+      <button
+        className="customer-review-form-toggle"
+        type="button"
+        aria-expanded={reviewFormOpen}
+        aria-controls="customer-review-form-panel"
+        onClick={() => setReviewFormOpen((open) => !open)}
+      >
+        <span>Leave a review</span>
+        <span className="customer-review-form-toggle-icon" aria-hidden="true">{reviewFormOpen ? "\u2212" : "+"}</span>
+      </button>
+      <div className="customer-review-form-panel" id="customer-review-form-panel" aria-hidden={!reviewFormOpen}>
+        <form className="customer-review-form" onSubmit={submitReview}>
+        <label>Name<input required value={name} onChange={(event) => setName(event.target.value)} /></label>
+        <label>Rating<select value={rating} onChange={(event) => setRating(Number(event.target.value))}>{[5, 4, 3, 2, 1].map((value) => <option value={value} key={value}>{value} stars</option>)}</select></label>
+        <label className="customer-review-comment">Your feedback<textarea required rows={4} value={comment} onChange={(event) => setComment(event.target.value)} /></label>
+        <label className="customer-review-upload">
+          <span>Add photos (up to 3)</span>
+          <span className="customer-review-file-button">Choose File</span>
+          <span className="customer-review-file-name">{uploads.length ? `${uploads.length} photo${uploads.length === 1 ? "" : "s"} selected` : "No file chosen"}</span>
+          <input type="file" accept="image/*" multiple onChange={onFiles} />
         </label>
-        <div className="customer-review-slider-controls" aria-label="Review navigation">
-          <button className="customer-review-prev" type="button" onClick={() => moveReviews(-1)} aria-label="Previous reviews">&#8249;</button>
-          <button className="customer-review-next" type="button" onClick={() => moveReviews(1)} aria-label="Next reviews">&#8250;</button>
-        </div>
+        {uploadError ? <small className="customer-review-upload-error">{uploadError}</small> : null}
+        {uploads.length ? <div className="customer-review-media customer-review-preview">{uploads.map((source) => <img src={source} alt="Review upload preview" key={source} />)}</div> : null}
+        <button type="submit">Submit review</button>
+        </form>
       </div>
-      {submitted ? <p className="customer-review-success" role="status">Your review was sent successfully.</p> : null}
+    </div>
+  );
 
-      <div className="customer-review-slider">
-        <div className="customer-review-grid" ref={reviewGridRef}>
-          {visibleReviews.map((review) => (
-          <article className="customer-review-card" key={review.id}>
-            <div className="customer-review-author">
-              <span aria-hidden="true">{review.name.charAt(0).toUpperCase()}</span>
-              <div><strong>{review.name}</strong>{review.verified ? <small>Verified purchase</small> : null}</div>
-            </div>
-            <div className="customer-review-rating">
-              <span role="img" aria-label={`${review.rating} out of 5 stars`}>{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span>
-              <time dateTime={review.date}>{new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric" }).format(new Date(review.date))}</time>
-            </div>
-            <p>&ldquo;{review.comment.split(/\s+/).slice(0, REVIEW_PREVIEW_WORDS).join(" ")}{review.comment.split(/\s+/).length > REVIEW_PREVIEW_WORDS ? "…" : ""}&rdquo;</p>
-            {review.comment.split(/\s+/).length > REVIEW_PREVIEW_WORDS ? (
-              <button className="customer-review-read-more" type="button" onClick={() => setExpandedReview(review)}>Read more</button>
-            ) : null}
-            {review.media?.length ? (
-              <div className="customer-review-media">
-                {review.media.map((source, index) => <img src={source} alt={`Photo attached to ${review.name}'s review ${index + 1}`} key={`${source}-${index}`} />)}
-              </div>
-            ) : null}
-          </article>
-          ))}
-          {!visibleReviews.length ? <p className="customer-review-empty">No reviews with photos yet.</p> : null}
+  return (
+    <>
+      <section className="customer-reviews" id="reviews" aria-labelledby="customer-reviews-title">
+        <div className="customer-reviews-head">
+          <div>
+            <h2 id="customer-reviews-title">{title}</h2>
+            {intro ? <p>{intro}</p> : null}
+          </div>
         </div>
-      </div>
-
-      <div className={`customer-review-form-wrap${reviewFormOpen ? " is-open" : ""}`}>
-        <button
-          className="customer-review-form-toggle"
-          type="button"
-          aria-expanded={reviewFormOpen}
-          aria-controls="customer-review-form-panel"
-          onClick={() => setReviewFormOpen((open) => !open)}
-        >
-          <span>Leave a review</span>
-          <span className="customer-review-form-toggle-icon" aria-hidden="true">{reviewFormOpen ? "\u2212" : "+"}</span>
-        </button>
-        <div className="customer-review-form-panel" id="customer-review-form-panel" aria-hidden={!reviewFormOpen}>
-          <form className="customer-review-form" onSubmit={submitReview}>
-          <label>Name<input required value={name} onChange={(event) => setName(event.target.value)} /></label>
-          <label>Rating<select value={rating} onChange={(event) => setRating(Number(event.target.value))}>{[5, 4, 3, 2, 1].map((value) => <option value={value} key={value}>{value} stars</option>)}</select></label>
-          <label className="customer-review-comment">Your feedback<textarea required rows={4} value={comment} onChange={(event) => setComment(event.target.value)} /></label>
-          <label className="customer-review-upload">
-            <span>Add photos (up to 3)</span>
-            <span className="customer-review-file-button">Choose File</span>
-            <span className="customer-review-file-name">{uploads.length ? `${uploads.length} photo${uploads.length === 1 ? "" : "s"} selected` : "No file chosen"}</span>
-            <input type="file" accept="image/*" multiple onChange={onFiles} />
+        <div className="customer-review-toolbar">
+          <label className="customer-review-sort">
+            <span>Sort reviews</span>
+            <select value={sort} onChange={(event) => setSort(event.target.value as ReviewSort)}>
+              <option value="recent">Recent</option>
+              <option value="highest">Highest</option>
+              <option value="lowest">Lowest</option>
+              <option value="media">Reviews with media</option>
+            </select>
           </label>
-          {uploadError ? <small className="customer-review-upload-error">{uploadError}</small> : null}
-          {uploads.length ? <div className="customer-review-media customer-review-preview">{uploads.map((source) => <img src={source} alt="Review upload preview" key={source} />)}</div> : null}
-          <button type="submit">Submit review</button>
-          </form>
+          <div className="customer-review-slider-controls" aria-label="Review navigation">
+            <button className="customer-review-prev" type="button" onClick={() => moveReviews(-1)} aria-label="Previous reviews">&#8249;</button>
+            <button className="customer-review-next" type="button" onClick={() => moveReviews(1)} aria-label="Next reviews">&#8250;</button>
+          </div>
         </div>
-      </div>
-      {expandedReview ? (
-        <div className="customer-review-modal-backdrop" role="presentation" onMouseDown={() => setExpandedReview(null)}>
-          <section className="customer-review-modal" role="dialog" aria-modal="true" aria-labelledby="full-review-title" onMouseDown={(event) => event.stopPropagation()}>
-            <button className="customer-review-modal-close" type="button" onClick={() => setExpandedReview(null)} aria-label="Close full review">&times;</button>
-            <h3 id="full-review-title">{expandedReview.name}&apos;s review</h3>
-            <p>&ldquo;{expandedReview.comment}&rdquo;</p>
-          </section>
+        {submitted ? <p className="customer-review-success" role="status">Your review was sent successfully.</p> : null}
+
+        <div className="customer-review-slider">
+          <div className="customer-review-grid" ref={reviewGridRef}>
+            {visibleReviews.map((review) => (
+            <article className="customer-review-card" key={review.id}>
+              <div className="customer-review-author">
+                <span aria-hidden="true">{review.name.charAt(0).toUpperCase()}</span>
+                <div><strong>{review.name}</strong>{review.verified ? <small>Verified purchase</small> : null}</div>
+              </div>
+              <div className="customer-review-rating">
+                <span role="img" aria-label={`${review.rating} out of 5 stars`}>{"★".repeat(review.rating)}{"☆".repeat(5 - review.rating)}</span>
+                <time dateTime={review.date}>{new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric" }).format(new Date(review.date))}</time>
+              </div>
+              <p>&ldquo;{review.comment.split(/\s+/).slice(0, REVIEW_PREVIEW_WORDS).join(" ")}{review.comment.split(/\s+/).length > REVIEW_PREVIEW_WORDS ? "…" : ""}&rdquo;</p>
+              {review.comment.split(/\s+/).length > REVIEW_PREVIEW_WORDS ? (
+                <button className="customer-review-read-more" type="button" onClick={() => setExpandedReview(review)}>Read more</button>
+              ) : null}
+              {review.media?.length ? (
+                <div className="customer-review-media">
+                  {review.media.map((source, index) => <img src={source} alt={`Photo attached to ${review.name}'s review ${index + 1}`} key={`${source}-${index}`} />)}
+                </div>
+              ) : null}
+            </article>
+            ))}
+            {!visibleReviews.length ? <p className="customer-review-empty">No reviews with photos yet.</p> : null}
+          </div>
         </div>
-      ) : null}
-    </section>
+
+        {detachForm ? null : reviewForm}
+        {expandedReview ? (
+          <div className="customer-review-modal-backdrop" role="presentation" onMouseDown={() => setExpandedReview(null)}>
+            <section className="customer-review-modal" role="dialog" aria-modal="true" aria-labelledby="full-review-title" onMouseDown={(event) => event.stopPropagation()}>
+              <button className="customer-review-modal-close" type="button" onClick={() => setExpandedReview(null)} aria-label="Close full review">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18" /></svg>
+              </button>
+              <h3 id="full-review-title">{expandedReview.name}&apos;s review</h3>
+              <p>&ldquo;{expandedReview.comment}&rdquo;</p>
+            </section>
+          </div>
+        ) : null}
+      </section>
+      {detachForm ? reviewForm : null}
+    </>
   );
 }

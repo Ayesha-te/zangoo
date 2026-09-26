@@ -1480,6 +1480,7 @@
   border-radius: 8px;
   padding: 16px;
   display: grid;
+  align-content: start;
   gap: 8px;
   color: inherit;
   text-decoration: none;
@@ -1497,12 +1498,12 @@
 
 .guideCard strong {
   color: var(--navy);
-  font: 900 14px/1.25 var(--sans);
+  font: 900 var(--fs-card-title)/var(--lh-card-title) var(--sans);
 }
 
 .guideCard small {
   color: var(--body);
-  font: 500 12px/1.45 var(--sans);
+  font: 500 var(--fs-card-text)/var(--lh-card-text) var(--sans);
 }
 
 .categoryFaqItem {
@@ -2298,21 +2299,47 @@
   }
 }
 
-/* Sidebar stays sticky through products, guides and FAQs; reviews ("What Our Customers Say") sit in a row below the rail. */
+/* The sidebar stays sticky across products, guides/FAQs and the review cards (rows 1-3).
+   "Leave a review" is detached into a full-width row 4, below the sticky boundary: a collapsible element inside the
+   sticky range moves the range's end, which drags the sidebar with it whenever the form toggles. */
 .catalogReviews {
+  display: contents;
+}
+
+/* Both are grid items of .mattressLayout (the wrapper is display: contents) but DOM children of .catalogReviews. */
+.catalogReviews > :global(.customer-reviews),
+.catalogReviews > :global(.customer-review-form-wrap) {
   min-width: 0;
 }
 
-.catalogReviews :global(.customer-reviews) {
+.catalogReviews > :global(.customer-reviews) {
   margin-top: 0;
+  padding-bottom: 0;
+}
+
+/* Same side inset as the review section's padding, so the form lines up with the review cards. */
+.catalogReviews > :global(.customer-review-form-wrap) {
+  margin: 0 max(24px, calc((100% - 1120px) / 2));
+}
+
+@media (max-width: 580px) {
+  .catalogReviews > :global(.customer-review-form-wrap) {
+    margin: 0 16px;
+  }
 }
 
 @media (min-width: 1025px) {
   .filterSidebarRail {
-    grid-row: 1 / span 2;
+    grid-row: 1 / span 3;
   }
 
-  .catalogReviews {
+  .catalogReviews > :global(.customer-reviews) {
     grid-column: 2;
+  }
+
+  /* Full width under the sidebar and content: no blank column beside it, and toggling it can't move the sidebar. */
+  .catalogReviews > :global(.customer-review-form-wrap) {
+    grid-column: 1 / -1;
+    margin: 0;
   }
 }

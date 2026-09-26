@@ -41,15 +41,29 @@ export function NavSearch({ open, top, inputRef, onClose }: NavSearchProps) {
         <div className="nav-search-inner">
           <form className="nav-search-bar" role="search" onSubmit={(event) => event.preventDefault()}>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-5-5m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" /></svg>
-            <input
-              ref={inputRef}
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search by product name, firmness or keyword"
-              aria-label="Search products"
-              autoComplete="off"
-            />
+            <span className="nav-search-field">
+              <input
+                ref={inputRef}
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Search by product name, firmness or keyword"
+                aria-label="Search products"
+                autoComplete="off"
+              />
+              {query ? (
+                <button
+                  type="button"
+                  className="nav-search-clear"
+                  onClick={() => {
+                    setQuery("");
+                    inputRef.current?.focus();
+                  }}
+                >
+                  Clear all
+                </button>
+              ) : null}
+            </span>
             <button type="button" className="nav-search-close" onClick={onClose} aria-label="Close search">
               &times;
             </button>

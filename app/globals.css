@@ -19,6 +19,9 @@
   --sh2:0 4px 16px rgba(26,46,68,.12),0 1px 4px rgba(26,46,68,.06);
   --sh3:0 12px 40px rgba(26,46,68,.18),0 2px 8px rgba(26,46,68,.06);
   --tr:.22s cubic-bezier(.4,0,.2,1);
+  /* Type scale for card subheadings and their body text (matches the FAQ cards). */
+  --fs-card-title:15px; --lh-card-title:1.35;
+  --fs-card-text:14px; --lh-card-text:1.65;
   --nav:142px;
   --nav-core:98px;
   --announce:30px;
@@ -127,7 +130,8 @@ section[id]{scroll-margin-top:calc(var(--nav) + 16px)}
 .nav-tools{display:flex;align-items:center;gap:4px;flex-shrink:0}
 .nav-tools a{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--body);transition:background .15s ease,color .15s ease}
 .nav-tools .nav-wishlist{position:relative}
-.nav-wishlist-count{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;display:grid;place-items:center;padding:0 4px;border:2px solid var(--surf);border-radius:999px;background:#c62828;color:#fff;font-size:9px;font-weight:900;line-height:1}
+/* Wishlist and cart counts share one badge style. */
+.nav-wishlist-count,.nav-cart-count{position:absolute;top:-5px;right:-5px;min-width:18px;height:18px;display:grid;place-items:center;padding:0 4px;border:2px solid var(--surf);border-radius:999px;background:#c62828;color:#fff;font-size:9px;font-weight:900;line-height:1}
 .nav-tools a:hover,.nav-tools a:focus-visible{background:rgba(21,87,167,.08);color:var(--blue)}
 .nav-tools svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 /* hamburger */
@@ -146,6 +150,10 @@ section[id]{scroll-margin-top:calc(var(--nav) + 16px)}
 .mob-category-btn{width:100%;min-height:38px;padding:8px 12px;border:1px solid var(--bdr);border-radius:var(--r);font:inherit;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--bg1);color:var(--body);text-align:left}
 .mob-category-label{flex:1;color:inherit;font:inherit;cursor:pointer}
 .mob-category-label:hover,.mob-category-label:focus-visible{color:var(--navy)}
+/* Hover highlights the whole row (label + badge + arrow), not just the label link. */
+.mob-links .mob-category-btn .mob-category-label,.mob-links .mob-category-btn .mob-category-label:hover{background:transparent}
+.mob-category-btn{transition:background var(--tr),border-color var(--tr)}
+.mob-sub-links>li:not(.is-disabled) .mob-category-btn:hover,.mob-sub-links>li:not(.is-disabled) .mob-category-btn:focus-within{background:#D6E6F7;border-color:var(--blue);color:var(--navy)}
 .mob-category-meta{display:inline-flex;align-items:center;gap:8px;flex-shrink:0;border:0;background:transparent;padding:0;font:inherit;color:inherit;cursor:pointer}
 .mob-sub-links>li.is-disabled .mob-category-meta{opacity:1}
 .mob-category-btn em{font-style:normal;font-size:9px;font-weight:800;color:var(--blue);text-transform:uppercase;white-space:nowrap}
@@ -597,7 +605,7 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .wishlist-actions a{background:var(--blue);color:#fff}.wishlist-actions button{background:#fff;color:#c62828;border-color:#c62828}
 .wishlist-actions a:hover,.wishlist-actions a:focus-visible,.wishlist-actions button:hover,.wishlist-actions button:focus-visible{color:#fff;background:var(--blue);border-color:var(--blue)}
 .wishlist-card>img{transition:transform .35s ease}.wishlist-card:hover>img{transform:scale(1.04)}
-.nav-cart{position:relative}.nav-cart-count{position:absolute;top:-9px;right:-10px;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:#c62828;color:#fff;font:900 10px/16px var(--sans);text-align:center}
+.nav-cart{position:relative} /* badge style: see .nav-cart-count with .nav-wishlist-count */
 .catalogSearch{display:grid;gap:4px;min-width:min(100%,300px);color:var(--navy);font:900 12px/1.2 var(--sans)}
 .catalogSearch input{height:40px;border:1px solid var(--bdr);border-radius:8px;padding:0 12px;background:#fff;color:var(--navy);font:500 14px var(--sans)}
 .wishlist-empty{display:grid;justify-items:start;gap:16px;margin-top:20px}
@@ -929,11 +937,8 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
   opacity:.65;
   cursor:not-allowed;
 }
-@media(max-width:900px){.site-trust-bar-in{justify-content:flex-start}.hero-certifications{top:calc(var(--nav) + 8px);right:12px;width:min(270px,calc(100% - 24px))}}
+@media(max-width:900px){.hero-certifications{top:calc(var(--nav) + 8px);right:12px;width:min(270px,calc(100% - 24px))}}
 @media(max-width:600px){
-  .site-trust-bar{height:auto;min-height:44px;overflow:visible}
-  .site-trust-bar-in{height:auto;min-height:44px;padding:9px 12px;justify-content:center;gap:7px 14px;flex-wrap:wrap;overflow:visible}
-  .site-trust-bar span{font-size:10px;line-height:1.25;white-space:normal;text-align:center}
   .trust-bar-in{padding:9px 12px;gap:7px 12px;flex-wrap:wrap;justify-content:center}
   .trust-bar span{font-size:10px;white-space:normal;text-align:center}
 }
@@ -970,6 +975,14 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .customer-review-modal h3{margin:0 42px 14px 0;color:var(--navy)}
 .customer-review-modal p{margin:0;color:var(--body);line-height:1.7}
 .customer-review-modal-close{position:absolute;top:12px;right:12px;width:36px;height:36px;border:1px solid var(--bdr);border-radius:50%;background:#fff;color:var(--navy);font-size:24px;cursor:pointer}
+/* Heading and close button share the first row, centred on each other; the review text spans below.
+   The close icon is an SVG so it sits in the exact centre of the circle (the "×" glyph sat ~4px low). */
+.customer-review-modal{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:16px;align-items:center}
+.customer-review-modal h3{grid-column:1;grid-row:1;margin:0}
+.customer-review-modal p{grid-column:1/-1;grid-row:2;margin-top:14px}
+.customer-review-modal-close{position:static;grid-column:2;grid-row:1;display:grid;place-items:center;padding:0;flex:none;transition:background .15s ease,color .15s ease,border-color .15s ease}
+.customer-review-modal-close svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.customer-review-modal-close:hover,.customer-review-modal-close:focus-visible{background:var(--bg4);border-color:var(--blue);color:var(--blue)}
 
 /* Mattress product landing pages */
 .mattress-landing{
@@ -2132,7 +2145,7 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .lp-faq .lp-faq-btn{
   min-height:64px!important;
   padding:16px 24px!important;
-  font:900 15px/1.35 var(--sans)!important;
+  font:900 var(--fs-card-title)/var(--lh-card-title) var(--sans)!important;
 }
 .lp-faq .lp-faq-icon{
   width:36px!important;
@@ -2141,7 +2154,7 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
   font-size:22px!important;
 }
 .lp-faq .lp-faq-body p{
-  font:500 14px/1.65 var(--sans)!important;
+  font:500 var(--fs-card-text)/var(--lh-card-text) var(--sans)!important;
 }
 
 .lp-faq details{
@@ -2253,7 +2266,12 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .nav-search-bar>svg{flex:0 0 22px;width:22px;height:22px;fill:none;stroke:var(--blue);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .nav-search-bar input{flex:1;min-width:0;height:52px;padding:0 16px;border:1px solid var(--bdr);border-radius:10px;background:var(--bg1);color:var(--navy);font:500 16px var(--sans);outline:none;transition:border-color .15s ease,box-shadow .15s ease,background .15s ease}
 .nav-search-bar input:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 3px rgba(21,87,167,.12)}
-.nav-search-bar input::-webkit-search-cancel-button{cursor:pointer}
+/* Native "x" is replaced by the "Clear all" button. */
+.nav-search-bar input::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none;display:none}
+.nav-search-field{position:relative;flex:1;min-width:0;display:flex}
+.nav-search-field input{width:100%;padding-right:104px}
+.nav-search-clear{position:absolute;top:50%;right:8px;transform:translateY(-50%);min-height:36px;padding:0 12px;border:0;border-radius:8px;background:transparent;color:var(--blue);font:800 13px/1 var(--sans);text-decoration:underline;text-underline-offset:3px;cursor:pointer;transition:background .15s ease,color .15s ease}
+.nav-search-clear:hover,.nav-search-clear:focus-visible{background:var(--bg4);color:var(--blue-h)}
 .nav-search-close{flex:0 0 44px;width:44px;height:44px;display:grid;place-items:center;padding:0;border:1px solid rgba(26,46,68,.16);border-radius:50%;background:var(--bg1);color:var(--navy);font-size:26px;line-height:1;cursor:pointer;transition:background .15s ease,color .15s ease}
 .nav-search-close:hover,.nav-search-close:focus-visible{background:var(--bg4);color:var(--blue)}
 .nav-search-results{display:grid;grid-template-rows:0fr;transition:grid-template-rows .36s cubic-bezier(.22,1,.36,1)}
@@ -2290,3 +2308,24 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 /* Desktop mega menu: Bedroom card is the link itself, so the subcategory list starts at the top of its panel. */
 .nav-links .mega-links a.mega-link{text-decoration:none}
 .mega-products-panel .mega-products{margin-top:0}
+
+/* Trust bar: one row stops fitting below ~820px, so it becomes two centred rows at a fixed height:
+   --nav grows by the same 12px (44px -> 56px bar) so the fixed header never overlaps page content. */
+@media(max-width:860px){
+  :root{--nav:154px}
+  .site-trust-bar{height:56px}
+  .site-trust-bar-in{flex-wrap:wrap;align-content:center;justify-content:center;gap:4px 16px;padding:0 16px;overflow:hidden}
+  .site-trust-bar span{font-size:11px;line-height:1.3}
+}
+@media(max-width:480px){
+  .site-trust-bar-in{gap:4px 10px;padding:0 10px}
+  .site-trust-bar span{font-size:10px}
+}
+@media(max-width:400px){
+  .site-trust-bar-in{gap:4px 7px;padding:0 6px}
+  .site-trust-bar span{font-size:9.5px;letter-spacing:-.01em} /* keeps 2 rows down to 340px */
+}
+@media(max-width:339px){
+  :root{--nav:170px}
+  .site-trust-bar{height:72px}
+}
