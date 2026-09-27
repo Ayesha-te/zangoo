@@ -75,6 +75,7 @@ export function SiteHeader() {
   const navRef = useRef<HTMLElement>(null);
   const searchToggleRef = useRef<HTMLButtonElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const hoverOpenedAt = useRef(0);
 
   const measureSearchTop = () => {
     const bottom = navRef.current?.getBoundingClientRect().bottom;
@@ -435,7 +436,10 @@ export function SiteHeader() {
                 {hasCollections ? (
                   <ul className="mob-sub-links" role="list" aria-label="Collection subcategories">
                     {collectionCategories.map((item) => (
-                      <li className={item.label === "Bedroom" ? undefined : "is-disabled"} key={item.label}>
+                      <li
+                        className={`mob-category-card${item.label === "Bedroom" ? "" : " is-disabled"}${openMobileCategory === item.label ? " is-open" : ""}`}
+                        key={item.label}
+                      >
                         <div className="mob-category-btn">
                           <Link
                             href={item.href}
@@ -447,6 +451,7 @@ export function SiteHeader() {
                             }}
                           >
                             {item.label}
+                            <span className="mob-category-go" aria-hidden="true">&rsaquo;</span>
                           </Link>
                           <button
                             className="mob-category-meta"
@@ -454,20 +459,30 @@ export function SiteHeader() {
                             disabled={item.label !== "Bedroom"}
                             aria-label={`Toggle ${item.label} subcategories`}
                             aria-expanded={openMobileCategory === item.label}
+                            onPointerEnter={(event) => {
+                              // Mouse users: hovering the badge opens the subcategories (touch taps toggle instead).
+                              if (event.pointerType !== "mouse" || item.label !== "Bedroom" || openMobileCategory === item.label) return;
+                              hoverOpenedAt.current = Date.now();
+                              setOpenMobileCategory(item.label);
+                              setOpenMobileGroup(null);
+                            }}
                             onClick={() => {
+                              // Ignore the click that immediately follows a hover-open, so it doesn't snap shut.
+                              if (Date.now() - hoverOpenedAt.current < 600) return;
                               setOpenMobileCategory((current) => (current === item.label ? null : item.label));
                               setOpenMobileGroup(null);
                             }}
                           >
-                            <em className={item.label === "Bedroom" ? "is-active" : undefined}>{item.badge}</em>
-                            <b aria-hidden="true">&gt;</b>
+                            <em className={item.label === "Bedroom" ? "is-active" : undefined}>
+                              {item.badge}
+                              {item.label === "Bedroom" ? (
+                                <svg className="mob-category-chevron" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m6 9 6 6 6-6" /></svg>
+                              ) : null}
+                            </em>
                           </button>
                         </div>
                         {openMobileCategory === item.label ? (
                           <ul className="mob-product-links" role="list" aria-label={`${item.label} products`}>
-                            <li>
-                              <Link href={item.href} onClick={() => setMenuOpen(false)}>View {item.label}</Link>
-                            </li>
                             {item.groups.map((group) => {
                               const isLiveGroup = group.label === "Mattresses";
                               return (
