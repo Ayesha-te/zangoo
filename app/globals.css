@@ -963,8 +963,9 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
   .customer-reviews-head .customer-review-sort select{width:104px;min-height:38px;padding-left:10px}
 }
 
-.customer-review-slider .customer-review-grid{align-items:start}
-.customer-review-slider .customer-review-card{min-height:0;height:auto}
+.customer-review-slider .customer-review-grid{align-items:stretch}
+.customer-review-slider .customer-review-card{box-sizing:border-box;min-height:374px;height:374px;max-height:374px}
+@media(max-width:580px){.customer-review-slider .customer-review-card{min-height:360px;height:auto;max-height:none}}
 .customer-review-read-more{align-self:flex-start;margin-top:8px;padding:0;border:0;background:transparent;color:var(--blue);font:800 12px/1.3 var(--sans);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .customer-review-modal-backdrop{position:fixed;inset:0;z-index:2600;display:grid;place-items:center;padding:20px;background:rgba(14,35,56,.62)}
 .customer-review-modal{position:relative;width:min(560px,100%);max-height:min(75vh,620px);overflow:auto;padding:28px;border-radius:16px;background:#fff;box-shadow:0 24px 70px rgba(14,35,56,.3)}
