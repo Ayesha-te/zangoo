@@ -524,8 +524,8 @@
 .mattressInfo {
   flex: 1;
   padding: 0 18px 16px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto auto auto minmax(104px, auto) 48px 72px 52px;
   align-items: flex-start;
 }
 
@@ -608,7 +608,8 @@
   display: flex !important;
   align-items: center;
   gap: 7px;
-  margin-top: 8px;
+  min-height: 48px;
+  margin-top: 0;
   color: var(--ok);
   font: 800 12px/1.35 var(--sans);
 }
@@ -625,7 +626,7 @@
 }
 
 .mattressPrice {
-  margin-top: auto;
+  margin-top: 0;
   padding-top: 0;
   border-top: 0;
   width: 100%;
@@ -653,7 +654,8 @@
 .mattressButton {
   width: 100%;
   min-height: 40px;
-  margin-top: 12px;
+  height: 52px;
+  margin-top: 0;
   border: 2px solid var(--navy);
   border-radius: 5px;
   display: flex !important;
@@ -1732,8 +1734,8 @@
 .mattressInfo > strong { margin-top: 12px; display: block; }
 .mattressInfo > span { width: 100%; }
 .mattressRating { margin-top: 16px; }
-.deliveryNote { margin-top: 14px; }
-.mattressPrice { margin-top: 14px; }
+.deliveryNote { margin-top: 0; }
+.mattressPrice { margin-top: 0; }
 .mattressPrice small { margin-top: 8px; }
 .reviewMiniGrid { overflow-x: auto; grid-auto-flow: column; grid-auto-columns: minmax(260px, 1fr); }
 .categoryFaqGrid { align-items: start; }
