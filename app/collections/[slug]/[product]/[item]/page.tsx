@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { ProductFaq } from "@/app/components/site/ProductFaq";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
+import { customerReviews } from "@/app/data/customerReviews";
 import { getMattressProduct, orthoMattressProducts, type MattressProduct } from "@/app/data/mattressProducts";
 import "./productLanding.module.css";
 
@@ -350,11 +351,7 @@ export default async function ProductLandingPage({ params }: ProductLandingPageP
         </section>
 
         <CustomerReviews
-          reviews={[
-            { id: "margaret", name: "Margaret T.", date: "2026-08-18", rating: 5, verified: true, comment: "After years of waking up stiff, the support felt different within the first week. I wake up more settled and my lower back feels properly supported." },
-            { id: "david", name: "David R.", date: "2026-08-07", rating: 5, verified: true, comment: "The mattress feels supportive without being harsh. The consultation helped me choose the right firmness and the delivery was straightforward." },
-            { id: "sarah", name: "Sarah K.", date: "2026-07-22", rating: 4, verified: true, comment: "My partner moves a lot and I sleep warm. This gives us a steadier, cooler sleep surface.", media: [item.gallery?.[0]?.src ?? item.image] },
-          ]}
+          reviews={customerReviews}
         />
 
         <section className="lp-certs" aria-labelledby="certs-title">

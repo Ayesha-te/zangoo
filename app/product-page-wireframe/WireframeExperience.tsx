@@ -7,6 +7,7 @@ import { orthoMattressProducts } from "@/app/data/mattressProducts";
 import { FirmnessBar } from "@/app/components/collections/FirmnessBar";
 import { FavoriteButton } from "@/app/components/favorites/FavoriteButton";
 import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
+import { customerReviews } from "@/app/data/customerReviews";
 import { ProductFaq } from "@/app/components/site/ProductFaq";
 import { useCart } from "@/app/components/cart/CartProvider";
 import { getStockState, type StockTone } from "@/app/utils/stockState";
@@ -282,11 +283,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
       <CustomerReviews
         title="What Our Customers Say"
         intro={`Verified feedback from customers who chose ${product.shortName}.`}
-        reviews={[
-          { id: "james", name: "James T.", date: "2026-08-20", rating: 5, verified: true, comment: "Comfortable support and a simple buying process." },
-          { id: "emma", name: "Emma K.", date: "2026-08-11", rating: 5, verified: true, comment: "The firmness guidance was accurate and delivery was straightforward." },
-          { id: "michael", name: "Michael L.", date: "2026-07-29", rating: 4, verified: true, comment: "Good support, clean finish, and helpful service throughout." },
-        ]}
+        reviews={customerReviews}
       />
 
       <section className={styles.faq} aria-labelledby="faq-title">

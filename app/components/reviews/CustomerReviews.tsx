@@ -18,6 +18,7 @@ const MAX_SOURCE_BYTES = 12 * 1024 * 1024;
 const MAX_OUTPUT_BYTES = 2.5 * 1024 * 1024;
 const MAX_IMAGE_EDGE = 1600;
 const REVIEW_PREVIEW_WORDS = 28;
+const SHARED_REVIEWS_STORAGE_KEY = "furniture-co-customer-reviews";
 
 async function compressReviewImage(file: File) {
   if (!file.type.startsWith("image/") || file.size > MAX_SOURCE_BYTES) return null;
@@ -61,6 +62,17 @@ export function CustomerReviews({
   const reviewGridRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    try {
+      const stored = window.localStorage.getItem(SHARED_REVIEWS_STORAGE_KEY);
+      if (!stored) return;
+      const parsed = JSON.parse(stored) as CustomerReview[];
+      if (Array.isArray(parsed)) setReviews(parsed);
+    } catch {
+      // Keep the shared seed reviews when browser storage is unavailable or invalid.
+    }
+  }, []);
+
+  useEffect(() => {
     if (!submitted) return;
     const timeout = window.setTimeout(() => setSubmitted(false), 4000);
     return () => window.clearTimeout(timeout);
@@ -90,14 +102,23 @@ export function CustomerReviews({
   function submitReview(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (!name.trim() || !comment.trim()) return;
-    setReviews((current) => [{
+    const nextReview: CustomerReview = {
       id: `customer-${Date.now()}`,
       name: name.trim(),
       date: new Date().toISOString(),
       rating,
       comment: comment.trim(),
       media: uploads,
-    }, ...current]);
+    };
+    setReviews((current) => {
+      const nextReviews = [nextReview, ...current];
+      try {
+        window.localStorage.setItem(SHARED_REVIEWS_STORAGE_KEY, JSON.stringify(nextReviews));
+      } catch {
+        // The review is still visible for this session if storage is unavailable.
+      }
+      return nextReviews;
+    });
     setName("");
     setComment("");
     setRating(5);

@@ -150,7 +150,7 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
                   <FirmnessBar firmness={mattress.firmness} />
                   <span className={styles.mattressFeel}>Open Coil Spring Mattress</span>
                   <span className={styles.mattressSpecs}>
-                    <span><span aria-hidden="true">↻</span>Double-sided</span>
+                    <span><span aria-hidden="true">↻</span>{mattress.compareSpecs.turnable ? "Double-sided" : "Single-sided"}</span>
                     <span><span aria-hidden="true">✣</span>Hand-tufted</span>
                     <span><span aria-hidden="true">▧</span>Wire edge</span>
                     <span><span aria-hidden="true">◇</span>Approx. 26cm deep</span>

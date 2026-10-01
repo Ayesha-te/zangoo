@@ -5,6 +5,7 @@ export const navLinks = [
   { label: "Collections", href: "/collections/" },
   { label: "Blog", href: "#blog" },
   { label: "FAQ", href: "#faq" },
+  { label: "Reviews", href: "/reviews/" },
   { label: "Contact", href: "#contact" },
 ];
 

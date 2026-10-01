@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
+import { customerReviews } from "@/app/data/customerReviews";
 import styles from "./capriOrthoMattress2.module.css";
 
 const wordpressReviewsUrl = "https://peru-armadillo-169520.hostingersite.com/852-2/";
-const wordpressReviewsApiUrl = "https://peru-armadillo-169520.hostingersite.com/wp-json/wp/v2/posts?slug=852-2";
 
 const specs = [
   ["26cm", "Total Depth"],
@@ -405,41 +405,9 @@ export default function CapriOrthoMattress2Client() {
   const [selectedSize, setSelectedSize] = useState<SizeKey>("single");
   const [baseAdded, setBaseAdded] = useState(false);
   const [openFaqs, setOpenFaqs] = useState<Set<number>>(new Set());
-  const [reviewItems, setReviewItems] = useState<ReviewItem[]>(fallbackReviews);
 
   const size = sizes[selectedSize];
   const total = size.price + (baseAdded ? size.base : 0);
-
-  useEffect(() => {
-    const controller = new AbortController();
-
-    async function loadWordPressReviews() {
-      try {
-        const response = await fetch(`${wordpressReviewsApiUrl}&_=${Date.now()}`, {
-          cache: "no-store",
-          signal: controller.signal,
-        });
-
-        if (!response.ok) return;
-
-        const data = (await response.json()) as WordPressReviewPost[];
-        const post = data[0];
-        const nextReviews = post?.content?.rendered
-          ? parseWordPressReviews(post.content.rendered, post.modified ?? post.date)
-          : [];
-
-        if (nextReviews.length) {
-          setReviewItems(nextReviews);
-        }
-      } catch {
-        // Keep fallback reviews when WordPress is unavailable.
-      }
-    }
-
-    loadWordPressReviews();
-
-    return () => controller.abort();
-  }, []);
 
   return (
     <main className={styles.page}>
@@ -587,17 +555,8 @@ export default function CapriOrthoMattress2Client() {
       </section>
 
       <CustomerReviews
-        key={reviewItems.map((review) => review.title).join("|")}
         intro="Live customer feedback from the main reviews feed, with photo reviews available through the media filter."
-        reviews={reviewItems.map((review, index) => ({
-          id: `${review.author}-${index}`,
-          name: review.author,
-          date: Number.isNaN(Date.parse(review.date)) ? ["2026-08-17", "2026-08-05", "2026-07-21"][index % 3] : review.date,
-          rating: 5,
-          verified: true,
-          comment: review.body.join(" "),
-          media: index === 0 ? ["/capri-ortho-mattress-bedroom-lifestyle.jpeg"] : undefined,
-        }))}
+        reviews={customerReviews}
       />
 
       <section className={`${styles.panel} ${styles.faqPanel}`} id="faq">

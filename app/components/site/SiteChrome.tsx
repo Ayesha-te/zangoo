@@ -283,7 +283,9 @@ export function SiteHeader() {
               const active =
                 link.href === "/collections/"
                   ? pathname.startsWith("/collections") || (isHome && activeHref === "/collections/")
-                  : isHome && activeHref === link.href;
+                  : link.href === "/reviews/"
+                    ? pathname.startsWith("/reviews")
+                    : isHome && activeHref === link.href;
               const hasMegaMenu = link.label === "Collections";
               const desktopCategory = collectionCategories.find((item) => item.label === openDesktopCategory);
 
@@ -420,7 +422,9 @@ export function SiteHeader() {
             const active =
               link.href === "/collections/"
                 ? pathname.startsWith("/collections") || (isHome && activeHref === "/collections/")
-                : isHome && activeHref === link.href;
+                : link.href === "/reviews/"
+                  ? pathname.startsWith("/reviews")
+                  : isHome && activeHref === link.href;
             const hasCollections = link.label === "Collections";
 
             return (
