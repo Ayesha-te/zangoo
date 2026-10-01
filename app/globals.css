@@ -687,7 +687,7 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 /* Simple review carousel: original cards with controls above */
 .customer-review-slider{position:relative;min-width:0;overflow:hidden;padding:0}
 .customer-review-slider .customer-review-grid{display:grid;grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:calc((100% - 32px)/3);align-items:stretch;gap:16px;overflow-x:hidden;scroll-behavior:smooth;scroll-snap-type:x mandatory;padding:0}
-.customer-review-slider .customer-review-card{height:auto;min-height:360px;max-height:none;scroll-snap-align:start}
+.customer-review-slider .customer-review-card{box-sizing:border-box;height:374px;min-height:374px;max-height:374px;overflow:hidden;scroll-snap-align:start}
 .customer-review-slider .customer-review-media{margin-top:14px}
 .customer-review-slider-controls{position:static;inset:auto;z-index:auto;display:flex;align-items:center;justify-content:flex-end;gap:10px;pointer-events:auto;margin:0 0 14px;order:-1}
 .customer-review-slider{display:flex;flex-direction:column}
@@ -695,7 +695,7 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .customer-review-slider-controls .customer-review-prev:hover,.customer-review-slider-controls .customer-review-next:hover,.customer-review-slider-controls .customer-review-prev:focus-visible,.customer-review-slider-controls .customer-review-next:focus-visible{background:var(--blue)!important;color:#fff!important;border-color:var(--blue)!important}
 .customer-review-toolbar select{appearance:none;-webkit-appearance:none;padding-right:34px!important;background-image:linear-gradient(45deg,transparent 50%,var(--navy) 50%),linear-gradient(135deg,var(--navy) 50%,transparent 50%)!important;background-position:calc(100% - 16px) 50%,calc(100% - 11px) 50%!important;background-size:5px 5px,5px 5px!important;background-repeat:no-repeat!important}
 @media(max-width:900px){.customer-review-slider .customer-review-grid{grid-auto-columns:calc((100% - 16px)/2)}}
-@media(max-width:580px){.customer-review-slider .customer-review-grid{grid-auto-columns:100%}}
+@media(max-width:580px){.customer-review-slider .customer-review-grid{grid-auto-columns:100%}.customer-review-slider .customer-review-card{height:auto;min-height:360px;max-height:none}}
 .customer-review-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 14px}
 .customer-review-toolbar label{display:flex;align-items:center;gap:10px;color:var(--navy);font-size:12px;font-weight:900;white-space:nowrap}
 .customer-review-toolbar select{width:132px;min-height:40px;padding-top:8px;padding-bottom:8px;font-weight:800}
