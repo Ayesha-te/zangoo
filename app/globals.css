@@ -2407,6 +2407,10 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .mob-category-chevron{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:3.2;stroke-linecap:round;stroke-linejoin:round;transition:transform var(--tr)}
 .mob-category-meta[aria-expanded=true] .mob-category-chevron{transform:rotate(180deg)}
 .mob-category-card .mob-product-links{margin:0;padding:2px 12px 10px 26px}
+/* Soft open transition for the subcategory list (Mattresses / Beds / Bedside Tables) in the mobile menu. */
+.mob-category-card .mob-product-links{overflow:hidden;animation:mob-sub-enter .28s cubic-bezier(.4,0,.2,1)}
+@keyframes mob-sub-enter{from{max-height:0;padding-top:0;padding-bottom:0;opacity:0;transform:translateY(-6px)}to{max-height:320px;opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.mob-category-card .mob-product-links{animation:none}}
 .mob-sub-links>li:not(.is-disabled) .mob-category-label,.mob-sub-links>li:not(.is-disabled) .mob-category-meta{cursor:pointer}
 @media (hover:none),(pointer:coarse){
   .mob-links .mob-sub-links>li:not(.is-disabled) .mob-category-label{background:#EAF1FB}
