@@ -68,8 +68,8 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   const [zoomOpen, setZoomOpen] = useState(false);
   const [size, setSize] = useState("king");
   const [quantity, setQuantity] = useState(1);
-  const [added, setAdded] = useState(false);
-  const { addItem } = useCart();
+  const [adding, setAdding] = useState(false);
+  const { items, addItem } = useCart();
   const [openAccordion, setOpenAccordion] = useState<number | null>(0);
   const [comparisonSlug, setComparisonSlug] = useState<string | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -93,6 +93,13 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   const comparisonProduct = relatedProducts.find((item) => item.slug === comparisonSlug) ?? null;
   const stockState = getStockState(product.stockCount);
   const outOfStock = stockState.tone === "out";
+  const added = items.some((item) => item.slug === product.slug);
+
+  useEffect(() => {
+    if (!adding) return;
+    const timeout = window.setTimeout(() => setAdding(false), 1000);
+    return () => window.clearTimeout(timeout);
+  }, [adding]);
 
   function chooseComparison(slug: string) {
     setComparisonSlug(slug);
@@ -238,10 +245,13 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             <button
               className={`${styles.addButton} ${added ? styles.addedButton : ""}`}
               type="button"
-              disabled={outOfStock}
-              onClick={() => { addItem({ slug: product.slug, name: product.shortName, image: gallery[0].src, price: activeSize.price, size, href: `/collections/bedroom/mattresses/${product.slug}/` }, quantity); setAdded(true); }}
+              disabled={outOfStock || added || adding}
+              onClick={() => {
+                setAdding(true);
+                addItem({ slug: product.slug, name: product.shortName, image: gallery[0].src, price: activeSize.price, size, href: `/collections/bedroom/mattresses/${product.slug}/` }, quantity);
+              }}
             >
-              {outOfStock ? "Out of Stock" : added ? "Added to Basket" : "Add to Basket"}
+              {outOfStock ? "Out of Stock" : adding ? "Adding..." : added ? "Added to Basket" : "Add to Basket"}
             </button>
             <FavoriteButton
               className={styles.favoriteButton}

@@ -12,9 +12,8 @@ export default function WishlistPage() {
       <SiteHeader />
       <Breadcrumbs items={[{ label: "Wishlist" }]} />
       <main className="simple-page">
-        <section className="wrap simple-page-inner">
-          <span className="sec-lbl">Wishlist</span>
-          <h1>Saved pieces.</h1>
+        <section className="wrap commerce-page">
+          <div className="commerce-heading"><div><span className="sec-lbl">Wishlist</span><h1>Saved pieces.</h1><p>Your favourite furniture, all in one place.</p></div></div>
           <WishlistContent />
         </section>
       </main>

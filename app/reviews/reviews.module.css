@@ -1,7 +1,7 @@
 .intro {
-  background: var(--navy);
-  color: #fff;
-  padding: 28px max(24px, calc((100% - 1120px) / 2)) 64px;
+  background: var(--bg1);
+  color: var(--body);
+  padding: 36px max(24px, calc((100% - 1120px) / 2)) 64px;
 }
 
 .introInner {
@@ -11,16 +11,16 @@
 
 .intro :global(.breadcrumbs) {
   margin: 0 0 52px;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--muted);
 }
 
 .intro :global(.breadcrumbs) a {
-  color: #fff;
+  color: var(--blue);
 }
 
 .eyebrow {
   margin: 0 0 12px;
-  color: #b9d7ef;
+  color: var(--blue);
   font-size: 12px;
   font-weight: 900;
   letter-spacing: 0.08em;
@@ -30,7 +30,7 @@
 .intro h1 {
   max-width: 700px;
   margin: 0;
-  color: #fff;
+  color: var(--navy);
   font-size: clamp(42px, 7vw, 76px);
   line-height: 0.98;
 }
@@ -38,7 +38,7 @@
 .lede {
   max-width: 620px;
   margin: 22px 0 0;
-  color: rgba(255, 255, 255, 0.78);
+  color: var(--body);
   font-size: 17px;
   line-height: 1.65;
 }

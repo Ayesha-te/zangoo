@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 export type CartItem = { slug: string; name: string; image: string; price: number; quantity: number; size: string; href: string };
-type CartContextValue = { items: CartItem[]; count: number; addItem: (item: Omit<CartItem, "quantity">, quantity: number) => void; removeItem: (slug: string, size: string) => void };
+type CartContextValue = { items: CartItem[]; count: number; addItem: (item: Omit<CartItem, "quantity">, quantity: number) => void; updateQuantity: (slug: string, size: string, quantity: number) => void; removeItem: (slug: string, size: string) => void };
 const CartContext = createContext<CartContextValue | null>(null);
 const key = "furnitureCoCart";
 
@@ -16,8 +16,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
     count: items.reduce((sum, item) => sum + item.quantity, 0),
     addItem: (item: Omit<CartItem, "quantity">, quantity: number) => setItems((current) => {
       const existing = current.find((entry) => entry.slug === item.slug && entry.size === item.size);
-      return existing ? current.map((entry) => entry === existing ? { ...entry, quantity: entry.quantity + quantity } : entry) : [...current, { ...item, quantity }];
+      return existing ? current : [...current, { ...item, quantity }];
     }),
+    updateQuantity: (slug: string, size: string, quantity: number) => setItems((current) => current.map((item) => item.slug === slug && item.size === size ? { ...item, quantity: Math.max(1, quantity) } : item)),
     removeItem: (slug: string, size: string) => setItems((current) => current.filter((item) => !(item.slug === slug && item.size === size))),
   }), [items]);
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

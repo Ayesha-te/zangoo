@@ -333,20 +333,20 @@
 }
 
 .addButton {
-  background: #2e7d32;
+  background: var(--blue);
   color: #fff;
   transition: background var(--tr), transform var(--tr), box-shadow var(--tr);
 }
 
 .addButton:hover,
 .addButton:focus-visible {
-  background: #236728;
+  background: #0f3a6e;
   transform: translateY(-1px);
-  box-shadow: 0 8px 18px rgba(46, 125, 50, .18);
+  box-shadow: 0 8px 18px rgba(21, 87, 167, .2);
 }
 
 .addedButton {
-  background: var(--blue);
+  background: #2e7d32;
 }
 
 .favoriteButton {

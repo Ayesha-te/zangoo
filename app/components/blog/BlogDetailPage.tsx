@@ -292,6 +292,7 @@ type BlogDetailPageProps = {
   initialPost?: WordPressPost | null;
   initialPosts?: WordPressPost[];
   initialDataReady?: boolean;
+  refreshPosts?: boolean;
 };
 
 export function BlogDetailPage({
@@ -299,6 +300,7 @@ export function BlogDetailPage({
   initialPost = null,
   initialPosts = [],
   initialDataReady = false,
+  refreshPosts = false,
 }: BlogDetailPageProps = {}) {
   const searchParams = useSearchParams();
   const slug = routeSlug ?? searchParams.get("slug");
@@ -310,9 +312,10 @@ export function BlogDetailPage({
   const [status, setStatus] = useState<"loading" | "ready" | "empty" | "error">(
     initialDataReady ? (initialPost || initialPosts.length ? "ready" : "empty") : "loading",
   );
+  const hasInitialPosts = initialPosts.length > 0;
 
   useEffect(() => {
-    if (initialDataReady) return;
+    if (initialDataReady && (slug || !refreshPosts)) return;
 
     const controller = new AbortController();
 
@@ -339,12 +342,21 @@ export function BlogDetailPage({
           setStatus(data[0] ? "ready" : "empty");
         } else {
           const blogOnlyPosts = data.filter((item) => !isReviewCategoryPost(item));
-          setPosts(blogOnlyPosts);
-          setStatus(blogOnlyPosts.length ? "ready" : "empty");
+          if (blogOnlyPosts.length) {
+            setPosts(blogOnlyPosts);
+            setStatus("ready");
+          } else if (!hasInitialPosts) {
+            setStatus("empty");
+          }
         }
       } catch {
         if (!controller.signal.aborted) {
-          setStatus("error");
+          // Keep the server-rendered fallback visible when the browser cannot reach WordPress.
+          if (!slug && hasInitialPosts) {
+            setStatus("ready");
+          } else {
+            setStatus("error");
+          }
         }
       }
     }
@@ -352,7 +364,7 @@ export function BlogDetailPage({
     loadPost();
 
     return () => controller.abort();
-  }, [initialDataReady, slug]);
+  }, [hasInitialPosts, initialDataReady, refreshPosts, slug]);
 
   const safeContent = useMemo(() => {
     if (!post?.content?.rendered) return "";

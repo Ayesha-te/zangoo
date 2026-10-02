@@ -34,7 +34,8 @@ export async function getBlogPosts(): Promise<WordPressPost[]> {
   try {
     // Always fetch the latest featured image/content from WordPress.
     const response = await fetch(url, {
-      cache: "no-store",
+      // The site is exported statically, so this must be cacheable at build time.
+      cache: "force-cache",
       headers: {
         "User-Agent": "Mozilla/5.0 (compatible; ZangooBot/1.0; +https://zangoo.vercel.app)",
         Accept: "application/json",
@@ -60,7 +61,8 @@ export async function getBlogPost(slug: string): Promise<WordPressPost | null> {
 
   try {
     const response = await fetch(url, {
-      cache: "no-store",
+      // Keep individual post generation compatible with the static export.
+      cache: "force-cache",
       headers: {
         "User-Agent": "Mozilla/5.0 (compatible; ZangooBot/1.0; +https://zangoo.vercel.app)",
         Accept: "application/json",

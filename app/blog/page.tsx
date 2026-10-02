@@ -8,7 +8,7 @@ export default async function Page() {
 
   return (
     <Suspense fallback={<BlogPageLoading />}>
-      <BlogDetailPage initialPosts={posts} initialDataReady />
+      <BlogDetailPage initialPosts={posts} initialDataReady refreshPosts />
     </Suspense>
   );
 }
