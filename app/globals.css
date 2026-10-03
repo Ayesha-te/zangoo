@@ -686,7 +686,6 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 @media(max-width:580px){.customer-reviews{padding:44px 16px}.customer-reviews-head{align-items:stretch;flex-direction:column}.customer-reviews-head label{width:100%;align-self:stretch;flex-basis:auto}.customer-review-grid{grid-template-columns:1fr}.customer-review-form{grid-template-columns:1fr}.customer-review-form>*{grid-column:1}}
 @media(max-width:580px){.customer-review-grid{grid-template-columns:none;grid-auto-columns:minmax(280px,88%)}}
 .customer-reviews{box-sizing:border-box;width:100%;min-width:0;overflow:hidden}
-.cart-item-actions{display:flex;align-items:center;gap:14px;margin-top:12px}.cart-quantity{display:flex;align-items:center;gap:12px;border:1px solid var(--bdr);border-radius:var(--r);padding:4px 8px}.cart-quantity button{width:28px;height:28px;padding:0;border:0;background:transparent;color:var(--navy);font-size:18px;font-weight:900;cursor:pointer}.cart-quantity strong{min-width:18px;text-align:center;color:var(--navy)}
 
 /* Commerce pages */
 /* ── COMMERCE: wishlist + cart ── */
@@ -696,48 +695,57 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .commerce-heading p{font-size:16px;line-height:1.5}
 .commerce-count{margin-bottom:12px;color:var(--navy);font-size:14px;font-weight:800;text-align:right}
 .commerce-list{display:grid;gap:16px;align-content:start}
-.commerce-item{display:grid;grid-template-columns:280px minmax(0,1fr) 260px;grid-template-areas:"media copy price" "media copy actions";column-gap:28px;row-gap:16px;padding:16px;border:1px solid var(--bdr);border-radius:14px;background:#fff;box-shadow:var(--sh1)}
-.commerce-item-media{grid-area:media;position:relative;overflow:hidden;align-self:stretch;min-height:210px;border-radius:10px;background:var(--bg4)}
+.commerce-item{display:grid;grid-template-columns:300px minmax(0,1fr) 260px;grid-template-areas:"media copy price" "media copy actions";column-gap:28px;row-gap:16px;padding:16px;border:1px solid var(--bdr);border-radius:14px;background:#fff;box-shadow:var(--sh1)}
+.commerce-item-media{grid-area:media;position:relative;overflow:hidden;align-self:stretch;min-height:220px;border-radius:10px;background:var(--bg4)}
 .commerce-item-media>a{position:absolute;inset:0;display:block}
 .commerce-item-media img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .35s ease}
 .commerce-item:hover .commerce-item-media img{transform:scale(1.04)}
-.commerce-badge{position:absolute;top:12px;left:12px;padding:6px 10px;border-radius:999px;background:#347db7;color:#fff;font-size:11px;font-weight:800;line-height:1;box-shadow:0 2px 8px rgba(26,46,68,.18);pointer-events:none}
-.commerce-size{position:absolute;bottom:12px;left:12px;padding:5px 9px;border-radius:6px;background:rgba(255,255,255,.92);color:var(--navy);font-size:11px;font-weight:800;line-height:1;pointer-events:none}
-.commerce-heart{position:absolute;top:10px;right:10px;width:38px;height:38px;display:grid;place-items:center;padding:0;border:0;border-radius:50%;background:#fff;color:#d02d36;box-shadow:0 3px 10px rgba(26,46,68,.16);cursor:pointer;transition:transform .15s ease}
-.commerce-heart svg{fill:currentColor}
-.commerce-heart:hover,.commerce-heart:focus-visible{transform:scale(1.08)}
 .commerce-item-copy{grid-area:copy;align-self:center;min-width:0}
 .commerce-item-copy h2{margin:0 0 4px;font:800 20px/1.25 var(--sans);color:var(--navy)}
 .commerce-item-copy h2 a{color:inherit;text-decoration:none}
 .commerce-item-copy h2 a:hover{color:var(--blue)}
-.commerce-item-copy>p{margin:0 0 16px;color:var(--muted);font-size:14px}
-.commerce-features{display:grid;gap:10px;margin:0;padding:0;list-style:none;font-size:14px}
-.commerce-features li{display:flex;gap:10px;align-items:center}
-.commerce-features svg{flex:none;color:var(--blue)}
-.commerce-features span{color:var(--body)}
-.commerce-item-price{grid-area:price;align-self:end;display:grid;gap:8px}
+.commerce-item-copy>p{margin:0 0 14px;color:var(--muted);font-size:14px}
+/* feature rows: same glyphs and rhythm as the catalogue product card */
+.commerce-features{display:grid;gap:0;margin:0;padding:0;list-style:none}
+.commerce-features li{display:flex;align-items:center;gap:8px;min-height:32px;border-top:1px solid rgba(200,218,234,.8);color:var(--muted);font:800 13px/1.2 var(--sans)}
+.commerce-features i{width:18px;min-width:18px;height:18px;display:grid;place-items:center;color:var(--blue);font-size:12px;font-style:normal;line-height:1}
+.commerce-features span{color:inherit}
+.commerce-item-price{grid-area:price;align-self:end;display:grid;gap:10px}
 .commerce-price-row{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:10px;row-gap:4px}
 .commerce-price-row strong{width:100%;color:var(--navy);font-size:28px;font-weight:800;line-height:1}
 .commerce-price-row del{color:var(--muted);font-size:13px}
-.commerce-price-row b{color:#d02d36;font-size:13px;font-weight:800}
-.stock{display:flex;align-items:center;gap:8px;margin:4px 0 0;color:var(--ok);font-size:14px;font-weight:800}
-.stock i{width:10px;height:10px;flex:none;border-radius:50%;background:currentColor}
-.stock.low{color:#b86e00}
-.stock-note{margin-left:18px;color:#c77900;font-size:12px;font-weight:700}
-.commerce-item-actions,.cart-item-controls{grid-area:actions;align-self:start;display:flex;align-items:center;gap:10px}
-.commerce-item-actions .btn{flex:1;min-height:48px;padding:10px 16px;font-size:15px}
-.icon-button{flex:none;width:48px;height:48px;display:grid;place-items:center;padding:0;border:1px solid var(--bdr);border-radius:var(--r);background:#fff;color:var(--muted);cursor:pointer;transition:border-color .15s ease,color .15s ease,background .15s ease}
-.icon-button svg{width:20px;height:20px}
+.commerce-price-row b{color:#d02d36;font-size:13px;font-weight:800;white-space:nowrap}
+/* stock note: same pulse as the catalogue */
+.commerce-stock p{display:flex;align-items:center;gap:8px;margin:0;font-size:14px;font-weight:800}
+.commerce-stock i{width:11px;height:11px;flex:none;border-radius:50%}
+.commerce-stock small{display:block;margin:2px 0 0 19px;white-space:nowrap;color:var(--muted);font-size:12px;font-weight:700}
+.stock-ok strong{color:var(--ok)}.stock-ok i{background:#2e7d32;animation:commerceStockOk 2.5s ease-in-out infinite}
+.stock-low strong{color:#b86e00}.stock-low i{background:#c6791a;animation:commerceStockLow 1.8s ease-in-out infinite}
+.stock-last strong{color:#c62828;animation:commerceStockText 1.5s ease-in-out infinite}.stock-last i{background:#c62828;animation:commerceStockLast 1.5s ease-in-out infinite}
+.stock-out strong{color:var(--muted)}.stock-out i{background:var(--muted)}
+@keyframes commerceStockOk{0%,100%{box-shadow:0 0 0 0 rgba(46,125,50,.35)}50%{box-shadow:0 0 0 6px rgba(46,125,50,0)}}
+@keyframes commerceStockLow{0%,100%{box-shadow:0 0 0 0 rgba(198,121,26,.4)}50%{box-shadow:0 0 0 6px rgba(198,121,26,0)}}
+@keyframes commerceStockLast{0%,40%,100%{box-shadow:0 0 0 0 rgba(198,40,40,.45)}20%,60%{box-shadow:0 0 0 6px rgba(198,40,40,0)}}
+@keyframes commerceStockText{0%,100%{opacity:1}50%{opacity:.55}}
+@media(prefers-reduced-motion:reduce){.commerce-stock i,.commerce-stock strong{animation:none!important}}
+/* actions: one row, one height, so the button and the icon button line up */
+.commerce-item-actions,.cart-item-controls{grid-area:actions;align-self:end;display:flex;align-items:stretch;gap:10px}
+.commerce-item-actions .btn{flex:1;height:40px;min-height:0;margin:0;padding:0 16px;font-size:15px}
+.icon-button{flex:none;width:40px;height:40px;display:grid;place-items:center;margin:0;padding:0;border:1px solid var(--bdr);border-radius:var(--r);background:#fff;color:var(--muted);cursor:pointer;transition:border-color .15s ease,color .15s ease,background .15s ease}
+.icon-button svg{width:18px;height:18px}
 .icon-button:hover,.icon-button:focus-visible{border-color:#c62828;color:#c62828;background:#fff7f7}
 /* cart */
 .cart-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;align-items:start;gap:24px}
-.cart-item{grid-template-columns:220px minmax(0,1fr) auto}
+.cart-item{grid-template-columns:240px minmax(0,1fr) auto}
 .cart-item .commerce-item-price{align-self:start}
-.cart-item .cart-item-controls{align-self:end}
-.cart-quantity{display:flex;align-items:center;height:48px;border:1px solid var(--bdr);border-radius:var(--r);background:#fff}
-.cart-quantity button{width:44px;height:100%;display:grid;place-items:center;padding:0;border:0;background:transparent;color:var(--navy);cursor:pointer}
-.cart-quantity button:hover,.cart-quantity button:focus-visible{color:var(--blue)}
-.cart-quantity strong{min-width:28px;text-align:center;color:var(--navy);font-size:16px}
+.cart-item-controls{justify-content:flex-end}
+/* quantity counter: same design as the product page */
+.cart-quantity{width:104px;height:36px;display:grid;grid-template-columns:32px 1fr 32px;overflow:hidden;border:1px solid var(--bdr);border-radius:8px}
+.cart-quantity button{border:0;padding:0;background:#f4f7fb;color:var(--navy);font:900 16px/1 var(--sans);cursor:pointer;transition:background var(--tr,.2s),color var(--tr,.2s)}
+.cart-quantity button:hover,.cart-quantity button:focus-visible{background:var(--blue);color:#fff}
+.cart-quantity strong{display:grid;place-items:center;color:var(--navy);font-size:14px}
+.cart-item-controls .icon-button{width:36px;height:36px}
+.cart-item-controls .icon-button svg{width:16px;height:16px}
 .cart-aside{position:sticky;top:calc(var(--nav,80px) + 16px);display:grid;gap:16px}
 .order-summary,.commerce-benefits,.cart-help{padding:22px;border:1px solid var(--bdr);border-radius:14px;background:#fff;box-shadow:var(--sh1)}
 .order-summary{display:grid;gap:14px}
@@ -757,31 +765,35 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .cart-help h3{margin:0;font:800 16px/1.3 var(--sans);color:var(--navy)}
 .cart-help p{margin:0 0 8px;color:var(--muted);font-size:14px}
 .cart-help .btn{width:100%;font-size:14px}
+.wishlist-empty{margin-top:8px}
 /* recommendations */
 .recommendations{margin-top:56px}
 .recommendations-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
 .recommendations-heading h2{font:800 22px/1.2 var(--sans);color:var(--navy)}
-.recommendations-heading a{color:var(--blue);font-size:14px;font-weight:800}
 .recommendations-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-.recommendation-card{overflow:hidden;border:1px solid var(--bdr);border-radius:12px;background:#fff;box-shadow:var(--sh1);text-decoration:none;transition:transform .2s ease,box-shadow .2s ease}
+.recommendation-card{position:relative;overflow:hidden;border:1px solid var(--bdr);border-radius:12px;background:#fff;box-shadow:var(--sh1);transition:transform .2s ease,box-shadow .2s ease}
 .recommendation-card:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(26,46,68,.12)}
-.recommendation-media{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--bg4)}
-.recommendation-media img{width:100%;height:100%;object-fit:cover}
-.recommendation-media span{position:absolute;top:10px;right:10px;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(26,46,68,.14)}
-.recommendation-card strong,.recommendation-card small{display:block;padding:0 14px}
-.recommendation-card strong{margin-top:12px;color:var(--navy);font-size:15px}
-.recommendation-card small{padding-bottom:14px;color:var(--muted);font-size:14px}
+.recommendation-link{display:block;text-decoration:none}
+.recommendation-media{aspect-ratio:4/3;overflow:hidden;background:var(--bg4)}
+.recommendation-media img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .35s ease}
+.recommendation-card:hover .recommendation-media img{transform:scale(1.04)}
+.recommendation-link strong,.recommendation-link small{display:block;padding:0 14px}
+.recommendation-link strong{margin-top:12px;color:var(--navy);font-size:15px}
+.recommendation-link small{padding-bottom:14px;color:var(--muted);font-size:14px}
 /* large monitors */
-@media(min-width:1600px){.commerce-page{max-width:1440px}.commerce-item{grid-template-columns:320px minmax(0,1fr) 280px}.cart-item{grid-template-columns:260px minmax(0,1fr) auto}.cart-layout{grid-template-columns:minmax(0,1fr) 380px}}
+@media(min-width:1600px){.commerce-page{max-width:1440px}.commerce-item{grid-template-columns:340px minmax(0,1fr) 280px}.cart-item{grid-template-columns:280px minmax(0,1fr) auto}.cart-layout{grid-template-columns:minmax(0,1fr) 380px}}
 /* small laptops: the cart sidebar leaves less room, so stack price and controls */
-@media(max-width:1280px){.cart-item{grid-template-columns:200px minmax(0,1fr);grid-template-areas:"media copy" "media price" "media actions"}.cart-item .commerce-item-price,.cart-item .cart-item-controls{align-self:start}}
-/* tablet */
+@media(max-width:1280px){.cart-item{grid-template-columns:220px minmax(0,1fr);grid-template-areas:"media copy" "media price" "media actions"}.cart-item .commerce-item-price{align-self:start}.cart-item-controls{justify-content:flex-start}}
+/* tablet: image takes ~40% of the card, details + price/actions fill the rest */
 @media(max-width:1024px){
   .commerce-page{padding-left:32px;padding-right:32px}
-  .commerce-item{grid-template-columns:260px minmax(0,1fr);grid-template-areas:"media copy" "media price" "media actions";column-gap:24px}
-  .commerce-item-copy,.commerce-item-price{align-self:start}
+  .commerce-item,.cart-item{grid-template-columns:minmax(260px,40%) minmax(0,1fr) auto;grid-template-areas:"media copy copy" "media price actions";column-gap:28px;align-items:end}
+  .commerce-item-copy{align-self:start}
+  .commerce-item-price{align-self:end}
+  .commerce-item-actions,.cart-item-controls{align-self:end;justify-content:flex-end}
+  .commerce-item-actions .btn{flex:none;min-width:170px}
+  .commerce-features{grid-template-columns:1fr 1fr;column-gap:24px}
   .cart-layout{grid-template-columns:1fr}
-  .cart-item{grid-template-columns:240px minmax(0,1fr)}
   .cart-aside{position:static;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
   .cart-aside .order-summary{grid-row:span 2}
   .recommendations-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -792,28 +804,22 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
   .commerce-heading{flex-direction:column;align-items:start;gap:6px}
   .commerce-heading h1{font-size:44px}
   .commerce-count{text-align:left}
-  .commerce-item,.cart-item{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"media media" "copy copy" "price price" "actions actions";row-gap:14px;padding:12px;border-radius:12px}
+  .commerce-item,.cart-item{grid-template-columns:minmax(0,1fr);grid-template-areas:"media" "copy" "price" "actions";row-gap:14px;padding:12px;border-radius:12px;align-items:stretch}
   .commerce-item-media{aspect-ratio:16/11;min-height:0}
   .commerce-item-copy{padding:0 4px}
   .commerce-item-copy h2{font-size:22px}
-  .commerce-item-copy>p{margin-bottom:12px}
-  .commerce-features{grid-template-columns:1fr 1fr;gap:8px 12px;font-size:13px}
-  .commerce-item-price{padding:12px 4px 0;border-top:1px solid var(--bdr)}
-  .cart-item{grid-template-areas:"media media" "copy copy" "price price" "actions actions"}
-  .cart-item .commerce-item-copy{padding-bottom:14px;border-bottom:1px solid var(--bdr)}
-  .cart-item .commerce-item-price{border-top:0;padding-top:0}
-  .cart-item .cart-item-controls{justify-content:space-between}
-  .cart-quantity{flex:1;max-width:200px}
-  .cart-quantity strong{flex:1}
+  .commerce-features{grid-template-columns:1fr}
+  .commerce-item-price{align-self:auto;padding:0 4px}
+  .commerce-item-actions,.cart-item-controls{align-self:auto;justify-content:space-between}
+  .commerce-item-actions .btn{flex:1;min-width:0}
   .cart-aside{grid-template-columns:1fr}
   .cart-aside .order-summary{grid-row:auto}
   .recommendations{margin-top:40px}
   .recommendations-heading h2{font-size:20px}
   .recommendations-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-  .recommendation-card strong{font-size:14px}
-  .recommendation-card small{font-size:13px}
+  .recommendation-link strong{font-size:14px}
+  .recommendation-link small{font-size:13px}
 }
-@media(max-width:380px){.commerce-features{grid-template-columns:1fr}.cart-item{grid-template-areas:"media media" "copy copy" "price price" "actions actions"}.cart-quantity button{width:40px}}
 
 /* Simple review carousel: original cards with controls above */
 .customer-review-slider{position:relative;min-width:0;overflow:hidden;padding:0}
