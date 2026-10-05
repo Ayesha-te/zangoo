@@ -2500,3 +2500,17 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 }
 .mob-links .mob-sub-links>li:not(.is-disabled) .mob-category-label:focus-visible,
 .mob-sub-links>li:not(.is-disabled) .mob-category-meta:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+
+/* Wishlist cards: never crop the product photo (the size tag, e.g. "Double", is printed in its
+   bottom-left corner), and at tablet widths give price and actions their own rows so the stock
+   note can't run underneath the "Add to basket" button. */
+.wishlist-item .commerce-item-media{aspect-ratio:4/3;min-height:0;align-self:start}
+@media(max-width:1024px){
+  .commerce-item.wishlist-item{grid-template-columns:minmax(240px,42%) minmax(0,1fr);grid-template-areas:"media copy" "media price" "media actions";align-items:start;row-gap:14px}
+  .wishlist-item .commerce-item-copy,.wishlist-item .commerce-item-price,.wishlist-item .commerce-item-actions{align-self:start}
+  .wishlist-item .commerce-item-actions{justify-content:flex-start}
+  .wishlist-item .commerce-item-actions .btn{flex:1;min-width:0}
+}
+@media(max-width:680px){
+  .commerce-item.wishlist-item{grid-template-columns:minmax(0,1fr);grid-template-areas:"media" "copy" "price" "actions"}
+}
