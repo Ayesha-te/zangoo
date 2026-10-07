@@ -2514,3 +2514,20 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 @media(max-width:680px){
   .commerce-item.wishlist-item{grid-template-columns:minmax(0,1fr);grid-template-areas:"media" "copy" "price" "actions"}
 }
+
+/* Hero certifications when the photo sits below the text (<=900px): anchor the badges to the
+   photo's own bottom-right corner. They used top: calc(var(--nav) + 8px), which assumed the photo
+   started under the header, and overflowed it once the header grew for the two-row trust bar. */
+@media(max-width:900px){
+  .hero-vis .hero-certifications{top:auto;bottom:14px;right:12px}
+}
+@media(max-width:600px){
+  .hero-vis .hero-certifications{width:min(272px,calc(100% - 24px));gap:8px;bottom:12px}
+  .hero-vis .hero-certifications .hero-trust{justify-content:flex-start;text-align:left}
+  .hero-vis .hero-certifications strong{white-space:nowrap} /* one line: "FSC Certified & Carbon Neutral" */
+  .hero-vis .hero-certifications .hero-badge,
+  .hero-vis .hero-certifications .hero-trust{height:52px;min-height:52px;padding:8px 12px;gap:9px}
+  .hero-vis .hero-certifications .hero-badge i,
+  .hero-vis .hero-certifications .hero-trust i{width:32px;height:32px;flex-basis:32px;font-size:15px}
+  .hero-vis .hero-certifications strong{font-size:11.5px}
+}
