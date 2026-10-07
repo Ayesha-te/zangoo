@@ -1931,3 +1931,15 @@
     line-height: 1.55;
   }
 }
+
+/* Product FAQ: one column at 900px and below (same as the homepage and category FAQs). The selector
+   matches `.faq > .faqHeader + .lp-faq-grid`, which otherwise forces two columns at every width. */
+@media (max-width: 900px) {
+  .faq > .faqHeader + :global(.lp-faq-grid),
+  .faq :global(.lp-faq-grid) { grid-template-columns: 1fr; }
+}
+@media (max-width: 580px) {
+  .faq :global(.lp-faq-btn) { min-height: 64px; padding: 16px 18px; }
+  .faq :global(.lp-faq-body) { padding: 0 18px; }
+  .faq :global(.lp-faq-body[aria-hidden="false"]) { padding: 0 18px 16px; }
+}
