@@ -28,6 +28,7 @@ export default function ReviewsPage() {
           title="What our customers say"
           intro="Browse the latest verified feedback, then share your own experience with the community."
           reviews={customerReviews}
+          showForm
         />
       </main>
       <SiteFooter />

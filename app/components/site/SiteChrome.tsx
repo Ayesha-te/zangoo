@@ -566,6 +566,9 @@ export function SiteFooter() {
             <li>
               <Link href="/contact/">Contact Support</Link>
             </li>
+            <li>
+              <Link href="/sitemap/">Sitemap</Link>
+            </li>
           </ul>
         </nav>
         <form className="foot-newsletter" aria-label="Footer newsletter sign-up">

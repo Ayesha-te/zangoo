@@ -42,12 +42,15 @@ export function CustomerReviews({
   title = "What Our Customers Say",
   intro,
   detachForm = false,
+  showForm = false,
 }: {
   reviews: CustomerReview[];
   title?: string;
   intro?: string;
   /** Render "Leave a review" as a sibling after the section so a layout can place it separately. */
   detachForm?: boolean;
+  /** Reviews now come from an external source, so the "Leave a review" form is off unless a page opts in. */
+  showForm?: boolean;
 }) {
   const [reviews, setReviews] = useState(initialReviews);
   const [sort, setSort] = useState<ReviewSort>("recent");
@@ -213,7 +216,7 @@ export function CustomerReviews({
           </div>
         </div>
 
-        {detachForm ? null : reviewForm}
+        {showForm && !detachForm ? reviewForm : null}
         {expandedReview ? (
           <div className="customer-review-modal-backdrop" role="presentation" onMouseDown={() => setExpandedReview(null)}>
             <section className="customer-review-modal" role="dialog" aria-modal="true" aria-labelledby="full-review-title" onMouseDown={(event) => event.stopPropagation()}>
@@ -226,7 +229,7 @@ export function CustomerReviews({
           </div>
         ) : null}
       </section>
-      {detachForm ? reviewForm : null}
+      {showForm && detachForm ? reviewForm : null}
     </>
   );
 }

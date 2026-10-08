@@ -2531,3 +2531,72 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
   .hero-vis .hero-certifications .hero-trust i{width:32px;height:32px;flex-basis:32px;font-size:15px}
   .hero-vis .hero-certifications strong{font-size:11.5px}
 }
+
+/* Review cards: cap the quote at 5 lines; "Read more" opens the full review. */
+.customer-review-card>p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:5;line-clamp:5;overflow:hidden}
+
+/* WhatsApp button: the logo is doubled (25px -> 48px) using the filled WhatsApp mark; the circle
+   grows to 80px to fit it with comfortable padding. Phones: a 64px circle with a 38px logo. */
+.whatsapp-float{width:80px;height:80px}
+.whatsapp-float svg{width:48px;height:48px;fill:currentColor;stroke:none}
+@media(max-width:580px){
+  .whatsapp-float{width:64px;height:64px}
+  .whatsapp-float svg{width:38px;height:38px}
+}
+
+/* Hero certifications: each badge is only as wide as its content, aligned to the right. */
+.hero-vis .hero-certifications{justify-items:end}
+.hero-vis .hero-certifications .hero-badge,
+.hero-vis .hero-certifications .hero-trust{width:auto;max-width:100%}
+
+/* Blog posts: wide WordPress tables scroll sideways inside their own box instead of widening the
+   whole page; images/embeds never exceed the column. */
+.blog-content .wp-block-table,
+.blog-content>table{display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.blog-content img,.blog-content iframe,.blog-content video{max-width:100%;height:auto}
+
+/* Sitemap page */
+.sitemap-page .simple-page-inner{max-width:1100px}
+.sitemap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;margin-top:36px;align-items:start}
+.sitemap-group{padding:22px 24px;border:1px solid var(--bdr);border-radius:var(--rl);background:#fff;box-shadow:var(--sh1)}
+.sitemap-group h2{margin:0 0 12px;color:var(--navy);font:800 16px/1.3 var(--sans)}
+.sitemap-group ul{display:grid;gap:2px;margin:0;padding:0;list-style:none}
+.sitemap-group a{display:block;padding:6px 0;color:var(--blue);font:600 14px/1.45 var(--sans);text-decoration:none}
+.sitemap-group a:hover,.sitemap-group a:focus-visible{text-decoration:underline;text-underline-offset:4px}
+
+/* Account page (sign in / create account layout) */
+.account-page .simple-page-inner{max-width:1100px}
+.account-layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:24px;margin-top:36px;align-items:start}
+.account-card,.account-panel{padding:28px;border:1px solid var(--bdr);border-radius:var(--rl);background:#fff;box-shadow:var(--sh1)}
+.account-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:24px;padding:4px;border-radius:12px;background:var(--bg4)}
+.account-tabs button{min-height:42px;border:0;border-radius:9px;background:transparent;color:var(--muted);font:800 14px/1 var(--sans);cursor:pointer;transition:background .15s ease,color .15s ease}
+.account-tabs button.is-active{background:#fff;color:var(--navy);box-shadow:var(--sh1)}
+.account-card h2,.account-panel h2{margin:0;color:var(--navy);font:800 22px/1.25 var(--sans)}
+.account-page .account-sub{margin:6px 0 20px;font-size:15px}
+.account-form{display:grid;gap:16px}
+.account-form>label{display:grid;gap:6px;color:var(--navy);font:800 13px/1.2 var(--sans)}
+.account-form input[type=text],.account-form input[type=email],.account-form input[type=password]{height:48px;padding:0 14px;border:1px solid var(--bdr);border-radius:10px;background:var(--bg1);color:var(--navy);font:500 16px var(--sans);outline:none}
+.account-form input:focus{border-color:var(--blue);background:#fff;box-shadow:0 0 0 3px rgba(21,87,167,.12)}
+.account-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.account-row a{color:var(--blue);font:700 13px var(--sans)}
+.account-check{display:flex;align-items:center;gap:8px;color:var(--body);font:600 14px/1.4 var(--sans);cursor:pointer}
+.account-check input{width:16px;height:16px;accent-color:var(--blue)}
+.account-form .btn{width:100%;margin-top:4px}
+.account-page .account-notice{margin:0;padding:12px 14px;border-radius:10px;background:#e8f0f8;color:var(--navy);font-size:14px;line-height:1.5}
+.account-side{display:grid;gap:24px}
+.account-benefits{display:grid;gap:14px;margin:18px 0 0;padding:0;list-style:none}
+.account-benefits li{display:flex;gap:12px;align-items:flex-start}
+.account-benefits li>span{flex:none;width:26px;height:26px;display:grid;place-items:center;border-radius:50%;background:#e8f0f8;color:var(--blue);font-weight:900;font-size:13px}
+.account-benefits strong{display:block;color:var(--navy);font:800 15px/1.3 var(--sans)}
+.account-benefits small{display:block;margin-top:2px;color:var(--muted);font-size:14px;line-height:1.5}
+.account-quick{display:grid;gap:10px;padding:16px}
+.account-quick a{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border:1px solid var(--bdr);border-radius:12px;color:var(--navy);text-decoration:none;transition:border-color .15s ease,background .15s ease}
+.account-quick a::after{content:"\2192";color:var(--blue);font-weight:800}
+.account-quick a:hover,.account-quick a:focus-visible{border-color:var(--blue);background:var(--bg1)}
+.account-quick strong{font:800 15px/1.2 var(--sans)}
+.account-quick small{margin-left:auto;color:var(--muted);font-size:13px}
+@media(max-width:860px){.account-layout{grid-template-columns:1fr}}
+@media(max-width:580px){.account-card,.account-panel{padding:20px}}
+.sitemap-group-wide{grid-column:1/-1} /* blog posts: full width, flowing columns */
+.sitemap-group-wide ul{display:block;columns:3 260px;column-gap:28px}
+.sitemap-group-wide li{break-inside:avoid}

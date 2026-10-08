@@ -25,6 +25,15 @@ const SIZE_TIERS = [
   { id: "king", label: "King (150 x 200cm)", multiplier: 1.27 },
 ];
 
+const SIZE_IMAGE_LABEL: Record<string, string> = { single: "Single", double: "Double", king: "King" };
+
+/** Gallery indexes whose photo shows the given size (file names like "... King Morning.webp"). */
+function sizeImageIndexes(gallery: Array<{ src: string }>, sizeId: string) {
+  const label = SIZE_IMAGE_LABEL[sizeId];
+  if (!label) return [];
+  return gallery.flatMap((image, index) => (image.src.includes(`${label} Morning`) || image.src.includes(`${label} Evening`) ? [index] : []));
+}
+
 function buildSizes(product: MattressProduct) {
   const basePrice = Number(product.price.replace(/[^0-9]/g, "")) || 499;
 
@@ -64,9 +73,10 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
     [product.gallery, product.image, product.imageAlt],
   );
   const sizes = useMemo(() => buildSizes(product), [product]);
-  const [activeImage, setActiveImage] = useState(0);
-  const [zoomOpen, setZoomOpen] = useState(false);
   const [size, setSize] = useState("king");
+  // Start on the photo of the default size, not just the first gallery image.
+  const [activeImage, setActiveImage] = useState(() => sizeImageIndexes(gallery, "king")[0] ?? 0);
+  const [zoomOpen, setZoomOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
   const { items, addItem } = useCart();
@@ -89,7 +99,17 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
 
   const activeSize = sizes.find((item) => item.id === size) ?? sizes[2];
   const total = activeSize.price * quantity;
-  const thumbnails = gallery.slice(0, 4);
+  // The selected size's photos lead the thumbnail strip; the rest follow.
+  const sizeIndexes = sizeImageIndexes(gallery, size);
+  const thumbnailIndexes = [...sizeIndexes, ...gallery.map((_, index) => index).filter((index) => !sizeIndexes.includes(index))].slice(0, 4);
+  // Photo saved to the basket / favourites: the selected size's main photo.
+  const sizeImage = gallery[sizeIndexes[0] ?? 0] ?? gallery[0];
+
+  function chooseSize(nextSize: string) {
+    setSize(nextSize);
+    const nextIndex = sizeImageIndexes(gallery, nextSize)[0];
+    if (nextIndex !== undefined) setActiveImage(nextIndex);
+  }
   const comparisonProduct = relatedProducts.find((item) => item.slug === comparisonSlug) ?? null;
   const stockState = getStockState(product.stockCount);
   const outOfStock = stockState.tone === "out";
@@ -148,16 +168,16 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             <button className={styles.view360} type="button">360&deg; View</button>
           </div>
           <div className={styles.thumbs} aria-label="Product image thumbnails">
-            {thumbnails.map((image, index) => (
+            {thumbnailIndexes.map((index) => (
               <button
                 className={index === activeImage ? styles.activeThumb : ""}
                 type="button"
-                key={`${image.src}-${index}`}
+                key={`${gallery[index].src}-${index}`}
                 aria-label={`View product image ${index + 1}`}
                 aria-pressed={index === activeImage}
                 onClick={() => setActiveImage(index)}
               >
-                <img src={image.src} alt="" />
+                <img src={gallery[index].src} alt="" />
               </button>
             ))}
           </div>
@@ -218,7 +238,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
           <aside className={styles.buyCard} aria-label="Product purchase options">
           <label>
             Size
-            <select value={size} onChange={(event) => setSize(event.target.value)}>
+            <select value={size} onChange={(event) => chooseSize(event.target.value)}>
               {sizes.map((item) => (
                 <option value={item.id} key={item.id}>{item.label}</option>
               ))}
@@ -248,7 +268,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
               disabled={outOfStock || added || adding}
               onClick={() => {
                 setAdding(true);
-                addItem({ slug: product.slug, name: product.shortName, image: gallery[0].src, price: activeSize.price, size, href: `/collections/bedroom/mattresses/${product.slug}/` }, quantity);
+                addItem({ slug: product.slug, name: product.shortName, image: sizeImage.src, price: activeSize.price, size, href: `/collections/bedroom/mattresses/${product.slug}/` }, quantity);
               }}
             >
               {outOfStock ? "Out of Stock" : adding ? "Adding..." : added ? "Added to Basket" : "Add to Basket"}
@@ -256,7 +276,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             <FavoriteButton
               className={styles.favoriteButton}
               activeClassName={styles.favoriteActive}
-              item={{ slug: product.slug, name: product.shortName, href: `/collections/bedroom/mattresses/${product.slug}/`, image: gallery[0].src, price: product.price, firmness: product.firmness }}
+              item={{ slug: product.slug, name: product.shortName, href: `/collections/bedroom/mattresses/${product.slug}/`, image: sizeImage.src, price: product.price, firmness: product.firmness }}
             />
           </div>
           {outOfStock ? (
@@ -313,7 +333,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
         <div className={styles.comparePicker}>
           <div className={`${styles.compareSlot} ${styles.compareSlotActive}`}>
             <span className={styles.compareSlotBadge}>This product</span>
-            <img src={gallery[0].src} alt={gallery[0].alt} />
+            <img src={sizeImage.src} alt={sizeImage.alt} />
             <strong>{product.shortName}</strong>
             <small>{product.firmness}</small>
             <span>{product.price.replace("From ", "")}</span>
