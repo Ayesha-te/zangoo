@@ -50,6 +50,11 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
           </Link>
           <span>{collection.badge}</span>
           <h1 id="collection-title">{collection.name}</h1>
+          {collection.slug === "bedroom" ? (
+            <div className={styles.categoryImageBanner} aria-label="Bedroom collection image">
+              <img src="/bedroom.jpeg" alt="Bright, styled bedroom with a made-up bed" />
+            </div>
+          ) : null}
           {introPreview.shouldCollapse ? (
             <CollapsibleIntro
               text={intro}
