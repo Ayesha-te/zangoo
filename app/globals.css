@@ -2600,3 +2600,14 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .sitemap-group-wide{grid-column:1/-1} /* blog posts: full width, flowing columns */
 .sitemap-group-wide ul{display:block;columns:3 260px;column-gap:28px}
 .sitemap-group-wide li{break-inside:avoid}
+
+/* Horizontal card tracks (blog, why-us, carousels): overflow-x:auto implicitly makes overflow-y auto,
+   and a few px of vertical overflow (hover lift / reveal animation) turned the track into a tiny vertical
+   scroller that swallowed swipes and wheel scrolls over the cards. Lock them to sideways-only scrolling. */
+.blog-grid,.why-grid,.carousel-track{overflow-y:hidden;touch-action:pan-x pan-y}
+
+/* "View all …" / "Shop Mattresses" links sit on their own row under the heading, aligned to the
+   right edge of the section's cards (homepage sections). The blog's "View All" + arrows stay on the left. */
+.sec-hdr>div:has(>.shared-section-link){flex:1 1 100%;min-width:0;max-width:none}
+.sec-hdr>div>.shared-section-link,
+.faq-intro>.shared-section-link{display:flex!important;width:max-content!important;margin-left:auto!important}

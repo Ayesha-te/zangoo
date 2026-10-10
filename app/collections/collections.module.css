@@ -2347,3 +2347,6 @@
     margin: 0;
   }
 }
+
+/* "View all guides" / "View all FAQs": own row under the heading, aligned right. */
+.supportHeading > :global(.shared-section-link) { align-self: flex-end; justify-self: end; }

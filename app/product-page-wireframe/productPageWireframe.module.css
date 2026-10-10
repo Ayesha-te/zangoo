@@ -1943,3 +1943,7 @@
   .faq :global(.lp-faq-body) { padding: 0 18px; }
   .faq :global(.lp-faq-body[aria-hidden="false"]) { padding: 0 18px 16px; }
 }
+
+/* "View all FAQs": own row under the heading, aligned to the right edge of the FAQ cards. */
+.faq > .faqHeader { max-width: none; }
+.faq > .faqHeader > .faqHeaderLink { align-self: flex-end !important; margin-left: auto; }
