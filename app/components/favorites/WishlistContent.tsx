@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { getMattressProduct } from "@/app/data/mattressProducts";
+import { formatGBP, getMattressProduct, getSizePricing } from "@/app/data/mattressProducts";
 import { useCart } from "@/app/components/cart/CartProvider";
 import { BagIcon, ProductFeatures, StockNote, TrashIcon } from "@/app/components/commerce/CommerceIcons";
 import { RecommendationStrip } from "@/app/components/commerce/RecommendationStrip";
@@ -23,7 +23,9 @@ export function WishlistContent() {
       <div className="commerce-list">
         {favorites.map((item) => {
           const product = getMattressProduct(item.slug);
-          const price = Number(product?.price.match(/\d+/)?.[0] || 0);
+          // Wishlist prices and adds the Double size.
+          const pricing = getSizePricing(item.slug, "double");
+          const price = pricing?.sale ?? Number(product?.price.replace(/[^0-9.]/g, "") || 0);
           const firmness = item.firmness || product?.firmness || "Medium to Firm";
           return <article className="commerce-item wishlist-item" key={item.slug}>
             <div className="commerce-item-media">
@@ -33,11 +35,11 @@ export function WishlistContent() {
             </div>
             <div className="commerce-item-copy"><h2><Link href={item.href}>{item.name}</Link></h2><p>Open Coil Spring Mattress</p><ProductFeatures turnable={product?.compareSpecs.turnable} /></div>
             <div className="commerce-item-price">
-              <div className="commerce-price-row"><strong>{"£"}{price}</strong><del>RRP {"£"}{price + 50}</del><b>Save {"£"}50 (15%)</b></div>
+              <div className="commerce-price-row"><strong>{formatGBP(price)}</strong>{pricing ? <><del>RRP {formatGBP(pricing.regular)}</del><b>Save {formatGBP(pricing.saving)} ({pricing.percent}%)</b></> : null}</div>
               <StockNote count={product?.stockCount ?? 10} />
             </div>
             <div className="commerce-item-actions">
-              <button className="btn btn-p" type="button" onClick={() => addItem({ slug: item.slug, name: item.name, image: item.image, price, size: "Double", href: item.href }, 1)}><BagIcon />Add to basket</button>
+              <button className="btn btn-p" type="button" onClick={() => addItem({ slug: item.slug, name: item.name, image: item.image, price, size: "double", href: item.href }, 1)}><BagIcon />Add to basket</button>
               <button className="icon-button" type="button" aria-label={`Remove ${item.name} from favourites`} onClick={() => removeFavorite(item.slug)}><TrashIcon /></button>
             </div>
           </article>;

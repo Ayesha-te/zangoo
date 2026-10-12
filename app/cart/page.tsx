@@ -5,7 +5,7 @@ import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteC
 import { RecommendationStrip } from "@/app/components/commerce/RecommendationStrip";
 import { ArrowIcon, CheckCircleIcon, LockIcon, ProductFeatures, TrashIcon } from "@/app/components/commerce/CommerceIcons";
 import { useCart } from "@/app/components/cart/CartProvider";
-import { getMattressProduct } from "@/app/data/mattressProducts";
+import { formatGBP, getMattressProduct, getSizePricing } from "@/app/data/mattressProducts";
 import { getFirmnessColor } from "@/app/utils/firmness";
 import collectionStyles from "@/app/collections/collections.module.css";
 
@@ -26,13 +26,14 @@ export default function CartPage() {
             <div className="commerce-list">{items.map((item) => {
               const product = getMattressProduct(item.slug);
               const firmness = product?.firmness || "Medium to Firm";
+              const pricing = getSizePricing(item.slug, item.size);
               return <article className="commerce-item cart-item" key={`${item.slug}-${item.size}`}>
                 <div className="commerce-item-media">
                   <Link href={item.href} aria-label={`View ${item.name}`}><img src={item.image} alt="" /></Link>
                   <span className={collectionStyles.saleBadge} style={{ backgroundColor: getFirmnessColor(firmness) }}>{firmness}</span>
                 </div>
-                <div className="commerce-item-copy"><h2><Link href={item.href}>{item.name}</Link></h2><p>Open Coil Spring Mattress</p><ProductFeatures turnable={product?.compareSpecs.turnable} /></div>
-                <div className="commerce-item-price"><div className="commerce-price-row"><strong>{"£"}{item.price}</strong><del>RRP {"£"}{item.price + 50}</del><b>Save {"£"}50 (15%)</b></div></div>
+                <div className="commerce-item-copy"><h2><Link href={item.href}>{item.name}</Link></h2><p>Open Coil Spring Mattress · {item.size.charAt(0).toUpperCase() + item.size.slice(1)}</p><ProductFeatures turnable={product?.compareSpecs.turnable} /></div>
+                <div className="commerce-item-price"><div className="commerce-price-row"><strong>{formatGBP(item.price)}</strong>{pricing ? <><del>RRP {formatGBP(pricing.regular)}</del><b>Save {formatGBP(pricing.saving)} ({pricing.percent}%)</b></> : null}</div></div>
                 <div className="cart-item-controls">
                   <div className="cart-quantity" aria-label={`Quantity for ${item.name}`}><button type="button" aria-label={`Decrease ${item.name} quantity`} onClick={() => updateQuantity(item.slug, item.size, item.quantity - 1)}>-</button><strong>{item.quantity}</strong><button type="button" aria-label={`Increase ${item.name} quantity`} onClick={() => updateQuantity(item.slug, item.size, item.quantity + 1)}>+</button></div>
                   <button className="icon-button" type="button" aria-label={`Remove ${item.name}`} onClick={() => removeItem(item.slug, item.size)}><TrashIcon /></button>

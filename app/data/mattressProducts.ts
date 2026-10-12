@@ -402,9 +402,37 @@ const allOrthoMattressProducts: MattressProduct[] = [
   },
 ];
 
+// ── Pricing ──
+// Regular price per size (before the sale). The sale price shown to customers is SALE_DISCOUNT off.
+export type MattressSize = "single" | "double" | "king";
+export const SALE_DISCOUNT = 0.15;
+export const regularSizePrices: Record<string, Record<MattressSize, number>> = {
+  "hampton-ortho": { single: 326, double: 403, king: 450 },
+  "deluxe-ortho": { single: 307, double: 377, king: 431 },
+  "capri-ortho-mattress": { single: 277, double: 317, king: 367 },
+  "classic-ortho": { single: 260, double: 294, king: 333 },
+};
+
+const toPennies = (value: number) => Math.round(value * 100) / 100;
+export const formatGBP = (value: number) => `£${value.toFixed(2)}`;
+
+/** Regular price, sale price and saving for one size of a product (size is case-insensitive). */
+export function getSizePricing(slug: string, size: string) {
+  const regular = regularSizePrices[slug]?.[size.toLowerCase() as MattressSize];
+  if (regular === undefined) return null;
+  const sale = toPennies(regular * (1 - SALE_DISCOUNT));
+  return { regular, sale, saving: toPennies(regular - sale), percent: Math.round(SALE_DISCOUNT * 100) };
+}
+
 // Launch catalogue: retain the other data for future releases, but expose only the approved four products.
+// "From" price = the Single sale price.
 const launchProductSlugs = new Set(["classic-ortho", "capri-ortho-mattress", "deluxe-ortho", "hampton-ortho"]);
-export const orthoMattressProducts = allOrthoMattressProducts.filter((product) => launchProductSlugs.has(product.slug));
+export const orthoMattressProducts = allOrthoMattressProducts
+  .filter((product) => launchProductSlugs.has(product.slug))
+  .map((product) => {
+    const single = getSizePricing(product.slug, "single");
+    return single ? { ...product, price: `From ${formatGBP(single.sale)}` } : product;
+  });
 
 export function getMattressProduct(slug: string) {
   return orthoMattressProducts.find((product) => product.slug === slug);

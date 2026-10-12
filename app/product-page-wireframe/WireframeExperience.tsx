@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { MattressProduct } from "@/app/data/mattressProducts";
-import { orthoMattressProducts } from "@/app/data/mattressProducts";
+import { formatGBP, getSizePricing, orthoMattressProducts } from "@/app/data/mattressProducts";
 import { FirmnessBar } from "@/app/components/collections/FirmnessBar";
 import { FavoriteButton } from "@/app/components/favorites/FavoriteButton";
 import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
@@ -38,6 +38,9 @@ function buildSizes(product: MattressProduct) {
   const basePrice = Number(product.price.replace(/[^0-9]/g, "")) || 499;
 
   return SIZE_TIERS.map((tier) => {
+    // Launch products use the price table (regular price, 15% off); others keep the old estimate.
+    const pricing = getSizePricing(product.slug, tier.id);
+    if (pricing) return { id: tier.id, label: tier.label, price: pricing.sale, compare: pricing.regular };
     const price = Math.round((basePrice * tier.multiplier) / 10) * 10;
     const compare = Math.round(price / 0.85 / 10) * 10;
     return { id: tier.id, label: tier.label, price, compare };
@@ -257,9 +260,9 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             </div>
           </div>
           <div className={styles.priceRow}>
-            <strong>£{total}</strong>
-            <span>£{activeSize.compare * quantity}.00</span>
-            <em>You Save £{(activeSize.compare - activeSize.price) * quantity}</em>
+            <strong>{formatGBP(total)}</strong>
+            <span>{formatGBP(activeSize.compare * quantity)}</span>
+            <em>You Save {formatGBP((activeSize.compare - activeSize.price) * quantity)}</em>
           </div>
           <div className={styles.buyActions}>
             <button

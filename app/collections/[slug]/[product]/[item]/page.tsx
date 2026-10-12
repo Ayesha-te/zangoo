@@ -134,7 +134,7 @@ export default async function ProductLandingPage({ params }: ProductLandingPageP
     offers: {
       "@type": "Offer",
       priceCurrency: "GBP",
-      price: item.price.replace(/[^0-9]/g, "") || "499",
+      price: item.price.replace(/[^0-9.]/g, "") || "499",
       availability: "https://schema.org/InStock",
     },
   };
