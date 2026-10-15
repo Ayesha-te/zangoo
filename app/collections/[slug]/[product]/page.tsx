@@ -7,10 +7,7 @@ import { ProductFaq } from "@/app/components/site/ProductFaq";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { collectionCategories } from "@/app/data/home";
 import { orthoMattressProducts } from "@/app/data/mattressProducts";
-import { getCatalogProducts } from "@/app/lib/woocommerce/catalog";
-
-// WooCommerce category that holds the mattress range.
-const WOO_MATTRESS_CATEGORY = "mattresses";
+import { getStoreCatalog } from "@/app/lib/woocommerce/catalog";
 import { getSentencePreview } from "@/app/utils/collapsibleIntro";
 import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
 import { customerReviews } from "@/app/data/customerReviews";
@@ -56,7 +53,7 @@ export default async function CollectionProductPage({ params }: ProductPageProps
 
   const isMattressRange = slug === "bedroom" && product === "mattresses";
   // WooCommerce is the source of truth; the local catalogue is used until the category has products.
-  const catalog = isMattressRange ? await getCatalogProducts(WOO_MATTRESS_CATEGORY, orthoMattressProducts) : null;
+  const catalog = isMattressRange ? await getStoreCatalog() : null;
   const intro =
     item.category.label === "Bedroom"
       ? `${item.group.label} sale products are available for enquiry now. Use this category page to compare the available product landing pages, review support details, and choose the mattress you want to ask about before opening a consultation.`

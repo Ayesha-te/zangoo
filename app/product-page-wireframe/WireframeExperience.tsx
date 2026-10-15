@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { MattressProduct } from "@/app/data/mattressProducts";
-import { formatGBP, getSizePricing, orthoMattressProducts } from "@/app/data/mattressProducts";
+import { formatGBP, getProductSizePricing, orthoMattressProducts } from "@/app/data/mattressProducts";
 import { FirmnessBar } from "@/app/components/collections/FirmnessBar";
 import { FavoriteButton } from "@/app/components/favorites/FavoriteButton";
 import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
@@ -27,19 +28,24 @@ const SIZE_TIERS = [
 
 const SIZE_IMAGE_LABEL: Record<string, string> = { single: "Single", double: "Double", king: "King" };
 
-/** Gallery indexes whose photo shows the given size (file names like "... King Morning.webp"). */
-function sizeImageIndexes(gallery: Array<{ src: string }>, sizeId: string) {
+/**
+ * Gallery indexes whose photo shows the given size, matched on the file name or alt text ("... King Morning").
+ * The WooCommerce variation image for that size (if any) comes first.
+ */
+function sizeImageIndexes(gallery: Array<{ src: string; alt: string }>, sizeId: string, variationImage?: string) {
   const label = SIZE_IMAGE_LABEL[sizeId];
   if (!label) return [];
-  return gallery.flatMap((image, index) => (image.src.includes(`${label} Morning`) || image.src.includes(`${label} Evening`) ? [index] : []));
+  const matches = gallery.flatMap((image, index) => ([image.src, image.alt].some((text) => text.includes(`${label} Morning`) || text.includes(`${label} Evening`)) ? [index] : []));
+  const variationIndex = variationImage ? gallery.findIndex((image) => image.src === variationImage) : -1;
+  return variationIndex >= 0 ? [variationIndex, ...matches.filter((index) => index !== variationIndex)] : matches;
 }
 
 function buildSizes(product: MattressProduct) {
   const basePrice = Number(product.price.replace(/[^0-9]/g, "")) || 499;
 
   return SIZE_TIERS.map((tier) => {
-    // Launch products use the price table (regular price, 15% off); others keep the old estimate.
-    const pricing = getSizePricing(product.slug, tier.id);
+    // WooCommerce variation prices (or the local size table); others keep the old estimate.
+    const pricing = getProductSizePricing(product, tier.id);
     if (pricing) return { id: tier.id, label: tier.label, price: pricing.sale, compare: pricing.regular };
     const price = Math.round((basePrice * tier.multiplier) / 10) * 10;
     const compare = Math.round(price / 0.85 / 10) * 10;
@@ -78,11 +84,12 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   const sizes = useMemo(() => buildSizes(product), [product]);
   const [size, setSize] = useState("king");
   // Start on the photo of the default size, not just the first gallery image.
-  const [activeImage, setActiveImage] = useState(() => sizeImageIndexes(gallery, "king")[0] ?? 0);
+  const [activeImage, setActiveImage] = useState(() => sizeImageIndexes(gallery, "king", product.sizePricing?.king?.image)[0] ?? 0);
   const [zoomOpen, setZoomOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
-  const { items, addItem } = useCart();
+  const { items, addItem, error: cartError, goToCheckout } = useCart();
+  const router = useRouter();
   const [openAccordion, setOpenAccordion] = useState<number | null>(0);
   const [comparisonSlug, setComparisonSlug] = useState<string | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -103,26 +110,22 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   const activeSize = sizes.find((item) => item.id === size) ?? sizes[2];
   const total = activeSize.price * quantity;
   // The selected size's photos lead the thumbnail strip; the rest follow.
-  const sizeIndexes = sizeImageIndexes(gallery, size);
+  const sizeIndexes = sizeImageIndexes(gallery, size, product.sizePricing?.[size]?.image);
   const thumbnailIndexes = [...sizeIndexes, ...gallery.map((_, index) => index).filter((index) => !sizeIndexes.includes(index))].slice(0, 4);
   // Photo saved to the basket / favourites: the selected size's main photo.
   const sizeImage = gallery[sizeIndexes[0] ?? 0] ?? gallery[0];
 
   function chooseSize(nextSize: string) {
     setSize(nextSize);
-    const nextIndex = sizeImageIndexes(gallery, nextSize)[0];
+    const nextIndex = sizeImageIndexes(gallery, nextSize, product.sizePricing?.[nextSize]?.image)[0];
     if (nextIndex !== undefined) setActiveImage(nextIndex);
   }
   const comparisonProduct = relatedProducts.find((item) => item.slug === comparisonSlug) ?? null;
   const stockState = getStockState(product.stockCount);
   const outOfStock = stockState.tone === "out";
-  const added = items.some((item) => item.slug === product.slug);
+  // "Added" refers to the selected size, so other sizes can still be added.
+  const added = items.some((item) => item.slug === product.slug && item.size === size);
 
-  useEffect(() => {
-    if (!adding) return;
-    const timeout = window.setTimeout(() => setAdding(false), 1000);
-    return () => window.clearTimeout(timeout);
-  }, [adding]);
 
   function chooseComparison(slug: string) {
     setComparisonSlug(slug);
@@ -269,9 +272,15 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
               className={`${styles.addButton} ${added ? styles.addedButton : ""}`}
               type="button"
               disabled={outOfStock || added || adding}
-              onClick={() => {
+              onClick={async () => {
                 setAdding(true);
-                addItem({ slug: product.slug, name: product.shortName, image: sizeImage.src, price: activeSize.price, size, href: `/collections/bedroom/mattresses/${product.slug}/` }, quantity);
+                try {
+                  await addItem({ slug: product.slug, name: product.shortName, image: sizeImage.src, price: activeSize.price, size, variationId: product.sizePricing?.[size]?.variationId, href: `/collections/bedroom/mattresses/${product.slug}/` }, quantity);
+                } catch {
+                  // The cart error is shown below the button.
+                } finally {
+                  setAdding(false);
+                }
               }}
             >
               {outOfStock ? "Out of Stock" : adding ? "Adding..." : added ? "Added to Basket" : "Add to Basket"}
@@ -282,10 +291,27 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
               item={{ slug: product.slug, name: product.shortName, href: `/collections/bedroom/mattresses/${product.slug}/`, image: sizeImage.src, price: product.price, firmness: product.firmness }}
             />
           </div>
+          {cartError ? <p className={styles.cartError} role="alert">{cartError}</p> : null}
           {outOfStock ? (
             <button className={styles.notifyButton} type="button">Notify Me When Available</button>
           ) : (
-            <button className={styles.buyButton} type="button">Buy Now</button>
+            <button
+              className={styles.buyButton}
+              type="button"
+              disabled={adding}
+              onClick={async () => {
+                setAdding(true);
+                try {
+                  if (!added) await addItem({ slug: product.slug, name: product.shortName, image: sizeImage.src, price: activeSize.price, size, variationId: product.sizePricing?.[size]?.variationId, href: `/collections/bedroom/mattresses/${product.slug}/` }, quantity);
+                  // WooCommerce checkout when connected; otherwise the basket page.
+                  if (!goToCheckout()) router.push("/cart/");
+                } catch {
+                  setAdding(false);
+                }
+              }}
+            >
+              Buy Now
+            </button>
           )}
           <small className={`${styles.stockNote} ${styles[STOCK_CLASS[stockState.tone]]}`}>
             <span className={styles.stockDot} aria-hidden="true" />

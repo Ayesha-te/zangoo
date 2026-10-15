@@ -1,26 +1,234 @@
 "use client";
 
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCatalog } from "@/app/components/catalog/CatalogProvider";
 
-export type CartItem = { slug: string; name: string; image: string; price: number; quantity: number; size: string; href: string };
-type CartContextValue = { items: CartItem[]; count: number; addItem: (item: Omit<CartItem, "quantity">, quantity: number) => void; updateQuantity: (slug: string, size: string, quantity: number) => void; removeItem: (slug: string, size: string) => void };
+export type CartItem = {
+  slug: string;
+  name: string;
+  image: string;
+  price: number;
+  quantity: number;
+  size: string;
+  href: string;
+  /** WooCommerce variation ID (needed to add the item to the WooCommerce cart). */
+  variationId?: number;
+  /** WooCommerce cart item key (set on items that are in the WooCommerce cart). */
+  key?: string;
+};
+
+type CartContextValue = {
+  items: CartItem[];
+  count: number;
+  addItem: (item: Omit<CartItem, "quantity" | "key">, quantity: number) => Promise<void>;
+  updateQuantity: (slug: string, size: string, quantity: number) => Promise<void>;
+  removeItem: (slug: string, size: string) => Promise<void>;
+  /** "woocommerce" when the basket is a WooCommerce cart; "local" when WooCommerce isn't configured. */
+  mode: "woocommerce" | "local";
+  /** True while a cart request is in flight. */
+  pending: boolean;
+  /** Last cart error (e.g. out of stock), for display. */
+  error: string | null;
+  clearError: () => void;
+  /** WooCommerce checkout URL that carries this cart over; null when unavailable. */
+  checkoutUrl: string | null;
+  /** Go to WooCommerce checkout with the current cart. Returns false when that isn't available. */
+  goToCheckout: () => boolean;
+};
+
 const CartContext = createContext<CartContextValue | null>(null);
-const key = "furnitureCoCart";
+const LOCAL_CART_KEY = "furnitureCoCart";
+// Same-origin proxy to the WooCommerce Store API (vercel.json in production, next.config.ts in dev), so the
+// browser never makes a cross-site request (the store doesn't send CORS headers for this site).
+const STORE_API = "/wc-store";
+const CART_TOKEN_KEY = "furnitureCoCartToken";
+
+// ── WooCommerce Store API (public, cookie-free via Cart-Token) ──
+type StoreCartItem = {
+  key: string;
+  id: number;
+  quantity: number;
+  name: string;
+  permalink: string;
+  images: Array<{ src: string }>;
+  variation: Array<{ attribute: string; value: string }>;
+  prices: { price: string; currency_minor_unit: number };
+};
+type StoreCart = { items: StoreCartItem[] };
+
+const readStorage = (name: string) => {
+  try {
+    return localStorage.getItem(name);
+  } catch {
+    return null;
+  }
+};
+const writeStorage = (name: string, value: string | null) => {
+  try {
+    if (value === null) localStorage.removeItem(name);
+    else localStorage.setItem(name, value);
+  } catch {
+    // Storage unavailable (private mode): the cart still works for this page view.
+  }
+};
 
 export function CartProvider({ children }: { children: ReactNode }) {
+  const { storeUrl, getProduct, findByVariation } = useCatalog();
+  const mode: CartContextValue["mode"] = storeUrl ? "woocommerce" : "local";
   const [items, setItems] = useState<CartItem[]>([]);
-  useEffect(() => { try { setItems(JSON.parse(localStorage.getItem(key) || "[]")); } catch { localStorage.removeItem(key); } }, []);
-  useEffect(() => { localStorage.setItem(key, JSON.stringify(items)); }, [items]);
-  const value = useMemo(() => ({
-    items,
-    count: items.reduce((sum, item) => sum + item.quantity, 0),
-    addItem: (item: Omit<CartItem, "quantity">, quantity: number) => setItems((current) => {
-      const existing = current.find((entry) => entry.slug === item.slug && entry.size === item.size);
-      return existing ? current : [...current, { ...item, quantity }];
-    }),
-    updateQuantity: (slug: string, size: string, quantity: number) => setItems((current) => current.map((item) => item.slug === slug && item.size === size ? { ...item, quantity: Math.max(1, quantity) } : item)),
-    removeItem: (slug: string, size: string) => setItems((current) => current.filter((item) => !(item.slug === slug && item.size === size))),
-  }), [items]);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [cartToken, setCartToken] = useState<string | null>(null);
+  const tokenRef = useRef<string | null>(null);
+  const queue = useRef<Promise<unknown>>(Promise.resolve());
+
+  /** Map a WooCommerce cart into the site's cart items (names, images and links from the catalogue). */
+  const fromStoreCart = useCallback(
+    (cart: StoreCart): CartItem[] =>
+      cart.items.map((item) => {
+        const match = findByVariation(item.id);
+        const size = (match?.size ?? item.variation[0]?.value ?? "").toLowerCase();
+        const slug = match?.product.slug ?? item.permalink.split("/").filter(Boolean).pop() ?? String(item.id);
+        return {
+          key: item.key,
+          variationId: item.id,
+          slug,
+          size,
+          name: match?.product.shortName ?? item.name,
+          image: match?.product.sizePricing?.[size]?.image ?? item.images[0]?.src ?? match?.product.image ?? "",
+          price: Number(item.prices.price) / 10 ** item.prices.currency_minor_unit,
+          quantity: item.quantity,
+          href: `/collections/bedroom/mattresses/${slug}/`,
+        };
+      }),
+    [findByVariation],
+  );
+
+  /** One Store API request at a time; keeps the Cart-Token current and the items in sync. */
+  const storeRequest = useCallback(
+    (path: string, body?: unknown) => {
+      const run = async () => {
+        setPending(true);
+        try {
+          // Trailing slash matches the site's trailingSlash setting; reads get a unique stamp so the host's
+          // page cache (LiteSpeed) never serves a stale or someone else's cart.
+          const url = `${STORE_API}${path}/${body === undefined ? `?_fresh=${Date.now()}` : ""}`;
+          const response = await fetch(url, {
+            method: body === undefined ? "GET" : "POST",
+            headers: { "Content-Type": "application/json", ...(tokenRef.current ? { "Cart-Token": tokenRef.current } : {}) },
+            body: body === undefined ? undefined : JSON.stringify(body),
+          });
+          const token = response.headers.get("Cart-Token");
+          if (token && token !== tokenRef.current) {
+            tokenRef.current = token;
+            setCartToken(token);
+            writeStorage(CART_TOKEN_KEY, token);
+          }
+          const data = await response.json().catch(() => null);
+          if (!response.ok) throw new Error(data?.message ? String(data.message).replace(/<[^>]+>/g, "") : `Basket request failed (${response.status})`);
+          setItems(fromStoreCart(data as StoreCart));
+          setError(null);
+        } catch (caught) {
+          setError(caught instanceof Error ? caught.message : "Something went wrong with your basket. Please try again.");
+          throw caught;
+        } finally {
+          setPending(false);
+        }
+      };
+      const next = queue.current.then(run, run);
+      queue.current = next.catch(() => undefined);
+      return next;
+    },
+    [fromStoreCart],
+  );
+
+  // Load: WooCommerce cart (moving any old browser-only basket into it), or the local basket.
+  useEffect(() => {
+    if (mode === "local") {
+      try {
+        setItems(JSON.parse(readStorage(LOCAL_CART_KEY) || "[]"));
+      } catch {
+        writeStorage(LOCAL_CART_KEY, null);
+      }
+      return;
+    }
+    tokenRef.current = readStorage(CART_TOKEN_KEY);
+    setCartToken(tokenRef.current);
+    const load = async () => {
+      await storeRequest("/cart").catch(() => undefined);
+      let legacy: CartItem[] = [];
+      try {
+        legacy = JSON.parse(readStorage(LOCAL_CART_KEY) || "[]");
+      } catch {
+        legacy = [];
+      }
+      for (const item of legacy) {
+        const variationId = item.variationId ?? getProduct(item.slug)?.sizePricing?.[item.size.toLowerCase()]?.variationId;
+        if (variationId) await storeRequest("/cart/add-item", { id: variationId, quantity: item.quantity }).catch(() => undefined);
+      }
+      writeStorage(LOCAL_CART_KEY, null);
+    };
+    void load();
+  }, [mode, storeRequest, getProduct]);
+
+  // Local mode persists to browser storage.
+  useEffect(() => {
+    if (mode === "local") writeStorage(LOCAL_CART_KEY, JSON.stringify(items));
+  }, [mode, items]);
+
+  const value = useMemo<CartContextValue>(() => {
+    const findItem = (slug: string, size: string) => items.find((item) => item.slug === slug && item.size === size);
+    return {
+      items,
+      count: items.reduce((sum, item) => sum + item.quantity, 0),
+      mode,
+      pending,
+      error,
+      clearError: () => setError(null),
+      checkoutUrl: mode === "woocommerce" && cartToken && items.length ? `${storeUrl}/checkout/?session=${encodeURIComponent(cartToken)}` : null,
+      goToCheckout: () => {
+        // Reads the token ref (not state) so it works straight after an add, before React re-renders.
+        if (mode !== "woocommerce" || !tokenRef.current) return false;
+        window.location.assign(`${storeUrl}/checkout/?session=${encodeURIComponent(tokenRef.current)}`);
+        return true;
+      },
+      addItem: async (item, quantity) => {
+        const variationId = item.variationId ?? getProduct(item.slug)?.sizePricing?.[item.size.toLowerCase()]?.variationId;
+        if (mode === "woocommerce" && variationId) {
+          await storeRequest("/cart/add-item", { id: variationId, quantity });
+          return;
+        }
+        setItems((current) => {
+          const existing = current.find((entry) => entry.slug === item.slug && entry.size === item.size);
+          return existing
+            ? current.map((entry) => (entry === existing ? { ...entry, quantity: entry.quantity + quantity } : entry))
+            : [...current, { ...item, quantity }];
+        });
+      },
+      updateQuantity: async (slug, size, quantity) => {
+        const item = findItem(slug, size);
+        if (mode === "woocommerce" && item?.key) {
+          await storeRequest("/cart/update-item", { key: item.key, quantity: Math.max(1, quantity) });
+          return;
+        }
+        setItems((current) => current.map((entry) => (entry.slug === slug && entry.size === size ? { ...entry, quantity: Math.max(1, quantity) } : entry)));
+      },
+      removeItem: async (slug, size) => {
+        const item = findItem(slug, size);
+        if (mode === "woocommerce" && item?.key) {
+          await storeRequest("/cart/remove-item", { key: item.key });
+          return;
+        }
+        setItems((current) => current.filter((entry) => !(entry.slug === slug && entry.size === size)));
+      },
+    };
+  }, [items, mode, pending, error, cartToken, storeUrl, storeRequest, getProduct]);
+
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
-export function useCart() { const context = useContext(CartContext); if (!context) throw new Error("useCart must be used inside CartProvider"); return context; }
+
+export function useCart() {
+  const context = useContext(CartContext);
+  if (!context) throw new Error("useCart must be used inside CartProvider");
+  return context;
+}

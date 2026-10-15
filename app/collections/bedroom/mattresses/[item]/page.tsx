@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { generateMetadata as generateProductMetadata } from "../../../[slug]/[product]/[item]/page";
-import { getMattressProduct, orthoMattressProducts } from "@/app/data/mattressProducts";
+import { getStoreCatalog } from "@/app/lib/woocommerce/catalog";
 import { SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { WireframeExperience } from "@/app/product-page-wireframe/WireframeExperience";
 import wireframeStyles from "@/app/product-page-wireframe/productPageWireframe.module.css";
@@ -10,26 +9,29 @@ type BedroomMattressPageProps = {
   params: Promise<{ item: string }>;
 };
 
-export function generateStaticParams() {
-  return orthoMattressProducts.map((mattress) => ({
-    item: mattress.slug,
-  }));
+// One page per product in the store catalogue (WooCommerce, or the local catalogue as fallback).
+export async function generateStaticParams() {
+  const { products } = await getStoreCatalog();
+  return products.map((mattress) => ({ item: mattress.slug }));
 }
 
 export async function generateMetadata({ params }: BedroomMattressPageProps): Promise<Metadata> {
   const { item } = await params;
+  const product = (await getStoreCatalog()).products.find((mattress) => mattress.slug === item);
 
-  return generateProductMetadata({
-    params: Promise.resolve({ slug: "bedroom", product: "mattresses", item }),
-  });
+  return {
+    title: product ? `${product.name} | Orthopaedic Mattress Sale | Furniture Co.` : "Orthopaedic Mattress | Furniture Co.",
+    description: product?.description,
+  };
 }
 
 export default async function BedroomMattressPage({ params }: BedroomMattressPageProps) {
   const { item } = await params;
-  const product = getMattressProduct(item);
+  const { products } = await getStoreCatalog();
+  const product = products.find((mattress) => mattress.slug === item);
   if (!product) notFound();
 
-  const relatedProducts = orthoMattressProducts.filter((mattress) => mattress.slug !== product.slug);
+  const relatedProducts = products.filter((mattress) => mattress.slug !== product.slug);
 
   return (
     <>

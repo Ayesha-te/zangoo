@@ -2,17 +2,18 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { orthoMattressProducts } from "@/app/data/mattressProducts";
+import { useCatalog } from "@/app/components/catalog/CatalogProvider";
 
 export function SearchExperience() {
   const [query, setQuery] = useState("");
+  const { products } = useCatalog();
   const results = useMemo(() => {
     const value = query.trim().toLowerCase();
     if (!value) return [];
-    return orthoMattressProducts.filter((product) =>
+    return products.filter((product) =>
       `${product.name} ${product.shortName} ${product.description} ${product.firmness}`.toLowerCase().includes(value),
     );
-  }, [query]);
+  }, [query, products]);
 
   return (
     <div className="search-experience">

@@ -2,7 +2,7 @@
 
 import { type CSSProperties, type RefObject, useMemo, useState } from "react";
 import Link from "next/link";
-import { orthoMattressProducts } from "@/app/data/mattressProducts";
+import { useCatalog } from "@/app/components/catalog/CatalogProvider";
 
 type NavSearchProps = {
   open: boolean;
@@ -13,16 +13,17 @@ type NavSearchProps = {
 
 export function NavSearch({ open, top, inputRef, onClose }: NavSearchProps) {
   const [query, setQuery] = useState("");
+  const { products } = useCatalog();
   const trimmed = query.trim();
 
   const results = useMemo(() => {
     const terms = trimmed.toLowerCase().split(/\s+/).filter(Boolean);
     if (!terms.length) return [];
-    return orthoMattressProducts.filter((product) => {
+    return products.filter((product) => {
       const haystack = `${product.name} ${product.shortName} ${product.description} ${product.firmness} ${product.bestFor.join(" ")}`.toLowerCase();
       return terms.every((term) => haystack.includes(term));
     });
-  }, [trimmed]);
+  }, [trimmed, products]);
 
   const style = { "--nav-search-top": `${top}px` } as CSSProperties;
 

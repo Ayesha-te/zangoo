@@ -5,14 +5,16 @@ import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteC
 import { RecommendationStrip } from "@/app/components/commerce/RecommendationStrip";
 import { ArrowIcon, CheckCircleIcon, LockIcon, ProductFeatures, TrashIcon } from "@/app/components/commerce/CommerceIcons";
 import { useCart } from "@/app/components/cart/CartProvider";
-import { formatGBP, getMattressProduct, getSizePricing } from "@/app/data/mattressProducts";
+import { formatGBP, getProductSizePricing, getSizePricing } from "@/app/data/mattressProducts";
+import { useCatalog } from "@/app/components/catalog/CatalogProvider";
 import { getFirmnessColor } from "@/app/utils/firmness";
 import collectionStyles from "@/app/collections/collections.module.css";
 
 const benefits = ["Free UK delivery", "0% interest-free finance", "1-year guarantee", "FSC certified & carbon neutral", "Made in the UK"];
 
 export default function CartPage() {
-  const { items, updateQuantity, removeItem } = useCart();
+  const { items, updateQuantity, removeItem, pending, error, checkoutUrl, goToCheckout, mode } = useCart();
+  const { getProduct } = useCatalog();
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const count = items.reduce((sum, item) => sum + item.quantity, 0);
   return (
@@ -24,9 +26,9 @@ export default function CartPage() {
           <div className="commerce-count">{count} {count === 1 ? "item" : "items"}</div>
           <div className="cart-layout">
             <div className="commerce-list">{items.map((item) => {
-              const product = getMattressProduct(item.slug);
+              const product = getProduct(item.slug);
               const firmness = product?.firmness || "Medium to Firm";
-              const pricing = getSizePricing(item.slug, item.size);
+              const pricing = product ? getProductSizePricing(product, item.size) : getSizePricing(item.slug, item.size);
               return <article className="commerce-item cart-item" key={`${item.slug}-${item.size}`}>
                 <div className="commerce-item-media">
                   <Link href={item.href} aria-label={`View ${item.name}`}><img src={item.image} alt="" /></Link>
@@ -35,8 +37,8 @@ export default function CartPage() {
                 <div className="commerce-item-copy"><h2><Link href={item.href}>{item.name}</Link></h2><p>Open Coil Spring Mattress · {item.size.charAt(0).toUpperCase() + item.size.slice(1)}</p><ProductFeatures turnable={product?.compareSpecs.turnable} /></div>
                 <div className="commerce-item-price"><div className="commerce-price-row"><strong>{formatGBP(item.price)}</strong>{pricing ? <><del>RRP {formatGBP(pricing.regular)}</del><b>Save {formatGBP(pricing.saving)} ({pricing.percent}%)</b></> : null}</div></div>
                 <div className="cart-item-controls">
-                  <div className="cart-quantity" aria-label={`Quantity for ${item.name}`}><button type="button" aria-label={`Decrease ${item.name} quantity`} onClick={() => updateQuantity(item.slug, item.size, item.quantity - 1)}>-</button><strong>{item.quantity}</strong><button type="button" aria-label={`Increase ${item.name} quantity`} onClick={() => updateQuantity(item.slug, item.size, item.quantity + 1)}>+</button></div>
-                  <button className="icon-button" type="button" aria-label={`Remove ${item.name}`} onClick={() => removeItem(item.slug, item.size)}><TrashIcon /></button>
+                  <div className="cart-quantity" aria-label={`Quantity for ${item.name}`}><button type="button" aria-label={`Decrease ${item.name} quantity`} disabled={pending} onClick={() => updateQuantity(item.slug, item.size, item.quantity - 1).catch(() => undefined)}>-</button><strong>{item.quantity}</strong><button type="button" aria-label={`Increase ${item.name} quantity`} disabled={pending} onClick={() => updateQuantity(item.slug, item.size, item.quantity + 1).catch(() => undefined)}>+</button></div>
+                  <button className="icon-button" type="button" aria-label={`Remove ${item.name}`} disabled={pending} onClick={() => removeItem(item.slug, item.size).catch(() => undefined)}><TrashIcon /></button>
                 </div>
               </article>;
             })}</div>
@@ -47,7 +49,8 @@ export default function CartPage() {
                 <div><span>Delivery</span><strong>Free</strong></div>
                 <hr />
                 <div className="summary-total"><span>Total</span><strong>{"£"}{subtotal.toFixed(2)}</strong></div>
-                <button className="btn btn-p" type="button">Proceed to checkout <ArrowIcon /></button>
+                {error ? <p className="cart-error" role="alert">{error}</p> : null}
+                <button className="btn btn-p" type="button" disabled={pending || (mode === "woocommerce" && !checkoutUrl)} onClick={() => goToCheckout()}>{pending ? "Updating basket…" : <>Proceed to checkout <ArrowIcon /></>}</button>
                 <small><LockIcon width="14" height="14" /> Secure checkout</small>
                 <div className="payment-methods"><b>VISA</b><b>Mastercard</b><b>Apple Pay</b><b>G Pay</b></div>
               </div>

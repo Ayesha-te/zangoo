@@ -2613,3 +2613,6 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .sec-hdr .blog-head-actions{align-items:flex-end;width:100%} /* link + arrows on the right */
 .sec-hdr>div>.shared-section-link,
 .faq-intro>.shared-section-link{display:flex!important;width:max-content!important;margin-left:auto!important}
+
+/* Basket errors returned by WooCommerce (e.g. out of stock), on the basket and wishlist pages. */
+.cart-error{margin:0 0 12px;padding:10px 12px;border-radius:8px;background:#fdecec;color:#b3261e;font:600 13px/1.4 var(--sans)}

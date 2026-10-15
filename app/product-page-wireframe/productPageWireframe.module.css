@@ -1947,3 +1947,6 @@
 /* "View all FAQs": own row under the heading, aligned to the right edge of the FAQ cards. */
 .faq > .faqHeader { max-width: none; }
 .faq > .faqHeader > .faqHeaderLink { align-self: flex-end !important; margin-left: auto; }
+
+/* Basket error from WooCommerce (e.g. out of stock), shown under the buy buttons. */
+.cartError { margin: 10px 0 0; padding: 10px 12px; border-radius: 8px; background: #fdecec; color: #b3261e; font: 600 13px/1.4 var(--sans); }

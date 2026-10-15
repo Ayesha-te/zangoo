@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { orthoMattressProducts } from "@/app/data/mattressProducts";
+import type { MattressProduct } from "@/app/data/mattressProducts";
+import { useCatalog } from "@/app/components/catalog/CatalogProvider";
 import { FavoriteButton } from "@/app/components/favorites/FavoriteButton";
 import { useFavorites } from "@/app/components/favorites/FavoritesProvider";
 import collectionStyles from "@/app/collections/collections.module.css";
@@ -12,10 +13,11 @@ const cleanPrice = (price: string) => price.replace("From ", "").replace("Â£",
 export function RecommendationStrip({ exclude = [] }: { exclude?: string[] }) {
   // Never recommend something the shopper has already saved to favourites.
   const { favorites } = useFavorites();
+  const { products: catalogProducts } = useCatalog();
   const hidden = new Set([...exclude, ...favorites.map((item) => item.slug)]);
   const products = recommendedSlugs
-    .map((slug) => orthoMattressProducts.find((product) => product.slug === slug))
-    .filter((product): product is (typeof orthoMattressProducts)[number] => Boolean(product))
+    .map((slug) => catalogProducts.find((product) => product.slug === slug))
+    .filter((product): product is MattressProduct => Boolean(product))
     .filter((product) => !hidden.has(product.slug));
 
   if (!products.length) return null;

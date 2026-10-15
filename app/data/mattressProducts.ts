@@ -432,6 +432,16 @@ export function getSizePricing(slug: string, size: string) {
   return { regular, sale, saving: toPennies(regular - sale), percent: Math.round(SALE_DISCOUNT * 100) };
 }
 
+/** Size pricing for a product: WooCommerce variation prices when available, otherwise the local size table. */
+export function getProductSizePricing(product: Pick<MattressProduct, "slug" | "sizePricing">, size: string) {
+  const variation = product.sizePricing?.[size.toLowerCase()];
+  if (variation) {
+    const saving = toPennies(variation.regular - variation.sale);
+    return { regular: variation.regular, sale: variation.sale, saving, percent: variation.regular ? Math.round((saving / variation.regular) * 100) : 0 };
+  }
+  return getSizePricing(product.slug, size);
+}
+
 /** Card "From" pricing: WooCommerce prices when the product came from WooCommerce, otherwise the size table (Single). */
 export function getCardPricing(product: Pick<MattressProduct, "slug" | "pricing">) {
   if (product.pricing) {
