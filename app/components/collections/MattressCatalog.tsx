@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { MattressProduct } from "@/app/data/mattressProducts";
-import { formatGBP, getSizePricing } from "@/app/data/mattressProducts";
+import { formatGBP, getCardPricing } from "@/app/data/mattressProducts";
 import { getFirmnessRank } from "@/app/utils/firmness";
 import { getFirmnessColor } from "@/app/utils/firmness";
 import { FavoriteButton } from "@/app/components/favorites/FavoriteButton";
@@ -160,7 +160,7 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
                   <span className={styles.mattressPrice}>
                     {cleanPrice(mattress.price)}
                     {(() => {
-                      const pricing = getSizePricing(mattress.slug, "single");
+                      const pricing = getCardPricing(mattress);
                       return pricing ? <small><s>RRP {formatGBP(pricing.regular)}</s> <b>Save {formatGBP(pricing.saving)} ({pricing.percent}%)</b></small> : null;
                     })()}
                   </span>

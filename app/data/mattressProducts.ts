@@ -21,6 +21,14 @@ export type MattressProduct = {
     turnable: boolean;
     weight: string;
   };
+  /** Where the product data came from. Local products leave this unset. */
+  source?: "woocommerce" | "local";
+  /** WooCommerce product ID (WooCommerce products only). */
+  wooId?: number;
+  /** "From" pricing for cards (cheapest option). Local products use the size price table instead. */
+  pricing?: { regular: number; sale: number };
+  /** Per-size pricing from WooCommerce variations, keyed by lowercase size (e.g. "single"). */
+  sizePricing?: Record<string, { regular: number; sale: number; variationId: number; image?: string }>;
 };
 
 const allOrthoMattressProducts: MattressProduct[] = [
@@ -422,6 +430,16 @@ export function getSizePricing(slug: string, size: string) {
   if (regular === undefined) return null;
   const sale = toPennies(regular * (1 - SALE_DISCOUNT));
   return { regular, sale, saving: toPennies(regular - sale), percent: Math.round(SALE_DISCOUNT * 100) };
+}
+
+/** Card "From" pricing: WooCommerce prices when the product came from WooCommerce, otherwise the size table (Single). */
+export function getCardPricing(product: Pick<MattressProduct, "slug" | "pricing">) {
+  if (product.pricing) {
+    const { regular, sale } = product.pricing;
+    const saving = toPennies(regular - sale);
+    return saving > 0 ? { regular, sale, saving, percent: Math.round((saving / regular) * 100) } : null;
+  }
+  return getSizePricing(product.slug, "single");
 }
 
 // Launch catalogue: retain the other data for future releases, but expose only the approved four products.
