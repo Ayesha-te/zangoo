@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import type { MattressProduct } from "@/app/data/mattressProducts";
 import { formatGBP, getProductSizePricing, orthoMattressProducts } from "@/app/data/mattressProducts";
 import { FirmnessBar } from "@/app/components/collections/FirmnessBar";
@@ -27,6 +27,23 @@ const SIZE_TIERS = [
 ];
 
 const SIZE_IMAGE_LABEL: Record<string, string> = { single: "Single", double: "Double", king: "King" };
+
+const RECENTLY_VIEWED_KEY = "furnitureCoRecentlyViewed";
+/** Raw stored "recently viewed" JSON ("" when empty or unavailable). Strings are stable snapshots. */
+function readRecentlyViewed() {
+  try {
+    return localStorage.getItem(RECENTLY_VIEWED_KEY) ?? "";
+  } catch {
+    return "";
+  }
+}
+function subscribeToRecentlyViewed(onChange: () => void) {
+  const listener = (event: StorageEvent) => {
+    if (event.key === RECENTLY_VIEWED_KEY) onChange();
+  };
+  window.addEventListener("storage", listener);
+  return () => window.removeEventListener("storage", listener);
+}
 
 /**
  * Gallery indexes whose photo shows the given size, matched on the file name or alt text ("... King Morning").
@@ -93,19 +110,27 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   const [openAccordion, setOpenAccordion] = useState<number | null>(0);
   const [comparisonSlug, setComparisonSlug] = useState<string | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
-  const [recentSlugs] = useState<string[]>(() => {
-    if (typeof window === "undefined") return [product.slug];
+  // Recently viewed comes from browser storage. useSyncExternalStore renders the server value (null) during
+  // hydration and the stored value right after, so server and browser HTML match (no React #418).
+  const storedRecent = useSyncExternalStore(subscribeToRecentlyViewed, readRecentlyViewed, () => null);
+  const recentSlugs = useMemo(() => {
+    let previous: string[] = [];
     try {
-      const previous = JSON.parse(localStorage.getItem("furnitureCoRecentlyViewed") || "[]") as string[];
-      return [product.slug, ...previous.filter((slug) => slug !== product.slug)].slice(0, 4);
+      previous = storedRecent ? (JSON.parse(storedRecent) as string[]) : [];
     } catch {
-      localStorage.removeItem("furnitureCoRecentlyViewed");
-      return [product.slug];
+      previous = [];
     }
-  });
+    return [product.slug, ...previous.filter((slug) => slug !== product.slug)].slice(0, 4);
+  }, [storedRecent, product.slug]);
   useEffect(() => {
-    localStorage.setItem("furnitureCoRecentlyViewed", JSON.stringify(recentSlugs));
-  }, [recentSlugs]);
+    // Only save once storage has been read (null = not read yet), so history is never overwritten.
+    if (storedRecent === null) return;
+    try {
+      localStorage.setItem(RECENTLY_VIEWED_KEY, JSON.stringify(recentSlugs));
+    } catch {
+      // Storage unavailable: the rail still works for this page view.
+    }
+  }, [storedRecent, recentSlugs]);
 
   const activeSize = sizes.find((item) => item.id === size) ?? sizes[2];
   const total = activeSize.price * quantity;

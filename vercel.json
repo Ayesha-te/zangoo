@@ -2,8 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "rewrites": [
     {
-      "source": "/wc-store/:path*",
-      "destination": "https://peru-armadillo-169520.hostingersite.com/wp-json/wc/store/v1/:path*"
+      "source": "/wc-store/(.*)",
+      "destination": "https://peru-armadillo-169520.hostingersite.com/wp-json/wc/store/v1/$1"
     }
   ]
 }

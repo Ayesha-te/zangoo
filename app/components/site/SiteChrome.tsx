@@ -275,8 +275,8 @@ export function SiteHeader() {
           </div>
         </div>
         <div className="nav-in">
-          <Link href="/" className="nav-logo" aria-label="Furniture Co. home">
-            Furniture Co.
+          <Link href="/" className="nav-logo" aria-label="OrthoBedroom.co.uk home">
+            OrthoBedroom.co.uk
           </Link>
           <ul className="nav-links" role="list">
             {navLinks.map((link) => {
@@ -526,8 +526,8 @@ export function SiteFooter() {
     <footer role="contentinfo">
       <div className="foot-in">
         <div className="foot-brand">
-          <Link href="/" className="foot-logo" aria-label="Furniture Co. home">
-            Furniture Co.
+          <Link href="/" className="foot-logo" aria-label="OrthoBedroom.co.uk home">
+            OrthoBedroom.co.uk
           </Link>
           <p>Responsibly crafted furniture, with mattress offers launching first.</p>
           <div className="foot-social" aria-label="Social links">

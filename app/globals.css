@@ -2616,3 +2616,6 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 
 /* Basket errors returned by WooCommerce (e.g. out of stock), on the basket and wishlist pages. */
 .cart-error{margin:0 0 12px;padding:10px 12px;border-radius:8px;background:#fdecec;color:#b3261e;font:600 13px/1.4 var(--sans)}
+
+/* Logo is the domain (longer than the old name): slightly smaller on the narrowest phones so it clears the icons. */
+@media(max-width:340px){.nav-logo{font-size:15px}} /* 320px phones */
