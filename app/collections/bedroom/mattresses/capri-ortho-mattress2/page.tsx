@@ -3,9 +3,9 @@ import { SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import CapriOrthoMattress2Client from "./CapriOrthoMattress2Client";
 
 export const metadata: Metadata = {
-  title: "Capri Ortho Mattress 2 | UK-Handcrafted Orthopaedic Support | Furniture Co.",
+  title: "Capri Ortho Orthopaedic Mattress | Medium-to-Firm | OrthoBedroom",
   description:
-    "Capri Ortho Mattress 2 landing page with UK-handcrafted orthopaedic support, double-sided comfort, open coil springs, wire edge support, and WebP mattress imagery.",
+    "Shop the UK-made Capri Ortho medium-to-firm orthopaedic mattress with open coil springs, wire-edge support and a double-sided 26cm design. Free UK delivery.",
 };
 
 export default function CapriOrthoMattress2Page() {

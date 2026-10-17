@@ -157,27 +157,22 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
     setPickerOpen(false);
   }
 
+  const accordionContent = product.accordionContent ?? {
+    features: product.features.map((feature) => `${feature.title}: ${feature.body}`).join(" "),
+    benefits: product.bullets.join(". "),
+    dimensions: "Single, Double, and King sizes are available. Please check the product specifications before ordering.",
+    deliveryReturns: "Please review the current delivery, guarantee and returns guidance before ordering.",
+  };
+
   const accordions = [
     { title: "Description", body: product.description },
-    { title: "Features", body: product.features.map((feature) => feature.title).join(". ") },
-    { title: "Benefits", body: product.bullets.join(". ") },
-    {
-      title: "Dimensions and Size Guide",
-      body: "Single, Double, and King sizes can be supported in this structure. The section is ready for a full size table later.",
-    },
-    {
-      title: "Delivery and Returns",
-      body: "Free UK delivery, clear support before purchase, and simple return guidance can be shown here.",
-    },
+    { title: "Features", body: accordionContent.features },
+    { title: "Benefits", body: accordionContent.benefits },
+    { title: "Dimensions and Size Guide", body: accordionContent.dimensions },
+    { title: "Delivery, Guarantee & Returns", body: accordionContent.deliveryReturns },
   ];
 
-  const faqItems = [
-    ...product.faqs,
-    { question: "How long does delivery take?", answer: "Standard UK delivery is free, with timing confirmed before dispatch." },
-    { question: "Can I use this mattress on my existing bed?", answer: "Yes. It works with supportive divan, platform, and correctly spaced slatted bases." },
-    { question: "How should I care for the mattress?", answer: "Rotate it regularly and follow the turning guidance supplied with your selected model." },
-    { question: "What happens if I need help after ordering?", answer: "Our support team can assist with delivery, setup, care, and product questions." },
-  ];
+  const faqItems = [...product.faqs];
 
   return (
     <div className={styles.wrap}>
@@ -243,7 +238,17 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
                   </button>
                   <div className={styles.accordionPanel} data-open={isOpen || undefined}>
                     <div className={styles.accordionPanelInner}>
-                      <p>{item.body}</p>
+                      <p style={{ whiteSpace: "pre-line", lineHeight: 1.7 }}>
+                        {item.body.split(/(<strong>.*?<\/strong>)/g).map((part, index) =>
+                          part.startsWith("<strong>") && part.endsWith("</strong>") ? (
+                            <strong key={index}>
+                              {part.slice(8, -9)}
+                            </strong>
+                          ) : (
+                            part
+                          )
+                        )}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -257,7 +262,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
           <p className={styles.sku}>SKU: {product.slug.toUpperCase()}</p>
           <h1 id="wireframe-title">{product.name}</h1>
           <FirmnessBar firmness={product.firmness} />
-          <p>{product.description}</p>
+          <p>{product.heroDescription}</p>
           <h2>Features You Will Love</h2>
           <ul className={styles.benefits} role="list">
             {product.bullets.map((benefit) => (
@@ -359,9 +364,9 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
       <section className={styles.textInsert} aria-labelledby="insert-title">
         <p className={styles.kicker}>Free UK delivery &bull; 60-night trial &bull; WhatsApp support</p>
         <h2 id="insert-title">Why choose {product.shortName}?</h2>
-        <p>
-          {product.description} Message our team on WhatsApp for size and firmness guidance, or browse the full mattress range to compare support options before you buy.
-        </p>
+        {product.whyChoose.map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
       </section>
 
       <CustomerReviews

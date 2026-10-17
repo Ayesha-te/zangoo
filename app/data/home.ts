@@ -3,8 +3,8 @@ import { orthoMattressProducts } from "./mattressProducts";
 export const navLinks = [
   { label: "Shop", href: "#", active: true },
   { label: "Collections", href: "/collections/" },
-  { label: "Blog", href: "#blog" },
-  { label: "FAQ", href: "#faq" },
+  { label: "Blogs", href: "#blog" },
+  { label: "FAQs", href: "#faq" },
   { label: "Reviews", href: "/reviews/" },
   { label: "Contact", href: "#contact" },
 ];
@@ -156,12 +156,12 @@ export const blogPosts = [
 ] as const;
 
 export const faqs = [
-  ["How long does furniture delivery take?", "Standard delivery takes 5-10 business days. White-glove delivery with in-home setup is available in most major UK cities within 7-14 days. You will receive tracking updates at every stage."],
-  ["What materials are used in your furniture?", "We use sustainably sourced solid hardwoods, FSC-certified engineered timber, high-resilience foam cushioning, and natural textiles including linen, wool, and full-grain leather. All tested for low VOC emissions."],
-  ["Do you offer a guarantee on your furniture?", "Yes. All pieces come with a 1-year guarantee covering manufacturing defects, frame integrity, and spring systems under normal residential use."],
-  ["Can I return furniture if I do not like it?", "We offer a 60-day returns policy on most items in original condition. Collection is free for defective items; a return fee applies for change-of-mind returns. Custom orders are non-returnable."],
-  ["Do you offer interior design consultations?", "Yes. Free 45-minute virtual consultations and in-home visits are available in London, Manchester, and Birmingham, covering space planning, material selection, and styling."],
-  ["Is your furniture flat-pack or fully assembled?", "Sofas and beds arrive fully assembled. Dining tables and some bedroom pieces require light assembly with included tools and instructions. White-glove assembly is available at checkout."],
-  ["Can I customise dimensions or fabrics?", "Yes. Our bespoke service offers custom sizing, 80+ fabric choices, and finish variations. Lead time is 8-12 weeks. Book a design consultation to get started."],
-  ["Do you offer interest-free finance?", "We offer 0% interest-free credit on orders over £500, with 6, 12, or 24-month repayment terms via our FCA-authorised finance partner. Subject to status and credit approval."],
+  ["What is an orthopaedic mattress?", "An orthopaedic mattress is designed to provide a firmer, more supportive sleep surface rather than to act as a medical treatment. The term can describe different mattress constructions, including spring and foam-based designs. Our launch range uses supportive spring systems and covers medium-to-firm, firm and extra-firm comfort levels."],
+  ["What is the difference between an orthopaedic mattress and a normal mattress?", "The main difference is usually the emphasis on firmness and support rather than one specific mattress construction. A standard mattress can be soft, medium or firm, while mattresses described as orthopaedic commonly offer a firmer feel. Compare the actual spring system, fillings, firmness and care instructions instead of relying on the word “orthopaedic” alone."],
+  ["How firm should an orthopaedic mattress be?", "There is no single firmness that suits everyone. Medium-to-firm offers support with more cushioning, firm creates a more stable sleep surface, and extra firm provides the least sink and the most solid feel. Your body weight, sleeping position and personal comfort preference should all influence the firmness you choose."],
+  ["Can an orthopaedic mattress help with back pain?", "A mattress cannot be guaranteed to treat or cure back pain. Some sleepers may feel more comfortable on a supportive mattress, while a surface that is too firm or too soft can also feel uncomfortable. If back pain is persistent, severe or accompanied by other symptoms, seek advice from a qualified healthcare professional rather than relying on a mattress as treatment."],
+  ["What is an open coil spring mattress?", "An open coil mattress uses rows of interconnected springs that work together as one spring unit. This creates a familiar, supportive mattress feel and is commonly used in firm and orthopaedic designs. Our launch mattresses combine spring support with different comfort materials, including polyester, coir or memory foam depending on the model."],
+  ["What is the difference between open coil and pocket sprung mattresses?", "Open coil mattresses use connected springs that respond together, while pocket sprung mattresses place individual springs in separate fabric pockets so they can move more independently. Neither construction is automatically better for everyone; firmness, fillings, edge support, budget and personal comfort should be compared alongside the spring type."],
+  ["Should I choose a single-sided or double-sided mattress?", "Choose according to how much mattress maintenance you are comfortable with. A double-sided mattress is designed to be flipped and rotated regularly, helping both sleeping surfaces wear more evenly. A single-sided mattress is not flipped and normally only needs rotating according to the manufacturer’s care instructions. Always follow the instructions for your specific model."],
+  ["Where are you based, and do you deliver mattresses across the UK?", "Our business address is 70 Ilford Lane, Ilford, London IG1 2LA, United Kingdom. We sell mattresses online and offer free London delivery. Our range is available in single, double and king sizes, with 0% interest-free finance and a 1-year guarantee."],
 ] as const;

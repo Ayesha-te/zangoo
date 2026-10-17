@@ -56,7 +56,7 @@ export default async function CollectionProductPage({ params }: ProductPageProps
   const catalog = isMattressRange ? await getStoreCatalog() : null;
   const intro =
     item.category.label === "Bedroom"
-      ? `${item.group.label} sale products are available for enquiry now. Use this category page to compare the available product landing pages, review support details, and choose the mattress you want to ask about before opening a consultation.`
+      ? `Shop our focused range of UK-made orthopaedic mattresses in medium-to-firm, firm and extra-firm feels. Choose from single, double and king sizes, with open coil spring support and clearly listed mattress specifications.`
       : `${item.group.label} in the ${item.category.label} collection is being prepared for launch. This category page will hold product links, availability notes, and enquiry options when the range is ready.`;
   const introPreview = getSentencePreview(intro);
   const needFilters = [
@@ -73,32 +73,32 @@ export default async function CollectionProductPage({ params }: ProductPageProps
   const mattressGuides = [
     {
       title: "What is an Orthopaedic Mattress?",
-      text: "Learn how supportive mattress construction can reduce pressure points and help keep the back aligned.",
-      href: "/blog/firm-mattress-for-back-pain-does-it-really-help/",
+      text: "Learn what “orthopaedic mattress” means, how these mattresses are constructed and what to compare before choosing one.",
+      href: "/blog/what-is-an-orthopaedic-mattress/",
     },
     {
-      title: "How to Choose the Right Mattress",
-      text: "Compare firmness, sleeping position, and mattress build before choosing a product.",
-      href: "/blog/",
+      title: "How to Choose the Best Orthopaedic Mattress in the UK",
+      text: "Compare firmness, spring construction, mattress size, comfort layers and care requirements before choosing an orthopaedic mattress.",
+      href: "/blog/how-to-choose-the-best-orthopaedic-mattress-in-the-uk/",
     },
     {
-      title: "Mattress Sizes Guide",
-      text: "Check common UK sizes and choose the best fit for your room and bed frame.",
-      href: "/collections/bedroom/mattresses/",
+      title: "UK Mattress Sizes — the Full Chart, and the Four Traps Nobody Warns You About",
+      text: "Compare UK mattress dimensions, including single, double and king sizes, and avoid common sizing mistakes before ordering.",
+      href: "/blog/uk-mattress-sizes-the-full-chart-and-the-four-traps-nobody-warns-you-about/",
     },
     {
-      title: "Care & Maintenance",
-      text: "Simple guidance for keeping your mattress fresh, supportive, and lasting longer.",
-      href: "/blog/",
+      title: "How to Care for an Orthopaedic Mattress: Flipping, Rotating and Making It Last",
+      text: "Learn when to flip or rotate your mattress, how to protect it and how correct care can help it wear more evenly over time.",
+      href: "/blog/how-to-care-for-an-orthopaedic-mattress-flipping-rotating-and-making-it-last/",
     },
   ];
   const mattressFaqs = [
-    ["Does an orthopaedic mattress help with back pain?", "The supportive orthopaedic construction is designed to maintain spinal alignment and reduce pressure points. Our team can also help you choose the right firmness for your needs."],
-    ["What type of mattress is best for side sleepers?", "Side sleepers usually benefit from a medium to firm mattress with enough comfort on the shoulder and hip areas. Message us for guidance based on your preferred feel."],
-    ["What is the difference between orthopaedic and normal mattress?", "An orthopaedic mattress is built around firmer, more supportive materials to help keep the body evenly supported, while a standard mattress may prioritise a softer comfort feel."],
-    ["Is an orthopaedic mattress worth it?", "It can be a strong choice if you prefer stable support, less sinking, and a firmer sleep surface. The right option depends on your sleeping position and comfort preference."],
-    ["Which firmness level is right for me?", "Back and stomach sleepers often prefer medium-firm or firm support, while side sleepers may prefer a little more cushioning. We can help compare Capri, Classic, Hampton, and Deluxe Ortho."],
-    ["How do I care for my orthopaedic mattress?", "Rotate the mattress regularly and follow the care and turning guidance supplied with your selected model. Hampton Ortho is non-turn, so it only needs occasional rotation."],
+    ["Does an orthopaedic mattress help with back pain?", "An orthopaedic mattress may improve comfort for some sleepers, but no mattress can be guaranteed to treat or relieve back pain. Comfort depends on mattress firmness, sleeping position, body weight and personal preference. If back pain is persistent, severe or accompanied by other symptoms, seek advice from a qualified healthcare professional."],
+    ["What type of mattress is best for side sleepers?", "There is no single mattress firmness that is best for every side sleeper. Side sleepers generally need enough cushioning around the shoulder and hip while still feeling adequately supported, and body weight affects how firm a mattress feels. Compare medium-to-firm, firm and extra-firm options according to your own comfort preference rather than choosing by sleeping position alone."],
+    ["What is the difference between orthopaedic and normal mattress?", "The main difference is that an orthopaedic mattress is typically designed and marketed around a firmer, more supportive feel, while a “normal mattress” can describe many firmness levels and constructions. “Orthopaedic” is not one specific material or spring system. Compare firmness, springs, fillings, depth and care requirements rather than relying on the label alone."],
+    ["Is an orthopaedic mattress worth it?", "An orthopaedic mattress can be worth it if you prefer a firmer, more stable sleep surface and its construction suits your comfort needs. Compare firmness, mattress size, spring construction, care requirements and price before choosing. A firmer mattress is not automatically a better mattress, so personal comfort should remain the deciding factor."],
+    ["Which firmness level is right for me?", "There is no single mattress firmness that is right for everyone. Choose medium-to-firm if you want support with some cushioning, firm if you prefer a more stable surface, and extra firm if you prefer minimal sink. Body weight, sleeping position and personal comfort can all change how firm a mattress feels."],
+    ["Can I buy an orthopaedic mattress online in London?", "Yes. We are an online mattress retailer based in Ilford, London, and we do not operate a walk-in showroom or physical store. You can order our UK-made orthopaedic mattresses online in single, double and king sizes, with free UK delivery, 0% interest-free finance and a 1-year guarantee. Current prices, firmness levels, specifications and stock availability are shown on each product page."],
   ] as const;
 
   return (
@@ -122,7 +122,7 @@ export default async function CollectionProductPage({ params }: ProductPageProps
             <div className={styles.categoryImageBanner} aria-label="Orthopaedic mattresses category image">
               <img
                 src="/category page banner.jpeg"
-                alt="Orthopaedic mattress styled in a bright bedroom"
+                alt="UK-made orthopaedic mattresses displayed on divan beds in a bright bedroom"
               />
             </div>
           ) : null}
@@ -157,10 +157,10 @@ export default async function CollectionProductPage({ params }: ProductPageProps
             <div className={styles.categoryGuides}>
               <div className={styles.supportHeading}>
                 <div>
-                  <h2>Related Guides &amp; Resources</h2>
-                  <p>Helpful buying guides and care advice for choosing with confidence.</p>
+                  <h2>Orthopaedic Mattress Buying Guides</h2>
+                  <p>Practical guides to help you understand orthopaedic mattresses, choose the right firmness and size, and care for your mattress properly.</p>
                 </div>
-                <Link className="shared-section-link" href="/blog/">View all guides</Link>
+                <Link className="shared-section-link" href="/blog/">View All Mattress Guides</Link>
               </div>
               <div className={styles.guideGrid}>
                 {mattressGuides.map((guide) => (
@@ -177,7 +177,7 @@ export default async function CollectionProductPage({ params }: ProductPageProps
               <div className={styles.supportHeading}>
                 <div>
                   <h2>Frequently Asked Questions</h2>
-                  <p>Quick answers about comfort, delivery, support, and mattress care.</p>
+                  <p>Clear answers to common questions about orthopaedic mattresses, firmness, sleeping positions, back-pain considerations and mattress care.</p>
                 </div>
                 <Link className="shared-section-link" href="/faq/">View all FAQs</Link>
               </div>

@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: ProductLandingPageProps): Pro
   const item = getMattressProduct(itemSlug);
 
   return {
-    title: item ? `${item.name} | Orthopaedic Mattress Sale | Furniture Co.` : "Orthopaedic Mattress | Furniture Co.",
+    title: item ? `${item.name} | Orthopaedic Mattress Sale | Orthobedroom` : "Orthopaedic Mattress | Orthobedroom",
     description: item?.description,
   };
 }
