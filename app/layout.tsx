@@ -16,8 +16,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Furniture Co. - Award-Winning Furniture for Modern Living",
-  description: "Award-winning, sustainably crafted furniture trusted by 5000+ homeowners. Free design consultation. 1-year guarantee.",
+  title: "Orthopaedic Mattresses UK | London-Based | OrthoKip",
+  description: "Shop UK-made orthopaedic mattresses in medium-to-firm, firm and extra-firm feels. Based in Ilford, London, with free UK delivery, 0% finance and a 1-year guarantee.",
 };
 
 export default function RootLayout({
