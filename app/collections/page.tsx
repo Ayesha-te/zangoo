@@ -8,13 +8,13 @@ import { getSentencePreview } from "@/app/utils/collapsibleIntro";
 import styles from "./collections.module.css";
 
 export const metadata: Metadata = {
-  title: "Furniture Collections | Furniture Co.",
-  description: "Browse Furniture Co. collections by room, including bedroom mattresses, living room furniture, dining pieces, and lighting.",
+  title: "Orthobedroom Collections | Orthobedroom",
+  description: "Browse Orthobedroom collections by room, including bedroom mattresses, living room furniture, dining pieces, and lighting.",
 };
 
 export default function CollectionsPage() {
   const intro =
-    "Explore the main Furniture Co. categories with clear status labels. Bedroom mattresses are currently on sale, while other room collections are being prepared for launch.";
+    "Explore our furniture collections by room. Our Bedroom collection is live with four UK-made orthopaedic mattresses in single, double and king sizes, while Dining, Lighting and Living Room collections are coming soon.";
   const introPreview = getSentencePreview(intro);
 
   return (
@@ -23,8 +23,8 @@ export default function CollectionsPage() {
       <Breadcrumbs items={[{ label: "Collections" }]} />
       <main className={styles.page}>
         <section className={styles.hero} aria-labelledby="collections-title">
-          <span>Furniture Collections</span>
-          <h1 id="collections-title">Shop furniture by room.</h1>
+          <span>FURNITURE & MATTRESS COLLECTION</span>
+          <h1 id="collections-title">Shop Furniture Collections by Room</h1>
           {introPreview.shouldCollapse ? (
             <CollapsibleIntro
               text={intro}
@@ -51,7 +51,7 @@ export default function CollectionsPage() {
                   <p>{collection.description}</p>
                 </div>
                 <div className={styles.cardBottom}>
-                  {isLive ? <><span>{orthoMattressProducts.length} products</span><Link href={`/collections/${collection.slug}/`} aria-label={`${collection.name} collection details`}>Enquire Now</Link></> : null}
+                  {isLive ? <><span>{orthoMattressProducts.length} products</span><Link href={`/collections/${collection.slug}/`} aria-label={`${collection.name} collection details`}>Explore Bedroom</Link></> : null}
                 </div>
               </article>
             );

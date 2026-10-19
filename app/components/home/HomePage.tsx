@@ -317,11 +317,11 @@ function Hero() {
           <span className="rating-text">5/5 from verified customers</span>
         </div>
         <div className="hero-btns">
-          <Link href="/collections/" className={`btn btn-p ${primaryButtonClasses}`}>
+          <Link href="/collections/bedroom/mattresses/" className={`btn btn-p ${primaryButtonClasses}`}>
             Shop Mattresses
           </Link>
           <a className={`btn btn-s ${secondaryButtonClasses}`} href={whatsappHref} target="_blank" rel="noopener noreferrer">
-            Compare Firmness
+            Free Consultation
           </a>
         </div>
       </div>
@@ -871,9 +871,9 @@ function Contact() {
         <div className="bot-grid">
           <div className="nl rv">
             <span className="nl-tag">JOIN & SAVE 10%</span>
-            <h3 id="nl-h">Get 10% Off Your Next Order</h3>
+            <h3 id="nl-h">Get 10% Off Your First Order</h3>
             <p className="nl-intro">
-              Subscribe for mattress buying guides, care advice and product updates. New subscribers receive a 10% discount code for their next order. Terms apply.
+              Subscribe for mattress buying guides, care advice and product updates. New subscribers receive a 10% discount code for their first order. Terms apply.
             </p>
             <form className="nl-form" onSubmit={onSubmit} noValidate aria-label="Newsletter sign-up">
               {errors.form ? (

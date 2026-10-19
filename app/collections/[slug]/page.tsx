@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: CollectionPageProps): Promise
   const collection = collections.find((item) => item.slug === slug);
 
   return {
-    title: collection ? `${collection.name} Collection | Furniture Co.` : "Collection | Furniture Co.",
+    title: collection ? `${collection.name} Collection | Orthobedroom` : "Collection | Orthobedroom",
     description: collection?.description,
   };
 }
@@ -36,7 +36,7 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
 
   const isLive = collection.name === "Bedroom";
   const category = collectionCategories.find((item) => item.href === `/collections/${collection.slug}/`);
-  const intro = `${collection.description} Browse the available subcategories below for current launch status, product availability, and the most relevant enquiry route for this collection.`;
+  const intro = `Shop our bedroom collection online, starting with four UK-made orthopaedic mattresses in medium-to-firm, firm and extra-firm feels. Choose from single, double and king sizes with free UK delivery, while additional bedroom collections including beds and bedside tables are coming soon.`;
   const introPreview = getSentencePreview(intro);
 
   return (
@@ -83,11 +83,11 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
                     <strong>{group.label}</strong>
                     <p>
                       {isMattresses
-                        ? "Orthopaedic mattress sale products are available now with individual landing pages."
+                        ? "Shop four UK-made orthopaedic mattresses in medium-to-firm, firm and extra-firm feels, available in single, double and king sizes."
                         : `${group.label} products are being prepared for launch.`}
                     </p>
                   </div>
-                  {isMattresses ? <div className={styles.cardBottom}><span>{orthoMattressProducts.length} products live</span><Link href={group.href} aria-label={`View ${group.label} in ${collection.name}`}>View Mattresses</Link></div> : null}
+                  {isMattresses ? <div className={styles.cardBottom}><span>{orthoMattressProducts.length} products live</span><Link href={group.href} aria-label={`View ${group.label} in ${collection.name}`}>Explore Mattresses</Link></div> : null}
                 </article>
               );
             })}

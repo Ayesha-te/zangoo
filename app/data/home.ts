@@ -10,10 +10,10 @@ export const navLinks = [
 ];
 
 export const collections = [
-  { name: "Bedroom", slug: "bedroom", count: "310 products", className: "cc-bedroom", kind: "bed", badge: "Mattress Sale", description: "Mattresses, beds, bedside tables, wardrobes, and sleep essentials." },
-  { name: "Dining", slug: "dining", count: "158 products", className: "cc-dining", kind: "dining", badge: "Coming Soon", description: "Dining tables, chairs, benches, and hosting-ready storage." },
-  { name: "Lighting", slug: "lighting", count: "117 products", className: "cc-lighting", kind: "lamp", badge: "Coming Soon", description: "Floor lamps, pendants, table lamps, and layered lighting." },
-  { name: "Living Room", slug: "living-room", count: "220 products", className: "cc-living", kind: "sofa", badge: "Coming Soon", description: "Sofas, lounge chairs, media units, and relaxed living pieces." },
+  { name: "Bedroom", slug: "bedroom", count: "310 products", className: "cc-bedroom", kind: "bed", badge: "Mattress Sale", description: "Shop UK-made orthopaedic mattresses now, with beds, bedside tables and more bedroom furniture planned for future collections." },
+  { name: "Dining", slug: "dining", count: "158 products", className: "cc-dining", kind: "dining", badge: "Coming Soon", description: "Dining furniture is coming soon, including tables, chairs, benches and practical dining-room storage." },
+  { name: "Lighting", slug: "lighting", count: "117 products", className: "cc-lighting", kind: "lamp", badge: "Coming Soon", description: "Our lighting collection is coming soon, with floor lamps, pendants, table lamps and lighting for modern interiors." },
+  { name: "Living Room", slug: "living-room", count: "220 products", className: "cc-living", kind: "sofa", badge: "Coming Soon", description: "Our Living Room collection is coming soon, with sofas, lounge chairs, media units and furniture for comfortable everyday living." },
 ] as const;
 
 export const collectionCategories = [
