@@ -2619,3 +2619,16 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 
 /* Logo is the domain (longer than the old name): slightly smaller on the narrowest phones so it clears the icons. */
 @media(max-width:340px){.nav-logo{font-size:15px}} /* 320px phones */
+
+/* Basket: discount code box and applied-code line */
+.summary-code{display:grid;gap:6px;margin-top:4px}
+.summary-code label{color:var(--navy);font:800 13px/1.2 var(--sans)}
+.summary-code>div{display:flex;gap:8px}
+.summary-code input{flex:1;min-width:0;height:42px;padding:0 12px;border:1px solid var(--bdr);border-radius:var(--r);background:#fff;color:var(--navy);font:600 14px var(--sans);text-transform:uppercase}
+.summary-code input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,87,167,.12)}
+.summary-code .btn{min-height:42px;padding:0 16px;margin:0}
+.summary-discount strong{color:#2e7d32}
+.summary-coupon{margin-left:8px;padding:2px 8px;border:1px solid #9bd5ad;border-radius:999px;background:#e8f7ed;color:#16733a;font:800 11px/1.4 var(--sans);cursor:pointer}
+.foot-newsletter-done,.foot-newsletter-error{margin:8px 0 0;font:600 13px/1.4 var(--sans)}
+.foot-newsletter-done{color:#9bd5ad}
+.foot-newsletter-error{color:#ffb4ab}

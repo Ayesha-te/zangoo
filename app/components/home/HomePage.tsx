@@ -1,5 +1,6 @@
 "use client";
 
+import { subscribeToNewsletter } from "@/app/lib/newsletter";
 import { ChangeEvent, FormEvent, type CSSProperties, type RefObject, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -818,6 +819,7 @@ function Contact() {
   const [firstName, setFirstName] = useState("");
   const [website, setWebsite] = useState("");
   const [errors, setErrors] = useState<NewsletterErrors>({});
+  const [submitting, setSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
@@ -841,12 +843,21 @@ function Contact() {
     setErrors((current) => ({ ...current, firstName: undefined, form: undefined }));
   }
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const nextErrors = validateNewsletter(email, firstName, website);
 
     if (Object.values(nextErrors).some(Boolean)) {
       setErrors(nextErrors);
+      return;
+    }
+
+    // Sign up and email the 10% welcome code (WordPress discount snippet).
+    setSubmitting(true);
+    const result = await subscribeToNewsletter({ email, firstName, website });
+    setSubmitting(false);
+    if (!result.ok) {
+      setErrors({ form: result.message });
       return;
     }
 
@@ -935,7 +946,7 @@ function Contact() {
                   onChange={(event) => setWebsite(event.target.value)}
                 />
               </div>
-              <button type="submit" className={`btn btn-p ${primaryButtonClasses}`}>
+              <button type="submit" className={`btn btn-p ${primaryButtonClasses}`} disabled={submitting}>
                 Subscribe - It Is Free
               </button>
             </form>
@@ -1003,7 +1014,7 @@ function Contact() {
             <span className="modal-kicker">Subscribed</span>
             <h3 id="subscribe-success-title">Thank you for subscribing.</h3>
             <p id="subscribe-success-copy">
-              Your form has been cleared. New arrivals, design ideas, and exclusive offers will be sent to your inbox.
+              Your 10% welcome code is on its way. Check your inbox (and spam folder) for an email from OrthoBedroom.co.uk.
             </p>
             <button className={`btn btn-p ${primaryButtonClasses}`} type="button" onClick={() => setShowSuccess(false)}>
               Done
@@ -1021,6 +1032,7 @@ function CampaignPopup() {
   const [firstName, setFirstName] = useState("");
   const [website, setWebsite] = useState("");
   const [errors, setErrors] = useState<NewsletterErrors>({});
+  const [submitting, setSubmitting] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
 
   useEffect(() => {
@@ -1045,12 +1057,21 @@ function CampaignPopup() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, []);
 
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const nextErrors = validateNewsletter(email, firstName, website);
 
     if (Object.values(nextErrors).some(Boolean)) {
       setErrors(nextErrors);
+      return;
+    }
+
+    // Sign up and email the 10% welcome code (WordPress discount snippet).
+    setSubmitting(true);
+    const result = await subscribeToNewsletter({ email, firstName, website });
+    setSubmitting(false);
+    if (!result.ok) {
+      setErrors({ form: result.message });
       return;
     }
 
@@ -1152,7 +1173,7 @@ function CampaignPopup() {
             <input type="text" value={website} onChange={(event) => setWebsite(event.target.value)} tabIndex={-1} autoComplete="off" />
           </label>
           {errors.form ? <div className="campaign-popup-error">{errors.form}</div> : null}
-          <button type="submit" style={{ minHeight: "42px", border: "2px solid var(--blue)", borderRadius: "var(--r)", background: "var(--blue)", color: "#fff", font: "900 14px/1.2 var(--sans)", cursor: "pointer" }}>Subscribe</button>
+          <button type="submit" disabled={submitting} style={{ minHeight: "42px", border: "2px solid var(--blue)", borderRadius: "var(--r)", background: "var(--blue)", color: "#fff", font: "900 14px/1.2 var(--sans)", cursor: "pointer" }}>Subscribe</button>
         </form>
       )}
     </aside>

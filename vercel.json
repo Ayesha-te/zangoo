@@ -4,6 +4,10 @@
     {
       "source": "/wc-store/(.*)",
       "destination": "https://peru-armadillo-169520.hostingersite.com/wp-json/wc/store/v1/$1"
+    },
+    {
+      "source": "/wp-signup/(.*)",
+      "destination": "https://peru-armadillo-169520.hostingersite.com/wp-json/orthobedroom/v1/signup/$1"
     }
   ]
 }

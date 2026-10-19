@@ -1,6 +1,6 @@
 "use client";
 
-import { type MouseEvent, useEffect, useRef, useState } from "react";
+import { type FormEvent, type MouseEvent, useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -8,6 +8,7 @@ import { collectionCategories, footerMainLinks, footerSocialLinks, navLinks } fr
 import { useFavorites } from "@/app/components/favorites/FavoritesProvider";
 import { useCart } from "@/app/components/cart/CartProvider";
 import { NavSearch } from "@/app/components/site/NavSearch";
+import { subscribeToNewsletter } from "@/app/lib/newsletter";
 
 const pendingSectionKey = "furnitureCoPendingSection";
 const whatsappHref = "https://wa.me/447830376489";
@@ -571,15 +572,7 @@ export function SiteFooter() {
             </li>
           </ul>
         </nav>
-        <form className="foot-newsletter" aria-label="Footer newsletter sign-up">
-          <h2>Newsletter</h2>
-          <p>Mattress sale updates, launches, and room guides.</p>
-          <label>
-            <span>Email address</span>
-            <input type="email" placeholder="you@example.com" required />
-          </label>
-          <button type="submit">Subscribe</button>
-        </form>
+        <FooterNewsletter />
         <p className="foot-copy">
           <small>&copy; 2026 Furniture Co. All rights reserved.</small>
         </p>
@@ -602,5 +595,39 @@ export function Breadcrumbs({ items }: { items: Array<{ label: string; href?: st
         ))}
       </ol>
     </nav>
+  );
+}
+
+/** Footer sign-up: emails a one-time 10% welcome code (see app/lib/newsletter.ts). */
+function FooterNewsletter() {
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<{ state: "idle" | "sending" | "done" | "error"; message?: string }>({ state: "idle" });
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const website = String(new FormData(event.currentTarget).get("website") ?? "");
+    setStatus({ state: "sending" });
+    const result = await subscribeToNewsletter({ email, website });
+    setStatus({ state: result.ok ? "done" : "error", message: result.message });
+    if (result.ok) setEmail("");
+  }
+
+  return (
+    <form className="foot-newsletter" aria-label="Footer newsletter sign-up" onSubmit={onSubmit}>
+      <h2>Newsletter</h2>
+      <p>Sign up for 10% off your first order, plus mattress sale updates and guides.</p>
+      <label>
+        <span>Email address</span>
+        <input type="email" placeholder="you@example.com" required value={email} onChange={(event) => setEmail(event.target.value.slice(0, 80))} />
+      </label>
+      {/* Honeypot: hidden from people, filled by bots. */}
+      <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: "absolute", left: "-9999px" }} />
+      <button type="submit" disabled={status.state === "sending"}>{status.state === "sending" ? "Sending…" : "Subscribe"}</button>
+      {status.message ? (
+        <p className={status.state === "error" ? "foot-newsletter-error" : "foot-newsletter-done"} role="status">
+          {status.message}
+        </p>
+      ) : null}
+    </form>
   );
 }

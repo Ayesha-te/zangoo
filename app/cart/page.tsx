@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { RecommendationStrip } from "@/app/components/commerce/RecommendationStrip";
@@ -13,7 +14,8 @@ import collectionStyles from "@/app/collections/collections.module.css";
 const benefits = ["Free UK delivery", "0% interest-free finance", "1-year guarantee", "FSC certified & carbon neutral", "Made in the UK"];
 
 export default function CartPage() {
-  const { items, updateQuantity, removeItem, pending, error, checkoutUrl, goToCheckout, mode } = useCart();
+  const { items, updateQuantity, removeItem, pending, error, checkoutUrl, goToCheckout, mode, coupons, totals, applyCoupon, removeCoupon } = useCart();
+  const [code, setCode] = useState("");
   const { getProduct } = useCatalog();
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const count = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -45,10 +47,22 @@ export default function CartPage() {
             <aside className="cart-aside">
               <div className="order-summary">
                 <h2>Order summary</h2>
-                <div><span>Subtotal ({count} {count === 1 ? "item" : "items"})</span><strong>{"£"}{subtotal.toFixed(2)}</strong></div>
+                <div><span>Subtotal ({count} {count === 1 ? "item" : "items"})</span><strong>{formatGBP(totals?.subtotal ?? subtotal)}</strong></div>
+                {totals && totals.discount > 0 ? (
+                  <div className="summary-discount">
+                    <span>Discount {coupons.map((applied) => <button type="button" key={applied} className="summary-coupon" disabled={pending} onClick={() => removeCoupon(applied).catch(() => undefined)} aria-label={`Remove discount code ${applied}`}>{applied.toUpperCase()} ×</button>)}</span>
+                    <strong>−{formatGBP(totals.discount)}</strong>
+                  </div>
+                ) : null}
                 <div><span>Delivery</span><strong>Free</strong></div>
+                {mode === "woocommerce" ? (
+                  <form className="summary-code" onSubmit={(event) => { event.preventDefault(); applyCoupon(code).then(() => setCode("")).catch(() => undefined); }}>
+                    <label htmlFor="discount-code">Discount code</label>
+                    <div><input id="discount-code" value={code} onChange={(event) => setCode(event.target.value)} placeholder="Enter code" autoComplete="off" disabled={pending} /><button type="submit" className="btn btn-s" disabled={pending || !code.trim()}>Apply</button></div>
+                  </form>
+                ) : null}
                 <hr />
-                <div className="summary-total"><span>Total</span><strong>{"£"}{subtotal.toFixed(2)}</strong></div>
+                <div className="summary-total"><span>Total</span><strong>{formatGBP(totals?.total ?? subtotal)}</strong></div>
                 {error ? <p className="cart-error" role="alert">{error}</p> : null}
                 <button className="btn btn-p" type="button" disabled={pending || (mode === "woocommerce" && !checkoutUrl)} onClick={() => goToCheckout()}>{pending ? "Updating basket…" : <>Proceed to checkout <ArrowIcon /></>}</button>
                 <small><LockIcon width="14" height="14" /> Secure checkout</small>

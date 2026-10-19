@@ -34,6 +34,12 @@ type CartContextValue = {
   checkoutUrl: string | null;
   /** Go to WooCommerce checkout with the current cart. Returns false when that isn't available. */
   goToCheckout: () => boolean;
+  /** Discount codes applied to the WooCommerce cart. */
+  coupons: string[];
+  /** Totals calculated by WooCommerce (null in local mode or before the cart loads). */
+  totals: { subtotal: number; discount: number; total: number } | null;
+  applyCoupon: (code: string) => Promise<void>;
+  removeCoupon: (code: string) => Promise<void>;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -54,7 +60,12 @@ type StoreCartItem = {
   variation: Array<{ attribute: string; value: string }>;
   prices: { price: string; currency_minor_unit: number };
 };
-type StoreCart = { items: StoreCartItem[] };
+type StoreCartTotals = { total_items: string; total_discount: string; total_price: string; currency_minor_unit: number };
+type StoreCart = { items: StoreCartItem[]; coupons?: Array<{ code: string }>; totals?: StoreCartTotals };
+
+/** WooCommerce messages arrive HTML-encoded (e.g. &quot;); show them as plain text. */
+const decodeEntities = (text: string) =>
+  text.replace(/&quot;|&#0?34;/g, '"').replace(/&#0?39;|&#8217;|&rsquo;/g, "’").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&nbsp;/g, " ");
 
 const readStorage = (name: string) => {
   try {
@@ -79,6 +90,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [cartToken, setCartToken] = useState<string | null>(null);
+  const [coupons, setCoupons] = useState<string[]>([]);
+  const [totals, setTotals] = useState<CartContextValue["totals"]>(null);
   const tokenRef = useRef<string | null>(null);
   const queue = useRef<Promise<unknown>>(Promise.resolve());
 
@@ -125,8 +138,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
             writeStorage(CART_TOKEN_KEY, token);
           }
           const data = await response.json().catch(() => null);
-          if (!response.ok) throw new Error(data?.message ? String(data.message).replace(/<[^>]+>/g, "") : `Basket request failed (${response.status})`);
-          setItems(fromStoreCart(data as StoreCart));
+          if (!response.ok) throw new Error(data?.message ? decodeEntities(String(data.message).replace(/<[^>]+>/g, "")) : `Basket request failed (${response.status})`);
+          const cart = data as StoreCart;
+          setItems(fromStoreCart(cart));
+          setCoupons((cart.coupons ?? []).map((coupon) => coupon.code));
+          if (cart.totals) {
+            const unit = 10 ** cart.totals.currency_minor_unit;
+            setTotals({ subtotal: Number(cart.totals.total_items) / unit, discount: Number(cart.totals.total_discount) / unit, total: Number(cart.totals.total_price) / unit });
+          }
           setError(null);
         } catch (caught) {
           setError(caught instanceof Error ? caught.message : "Something went wrong with your basket. Please try again.");
@@ -192,6 +211,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
         window.location.assign(`${storeUrl}/checkout/?session=${encodeURIComponent(tokenRef.current)}`);
         return true;
       },
+      coupons,
+      totals,
+      applyCoupon: async (code) => {
+        const trimmed = code.trim();
+        if (!trimmed) return;
+        if (mode !== "woocommerce") {
+          setError("Discount codes can be entered at checkout.");
+          return;
+        }
+        await storeRequest("/cart/apply-coupon", { code: trimmed });
+      },
+      removeCoupon: async (code) => {
+        if (mode === "woocommerce") await storeRequest("/cart/remove-coupon", { code });
+      },
       addItem: async (item, quantity) => {
         const variationId = item.variationId ?? getProduct(item.slug)?.sizePricing?.[item.size.toLowerCase()]?.variationId;
         if (mode === "woocommerce" && variationId) {
@@ -222,7 +255,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setItems((current) => current.filter((entry) => !(entry.slug === slug && entry.size === size)));
       },
     };
-  }, [items, mode, pending, error, cartToken, storeUrl, storeRequest, getProduct]);
+  }, [items, mode, pending, error, cartToken, storeUrl, storeRequest, getProduct, coupons, totals]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
