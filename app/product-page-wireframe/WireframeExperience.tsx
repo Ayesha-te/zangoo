@@ -95,13 +95,13 @@ const COMPARE_ROWS: CompareRow[] = [
 
 export function WireframeExperience({ product, relatedProducts, isPreview = true }: WireframeExperienceProps) {
   const gallery = useMemo(
-    () => (product.gallery?.length ? product.gallery : [{ src: product.image, alt: product.imageAlt }]),
+    () => [{ src: product.image, alt: product.imageAlt }, ...(product.gallery ?? [])],
     [product.gallery, product.image, product.imageAlt],
   );
   const sizes = useMemo(() => buildSizes(product), [product]);
   const [size, setSize] = useState("king");
-  // Start on the photo of the default size, not just the first gallery image.
-  const [activeImage, setActiveImage] = useState(() => sizeImageIndexes(gallery, "king", product.sizePricing?.king?.image)[0] ?? 0);
+  // Open on the main product photo (first gallery image).
+  const [activeImage, setActiveImage] = useState(0);
   const [zoomOpen, setZoomOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
@@ -134,16 +134,39 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
 
   const activeSize = sizes.find((item) => item.id === size) ?? sizes[2];
   const total = activeSize.price * quantity;
-  // The selected size's photos lead the thumbnail strip; the rest follow.
+  // Keep the product image first and show size-specific photos after it.
   const sizeIndexes = sizeImageIndexes(gallery, size, product.sizePricing?.[size]?.image);
-  const thumbnailIndexes = [...sizeIndexes, ...gallery.map((_, index) => index).filter((index) => !sizeIndexes.includes(index))].slice(0, 4);
+  const allSizeIndexes = new Set([
+    ...sizeImageIndexes(gallery, "single", product.sizePricing?.single?.image),
+    ...sizeImageIndexes(gallery, "double", product.sizePricing?.double?.image),
+    ...sizeImageIndexes(gallery, "king", product.sizePricing?.king?.image),
+  ]);
+  const sizeIndependentIndexes = gallery
+    .map((_, index) => index)
+    .filter((index) => index !== 0 && !allSizeIndexes.has(index));
+  const thumbnailIndexes = [
+    0,
+    ...sizeIndependentIndexes,
+    ...sizeIndexes,
+    ...gallery
+      .map((_, index) => index)
+      .filter((index) => index !== 0 && !sizeIndependentIndexes.includes(index) && !sizeIndexes.includes(index)),
+  ];
   // Photo saved to the basket / favourites: the selected size's main photo.
   const sizeImage = gallery[sizeIndexes[0] ?? 0] ?? gallery[0];
 
+  function changeImage(direction: -1 | 1) {
+    setActiveImage((current) => {
+      const currentPosition = thumbnailIndexes.indexOf(current);
+      const nextPosition = (currentPosition + direction + thumbnailIndexes.length) % thumbnailIndexes.length;
+      return thumbnailIndexes[nextPosition];
+    });
+  }
+
   function chooseSize(nextSize: string) {
     setSize(nextSize);
-    const nextIndex = sizeImageIndexes(gallery, nextSize, product.sizePricing?.[nextSize]?.image)[0];
-    if (nextIndex !== undefined) setActiveImage(nextIndex);
+    const nextSizeIndexes = sizeImageIndexes(gallery, nextSize, product.sizePricing?.[nextSize]?.image);
+    if (nextSizeIndexes[0] !== undefined) setActiveImage(nextSizeIndexes[0]);
   }
   const comparisonProduct = relatedProducts.find((item) => item.slug === comparisonSlug) ?? null;
   const stockState = getStockState(product.stockCount);
@@ -157,27 +180,22 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
     setPickerOpen(false);
   }
 
+  const accordionContent = product.accordionContent ?? {
+    features: product.features.map((feature) => `${feature.title}: ${feature.body}`).join(" "),
+    benefits: product.bullets.join(". "),
+    dimensions: "Single, Double, and King sizes are available. Please check the product specifications before ordering.",
+    deliveryReturns: "Please review the current delivery, guarantee and returns guidance before ordering.",
+  };
+
   const accordions = [
     { title: "Description", body: product.description },
-    { title: "Features", body: product.features.map((feature) => feature.title).join(". ") },
-    { title: "Benefits", body: product.bullets.join(". ") },
-    {
-      title: "Dimensions and Size Guide",
-      body: "Single, Double, and King sizes can be supported in this structure. The section is ready for a full size table later.",
-    },
-    {
-      title: "Delivery and Returns",
-      body: "Free UK delivery, clear support before purchase, and simple return guidance can be shown here.",
-    },
+    { title: "Features", body: accordionContent.features },
+    { title: "Benefits", body: accordionContent.benefits },
+    { title: "Dimensions and Size Guide", body: accordionContent.dimensions },
+    { title: "Delivery, Guarantee & Returns", body: accordionContent.deliveryReturns },
   ];
 
-  const faqItems = [
-    ...product.faqs,
-    { question: "How long does delivery take?", answer: "Standard UK delivery is free, with timing confirmed before dispatch." },
-    { question: "Can I use this mattress on my existing bed?", answer: "Yes. It works with supportive divan, platform, and correctly spaced slatted bases." },
-    { question: "How should I care for the mattress?", answer: "Rotate it regularly and follow the turning guidance supplied with your selected model." },
-    { question: "What happens if I need help after ordering?", answer: "Our support team can assist with delivery, setup, care, and product questions." },
-  ];
+  const faqItems = [...product.faqs];
 
   return (
     <div className={styles.wrap}>
@@ -196,6 +214,26 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             >
               <img src={gallery[activeImage]?.src ?? gallery[0].src} alt={gallery[activeImage]?.alt ?? gallery[0].alt} />
             </button>
+            {gallery.length > 1 ? (
+              <>
+                <button
+                  type="button"
+                  className={`${styles.galleryArrow} ${styles.galleryArrowPrevious}`}
+                  onClick={() => changeImage(-1)}
+                  aria-label="View previous product image"
+                >
+                  &#8592;
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.galleryArrow} ${styles.galleryArrowNext}`}
+                  onClick={() => changeImage(1)}
+                  aria-label="View next product image"
+                >
+                  &#8594;
+                </button>
+              </>
+            ) : null}
             <button className={styles.view360} type="button">360&deg; View</button>
           </div>
           <div className={styles.thumbs} aria-label="Product image thumbnails">
@@ -243,7 +281,17 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
                   </button>
                   <div className={styles.accordionPanel} data-open={isOpen || undefined}>
                     <div className={styles.accordionPanelInner}>
-                      <p>{item.body}</p>
+                      <p style={{ whiteSpace: "pre-line", lineHeight: 1.7 }}>
+                        {item.body.split(/(<strong>.*?<\/strong>)/g).map((part, index) =>
+                          part.startsWith("<strong>") && part.endsWith("</strong>") ? (
+                            <strong key={index}>
+                              {part.slice(8, -9)}
+                            </strong>
+                          ) : (
+                            part
+                          )
+                        )}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -257,7 +305,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
           <p className={styles.sku}>SKU: {product.slug.toUpperCase()}</p>
           <h1 id="wireframe-title">{product.name}</h1>
           <FirmnessBar firmness={product.firmness} />
-          <p>{product.description}</p>
+          <p>{product.heroDescription ?? product.description}</p>
           <h2>Features You Will Love</h2>
           <ul className={styles.benefits} role="list">
             {product.bullets.map((benefit) => (
@@ -359,9 +407,9 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
       <section className={styles.textInsert} aria-labelledby="insert-title">
         <p className={styles.kicker}>Free UK delivery &bull; 60-night trial &bull; WhatsApp support</p>
         <h2 id="insert-title">Why choose {product.shortName}?</h2>
-        <p>
-          {product.description} Message our team on WhatsApp for size and firmness guidance, or browse the full mattress range to compare support options before you buy.
-        </p>
+        {(product.whyChoose?.length ? product.whyChoose : [product.description]).map((paragraph) => (
+          <p key={paragraph}>{paragraph}</p>
+        ))}
       </section>
 
       <CustomerReviews

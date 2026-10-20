@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: BedroomMattressPageProps): Pr
   const product = (await getStoreCatalog()).products.find((mattress) => mattress.slug === item);
 
   return {
-    title: product ? `${product.name} | Orthopaedic Mattress Sale | Furniture Co.` : "Orthopaedic Mattress | Furniture Co.",
+    title: product ? `${product.name} | Orthopaedic Mattress Sale | OrthoBedroom` : "Orthopaedic Mattress | OrthoBedroom",
     description: product?.description,
   };
 }

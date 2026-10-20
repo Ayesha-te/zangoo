@@ -3,7 +3,7 @@ import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteC
 import { SearchExperience } from "@/app/components/search/SearchExperience";
 
 export const metadata: Metadata = {
-  title: "Search | Furniture Co.",
+  title: "Search | OrthoBedroom",
 };
 
 export default function SearchPage() {

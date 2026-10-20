@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 
 export const metadata: Metadata = {
-  title: "Contact | Furniture Co.",
+  title: "Contact | OrthoBedroom",
   description: "Contact Furniture Co. for support, secure enquiries, and showroom information.",
 };
 

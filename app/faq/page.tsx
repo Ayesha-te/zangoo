@@ -4,7 +4,7 @@ import { faqs } from "@/app/data/home";
 import { FaqAccordion } from "@/app/components/site/FaqAccordion";
 
 export const metadata: Metadata = {
-  title: "FAQ | Furniture Co.",
+  title: "FAQ | OrthoBedroom",
   description: "Frequently asked questions about Furniture Co. delivery, returns, guarantee, and consultations.",
 };
 

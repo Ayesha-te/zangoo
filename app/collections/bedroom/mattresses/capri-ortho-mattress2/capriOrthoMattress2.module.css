@@ -867,7 +867,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  margin-top: 18px;
+  margin: 18px 0 0 auto;
   color: var(--blue);
   font: 900 15px/1.2 var(--sans);
   text-decoration: none;
@@ -1200,4 +1200,30 @@
   .summary {
     grid-template-columns: 1fr;
   }
+}
+.stockNote {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin: 18px 0 0;
+  color: #2e7d32;
+  font-size: 14px;
+}
+
+.stockDot {
+  width: 11px;
+  height: 11px;
+  flex: none;
+  border-radius: 50%;
+  background: #2e7d32;
+  animation: stockPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes stockPulse {
+  0%, 40%, 100% { box-shadow: 0 0 0 0 rgba(46, 125, 50, .42); }
+  20%, 60% { box-shadow: 0 0 0 6px rgba(46, 125, 50, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stockDot { animation: none; }
 }

@@ -5,7 +5,7 @@ import { orthoMattressProducts } from "@/app/data/mattressProducts";
 import { getBlogPosts } from "@/app/data/wordpressBlog";
 
 export const metadata: Metadata = {
-  title: "Sitemap | Furniture Co.",
+  title: "Sitemap | OrthoBedroom",
   description: "Every page on the Furniture Co. website in one place.",
 };
 

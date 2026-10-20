@@ -304,9 +304,9 @@ export function SiteHeader() {
                     <div className="mega-menu" aria-label="Collection subcategories">
                       <div className="mega-panel">
                         <div className="mega-intro">
-                          <span>Shop by room</span>
-                          <strong>Explore collections</strong>
-                          <p>Browse the main furniture categories, including the current bedroom mattress sale.</p>
+                          <span>SHOP MATTRESSES</span>
+                          <strong>Explore Mattress Collections</strong>
+                          <p>Browse our UK-made orthopaedic mattress range by firmness, size and construction, with medium-to-firm, firm and extra-firm options available online.</p>
                         </div>
                         <ul className="mega-links" role="list">
                           {collectionCategories.map((item) => (
@@ -407,7 +407,7 @@ export function SiteHeader() {
             <span />
           </button>
         </div>
-        <div className="site-trust-bar" aria-label="Furniture Co. trust benefits">
+        <div className="site-trust-bar" aria-label="OrthoBedroom.co.uk trust benefits">
           <div className="site-trust-bar-in" role="list">
             <span role="listitem">🇬🇧 Made in the UK</span>
             <span role="listitem">🚚 Free UK Delivery</span>
@@ -530,7 +530,7 @@ export function SiteFooter() {
           <Link href="/" className="foot-logo" aria-label="OrthoBedroom.co.uk home">
             OrthoBedroom.co.uk
           </Link>
-          <p>Responsibly crafted furniture, with mattress offers launching first.</p>
+          <p>Shop UK-made orthopaedic mattresses online, with medium-to-firm, firm and extra-firm options in single, double and king sizes. More furniture collections are coming soon.</p>
           <div className="foot-social" aria-label="Social links">
             {footerSocialLinks.map((link) => (
               <a href={link.href} target="_blank" rel="noopener noreferrer" key={link.label} aria-label={link.label}>
@@ -574,7 +574,7 @@ export function SiteFooter() {
         </nav>
         <FooterNewsletter />
         <p className="foot-copy">
-          <small>&copy; 2026 Furniture Co. All rights reserved.</small>
+          <small>&copy; 2026 Orthobedroom. All rights reserved.</small>
         </p>
       </div>
     </footer>
@@ -615,7 +615,7 @@ function FooterNewsletter() {
   return (
     <form className="foot-newsletter" aria-label="Footer newsletter sign-up" onSubmit={onSubmit}>
       <h2>Newsletter</h2>
-      <p>Sign up for 10% off your first order, plus mattress sale updates and guides.</p>
+      <p>Sign up for 10% off your first order, plus mattress offers, new product updates and practical buying guides.</p>
       <label>
         <span>Email address</span>
         <input type="email" placeholder="you@example.com" required value={email} onChange={(event) => setEmail(event.target.value.slice(0, 80))} />

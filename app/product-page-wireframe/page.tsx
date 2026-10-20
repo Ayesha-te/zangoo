@@ -5,7 +5,7 @@ import { WireframeExperience } from "./WireframeExperience";
 import styles from "./productPageWireframe.module.css";
 
 export const metadata: Metadata = {
-  title: "Product Page Wireframe Preview | Furniture Co.",
+  title: "Product Page Wireframe Preview | OrthoBedroom",
   description: "Standalone product page wireframe preview for a mattress product layout.",
 };
 

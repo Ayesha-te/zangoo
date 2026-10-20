@@ -1,7 +1,7 @@
 "use client";
 
 import { subscribeToNewsletter } from "@/app/lib/newsletter";
-import { ChangeEvent, FormEvent, type CSSProperties, type RefObject, useEffect, useMemo, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, type CSSProperties, type MouseEvent, type RefObject, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { awards, blogPosts, collections, faqs, reviews } from "@/app/data/home";
@@ -80,19 +80,20 @@ const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,24}$/i;
 const namePattern = /^[A-Za-z][A-Za-z' -]{0,39}$/;
 const whatsappHref = "https://wa.me/447830376489";
 const remoteImages = {
-  hero: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=80",
-  feature: "https://images.pexels.com/photos/276583/pexels-photo-276583.jpeg?auto=compress&cs=tinysrgb&w=900",
+  hero: "/Hero%20Image.webp",
+  feature: "/classic%20ortho%20product%20images/classic/Classic%20Ortho%20Main.webp",
   collections: {
-    "living-room": "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=900",
-    dining: "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=900",
-    bedroom: "https://images.pexels.com/photos/1454806/pexels-photo-1454806.jpeg?auto=compress&cs=tinysrgb&w=900",
-    lighting: "https://images.pexels.com/photos/112811/pexels-photo-112811.jpeg?auto=compress&cs=tinysrgb&w=900",
+    "living-room": "/coming%20soon%20card.webp",
+    dining: "/coming%20soon%20card.webp",
+    bedroom: "/Bedroom%20card.webp",
+    lighting: "/coming%20soon%20card.webp",
   },
   featured: [
-    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=900&q=80",
-    "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80",
+    "/Coming%20soon%20card.webp",
+    "/Coming%20soon%20card.webp",
     "https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&w=900&q=80",
   ],
+  orthopaedicCard: "/Orthopaedic%20mattress%20card.webp",
   reviews: {
     "living-room": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=700&q=80",
     bedroom: "https://images.unsplash.com/photo-1616627561950-9f746e330187?auto=format&fit=crop&w=700&q=80",
@@ -302,24 +303,24 @@ function Hero() {
   return (
     <section className="hero" aria-labelledby="h1">
       <div className="hero-txt">
-        <span className="hero-eye">Award-Winning &bull; Sustainably Crafted</span>
+        <span className="hero-eye">UK-MADE &bull; ORTHOPAEDIC MATTRESSES</span>
         <h1 id="h1">
-          Timeless Furniture
+          UK-Made
           <br />
-          Designed For <em>Modern Living</em>
+          Orthopaedic Mattresses For <em>Firm, Supportive Sleep</em>
         </h1>
         <p className="hero-sub">
-          Sustainably crafted pieces that balance comfort, durability, and contemporary design - furniture built to grow with your life.
+          We offer a focused range of UK-made orthopaedic mattresses in medium-to-firm, firm and extra-firm feels, with free UK delivery. Each model combines supportive spring construction with carefully selected comfort layers, tufted finishes and an approximately 26cm mattress depth.
         </p>
         <div className="hero-stars" role="img" aria-label="5 star verified reviews">
           <span className="stars" aria-hidden="true">
             &#9733;&#9733;&#9733;&#9733;&#9733;
           </span>
-          <span className="rating-text">5 star verified reviews</span>
+          <span className="rating-text">5/5 from verified customers</span>
         </div>
         <div className="hero-btns">
-          <Link href="/collections/" className={`btn btn-p ${primaryButtonClasses}`}>
-            Shop Collection
+          <Link href="/collections/bedroom/mattresses/" className={`btn btn-p ${primaryButtonClasses}`}>
+            Shop Mattresses
           </Link>
           <a className={`btn btn-s ${secondaryButtonClasses}`} href={whatsappHref} target="_blank" rel="noopener noreferrer">
             Free Consultation
@@ -330,7 +331,7 @@ function Hero() {
         className="hero-vis hero-photo"
         style={imageStyle(remoteImages.hero)}
         role="img"
-        aria-label="Modern living room with a sofa, warm lighting and contemporary furniture"
+        aria-label="Bright bedroom with a white orthopaedic mattress and a scenic window view"
       >
         <div className="hero-photo-shade" aria-hidden="true" />
         <div className="hero-certifications" aria-label="Supplier certifications">
@@ -362,26 +363,26 @@ function Collections() {
           <Link href="/collections/living-room/" className="feat-card rv" aria-label="View Living Room collection">
             <div className="feat-thumb feat-thumb-photo" style={imageStyle(remoteImages.feature)} aria-hidden="true" />
             <div className="feat-info">
-              <span className="feat-tag">Best Seller</span>
-              <p className="feat-name">Nordic Lounge Chair</p>
-              <p className="feat-sub">Explore trending styles</p>
+              <span className="feat-tag">MEDIUM-TO-FIRM</span>
+              <p className="feat-name">Classic Ortho</p>
+              <p className="feat-sub">Double-sided open coil support with a hand-tufted damask finish.</p>
               <span className={`btn btn-p btn-sm ${primaryButtonClasses}`} aria-hidden="true">
-                Open Store
+                View Classic Ortho
               </span>
             </div>
           </Link>
           <div>
             <div className="sec-hdr">
               <div>
-                <span className="sec-lbl sec-lbl-lt">Browse by Room</span>
+                <span className="sec-lbl sec-lbl-lt">SHOP THE RANGE</span>
                 <h2 className="h2lt rv" id="coll-h">
-                  Explore Our Collections
+                  Explore Our Orthopaedic Mattresses
                 </h2>
-                <p>Browse room-led edits and find the range that matches the way you live.</p>
-                <Link href="/collections/" className="sec-lnk sec-lnk-lt shared-section-link rv" aria-label="View all collections">
-                  View All
-                </Link>
+                <p>Compare our four UK-made orthopaedic mattresses by firmness, construction and care style. Available in single, double and king sizes, with delivery across London and the UK.</p>
               </div>
+              <Link href="/collections/" className="sec-lnk sec-lnk-lt shared-section-link rv" aria-label="View all collections">
+                View All Mattresses
+              </Link>
             </div>
             <div className="coll-grid">
               {collections.map((collection, index) => (
@@ -420,9 +421,25 @@ function Collections() {
 
 function FeaturedMattresses() {
   const featured = [
-    ["Pocket Spring Mattress", "Balanced support for everyday sleep", "From GBP 499", remoteImages.featured[0]],
-    ["Hybrid Comfort Mattress", "Foam comfort with responsive springs", "From GBP 649", remoteImages.featured[1]],
-    ["Orthopaedic Mattress", "Firm support for deeper rest", "From GBP 579", remoteImages.featured[2]],
+    {
+      title: "Orthopaedic Mattress",
+      copy: "Coir-enhanced open coil support with wire-edge and butterfly support for a distinctly extra-firm feel.",
+      price: "From £211",
+      image: remoteImages.orthopaedicCard,
+      badge: "Mattress Sale",
+    },
+    {
+      title: "Pocket Spring Mattress",
+      copy: "Double-sided open coil support with damask fabric, deep polyester filling and a hand-tufted finish.",
+      image: remoteImages.featured[0],
+      badge: "Coming Soon",
+    },
+    {
+      title: "Hybrid Comfort Mattress",
+      copy: "A firm spring mattress with foam encapsulation, deep adaptive memory foam and a premium knitted finish.",
+      image: remoteImages.featured[1],
+      badge: "Coming Soon",
+    },
   ];
 
   return (
@@ -430,24 +447,29 @@ function FeaturedMattresses() {
       <div className="wrap">
         <div className="sec-hdr">
           <div>
-            <span className="sec-lbl">Featured Collections &amp; Trends</span>
-            <h2 className="h2dk rv" id="featured-h">Mattress sale highlights</h2>
-            <p>Compare featured mattress picks, current offers, and popular comfort styles.</p>
-            <Link href="/collections/bedroom/mattresses/" className="sec-lnk shared-section-link">Shop Mattresses</Link>
+            <span className="sec-lbl">CHOOSE BY FIRMNESS</span>
+            <h2 className="h2dk rv" id="featured-h">Find Your Preferred Mattress Firmness</h2>
+            <p>Choose between medium-to-firm, firm and extra-firm support. The right feel is personal, so compare the spring construction, comfort layers and care requirements behind each mattress before you decide</p>
+            <Link href="/collections/bedroom/mattresses/" className="sec-lnk shared-section-link">Compare All Mattresses</Link>
           </div>
         </div>
         <div className="featured-grid">
-          {featured.map(([title, copy, price, image], index) => (
+          {featured.map(({ title, copy, price, image, badge }, index) => (
             <Link
               className="featured-card featured-card-photo rv"
               href="/collections/bedroom/mattresses/"
               style={{ ...imageStyle(image), transitionDelay: `${index * 0.08}s` }}
               key={title}
             >
-              <span>Mattress Sale</span>
+              <span className={badge === "Coming Soon" ? "featured-card-badge-coming-soon" : undefined}>{badge}</span>
               <strong>{title}</strong>
               <p>{copy}</p>
-              <em>{price}</em>
+              {price ? (
+                <em className="featured-card-meta">
+                  <span>{price}</span>
+                  <span>Single · Double · King</span>
+                </em>
+              ) : null}
             </Link>
           ))}
         </div>
@@ -462,10 +484,11 @@ function Stats() {
       <div className="wrap">
         <div className="sec-hdr">
           <div>
-            <span className="sec-lbl">Proof in Numbers</span>
+            <span className="sec-lbl">PROOF IN THE DETAILS</span>
             <h2 className="h2dk rv" id="stats-h">
-              Our Suppliers
+              Our Mattress Range in Numbers
             </h2>
+            <p>A focused UK-made mattress range built around clear firmness choices, straightforward specifications and practical details for customers in London and across the UK.</p>
           </div>
         </div>
         <div className="stats-grid">
@@ -513,7 +536,7 @@ function Awards() {
         <div className="awards-intro rv">
           <span className="sec-lbl">Recognition &amp; Trust</span>
           <h2 id="awards-h" className="h2dk">Awards &amp; Certifications</h2>
-          <p>Independently recognised for design, sustainability, and customer experience - so you can buy with complete confidence.</p>
+          <p>Our mattress supply chain is supported by recognised management-system standards covering quality, environmental responsibility, information security and workplace health and safety. Product-specific standards are shown only where they apply to the mattress or bed component concerned.</p>
         </div>
       </div>
       <div className="wrap">
@@ -594,7 +617,7 @@ function Reviews() {
   return (
     <CustomerReviews
       key={reviewItems.map((review) => review.title).join("|")}
-      intro="Recent verified customer feedback, including reviews with room photos."
+      intro="Real feedback from verified mattress purchases, shown in our customers' own words."
       reviews={reviewItems.map((review, index) => ({
         id: `${review.author}-${index}`,
         name: review.author,
@@ -707,19 +730,19 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
       <div className="wrap">
         <div className="sec-hdr rv">
           <div>
-            <span className="sec-lbl sec-lbl-lt">Ideas &amp; Inspiration</span>
-            <h2 className="h2lt" id="blog-h">From Our Blog</h2>
-            <p>Practical guides for choosing, caring for, and getting more from your mattress.</p>
-            <div className="blog-head-actions">
-              <Link href="/blog/" className="sec-lnk sec-lnk-lt shared-section-link" aria-label="View all blog articles">View All</Link>
-              <div className="carousel-actions carousel-actions-lt" aria-label="Blog carousel controls">
-                <button type="button" aria-label="Previous blog post" onClick={() => scrollCarousel(sliderRef, -1)}>
-                  &larr;
-                </button>
-                <button type="button" aria-label="Next blog post" onClick={() => scrollCarousel(sliderRef, 1)}>
-                  &rarr;
-                </button>
-              </div>
+            <span className="sec-lbl sec-lbl-lt">MATTRESS GUIDES &amp; ADVICE</span>
+            <h2 className="h2lt" id="blog-h">From Our Mattress Guides</h2>
+            <p>Clear, evidence-led guides to orthopaedic mattresses, firmness and mattress construction, written to help UK shoppers compare options before they buy.</p>
+          </div>
+          <div className="blog-head-actions">
+            <Link href="/blog/" className="sec-lnk sec-lnk-lt shared-section-link" aria-label="View all blog articles">View All Mattress Guides</Link>
+            <div className="carousel-actions carousel-actions-lt" aria-label="Blog carousel controls">
+              <button type="button" aria-label="Previous blog post" onClick={() => scrollCarousel(sliderRef, -1)}>
+                &larr;
+              </button>
+              <button type="button" aria-label="Next blog post" onClick={() => scrollCarousel(sliderRef, 1)}>
+                &rarr;
+              </button>
             </div>
           </div>
         </div>
@@ -771,9 +794,9 @@ function Faq() {
     <section className="faq" id="faq" aria-labelledby="faq-h">
       <div className="wrap">
         <div className="faq-intro rv">
-          <span className="sec-lbl">Common Questions</span>
+          <span className="sec-lbl">MATTRESS QUESTIONS, ANSWERED</span>
           <h2 id="faq-h" className="h2dk">Frequently Asked Questions</h2>
-          <p>Everything you need to know before you buy - answered clearly and honestly.</p>
+          <p>Straight answers to common questions about orthopaedic mattresses, firmness, spring systems, mattress care, London delivery and buying online in the UK.</p>
           <Link className="faq-link shared-section-link" href="/faq/">View all FAQs</Link>
         </div>
         <div className="faq-grid" role="list">
@@ -872,18 +895,18 @@ function Contact() {
     <section className="bottom" id="contact" aria-labelledby="nl-h">
       <div className="wrap">
         <div className="contact-section-head rv">
-          <span className="sec-lbl">Contact &amp; Updates</span>
-          <h2>Visit the showroom or stay updated</h2>
+          <span className="sec-lbl">LONDON MATTRESS SUPPORT &amp; OFFERS</span>
+          <h2>Need Help Choosing an Orthopaedic Mattress?</h2>
           <p>
-            Get help choosing the right furniture, ask about launch offers, or subscribe for room guides and mattress sale updates.
+            We serve mattress customers across London and the UK, with practical guidance on firmness, construction and mattress care, plus 10% off the first mattress order for new subscribers.
           </p>
         </div>
         <div className="bot-grid">
           <div className="nl rv">
-            <span className="nl-tag">Stay in the Loop</span>
-            <h3 id="nl-h">New arrivals, ideas &amp; exclusive offers</h3>
+            <span className="nl-tag">JOIN & SAVE 10%</span>
+            <h3 id="nl-h">Get 10% Off Your First Order</h3>
             <p className="nl-intro">
-              Get mattress sale updates, room guides, and subscriber-only offers straight to your inbox.
+              Subscribe for mattress buying guides, care advice and product updates. New subscribers receive a 10% discount code for their first order. Terms apply.
             </p>
             <form className="nl-form" onSubmit={onSubmit} noValidate aria-label="Newsletter sign-up">
               {errors.form ? (
@@ -947,31 +970,35 @@ function Contact() {
                 />
               </div>
               <button type="submit" className={`btn btn-p ${primaryButtonClasses}`} disabled={submitting}>
-                Subscribe - It Is Free
+                Get My 10% Code
               </button>
             </form>
             <ul className="nl-list" aria-label="Newsletter topics">
-              <li>Customer stories &amp; inspiration</li>
-              <li>Design trends &amp; guides</li>
-              <li>Furniture care advice</li>
-              <li>Exclusive subscriber discounts</li>
+              <li>Mattress buying guides</li>
+              <li>Firmness &amp; comfort advice</li>
+              <li>Mattress care tips</li>
+              <li>Subscriber-only offers</li>
             </ul>
           </div>
           <address className="map-card rv map-address">
             <div className="map-vis">
               <iframe
-                title="Google map for Furniture Co. Showroom"
+                title="Google map for Orthobedroom"
                 src="https://maps.google.com/maps?q=70%20Ilford%20Lane%2C%20London%20IG1%202LA&t=&z=15&ie=UTF8&iwloc=&output=embed"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
             <div className="map-info">
-              <p className="map-name">Furniture Co. Showroom</p>
+              <p className="map-name">Orthobedroom Address:</p>
               <p className="map-addr">
                 70 Ilford Lane
                 <br />
-                London IG1 2LA
+                Ilford
+                <br />
+                London
+                <br />
+                IG1 2LA
                 <br />
                 United Kingdom
               </p>
@@ -1190,7 +1217,8 @@ function BackToTop() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  function scrollToPageTop() {
+  function scrollToPageTop(event: MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
     const scrollingElement = document.scrollingElement ?? document.documentElement;
     const setAbsoluteTop = () => {
       scrollingElement.scrollTop = 0;

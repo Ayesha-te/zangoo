@@ -3,7 +3,7 @@ import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteC
 import { WishlistContent } from "@/app/components/favorites/WishlistContent";
 
 export const metadata: Metadata = {
-  title: "Wishlist | Furniture Co.",
+  title: "Wishlist | OrthoBedroom",
 };
 
 export default function WishlistPage() {

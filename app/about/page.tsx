@@ -4,7 +4,7 @@ import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteC
 import styles from "./about.module.css";
 
 export const metadata: Metadata = {
-  title: "About Us | Furniture Co.",
+  title: "About Us | OrthoBedroom",
   description: "Learn about Furniture Co.'s sustainable materials, design process, 1-year guarantee standards, and customer-first furniture service.",
 };
 

@@ -3,7 +3,7 @@ import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteC
 import { AccountExperience } from "./AccountExperience";
 
 export const metadata: Metadata = {
-  title: "Account | Furniture Co.",
+  title: "Account | OrthoBedroom",
 };
 
 export default function AccountPage() {
