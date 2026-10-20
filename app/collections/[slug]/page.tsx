@@ -35,6 +35,7 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
   if (!collection) notFound();
 
   const isLive = collection.name === "Bedroom";
+  const isBedroom = collection.slug === "bedroom";
   const category = collectionCategories.find((item) => item.href === `/collections/${collection.slug}/`);
   const intro = `Shop our bedroom collection online, starting with four UK-made orthopaedic mattresses in medium-to-firm, firm and extra-firm feels. Choose from single, double and king sizes with free UK delivery, while additional bedroom collections including beds and bedside tables are coming soon.`;
   const introPreview = getSentencePreview(intro);
@@ -50,6 +51,14 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
           </Link>
           <span>{collection.badge}</span>
           <h1 id="collection-title">{collection.name}</h1>
+          {isBedroom ? (
+            <div className={styles.categoryImageBanner} aria-label="Bedroom collection image">
+              <img
+                src="/bedroom category banner.webp"
+                alt="Bedroom collection with mattresses and bedroom furniture"
+              />
+            </div>
+          ) : null}
           {introPreview.shouldCollapse ? (
             <CollapsibleIntro
               text={intro}

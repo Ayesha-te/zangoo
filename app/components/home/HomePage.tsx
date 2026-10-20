@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEvent, FormEvent, type CSSProperties, type RefObject, useEffect, useMemo, useRef, useState } from "react";
+import { ChangeEvent, FormEvent, type CSSProperties, type MouseEvent, type RefObject, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { awards, blogPosts, collections, faqs, reviews } from "@/app/data/home";
@@ -79,19 +79,20 @@ const emailPattern = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,24}$/i;
 const namePattern = /^[A-Za-z][A-Za-z' -]{0,39}$/;
 const whatsappHref = "https://wa.me/447830376489";
 const remoteImages = {
-  hero: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1400&q=80",
-  feature: "https://images.pexels.com/photos/276583/pexels-photo-276583.jpeg?auto=compress&cs=tinysrgb&w=900",
+  hero: "/Hero%20Image.webp",
+  feature: "/classic%20ortho%20product%20images/classic/Classic%20Ortho%20Main.webp",
   collections: {
-    "living-room": "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=900",
-    dining: "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=900",
-    bedroom: "https://images.pexels.com/photos/1454806/pexels-photo-1454806.jpeg?auto=compress&cs=tinysrgb&w=900",
-    lighting: "https://images.pexels.com/photos/112811/pexels-photo-112811.jpeg?auto=compress&cs=tinysrgb&w=900",
+    "living-room": "/coming%20soon%20card.webp",
+    dining: "/coming%20soon%20card.webp",
+    bedroom: "/Bedroom%20card.webp",
+    lighting: "/coming%20soon%20card.webp",
   },
   featured: [
-    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=900&q=80",
-    "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80",
+    "/Coming%20soon%20card.webp",
+    "/Coming%20soon%20card.webp",
     "https://images.unsplash.com/photo-1615874959474-d609969a20ed?auto=format&fit=crop&w=900&q=80",
   ],
+  orthopaedicCard: "/Orthopaedic%20mattress%20card.webp",
   reviews: {
     "living-room": "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=700&q=80",
     bedroom: "https://images.unsplash.com/photo-1616627561950-9f746e330187?auto=format&fit=crop&w=700&q=80",
@@ -329,7 +330,7 @@ function Hero() {
         className="hero-vis hero-photo"
         style={imageStyle(remoteImages.hero)}
         role="img"
-        aria-label="Modern living room with a sofa, warm lighting and contemporary furniture"
+        aria-label="Bright bedroom with a white orthopaedic mattress and a scenic window view"
       >
         <div className="hero-photo-shade" aria-hidden="true" />
         <div className="hero-certifications" aria-label="Supplier certifications">
@@ -377,10 +378,10 @@ function Collections() {
                   Explore Our Orthopaedic Mattresses
                 </h2>
                 <p>Compare our four UK-made orthopaedic mattresses by firmness, construction and care style. Available in single, double and king sizes, with delivery across London and the UK.</p>
-                <Link href="/collections/" className="sec-lnk sec-lnk-lt shared-section-link rv" aria-label="View all collections">
-                  View All Mattresses
-                </Link>
               </div>
+              <Link href="/collections/" className="sec-lnk sec-lnk-lt shared-section-link rv" aria-label="View all collections">
+                View All Mattresses
+              </Link>
             </div>
             <div className="coll-grid">
               {collections.map((collection, index) => (
@@ -419,9 +420,25 @@ function Collections() {
 
 function FeaturedMattresses() {
   const featured = [
-    ["Pocket Spring Mattress", "Balanced support for everyday sleep", "From GBP 499", remoteImages.featured[0]],
-    ["Hybrid Comfort Mattress", "Foam comfort with responsive springs", "From GBP 649", remoteImages.featured[1]],
-    ["Orthopaedic Mattress", "Firm support for deeper rest", "From GBP 579", remoteImages.featured[2]],
+    {
+      title: "Orthopaedic Mattress",
+      copy: "Coir-enhanced open coil support with wire-edge and butterfly support for a distinctly extra-firm feel.",
+      price: "From £211",
+      image: remoteImages.orthopaedicCard,
+      badge: "Mattress Sale",
+    },
+    {
+      title: "Pocket Spring Mattress",
+      copy: "Double-sided open coil support with damask fabric, deep polyester filling and a hand-tufted finish.",
+      image: remoteImages.featured[0],
+      badge: "Coming Soon",
+    },
+    {
+      title: "Hybrid Comfort Mattress",
+      copy: "A firm spring mattress with foam encapsulation, deep adaptive memory foam and a premium knitted finish.",
+      image: remoteImages.featured[1],
+      badge: "Coming Soon",
+    },
   ];
 
   return (
@@ -436,17 +453,22 @@ function FeaturedMattresses() {
           </div>
         </div>
         <div className="featured-grid">
-          {featured.map(([title, copy, price, image], index) => (
+          {featured.map(({ title, copy, price, image, badge }, index) => (
             <Link
               className="featured-card featured-card-photo rv"
               href="/collections/bedroom/mattresses/"
               style={{ ...imageStyle(image), transitionDelay: `${index * 0.08}s` }}
               key={title}
             >
-              <span>Mattress Sale</span>
+              <span className={badge === "Coming Soon" ? "featured-card-badge-coming-soon" : undefined}>{badge}</span>
               <strong>{title}</strong>
               <p>{copy}</p>
-              <em>{price}</em>
+              {price ? (
+                <em className="featured-card-meta">
+                  <span>{price}</span>
+                  <span>Single · Double · King</span>
+                </em>
+              ) : null}
             </Link>
           ))}
         </div>
@@ -710,16 +732,16 @@ function Blog({ initialPosts = [] }: { initialPosts?: WordPressPost[] }) {
             <span className="sec-lbl sec-lbl-lt">MATTRESS GUIDES &amp; ADVICE</span>
             <h2 className="h2lt" id="blog-h">From Our Mattress Guides</h2>
             <p>Clear, evidence-led guides to orthopaedic mattresses, firmness and mattress construction, written to help UK shoppers compare options before they buy.</p>
-            <div className="blog-head-actions">
-              <Link href="/blog/" className="sec-lnk sec-lnk-lt shared-section-link" aria-label="View all blog articles">View All Mattress Guides</Link>
-              <div className="carousel-actions carousel-actions-lt" aria-label="Blog carousel controls">
-                <button type="button" aria-label="Previous blog post" onClick={() => scrollCarousel(sliderRef, -1)}>
-                  &larr;
-                </button>
-                <button type="button" aria-label="Next blog post" onClick={() => scrollCarousel(sliderRef, 1)}>
-                  &rarr;
-                </button>
-              </div>
+          </div>
+          <div className="blog-head-actions">
+            <Link href="/blog/" className="sec-lnk sec-lnk-lt shared-section-link" aria-label="View all blog articles">View All Mattress Guides</Link>
+            <div className="carousel-actions carousel-actions-lt" aria-label="Blog carousel controls">
+              <button type="button" aria-label="Previous blog post" onClick={() => scrollCarousel(sliderRef, -1)}>
+                &larr;
+              </button>
+              <button type="button" aria-label="Next blog post" onClick={() => scrollCarousel(sliderRef, 1)}>
+                &rarr;
+              </button>
             </div>
           </div>
         </div>
@@ -950,14 +972,14 @@ function Contact() {
           <address className="map-card rv map-address">
             <div className="map-vis">
               <iframe
-                title="Google map for Furniture Co. Showroom"
+                title="Google map for Orthobedroom"
                 src="https://maps.google.com/maps?q=70%20Ilford%20Lane%2C%20London%20IG1%202LA&t=&z=15&ie=UTF8&iwloc=&output=embed"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
             <div className="map-info">
-              <p className="map-name">Furniture Co. Showroom</p>
+              <p className="map-name">Orthobedroom Address:</p>
               <p className="map-addr">
                 70 Ilford Lane
                 <br />
@@ -1174,7 +1196,8 @@ function BackToTop() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  function scrollToPageTop() {
+  function scrollToPageTop(event: MouseEvent<HTMLAnchorElement>) {
+    event.preventDefault();
     const scrollingElement = document.scrollingElement ?? document.documentElement;
     const setAbsoluteTop = () => {
       scrollingElement.scrollTop = 0;

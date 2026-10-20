@@ -69,13 +69,12 @@ const COMPARE_ROWS: CompareRow[] = [
 
 export function WireframeExperience({ product, relatedProducts, isPreview = true }: WireframeExperienceProps) {
   const gallery = useMemo(
-    () => (product.gallery?.length ? product.gallery : [{ src: product.image, alt: product.imageAlt }]),
+    () => [{ src: product.image, alt: product.imageAlt }, ...(product.gallery ?? [])],
     [product.gallery, product.image, product.imageAlt],
   );
   const sizes = useMemo(() => buildSizes(product), [product]);
   const [size, setSize] = useState("king");
-  // Start on the photo of the default size, not just the first gallery image.
-  const [activeImage, setActiveImage] = useState(() => sizeImageIndexes(gallery, "king")[0] ?? 0);
+  const [activeImage, setActiveImage] = useState(0);
   const [zoomOpen, setZoomOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
@@ -99,16 +98,39 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
 
   const activeSize = sizes.find((item) => item.id === size) ?? sizes[2];
   const total = activeSize.price * quantity;
-  // The selected size's photos lead the thumbnail strip; the rest follow.
+  // Keep the product image first and show size-specific photos after it.
   const sizeIndexes = sizeImageIndexes(gallery, size);
-  const thumbnailIndexes = [...sizeIndexes, ...gallery.map((_, index) => index).filter((index) => !sizeIndexes.includes(index))].slice(0, 4);
+  const allSizeIndexes = new Set([
+    ...sizeImageIndexes(gallery, "single"),
+    ...sizeImageIndexes(gallery, "double"),
+    ...sizeImageIndexes(gallery, "king"),
+  ]);
+  const sizeIndependentIndexes = gallery
+    .map((_, index) => index)
+    .filter((index) => index !== 0 && !allSizeIndexes.has(index));
+  const thumbnailIndexes = [
+    0,
+    ...sizeIndependentIndexes,
+    ...sizeIndexes,
+    ...gallery
+      .map((_, index) => index)
+      .filter((index) => index !== 0 && !sizeIndependentIndexes.includes(index) && !sizeIndexes.includes(index)),
+  ];
   // Photo saved to the basket / favourites: the selected size's main photo.
   const sizeImage = gallery[sizeIndexes[0] ?? 0] ?? gallery[0];
 
+  function changeImage(direction: -1 | 1) {
+    setActiveImage((current) => {
+      const currentPosition = thumbnailIndexes.indexOf(current);
+      const nextPosition = (currentPosition + direction + thumbnailIndexes.length) % thumbnailIndexes.length;
+      return thumbnailIndexes[nextPosition];
+    });
+  }
+
   function chooseSize(nextSize: string) {
     setSize(nextSize);
-    const nextIndex = sizeImageIndexes(gallery, nextSize)[0];
-    if (nextIndex !== undefined) setActiveImage(nextIndex);
+    const nextSizeIndexes = sizeImageIndexes(gallery, nextSize);
+    if (nextSizeIndexes[0] !== undefined) setActiveImage(nextSizeIndexes[0]);
   }
   const comparisonProduct = relatedProducts.find((item) => item.slug === comparisonSlug) ?? null;
   const stockState = getStockState(product.stockCount);
@@ -160,6 +182,26 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             >
               <img src={gallery[activeImage]?.src ?? gallery[0].src} alt={gallery[activeImage]?.alt ?? gallery[0].alt} />
             </button>
+            {gallery.length > 1 ? (
+              <>
+                <button
+                  type="button"
+                  className={`${styles.galleryArrow} ${styles.galleryArrowPrevious}`}
+                  onClick={() => changeImage(-1)}
+                  aria-label="View previous product image"
+                >
+                  &#8592;
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.galleryArrow} ${styles.galleryArrowNext}`}
+                  onClick={() => changeImage(1)}
+                  aria-label="View next product image"
+                >
+                  &#8594;
+                </button>
+              </>
+            ) : null}
             <button className={styles.view360} type="button">360&deg; View</button>
           </div>
           <div className={styles.thumbs} aria-label="Product image thumbnails">

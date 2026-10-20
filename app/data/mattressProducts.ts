@@ -33,226 +33,6 @@ export type MattressProduct = {
 
 const allOrthoMattressProducts: MattressProduct[] = [
   {
-    slug: "restcore-ortho",
-    name: "RestCore Ortho Mattress",
-    shortName: "RestCore Ortho",
-    price: "From £499",
-    firmness: "Medium to Firm",
-    description:
-      "An orthopaedic mattress designed for balanced spinal alignment, everyday pressure relief, and reliable support through the night.",
-    heroDescription:
-      "An orthopaedic mattress designed for balanced spinal alignment, everyday pressure relief, and reliable support through the night.",
-    whyChoose: [
-      "RestCore Ortho is designed for sleepers who want balanced medium-firm support with dependable everyday comfort.",
-      "Its supportive core and breathable comfort layers help maintain a stable sleep surface while reducing hard pressure points.",
-      "It may be a good match if you want practical orthopaedic support with a comfortable feel for regular nightly use.",
-    ],
-    image: "https://images.pexels.com/photos/1454806/pexels-photo-1454806.jpeg?auto=compress&cs=tinysrgb&w=1400",
-    imageAlt: "Neutral bedroom with a dressed mattress and bedside lighting",
-    gallery: [
-      { src: "https://images.pexels.com/photos/1454806/pexels-photo-1454806.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "RestCore Ortho styled in a neutral bedroom" },
-      { src: "https://images.pexels.com/photos/6585760/pexels-photo-6585760.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "RestCore Ortho close-up in a bright bedroom" },
-      { src: "https://images.pexels.com/photos/6782567/pexels-photo-6782567.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "RestCore Ortho styled with pillows and soft lighting" },
-    ],
-    bullets: ["7-zone support feel", "Breathable comfort layers", "Free UK delivery", "1-year guarantee"],
-    specs: [
-      { label: "Firmness", value: "6.5/10", note: "Medium-firm support" },
-      { label: "Depth", value: "26cm", note: "Supportive profile" },
-      { label: "Trial", value: "60 nights", note: "At-home comfort check" },
-      { label: "Delivery", value: "Free", note: "UK mainland" },
-    ],
-    features: [
-      {
-        title: "Built for spinal alignment",
-        body: "A supportive orthopaedic core helps keep your back evenly supported while the top comfort layers reduce hard pressure points.",
-        points: ["Back and stomach sleeper friendly", "Stable edge-to-edge feel", "Designed for daily use"],
-      },
-      {
-        title: "Comfort without sinking",
-        body: "The medium-firm surface gives enough cushioning for comfort while resisting the sagging that can disturb posture.",
-        points: ["Responsive comfort layer", "Reduced roll-together feel", "Breathable sleep surface"],
-      },
-    ],
-    faqs: [
-      { question: "Who is RestCore Ortho best for?", answer: "It suits sleepers who want a balanced medium-firm orthopaedic feel with dependable everyday support." },
-      { question: "Can I ask questions before ordering?", answer: "Yes. Use the WhatsApp consultation button and we will guide sizing, firmness, and delivery details." },
-    ],
-    bestFor: ["Back Pain"],
-    stockCount: 12,
-    compareSpecs: {
-      springType: "Open coil, 7-zone springs",
-      comfortLayer: "Breathable foam comfort layer",
-      cover: "Woven fabric cover",
-      turnable: true,
-      weight: "~22kg (Double)",
-    },
-  },
-  {
-    slug: "alignplus-ortho",
-    name: "AlignPlus Ortho Mattress",
-    shortName: "AlignPlus Ortho",
-    price: "From £579",
-    firmness: "Firm",
-    description:
-      "A firmer orthopaedic mattress for sleepers who prefer a more lifted, stable feel across the hips, shoulders, and lower back.",
-    heroDescription:
-      "A firmer orthopaedic mattress for sleepers who prefer a more lifted, stable feel across the hips, shoulders, and lower back.",
-    whyChoose: [
-      "AlignPlus Ortho is designed for sleepers who prefer a firmer, more lifted support feel across the hips, shoulders and lower back.",
-      "Its reinforced support core provides a stable surface with controlled movement and less unwanted sinking.",
-      "It may be a good match if you want a firm orthopaedic mattress for regular use and prefer a more structured feel.",
-    ],
-    image: "https://images.pexels.com/photos/6585760/pexels-photo-6585760.jpeg?auto=compress&cs=tinysrgb&w=1400",
-    imageAlt: "Bright bedroom with a neatly styled bed",
-    gallery: [
-      { src: "https://images.pexels.com/photos/6585760/pexels-photo-6585760.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "AlignPlus Ortho styled in a bright bedroom" },
-      { src: "https://images.pexels.com/photos/1454806/pexels-photo-1454806.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "AlignPlus Ortho close-up with bedside lighting" },
-      { src: "https://images.pexels.com/photos/262048/pexels-photo-262048.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "AlignPlus Ortho styled in a minimal bedroom" },
-    ],
-    bullets: ["Firm orthopaedic feel", "Reinforced support core", "Made for back support", "Mattress sale active"],
-    specs: [
-      { label: "Firmness", value: "7.5/10", note: "Firm support" },
-      { label: "Depth", value: "28cm", note: "Extra support build" },
-      { label: "Support", value: "Zoned", note: "Targeted pressure zones" },
-      { label: "Guarantee", value: "1 year", note: "Manufacturing cover" },
-    ],
-    features: [
-      {
-        title: "Firmer posture support",
-        body: "A more resistant sleep surface keeps heavier contact points lifted and helps reduce unwanted dipping.",
-        points: ["Excellent for firm-mattress buyers", "Supportive lower-back feel", "Stable movement control"],
-      },
-      {
-        title: "Everyday durability",
-        body: "Built for consistent support with materials selected for regular family use and long-term comfort.",
-        points: ["Durable cover finish", "Strong perimeter support", "Easy room pairing"],
-      },
-    ],
-    faqs: [
-      { question: "Is AlignPlus firmer than RestCore?", answer: "Yes. AlignPlus is designed for customers who specifically want a firmer orthopaedic feel." },
-      { question: "Is this part of the mattress sale?", answer: "Yes. This product is included in the current Bedroom mattress sale launch." },
-    ],
-    bestFor: ["Firm Support", "Back Pain"],
-    stockCount: 4,
-    compareSpecs: {
-      springType: "Reinforced open coil springs",
-      comfortLayer: "Firm support foam layer",
-      cover: "Woven fabric cover",
-      turnable: true,
-      weight: "~25kg (Double)",
-    },
-  },
-  {
-    slug: "ortholux-pocket",
-    name: "OrthoLux Pocket Mattress",
-    shortName: "OrthoLux Pocket",
-    price: "From £649",
-    firmness: "Medium to Firm",
-    description:
-      "A pocket-sprung orthopaedic mattress made for independent support, reduced partner disturbance, and a more responsive sleep feel.",
-    heroDescription:
-      "A pocket-sprung orthopaedic mattress made for independent support, reduced partner disturbance, and a more responsive sleep feel.",
-    whyChoose: [
-      "OrthoLux Pocket is designed for sleepers who want orthopaedic support with a more responsive pocket-sprung feel.",
-      "Its individually responsive springs can help reduce partner movement while adapting more naturally across different sleep positions.",
-      "It may be a good match for couples or side sleepers who want support with a little more cushioning and movement independence.",
-    ],
-    image: "https://images.pexels.com/photos/6782567/pexels-photo-6782567.jpeg?auto=compress&cs=tinysrgb&w=1400",
-    imageAlt: "Comfortable bedroom with pillows and soft natural light",
-    gallery: [
-      { src: "https://images.pexels.com/photos/6782567/pexels-photo-6782567.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "OrthoLux Pocket styled with pillows and soft light" },
-      { src: "https://images.pexels.com/photos/6474471/pexels-photo-6474471.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "OrthoLux Pocket close-up in a simple bedroom" },
-      { src: "https://images.pexels.com/photos/6316526/pexels-photo-6316526.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "OrthoLux Pocket styled in a bright bedroom" },
-    ],
-    bullets: ["Pocket spring response", "Reduced motion transfer", "Supportive comfort top", "Free UK delivery"],
-    specs: [
-      { label: "Feel", value: "Pocket", note: "Responsive support" },
-      { label: "Firmness", value: "6/10", note: "Medium-firm comfort" },
-      { label: "Best for", value: "Couples", note: "Less partner movement" },
-      { label: "Finance", value: "0%", note: "Interest-free options" },
-    ],
-    features: [
-      {
-        title: "Individual support response",
-        body: "Pocket springs move independently, so support adapts more naturally across different sleep positions.",
-        points: ["Good for couples", "Balanced pressure relief", "Responsive spring feel"],
-      },
-      {
-        title: "Comfortable orthopaedic base",
-        body: "The support system is paired with a comfortable top layer to avoid a harsh, board-like feel.",
-        points: ["Gentler shoulder comfort", "Firm core stability", "Practical everyday support"],
-      },
-    ],
-    faqs: [
-      { question: "Is OrthoLux suitable for couples?", answer: "Yes. The pocket spring construction helps reduce partner movement compared with a linked spring system." },
-      { question: "Does it still feel orthopaedic?", answer: "Yes. It is supportive, but with a more responsive and comfortable pocket-spring feel." },
-    ],
-    bestFor: ["Couples", "Side Sleepers"],
-    stockCount: 8,
-    compareSpecs: {
-      springType: "Pocket springs",
-      comfortLayer: "Responsive comfort foam",
-      cover: "Soft-touch fabric cover",
-      turnable: true,
-      weight: "~23kg (Double)",
-    },
-  },
-  {
-    slug: "spineguard-ortho",
-    name: "SpineGuard Ortho Mattress",
-    shortName: "SpineGuard Ortho",
-    price: "From £699",
-    firmness: "Extra Firm",
-    description:
-      "The firmest orthopaedic option in the launch range, created for customers who want maximum lift and a highly supportive sleep surface.",
-    heroDescription:
-      "The firmest orthopaedic option in the launch range, created for customers who want maximum lift and a highly supportive sleep surface.",
-    whyChoose: [
-      "SpineGuard Ortho is designed for sleepers who prefer maximum lift, an extra-firm surface and minimal sinking.",
-      "Its reinforced structure focuses on strong support through the hips and a stable feel across the mattress.",
-      "It may be a good match if you already know that you prefer an extra-firm orthopaedic mattress rather than a softer comfort surface.",
-    ],
-    image: "https://images.pexels.com/photos/262048/pexels-photo-262048.jpeg?auto=compress&cs=tinysrgb&w=1400",
-    imageAlt: "Minimal bedroom with white bedding and calm decor",
-    gallery: [
-      { src: "https://images.pexels.com/photos/262048/pexels-photo-262048.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "SpineGuard Ortho styled in a minimal bedroom" },
-      { src: "https://images.pexels.com/photos/6580227/pexels-photo-6580227.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "SpineGuard Ortho close-up on a bed frame" },
-      { src: "https://images.pexels.com/photos/6585760/pexels-photo-6585760.jpeg?auto=compress&cs=tinysrgb&w=1400", alt: "SpineGuard Ortho styled in a bright bedroom" },
-    ],
-    bullets: ["Extra-firm support", "Maximum lifted feel", "Reinforced structure", "Bedroom sale product"],
-    specs: [
-      { label: "Firmness", value: "8.5/10", note: "Extra-firm support" },
-      { label: "Profile", value: "30cm", note: "Deep support build" },
-      { label: "Edge", value: "Strong", note: "Stable sitting edge" },
-      { label: "Use", value: "Daily", note: "Made for regular use" },
-    ],
-    features: [
-      {
-        title: "Maximum firm support",
-        body: "SpineGuard is for sleepers who dislike sinking and prefer a very stable, lifted mattress surface.",
-        points: ["Extra-firm feel", "Strong hip support", "Minimal surface dip"],
-      },
-      {
-        title: "Clean, supportive build",
-        body: "The mattress focuses on firm orthopaedic performance with practical materials and a calm bedroom look.",
-        points: ["Support-first design", "Firm perimeter feel", "Simple care routine"],
-      },
-    ],
-    faqs: [
-      { question: "Is SpineGuard the firmest option?", answer: "Yes. SpineGuard is the firmest orthopaedic mattress in this initial launch set." },
-      { question: "Should side sleepers choose it?", answer: "Dedicated side sleepers may prefer RestCore or OrthoLux unless they already know they like extra-firm mattresses." },
-    ],
-    bestFor: ["Firm Support"],
-    stockCount: 1,
-    compareSpecs: {
-      springType: "Reinforced open coil, extra-firm",
-      comfortLayer: "Firm support foam layer",
-      cover: "Woven fabric cover",
-      turnable: true,
-      weight: "~27kg (Double)",
-    },
-  },
-  {
     slug: "capri-ortho-mattress",
     name: "Capri Ortho Mattress",
     shortName: "Capri Ortho",
@@ -303,10 +83,17 @@ const allOrthoMattressProducts: MattressProduct[] = [
 
         • <strong>Returns & Cancellations</strong> - Please review our current returns policy before ordering for full information about cancellations, returns and any applicable conditions.`,
     },
-    image: "/Capri Ortho Product Images/px-conversions/Capri Ortho Double Morning.webp",
-    imageAlt: "Capri Ortho Double Morning product image",
+    image: "/Capri Ortho Product Images/px-conversions/Capri Ortho Main.webp",
+    imageAlt: "Capri Ortho main product image",
     gallery: [
-      ...["Double Morning", "Double Evening", "King Morning", "King Evening", "Single Morning", "Single Evening"].map((view) => ({ src: `/Capri Ortho Product Images/px-conversions/Capri Ortho ${view}.webp`, alt: `Capri Ortho ${view} product image` })),
+      {
+        src: "/Capri Ortho Product Images/px-conversions/Capri Ortho Main Alternative.webp",
+        alt: "Capri Ortho alternative main product image",
+      },
+      ...["Double Morning", "Double Evening", "King Morning", "King Evening", "Single Morning", "Single Evening"].map((view) => ({
+        src: `/Capri Ortho Product Images/px-conversions/Capri Ortho ${view}.webp`,
+        alt: `Capri Ortho ${view} product image`,
+      })),
     ],
     bullets: ["Medium-to-firm orthopaedic feel", "Open coil spring system", "Wire-edge support", "Double-sided, deep-tufted design"],
     specs: [
@@ -401,9 +188,13 @@ const allOrthoMattressProducts: MattressProduct[] = [
 
         • <strong>Returns & Cancellations</strong> - Please review our current returns policy before ordering for full information about cancellations, returns and any applicable conditions.`,
     },
-    image: "/classic ortho product images/classic/Classic Ortho Double Morning.webp",
-    imageAlt: "Classic Ortho Double Morning product image",
+    image: "/classic ortho product images/classic/Classic Ortho Main.webp",
+    imageAlt: "Classic Ortho Main product image",
     gallery: [
+      {
+        src: "/classic ortho product images/classic/Classic Ortho Main Alternative.webp",
+        alt: "Classic Ortho alternative main product image",
+      },
       ...["Double Morning", "Double Evening", "King Morning", "King Evening", "Single Morning", "Single Evening"].map((view) => ({ src: `/classic ortho product images/classic/Classic Ortho ${view}.webp`, alt: `Classic Ortho ${view} product image` })),
     ],
     bullets: ["Medium-to-firm orthopaedic feel", "Open coil spring system", "Wire-edge support", "Double-sided, hand-tufted build"],
@@ -494,9 +285,13 @@ const allOrthoMattressProducts: MattressProduct[] = [
 
         • <strong>Returns & Cancellations</strong> - Please review our current returns policy before ordering for full information about cancellations, returns and any applicable conditions.`,
     },
-    image: "/Hampton Ortho Product Images/hampton/Hampton Ortho Double Morning.webp",
-    imageAlt: "Hampton Ortho Double Morning product image",
+    image: "/Hampton Ortho Product Images/hampton/Hampton Ortho Main.webp",
+    imageAlt: "Hampton Ortho main product image",
     gallery: [
+      {
+        src: "/Hampton Ortho Product Images/hampton/Hampton Ortho Main Alternative.webp",
+        alt: "Hampton Ortho alternative main product image",
+      },
       ...["Double Morning", "Double Evening", "King Morning", "King Evening", "Single Morning", "Single Evening"].map((view) => ({ src: `/Hampton Ortho Product Images/hampton/Hampton Ortho ${view}.webp`, alt: `Hampton Ortho ${view} product image` })),
     ],
     bullets: ["Firm orthopaedic feel", "Deep adaptive memory foam", "Foam-encapsulated spring unit", "Single-sided, hand-tufted build"],
@@ -582,9 +377,13 @@ const allOrthoMattressProducts: MattressProduct[] = [
 
         • <strong>Returns & Cancellations</strong> - Please review our current returns policy before ordering for full information about cancellations, returns and any applicable conditions.`,
     },
-    image: "/Deluxe Ortho Product Images/deluxe/Deluxe Ortho Double Morning.webp",
-    imageAlt: "Deluxe Ortho Double Morning product image",
+    image: "/Deluxe Ortho Product Images/deluxe/Deluxe Ortho Main.webp",
+    imageAlt: "Deluxe Ortho main product image",
     gallery: [
+      {
+        src: "/Deluxe Ortho Product Images/deluxe/Deluxe Ortho Main Alternative.webp",
+        alt: "Deluxe Ortho alternative main product image",
+      },
       ...["Double Morning", "Double Evening", "King Morning", "King Evening", "Single Morning", "Single Evening"].map((view) => ({ src: `/Deluxe Ortho Product Images/deluxe/Deluxe Ortho ${view}.webp`, alt: `Deluxe Ortho ${view} product image` })),
     ],
     bullets: ["Extra-firm orthopaedic feel", "Wire-edge & butterfly support", "Coir-enhanced support layer", "Hand-tufted open coil construction"],
@@ -607,8 +406,12 @@ const allOrthoMattressProducts: MattressProduct[] = [
       },
     ],
     faqs: [
-      { question: "Is Deluxe Ortho suitable for heavier sleepers?", answer: "Yes. It is reinforced and extra firm, built to give heavier sleepers (90kg+) strong, lasting support." },
-      { question: "Is Deluxe Ortho turnable?", answer: "Yes. It has a double-sided, turnable construction so it can be flipped and rotated to even out wear." },
+      { question: "Is the Deluxe Ortho mattress suitable for heavier sleepers?", answer: "Deluxe Ortho may suit heavier sleepers who personally prefer an extra-firm, stable mattress feel. Its open coil spring unit, wire-edge and butterfly support, coir layer and hand-tufted construction create the firmest feel in our current range. Comfort is subjective, so body weight alone should not determine your mattress choice." },
+      { question: "Should I flip and rotate the Deluxe Ortho mattress?", answer: "Yes. Deluxe Ortho is a double-sided mattress designed to be flipped and rotated regularly. Alternating the sleeping surfaces helps distribute normal wear more evenly. Follow the care schedule supplied with your mattress and avoid bending or folding the spring unit when turning it." },
+      { question: "Is an extra-firm mattress good for back pain?", answer: "An extra-firm mattress can feel supportive to some sleepers, but it cannot be guaranteed to treat or relieve back pain. A mattress that feels too firm can also be uncomfortable for some people. If back pain is persistent, severe or accompanied by other symptoms, seek advice from a qualified healthcare professional rather than relying on a mattress as treatment." },
+      { question: "What is an open coil spring mattress?", answer: "An open coil mattress uses interconnected springs that work together as one spring unit. Deluxe Ortho combines this traditional spring construction with wire-edge and butterfly support, coir filling, polyester cushioning and hand tufting to create its extra-firm feel." },
+      { question: "Who should not choose an extra-firm mattress?", answer: "An extra-firm mattress may not suit sleepers who prefer noticeable cushioning or pressure relief, particularly some lighter or side sleepers. Firmness is subjective, so compare your sleeping position, body weight and comfort preference before choosing the firmest option in the range." },
+      { question: "Where can I buy the Deluxe Ortho mattress in London and the UK?", answer: "You can order Deluxe Ortho online from our business at 70 Ilford Lane, Ilford, London IG1 2LA. It is available in single, double and king sizes with free UK delivery, 0% interest-free finance and a 1-year guarantee. Current price and stock availability are shown on this product page before you order." },
     ],
     bestFor: ["Firm Support", "Stomach Sleepers", "Heavy Sleepers (90kg+)", "Turnable / Double-Sided"],
     stockCount: 3,

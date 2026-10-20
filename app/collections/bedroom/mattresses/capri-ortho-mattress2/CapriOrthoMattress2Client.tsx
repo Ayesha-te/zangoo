@@ -605,6 +605,10 @@ export default function CapriOrthoMattress2Client() {
           <span className={styles.eyebrow}>Choose your Capri Ortho</span>
           <h2>Choose Your <em>Size</em></h2>
           <p>Free delivery on all sizes. 30-day returns. Every mattress hand-built in the UK.</p>
+          <p className={styles.stockNote}>
+            <span className={styles.stockDot} aria-hidden="true" />
+            <strong>Available to order</strong>
+          </p>
           <div className={styles.sizeGrid} role="group" aria-label="Choose mattress size">
             {(Object.entries(sizes) as Array<[SizeKey, typeof sizes[SizeKey]]>).map(([key, option]) => (
               <button

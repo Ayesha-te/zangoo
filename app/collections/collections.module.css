@@ -56,11 +56,14 @@
 }
 
 .collapsibleText {
-  max-width: 720px;
+  width: 100%;
+  max-width: none;
   margin-top: 18px;
 }
 
-.collapsiblePanel {
+.hero .collapsiblePanel {
+  width: 100%;
+  max-width: none;
   max-height: 2.05em;
   margin: 0;
   overflow: hidden;
@@ -871,6 +874,7 @@
 .hero .categoryBackLink::before { content:"\2190";display:inline-block;line-height:1;transition:transform var(--tr); }
 .hero .categoryForwardLink::before { content:none; }
 .hero .categoryForwardLink::after { content:"\2192";display:inline-block;line-height:1;transition:transform var(--tr); }
+.hero .categoryForwardLink { display:flex; width:max-content; margin-left:auto; }
 .hero .categoryBackLink:hover,
 .hero .categoryBackLink:focus-visible { text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:5px; }
 .hero .categoryBackLink:hover::before,
@@ -1444,9 +1448,9 @@
 
 .supportHeading {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: space-between;
   gap: 16px;
   margin-bottom: 16px;
 }
@@ -1468,6 +1472,11 @@
   font: 900 13px/1.2 var(--sans);
   text-decoration: none;
   white-space: nowrap;
+}
+
+.supportHeading > .shared-section-link {
+  align-self: flex-end;
+  margin: 0 0 0 auto !important;
 }
 
 .guideGrid,
@@ -1690,11 +1699,9 @@
 
 /* Stock messaging stays compact inside catalogue cards. */
 .mattressCard .deliveryNote {
-  display: grid !important;
-  grid-template-columns: 18px minmax(0, 1fr);
-  column-gap: 8px;
-  row-gap: 2px;
+  display: flex !important;
   align-items: center;
+  gap: 8px;
   font-size: 12px;
   line-height: 1.25;
 }
@@ -1702,9 +1709,9 @@
   display: none;
 }
 .mattressCard .stockDot {
-  grid-row: 1 / span 2;
   position: relative;
   display: inline-block;
+  flex: 0 0 11px;
   width: 11px;
   height: 11px;
   border-radius: 50%;
