@@ -95,7 +95,11 @@ const COMPARE_ROWS: CompareRow[] = [
 
 export function WireframeExperience({ product, relatedProducts, isPreview = true }: WireframeExperienceProps) {
   const gallery = useMemo(
-    () => [{ src: product.image, alt: product.imageAlt }, ...(product.gallery ?? [])],
+    // Main photo first, then the gallery. WooCommerce galleries already include the main photo, so drop repeats.
+    () =>
+      [{ src: product.image, alt: product.imageAlt }, ...(product.gallery ?? [])].filter(
+        (image, index, all) => all.findIndex((other) => other.src === image.src) === index,
+      ),
     [product.gallery, product.image, product.imageAlt],
   );
   const sizes = useMemo(() => buildSizes(product), [product]);
