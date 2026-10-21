@@ -167,6 +167,17 @@
   color: #fff;
 }
 
+.titleLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.titleLink:hover,
+.titleLink:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 .cardTop strong {
   display: block;
   margin-bottom: 12px;

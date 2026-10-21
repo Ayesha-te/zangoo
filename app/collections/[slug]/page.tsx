@@ -86,10 +86,17 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
               return (
                 <article className={styles.card} key={group.label}>
                   <div className={styles.cardTop}>
-                    <span className={isMattresses ? styles.liveBadge : styles.badge}>
-                      {isMattresses ? "Mattress Sale" : "Coming Soon"}
-                    </span>
-                    <strong>{group.label}</strong>
+                    {isMattresses ? (
+                      <>
+                        <Link className={styles.liveBadge} href={group.href}>Mattress Sale</Link>
+                        <strong><Link className={styles.titleLink} href={group.href}>{group.label}</Link></strong>
+                      </>
+                    ) : (
+                      <>
+                        <span className={styles.badge}>Coming Soon</span>
+                        <strong>{group.label}</strong>
+                      </>
+                    )}
                     <p>
                       {isMattresses
                         ? "Shop four UK-made orthopaedic mattresses in medium-to-firm, firm and extra-firm feels, available in single, double and king sizes."

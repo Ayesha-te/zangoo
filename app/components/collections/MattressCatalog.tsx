@@ -147,7 +147,7 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
                   />
                 </span>
                 <span className={styles.mattressInfo}>
-                  <strong>{mattress.shortName}</strong>
+                  <strong><Link className={styles.titleLink} href={`/collections/bedroom/mattresses/${mattress.slug}/`}>{mattress.shortName}</Link></strong>
                   <FirmnessBar firmness={mattress.firmness} />
                   <span className={styles.mattressFeel}>Open Coil Spring Mattress</span>
                   <span className={styles.mattressSpecs}>

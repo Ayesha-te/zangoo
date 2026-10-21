@@ -103,7 +103,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
     [product.gallery, product.image, product.imageAlt],
   );
   const sizes = useMemo(() => buildSizes(product), [product]);
-  const [size, setSize] = useState("king");
+  const [size, setSize] = useState("single");
   // Open on the main product photo (first gallery image).
   const [activeImage, setActiveImage] = useState(0);
   const [zoomOpen, setZoomOpen] = useState(false);
@@ -136,7 +136,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
     }
   }, [storedRecent, recentSlugs]);
 
-  const activeSize = sizes.find((item) => item.id === size) ?? sizes[2];
+  const activeSize = sizes.find((item) => item.id === size) ?? sizes[0];
   const total = activeSize.price * quantity;
   // Keep the product image first and show size-specific photos after it.
   const sizeIndexes = sizeImageIndexes(gallery, size, product.sizePricing?.[size]?.image);
