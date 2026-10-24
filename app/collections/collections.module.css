@@ -64,15 +64,34 @@
 .hero .collapsiblePanel {
   width: 100%;
   max-width: none;
-  max-height: 2.05em;
+  height: auto;
   margin: 0;
   overflow: hidden;
   color: var(--body);
-  transition: max-height 0.35s ease;
+  transition: height 0.5s cubic-bezier(.22, 1, .36, 1);
 }
 
-.collapsibleText[data-open="true"] .collapsiblePanel {
-  max-height: 420px;
+.hero .collapsiblePanel .collapsiblePreview,
+.hero .collapsiblePanel .collapsibleFull {
+  display: inline;
+  margin: 0;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: none;
+  vertical-align: baseline;
+}
+
+.hero .collapsiblePanel .collapsibleFull {
+  display: none;
+}
+
+.collapsibleText[data-open="true"] .collapsiblePreview {
+  display: none;
+}
+
+.collapsibleText[data-open="true"] .collapsibleFull {
+  display: inline;
 }
 
 .collapsibleButton {
@@ -695,7 +714,7 @@
   display: flex !important;
   align-items: center;
   gap: 8px;
-  margin-top: 10px;
+  margin-top: 16px;
   color: var(--body);
   font: 700 12px/1.2 var(--sans);
 }
@@ -752,6 +771,10 @@
     padding: 32px 24px 36px;
   }
 
+  .hero .collapsiblePanel {
+    height: auto;
+  }
+
   .grid {
     padding: 0 24px 72px;
     grid-template-columns: 1fr;
@@ -798,6 +821,10 @@
     font-size: 16px;
   }
 
+  .hero .collapsiblePanel {
+    height: auto;
+  }
+
   .grid {
     padding: 0 16px 64px;
   }
@@ -835,8 +862,8 @@
   }
 
   .cardBottom {
-    align-items: stretch;
-    grid-template-columns: 1fr;
+    align-items: center;
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 12px;
   }
 
@@ -844,6 +871,13 @@
   .primaryLink,
   .secondaryLink {
     width: 100%;
+  }
+
+  .cardBottom a {
+    width: max-content;
+    max-width: 100%;
+    justify-self: end;
+    margin-left: auto;
   }
 
   .detailActions {
@@ -1050,6 +1084,8 @@
 }
 
 .mattressToolbar select {
+  width: 190px;
+  max-width: 100%;
   min-height: 38px;
   border: 1px solid var(--bdr);
   border-radius: var(--r);
@@ -1253,13 +1289,24 @@
   }
 
   .mattressToolbar {
-    align-items: stretch;
+    align-items: center;
+    justify-content: flex-end;
   }
 
-  .mattressToolbar label,
+  .mattressToolbarActions {
+    width: auto;
+    margin-left: auto;
+    justify-content: flex-end;
+  }
+
+  .mattressToolbar label {
+    width: auto;
+    justify-content: flex-end;
+  }
+
   .mattressToolbar select,
   .mattressToolbar button {
-    width: 100%;
+    width: auto;
   }
 }
 
@@ -1993,7 +2040,7 @@
 
   .compareCheck {
     min-height: 40px;
-    margin: 0 24px 24px;
+    margin: 16px 24px 24px;
     gap: 12px;
     font-size: 15px;
   }
@@ -2368,3 +2415,70 @@
 
 /* "View all guides" / "View all FAQs": own row under the heading, aligned right. */
 .supportHeading > :global(.shared-section-link) { align-self: flex-end; justify-self: end; }
+
+@media (max-width: 580px) {
+  .mattressToolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .mattressToolbarActions {
+    width: 100%;
+    margin-left: auto;
+    justify-content: flex-end;
+  }
+
+  .mattressToolbar label {
+    width: 100%;
+    display: grid;
+    grid-template-columns: max-content max-content max-content;
+    gap: 6px;
+    justify-content: flex-end;
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .mattressToolbar select {
+    width: clamp(140px, 42vw, 180px);
+    min-width: 0;
+    min-height: 38px;
+    padding: 0 26px 0 9px;
+    background-position: right 9px center;
+    font-size: 12px;
+  }
+
+  .mattressToolbar .sortApplyBtn {
+    width: max-content;
+    min-width: 0;
+    min-height: 38px;
+    padding: 0 10px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .mattressToolbar {
+    padding: 10px 12px;
+  }
+
+  .mattressToolbarActions {
+    width: max-content;
+    margin-left: auto;
+  }
+
+  .mattressToolbar label {
+    width: max-content;
+    gap: 5px;
+  }
+
+  .mattressToolbar select {
+    width: 132px;
+    padding-right: 24px;
+  }
+
+  .mattressToolbar .sortApplyBtn {
+    padding-right: 9px;
+    padding-left: 9px;
+  }
+}

@@ -66,6 +66,8 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
                 collapsibleText: styles.collapsibleText,
                 collapsiblePanel: styles.collapsiblePanel,
                 collapsibleButton: styles.collapsibleButton,
+                collapsiblePreview: styles.collapsiblePreview,
+                collapsibleFull: styles.collapsibleFull,
               }}
             />
           ) : (

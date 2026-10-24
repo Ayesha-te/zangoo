@@ -83,10 +83,10 @@ const remoteImages = {
   hero: "/Hero%20Image.webp",
   feature: "/classic%20ortho%20product%20images/classic/Classic%20Ortho%20Main.webp",
   collections: {
-    "living-room": "/coming%20soon%20card.webp",
-    dining: "/coming%20soon%20card.webp",
+    "living-room": "/Coming%20soon%20card.webp",
+    dining: "/Coming%20soon%20card.webp",
     bedroom: "/Bedroom%20card.webp",
-    lighting: "/coming%20soon%20card.webp",
+    lighting: "/Coming%20soon%20card.webp",
   },
   featured: [
     "/Coming%20soon%20card.webp",

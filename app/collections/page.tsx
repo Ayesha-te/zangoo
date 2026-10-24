@@ -32,6 +32,8 @@ export default function CollectionsPage() {
                 collapsibleText: styles.collapsibleText,
                 collapsiblePanel: styles.collapsiblePanel,
                 collapsibleButton: styles.collapsibleButton,
+                collapsiblePreview: styles.collapsiblePreview,
+                collapsibleFull: styles.collapsibleFull,
               }}
             />
           ) : (
