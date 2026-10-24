@@ -24,30 +24,27 @@ export function CollapsibleIntro({ text, classes }: CollapsibleIntroProps) {
 
   useLayoutEffect(() => {
     const panel = panelRef.current;
-    if (!panel) return;
+    const previousHeight = previousHeightRef.current;
+    // Only animate after a toggle; otherwise the panel keeps its natural (auto) height.
+    if (!panel || previousHeight === null) return;
+    previousHeightRef.current = null;
 
-    const inlineHeight = panel.style.height;
     panel.style.height = "auto";
     const targetHeight = panel.scrollHeight;
-    const previousHeight = previousHeightRef.current;
-
-    if (previousHeight === null) {
-      panel.style.height = `${targetHeight}px`;
-      return;
-    }
-
     panel.style.height = `${previousHeight}px`;
     void panel.offsetHeight;
     const frame = requestAnimationFrame(() => {
       panel.style.height = `${targetHeight}px`;
-      previousHeightRef.current = null;
     });
+    // Back to auto once the 0.5s transition ends, so late font loads or a rotated phone never clip the text.
+    const release = window.setTimeout(() => {
+      panel.style.height = "auto";
+    }, 550);
 
     return () => {
       cancelAnimationFrame(frame);
-      if (panel.style.height === "auto") {
-        panel.style.height = inlineHeight;
-      }
+      window.clearTimeout(release);
+      panel.style.height = "auto";
     };
   }, [open]);
 
