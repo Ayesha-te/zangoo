@@ -360,7 +360,7 @@ function Collections() {
     <section className="collections" id="collections" aria-labelledby="coll-h">
       <div className="wrap">
         <div className="coll-wrap">
-          <Link href="/collections/living-room/" className="feat-card rv" aria-label="View Living Room collection">
+          <Link href="/collections/bedroom/mattresses/classic-ortho/" className="feat-card rv" aria-label="View Classic Ortho mattress">
             <div className="feat-thumb feat-thumb-photo" style={imageStyle(remoteImages.feature)} aria-hidden="true" />
             <div className="feat-info">
               <span className="feat-tag">MEDIUM-TO-FIRM</span>
