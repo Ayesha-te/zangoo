@@ -396,13 +396,13 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             {stockState.sub ? <em>{stockState.sub}</em> : null}
           </small>
           <div className={styles.paymentMethods} aria-label="Accepted payment methods">
-            <span>VISA</span>
-            <span>Mastercard</span>
-            <span>AMEX</span>
-            <span>Maestro</span>
-            <span>Klarna.</span>
-            <span>Apple Pay</span>
-            <span>Google Pay</span>
+            <img src="/payments/visa-svgrepo-com.svg" alt="Visa" />
+            <img src="/payments/mastercard.svg" alt="Mastercard" />
+            <img src="/payments/amex.svg" alt="American Express" />
+            <img src="/payments/maestro.svg" alt="Maestro" />
+            <img src="/payments/klarna.svg" alt="Klarna" />
+            <img src="/payments/apple-pay.svg" alt="Apple Pay" />
+            <img src="/payments/google-pay.svg" alt="Google Pay" />
           </div>
           </aside>
         </div>
