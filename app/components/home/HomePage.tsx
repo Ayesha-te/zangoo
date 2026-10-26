@@ -1,6 +1,7 @@
 "use client";
 
-import { subscribeToNewsletter } from "@/app/lib/newsletter";
+import { subscribeToNewsletter, type WelcomeCode } from "@/app/lib/newsletter";
+import { WelcomeCodeCard } from "@/app/components/site/WelcomeCodeCard";
 import { ChangeEvent, FormEvent, type CSSProperties, type MouseEvent, type RefObject, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -844,6 +845,7 @@ function Contact() {
   const [errors, setErrors] = useState<NewsletterErrors>({});
   const [submitting, setSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [welcome, setWelcome] = useState<{ message: string; code?: WelcomeCode } | null>(null);
 
   useEffect(() => {
     if (!showSuccess) return;
@@ -888,6 +890,7 @@ function Contact() {
     setFirstName("");
     setWebsite("");
     setErrors({});
+    setWelcome({ message: result.message, code: result.welcome });
     setShowSuccess(true);
   }
 
@@ -1041,8 +1044,11 @@ function Contact() {
             <span className="modal-kicker">Subscribed</span>
             <h3 id="subscribe-success-title">Thank you for subscribing.</h3>
             <p id="subscribe-success-copy">
-              Your 10% welcome code is on its way. Check your inbox (and spam folder) for an email from OrthoBedroom.co.uk.
+              {welcome?.code
+                ? "Here's your welcome code. We've also emailed it to you, so you can use it whenever you're ready."
+                : welcome?.message ?? "Thanks for signing up."}
             </p>
+            {welcome?.code ? <WelcomeCodeCard welcome={welcome.code} /> : null}
             <button className={`btn btn-p ${primaryButtonClasses}`} type="button" onClick={() => setShowSuccess(false)}>
               Done
             </button>
@@ -1060,7 +1066,7 @@ function CampaignPopup() {
   const [website, setWebsite] = useState("");
   const [errors, setErrors] = useState<NewsletterErrors>({});
   const [submitting, setSubmitting] = useState(false);
-  const [subscribed, setSubscribed] = useState(false);
+  const [subscribed, setSubscribed] = useState<{ message: string; code?: WelcomeCode } | null>(null);
 
   useEffect(() => {
     const collectionsSection = document.getElementById("collections");
@@ -1106,7 +1112,7 @@ function CampaignPopup() {
     setFirstName("");
     setWebsite("");
     setErrors({});
-    setSubscribed(true);
+    setSubscribed({ message: result.message, code: result.welcome });
   }
 
   const popupStyle: CSSProperties = {
@@ -1161,7 +1167,8 @@ function CampaignPopup() {
       <p style={{ margin: "10px 0 16px", fontSize: "13px", lineHeight: 1.55, color: "var(--body)" }}>Subscribe for launch offers, mattress sale updates, and room styling guides.</p>
       {subscribed ? (
         <div className="campaign-popup-success" role="status" style={{ border: "1px solid rgba(46,125,50,.28)", borderRadius: "var(--r)", background: "rgba(46,125,50,.08)", padding: "12px", color: "var(--ok)", fontSize: "13px", fontWeight: 800, lineHeight: 1.45 }}>
-          You are subscribed. Your welcome offer will be sent by email.
+          {subscribed.code ? "You're subscribed. Here's your welcome code:" : subscribed.message}
+          {subscribed.code ? <WelcomeCodeCard welcome={subscribed.code} /> : null}
         </div>
       ) : (
         <form className="campaign-popup-form" onSubmit={onSubmit} noValidate style={{ display: "grid", gap: "10px" }}>

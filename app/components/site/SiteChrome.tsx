@@ -8,7 +8,8 @@ import { collectionCategories, footerMainLinks, footerSocialLinks, navLinks } fr
 import { useFavorites } from "@/app/components/favorites/FavoritesProvider";
 import { useCart } from "@/app/components/cart/CartProvider";
 import { NavSearch } from "@/app/components/site/NavSearch";
-import { subscribeToNewsletter } from "@/app/lib/newsletter";
+import { subscribeToNewsletter, type WelcomeCode } from "@/app/lib/newsletter";
+import { WelcomeCodeCard } from "@/app/components/site/WelcomeCodeCard";
 
 const pendingSectionKey = "furnitureCoPendingSection";
 const whatsappHref = "https://wa.me/447830376489";
@@ -598,17 +599,17 @@ export function Breadcrumbs({ items }: { items: Array<{ label: string; href?: st
   );
 }
 
-/** Footer sign-up: emails a one-time 10% welcome code (see app/lib/newsletter.ts). */
+/** Footer sign-up: shows (and emails) a one-time 10% welcome code (see app/lib/newsletter.ts). */
 function FooterNewsletter() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<{ state: "idle" | "sending" | "done" | "error"; message?: string }>({ state: "idle" });
+  const [status, setStatus] = useState<{ state: "idle" | "sending" | "done" | "error"; message?: string; welcome?: WelcomeCode }>({ state: "idle" });
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const website = String(new FormData(event.currentTarget).get("website") ?? "");
     setStatus({ state: "sending" });
     const result = await subscribeToNewsletter({ email, website });
-    setStatus({ state: result.ok ? "done" : "error", message: result.message });
+    setStatus({ state: result.ok ? "done" : "error", message: result.message, welcome: result.welcome });
     if (result.ok) setEmail("");
   }
 
@@ -628,6 +629,7 @@ function FooterNewsletter() {
           {status.message}
         </p>
       ) : null}
+      {status.welcome ? <WelcomeCodeCard welcome={status.welcome} tone="dark" /> : null}
     </form>
   );
 }
