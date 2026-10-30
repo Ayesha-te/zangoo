@@ -115,7 +115,7 @@ export const reviews = [
     date: "May 2, 2026",
     title: "Best furniture I have ever bought online",
     body: [
-      "Sceptical about buying furniture online, but Furniture Co. changed my mind. The pieces look even better in person.",
+      "Sceptical about buying furniture online, but OrthoBedroom changed my mind. The pieces look even better in person.",
       "Their consultant guided me through the whole selection. The bedroom set is exactly what I had been searching for.",
     ],
     author: "James R.",

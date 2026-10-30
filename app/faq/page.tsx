@@ -5,7 +5,7 @@ import { FaqAccordion } from "@/app/components/site/FaqAccordion";
 
 export const metadata: Metadata = {
   title: "FAQ | OrthoBedroom",
-  description: "Frequently asked questions about Furniture Co. delivery, returns, guarantee, and consultations.",
+  description: "Frequently asked questions about OrthoBedroom delivery, returns, guarantee, and consultations.",
 };
 
 export default function FaqPage() {

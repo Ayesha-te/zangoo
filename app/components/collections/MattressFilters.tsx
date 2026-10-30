@@ -32,15 +32,27 @@ export function MattressFilters({
 }: MattressFiltersProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [draftNeed, setDraftNeed] = useState(selectedNeed);
-  const [draftFeel, setDraftFeel] = useState(selectedFeel);
+  // Mobile edits filters as a draft until "Apply". null = no edits yet, so the draft simply shows the applied filters.
+  const [needEdits, setNeedEdits] = useState<string[] | null>(null);
+  const [feelEdits, setFeelEdits] = useState<string[] | null>(null);
+  const draftNeed = needEdits ?? selectedNeed;
+  const draftFeel = feelEdits ?? selectedFeel;
+  const setDraftNeed = (update: string[] | ((current: string[]) => string[])) =>
+    setNeedEdits((current) => (typeof update === "function" ? update(current ?? selectedNeed) : update));
+  const setDraftFeel = (update: string[] | ((current: string[]) => string[])) =>
+    setFeelEdits((current) => (typeof update === "function" ? update(current ?? selectedFeel) : update));
+  // Closing the panel throws away unapplied edits.
+  const closePanel = () => {
+    setIsOpen(false);
+    setNeedEdits(null);
+    setFeelEdits(null);
+  };
   useEffect(() => {
     const query = window.matchMedia("(max-width: 1024px)");
     const update = () => setIsMobile(query.matches);
     update(); query.addEventListener("change", update);
     return () => query.removeEventListener("change", update);
   }, []);
-  useEffect(() => { if (!isOpen) { setDraftNeed(selectedNeed); setDraftFeel(selectedFeel); } }, [isOpen, selectedNeed, selectedFeel]);
   const hasSelection = (isMobile ? draftNeed.length > 0 || draftFeel.length > 0 : selectedNeed.length > 0 || selectedFeel.length > 0) || selectedSize.length > 0;
   const shownNeed = isMobile ? draftNeed : selectedNeed;
   const shownFeel = isMobile ? draftFeel : selectedFeel;
@@ -54,7 +66,10 @@ export function MattressFilters({
     if (!isOpen) return;
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsOpen(false);
+      if (event.key !== "Escape") return;
+      setIsOpen(false);
+      setNeedEdits(null);
+      setFeelEdits(null);
     };
     document.addEventListener("keydown", onKeyDown);
     document.body.style.overflow = "hidden";
@@ -87,7 +102,7 @@ export function MattressFilters({
               <button
                 type="button"
                 className={styles.filterCloseBtn}
-                onClick={() => setIsOpen(false)}
+                onClick={closePanel}
                 aria-label="Close filters"
               >
                 &times;
@@ -149,7 +164,7 @@ export function MattressFilters({
           </div>
 
           {hasSelection ? (
-              <button type="button" className={styles.filterApplyBtn} onClick={() => { if (isMobile) onApplyFilters?.(draftNeed, draftFeel); setIsOpen(false); }}>
+              <button type="button" className={styles.filterApplyBtn} onClick={() => { if (isMobile) onApplyFilters?.(draftNeed, draftFeel); closePanel(); }}>
               Apply Filters
             </button>
           ) : null}

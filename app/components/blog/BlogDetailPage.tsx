@@ -40,15 +40,25 @@ export type WordPressPost = {
 const WORDPRESS_ORIGIN = "https://peru-armadillo-169520.hostingersite.com";
 const BLOG_POSTS_PER_PAGE = 10;
 
+const NAMED_ENTITIES: Record<string, string> = {
+  amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " ", hellip: "…",
+  rsquo: "’", lsquo: "‘", rdquo: "”", ldquo: "“", ndash: "–", mdash: "—", pound: "£",
+};
+
 function decodeHtml(value: string) {
-  const textarea = document.createElement("textarea");
-  textarea.innerHTML = value;
-  return textarea.value;
+  return value.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (match, entity: string) => {
+    if (entity[0] === "#") {
+      const code = entity[1].toLowerCase() === "x" ? parseInt(entity.slice(2), 16) : parseInt(entity.slice(1), 10);
+      return code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : match;
+    }
+    return NAMED_ENTITIES[entity.toLowerCase()] ?? match;
+  });
 }
 
+// Plain-text titles/excerpts from WordPress HTML. String-based (not DOMParser) so it also runs during server
+// rendering and gives the browser the exact same text.
 function stripHtml(value: string) {
-  const doc = new DOMParser().parseFromString(value, "text/html");
-  return decodeHtml(doc.body.textContent?.replace(/\s+/g, " ").trim() ?? "");
+  return decodeHtml(value.replace(/<[^>]*>/g, "")).replace(/\s+/g, " ").trim();
 }
 
 function isSafeHref(value: string) {

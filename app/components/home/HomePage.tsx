@@ -986,14 +986,14 @@ function Contact() {
           <address className="map-card rv map-address">
             <div className="map-vis">
               <iframe
-                title="Google map for Orthobedroom"
+                title="Google map for OrthoBedroom"
                 src="https://maps.google.com/maps?q=70%20Ilford%20Lane%2C%20London%20IG1%202LA&t=&z=15&ie=UTF8&iwloc=&output=embed"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
               />
             </div>
             <div className="map-info">
-              <p className="map-name">Orthobedroom Address:</p>
+              <p className="map-name">OrthoBedroom Address:</p>
               <p className="map-addr">
                 70 Ilford Lane
                 <br />

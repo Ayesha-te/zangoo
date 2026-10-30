@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useCatalog } from "@/app/components/catalog/CatalogProvider";
+import { STORAGE_KEYS, isRecord, readStorage, readStoredList, writeStorage } from "@/app/utils/browserStorage";
 
 export type CartItem = {
   slug: string;
@@ -43,11 +44,11 @@ type CartContextValue = {
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
-const LOCAL_CART_KEY = "furnitureCoCart";
+const LOCAL_CART_KEY = STORAGE_KEYS.cart;
 // Same-origin proxy to the WooCommerce Store API (vercel.json in production, next.config.ts in dev), so the
 // browser never makes a cross-site request (the store doesn't send CORS headers for this site).
 const STORE_API = "/wc-store";
-const CART_TOKEN_KEY = "furnitureCoCartToken";
+const CART_TOKEN_KEY = STORAGE_KEYS.cartToken;
 
 // ── WooCommerce Store API (public, cookie-free via Cart-Token) ──
 type StoreCartItem = {
@@ -67,21 +68,15 @@ type StoreCart = { items: StoreCartItem[]; coupons?: Array<{ code: string }>; to
 const decodeEntities = (text: string) =>
   text.replace(/&quot;|&#0?34;/g, '"').replace(/&#0?39;|&#8217;|&rsquo;/g, "’").replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&nbsp;/g, " ");
 
-const readStorage = (name: string) => {
-  try {
-    return localStorage.getItem(name);
-  } catch {
-    return null;
-  }
-};
-const writeStorage = (name: string, value: string | null) => {
-  try {
-    if (value === null) localStorage.removeItem(name);
-    else localStorage.setItem(name, value);
-  } catch {
-    // Storage unavailable (private mode): the cart still works for this page view.
-  }
-};
+/** A stored basket line is only trusted when it has the fields the basket relies on. */
+const isCartItem = (value: unknown): value is CartItem =>
+  isRecord(value) &&
+  typeof value.slug === "string" &&
+  typeof value.size === "string" &&
+  typeof value.name === "string" &&
+  typeof value.price === "number" &&
+  typeof value.quantity === "number" &&
+  value.quantity > 0;
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const { storeUrl, getProduct, findByVariation } = useCatalog();
@@ -164,23 +159,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Load: WooCommerce cart (moving any old browser-only basket into it), or the local basket.
   useEffect(() => {
     if (mode === "local") {
-      try {
-        setItems(JSON.parse(readStorage(LOCAL_CART_KEY) || "[]"));
-      } catch {
-        writeStorage(LOCAL_CART_KEY, null);
-      }
+      setItems(readStoredList(LOCAL_CART_KEY, isCartItem));
       return;
     }
     tokenRef.current = readStorage(CART_TOKEN_KEY);
     setCartToken(tokenRef.current);
     const load = async () => {
       await storeRequest("/cart").catch(() => undefined);
-      let legacy: CartItem[] = [];
-      try {
-        legacy = JSON.parse(readStorage(LOCAL_CART_KEY) || "[]");
-      } catch {
-        legacy = [];
-      }
+      const legacy = readStoredList(LOCAL_CART_KEY, isCartItem);
       for (const item of legacy) {
         const variationId = item.variationId ?? getProduct(item.slug)?.sizePricing?.[item.size.toLowerCase()]?.variationId;
         if (variationId) await storeRequest("/cart/add-item", { id: variationId, quantity: item.quantity }).catch(() => undefined);

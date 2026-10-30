@@ -10,8 +10,9 @@ import { useCart } from "@/app/components/cart/CartProvider";
 import { NavSearch } from "@/app/components/site/NavSearch";
 import { subscribeToNewsletter, type WelcomeCode } from "@/app/lib/newsletter";
 import { WelcomeCodeCard } from "@/app/components/site/WelcomeCodeCard";
+import { STORAGE_KEYS, readStorage, writeStorage } from "@/app/utils/browserStorage";
 
-const pendingSectionKey = "furnitureCoPendingSection";
+const pendingSectionKey = STORAGE_KEYS.pendingSection;
 const whatsappHref = "https://wa.me/447830376489";
 
 function SocialIcon({ label }: { label: string }) {
@@ -201,10 +202,10 @@ export function SiteHeader() {
   useEffect(() => {
     if (!isHome) return;
 
-    const pendingHref = window.sessionStorage.getItem(pendingSectionKey);
+    const pendingHref = readStorage(pendingSectionKey, "session");
     if (!pendingHref) return;
 
-    window.sessionStorage.removeItem(pendingSectionKey);
+    writeStorage(pendingSectionKey, null, "session");
 
     if (pendingHref === "#") {
       window.history.replaceState(null, "", "/");
@@ -243,7 +244,7 @@ export function SiteHeader() {
     event.preventDefault();
 
     if (!isHome) {
-      window.sessionStorage.setItem(pendingSectionKey, href);
+      writeStorage(pendingSectionKey, href, "session");
       window.location.assign("/");
       return;
     }
@@ -575,7 +576,7 @@ export function SiteFooter() {
         </nav>
         <FooterNewsletter />
         <p className="foot-copy">
-          <small>&copy; 2026 Orthobedroom. All rights reserved.</small>
+          <small>&copy; 2026 OrthoBedroom. All rights reserved.</small>
         </p>
       </div>
     </footer>

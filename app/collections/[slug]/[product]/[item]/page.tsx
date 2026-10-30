@@ -129,7 +129,7 @@ export default async function ProductLandingPage({ params }: ProductLandingPageP
     name: item.name,
     description: item.description,
     image: productImages,
-    brand: { "@type": "Brand", name: "Furniture Co." },
+    brand: { "@type": "Brand", name: "OrthoBedroom" },
     aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "5000" },
     offers: {
       "@type": "Offer",

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ChangeEvent, type FormEvent } from "react";
+import { STORAGE_KEYS, isRecord, parseStoredList, readStorage, writeStorage } from "@/app/utils/browserStorage";
 
 export type CustomerReview = {
   id: string;
@@ -18,7 +19,20 @@ const MAX_SOURCE_BYTES = 12 * 1024 * 1024;
 const MAX_OUTPUT_BYTES = 2.5 * 1024 * 1024;
 const MAX_IMAGE_EDGE = 1600;
 const REVIEW_PREVIEW_WORDS = 28;
-const SHARED_REVIEWS_STORAGE_KEY = "furniture-co-customer-reviews";
+const SHARED_REVIEWS_STORAGE_KEY = STORAGE_KEYS.reviews;
+const isStoredReview = (value: unknown): value is CustomerReview =>
+  isRecord(value) &&
+  typeof value.id === "string" &&
+  typeof value.name === "string" &&
+  typeof value.date === "string" &&
+  typeof value.rating === "number" &&
+  typeof value.comment === "string" &&
+  (value.media === undefined || (Array.isArray(value.media) && value.media.every((source) => typeof source === "string")));
+// Saved reviews are read with useSyncExternalStore (server/hydration render sees null, so the HTML matches).
+// This tab is the only writer, and it keeps its own copy after a submit, so no change subscription is needed.
+const subscribeToSavedReviews = () => () => {};
+const readSavedReviews = () => readStorage(SHARED_REVIEWS_STORAGE_KEY);
+const noSavedReviewsOnServer = () => null;
 
 async function compressReviewImage(file: File) {
   if (!file.type.startsWith("image/") || file.size > MAX_SOURCE_BYTES) return null;
@@ -52,7 +66,14 @@ export function CustomerReviews({
   /** Reviews now come from an external source, so the "Leave a review" form is off unless a page opts in. */
   showForm?: boolean;
 }) {
-  const [reviews, setReviews] = useState(initialReviews);
+  const savedRaw = useSyncExternalStore(subscribeToSavedReviews, readSavedReviews, noSavedReviewsOnServer);
+  // Reviews submitted in this visit (with everything shown before them); until then, saved reviews or the seed list.
+  const [submittedList, setSubmittedList] = useState<CustomerReview[] | null>(null);
+  const reviews = useMemo(() => {
+    if (submittedList) return submittedList;
+    const saved = parseStoredList(savedRaw, isStoredReview);
+    return saved.length ? saved : initialReviews;
+  }, [submittedList, savedRaw, initialReviews]);
   const [sort, setSort] = useState<ReviewSort>("recent");
   const [name, setName] = useState("");
   const [comment, setComment] = useState("");
@@ -63,17 +84,6 @@ export function CustomerReviews({
   const [reviewFormOpen, setReviewFormOpen] = useState(true);
   const [expandedReview, setExpandedReview] = useState<CustomerReview | null>(null);
   const reviewGridRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(SHARED_REVIEWS_STORAGE_KEY);
-      if (!stored) return;
-      const parsed = JSON.parse(stored) as CustomerReview[];
-      if (Array.isArray(parsed)) setReviews(parsed);
-    } catch {
-      // Keep the shared seed reviews when browser storage is unavailable or invalid.
-    }
-  }, []);
 
   useEffect(() => {
     if (!submitted) return;
@@ -113,15 +123,10 @@ export function CustomerReviews({
       comment: comment.trim(),
       media: uploads,
     };
-    setReviews((current) => {
-      const nextReviews = [nextReview, ...current];
-      try {
-        window.localStorage.setItem(SHARED_REVIEWS_STORAGE_KEY, JSON.stringify(nextReviews));
-      } catch {
-        // The review is still visible for this session if storage is unavailable.
-      }
-      return nextReviews;
-    });
+    const nextReviews = [nextReview, ...reviews];
+    // The review is still visible for this session if storage is unavailable.
+    writeStorage(SHARED_REVIEWS_STORAGE_KEY, JSON.stringify(nextReviews));
+    setSubmittedList(nextReviews);
     setName("");
     setComment("");
     setRating(5);

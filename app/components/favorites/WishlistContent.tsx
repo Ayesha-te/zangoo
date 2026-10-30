@@ -30,9 +30,11 @@ export function WishlistContent() {
           const pricing = product ? getProductSizePricing(product, "double") : null;
           const price = pricing?.sale ?? Number(product?.price.replace(/[^0-9.]/g, "") || 0);
           const firmness = item.firmness || product?.firmness || "Medium to Firm";
+          // Saved items from older versions may lack a photo: use the product's own.
+          const image = item.image || product?.image;
           return <article className="commerce-item wishlist-item" key={item.slug}>
             <div className="commerce-item-media">
-              <Link href={item.href} aria-label={`View ${item.name}`}><img src={item.image} alt="" /></Link>
+              <Link href={item.href} aria-label={`View ${item.name}`}>{image ? <img src={image} alt="" /> : null}</Link>
               <span className={collectionStyles.saleBadge} style={{ backgroundColor: getFirmnessColor(firmness) }}>{firmness}</span>
               <FavoriteButton className={collectionStyles.heartBadge} activeClassName={collectionStyles.heartBadgeActive} item={item} />
             </div>

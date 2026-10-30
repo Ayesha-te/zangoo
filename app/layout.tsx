@@ -36,6 +36,8 @@ export default async function RootLayout({
     <html
       lang="en"
       className={`${dmSans.variable} ${playfair.variable} h-full antialiased`}
+      // globals.css uses smooth scrolling; this tells Next.js to switch it off during page changes.
+      data-scroll-behavior="smooth"
     >
       <body className="min-h-full flex flex-col">
         <CatalogProvider products={catalog.products} storeUrl={storeUrl}><FavoritesProvider><CartProvider>{children}<FloatingWhatsApp /></CartProvider></FavoritesProvider></CatalogProvider>

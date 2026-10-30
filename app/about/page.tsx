@@ -5,7 +5,7 @@ import styles from "./about.module.css";
 
 export const metadata: Metadata = {
   title: "About Us | OrthoBedroom",
-  description: "Learn about Furniture Co.'s sustainable materials, design process, 1-year guarantee standards, and customer-first furniture service.",
+  description: "Learn about OrthoBedroom's sustainable materials, design process, 1-year guarantee standards, and customer-first furniture service.",
 };
 
 export default function AboutPage() {
@@ -40,7 +40,7 @@ export default function AboutPage() {
       <main className={styles.page}>
         <section className={styles.hero} aria-labelledby="about-title">
           <div className={styles.copy}>
-            <span className={styles.kicker}>About Furniture Co.</span>
+            <span className={styles.kicker}>About OrthoBedroom</span>
             <h1 id="about-title" className={styles.title}>
               Furniture designed with craft, comfort, and responsibility.
             </h1>
@@ -62,7 +62,7 @@ export default function AboutPage() {
             <div className={styles.visualFrame}>
               <div className={styles.visual}>Crafted</div>
             </div>
-            <div className={styles.statList} aria-label="Furniture Co. highlights">
+            <div className={styles.statList} aria-label="OrthoBedroom highlights">
               {proofPoints.map(([value, label]) => (
                 <div className={styles.stat} key={label}>
                   <strong>{value}</strong>

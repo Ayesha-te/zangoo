@@ -6,7 +6,7 @@ import styles from "./reviews.module.css";
 
 export const metadata: Metadata = {
   title: "Customer Reviews | OrthoBedroom",
-  description: "Read verified customer reviews and share your Orthobedroom experience.",
+  description: "Read verified customer reviews and share your OrthoBedroom experience.",
 };
 
 export default function ReviewsPage() {

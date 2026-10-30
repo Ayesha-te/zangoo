@@ -9,7 +9,7 @@ import styles from "./collections.module.css";
 
 export const metadata: Metadata = {
   title: "OrthoBedroom Collections | OrthoBedroom",
-  description: "Browse Orthobedroom collections by room, including bedroom mattresses, living room furniture, dining pieces, and lighting.",
+  description: "Browse OrthoBedroom collections by room, including bedroom mattresses, living room furniture, dining pieces, and lighting.",
 };
 
 export default function CollectionsPage() {

@@ -10,6 +10,7 @@ import { FavoriteButton } from "@/app/components/favorites/FavoriteButton";
 import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
 import { customerReviews } from "@/app/data/customerReviews";
 import { ProductFaq } from "@/app/components/site/ProductFaq";
+import { STORAGE_KEYS, readStorage, writeStorage } from "@/app/utils/browserStorage";
 import { useCart } from "@/app/components/cart/CartProvider";
 import { getStockState, type StockTone } from "@/app/utils/stockState";
 import styles from "./productPageWireframe.module.css";
@@ -28,14 +29,10 @@ const SIZE_TIERS = [
 
 const SIZE_IMAGE_LABEL: Record<string, string> = { single: "Single", double: "Double", king: "King" };
 
-const RECENTLY_VIEWED_KEY = "furnitureCoRecentlyViewed";
+const RECENTLY_VIEWED_KEY = STORAGE_KEYS.recentlyViewed;
 /** Raw stored "recently viewed" JSON ("" when empty or unavailable). Strings are stable snapshots. */
 function readRecentlyViewed() {
-  try {
-    return localStorage.getItem(RECENTLY_VIEWED_KEY) ?? "";
-  } catch {
-    return "";
-  }
+  return readStorage(RECENTLY_VIEWED_KEY) ?? "";
 }
 function subscribeToRecentlyViewed(onChange: () => void) {
   const listener = (event: StorageEvent) => {
@@ -118,9 +115,11 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   // hydration and the stored value right after, so server and browser HTML match (no React #418).
   const storedRecent = useSyncExternalStore(subscribeToRecentlyViewed, readRecentlyViewed, () => null);
   const recentSlugs = useMemo(() => {
+    // Only a list of slugs is trusted; anything else in storage (corrupt or old data) is ignored.
     let previous: string[] = [];
     try {
-      previous = storedRecent ? (JSON.parse(storedRecent) as string[]) : [];
+      const parsed: unknown = storedRecent ? JSON.parse(storedRecent) : [];
+      if (Array.isArray(parsed)) previous = parsed.filter((slug): slug is string => typeof slug === "string");
     } catch {
       previous = [];
     }
@@ -129,11 +128,8 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   useEffect(() => {
     // Only save once storage has been read (null = not read yet), so history is never overwritten.
     if (storedRecent === null) return;
-    try {
-      localStorage.setItem(RECENTLY_VIEWED_KEY, JSON.stringify(recentSlugs));
-    } catch {
-      // Storage unavailable: the rail still works for this page view.
-    }
+    // Storage unavailable: the rail still works for this page view.
+    writeStorage(RECENTLY_VIEWED_KEY, JSON.stringify(recentSlugs));
   }, [storedRecent, recentSlugs]);
 
   const activeSize = sizes.find((item) => item.id === size) ?? sizes[0];

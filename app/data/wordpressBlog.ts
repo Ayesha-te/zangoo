@@ -37,7 +37,7 @@ export async function getBlogPosts(): Promise<WordPressPost[]> {
       // The site is exported statically, so this must be cacheable at build time.
       cache: "force-cache",
       headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; ZangooBot/1.0; +https://zangoo.vercel.app)",
+        "User-Agent": "Mozilla/5.0 (compatible; OrthoBedroomBot/1.0; +https://www.orthobedroom.co.uk)",
         Accept: "application/json",
       },
     });
@@ -64,7 +64,7 @@ export async function getBlogPost(slug: string): Promise<WordPressPost | null> {
       // Keep individual post generation compatible with the static export.
       cache: "force-cache",
       headers: {
-        "User-Agent": "Mozilla/5.0 (compatible; ZangooBot/1.0; +https://zangoo.vercel.app)",
+        "User-Agent": "Mozilla/5.0 (compatible; OrthoBedroomBot/1.0; +https://www.orthobedroom.co.uk)",
         Accept: "application/json",
       },
     });

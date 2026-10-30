@@ -6,7 +6,7 @@ import { getBlogPosts } from "@/app/data/wordpressBlog";
 
 export const metadata: Metadata = {
   title: "Sitemap | OrthoBedroom",
-  description: "Every page on the Furniture Co. website in one place.",
+  description: "Every page on the OrthoBedroom website in one place.",
 };
 
 const decode = (text: string) =>
@@ -71,7 +71,7 @@ export default async function SitemapPage() {
         <section className="wrap simple-page-inner">
           <span className="sec-lbl">Sitemap</span>
           <h1>Every page, in one place.</h1>
-          <p>Find any page on the Furniture Co. website.</p>
+          <p>Find any page on the OrthoBedroom website.</p>
           <div className="sitemap-grid">
             {sections.map((section) =>
               section.links.length ? (
