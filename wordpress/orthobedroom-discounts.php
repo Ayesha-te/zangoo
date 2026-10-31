@@ -6,14 +6,17 @@
  *          Snippets → Add New → paste this file (without the opening "<?php" line if the editor adds its own) →
  *          "Run snippet everywhere" → Save and Activate.
  *
- * 1. Marketer codes (start with PARTNER-): percentage off the ORIGINAL (regular) price. While one is applied,
- *    cart prices revert from the sale price to the regular price. Never combinable with other codes.
- *    Create them in Marketing → Coupons: code PARTNER-NAME, "Percentage discount", amount 30.
+ * 1. Marketer codes (every code that does NOT start with WELCOME-, e.g. ASH30 or PARTNER-SARAH): percentage off
+ *    the ORIGINAL (regular) price. While one is applied, cart prices revert from the sale price to the regular
+ *    price. Never combinable with other codes.
+ *    Create them in Marketing → Coupons: any code name, "Percentage discount", amount 30.
  * 2. Sign-up codes (start with WELCOME-): created automatically when someone signs up on www.orthobedroom.co.uk,
  *    shown on screen and emailed to them, 10% off the current (sale) price, one use, first order only (checked at
  *    checkout), expires after OB_SIGNUP_EXPIRY_DAYS. Never combinable with other codes.
  * 3. Every sign-up email is saved in the database table wp_ob_signups.
  *    View or download them (CSV) in WooCommerce → Sign-ups.
+ * 4. "Work with Us" applications from digital marketers (www.orthobedroom.co.uk/work-with-us/) are saved in
+ *    wp_ob_applications. View or download them (CSV) in WooCommerce → Marketer applications.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -21,25 +24,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! defined( 'OB_PARTNER_PREFIX' ) ) {
-	define( 'OB_PARTNER_PREFIX', 'partner-' );     // marketer codes (case-insensitive)
+	define( 'OB_PARTNER_PREFIX', 'partner-' );     // old marketer prefix; any non-WELCOME code is a marketer code now
 	define( 'OB_SIGNUP_PREFIX', 'welcome-' );      // sign-up codes (case-insensitive)
 	define( 'OB_SIGNUP_PERCENT', 10 );             // sign-up discount, % of the sale price
 	define( 'OB_SIGNUP_EXPIRY_DAYS', 30 );         // 0 = never expires; e.g. 30 = expires after 30 days
 	define( 'OB_SIGNUP_MAX_PER_HOUR', 5 );         // sign-ups allowed per visitor IP per hour (spam guard)
 	define( 'OB_SITE_URL', 'https://www.orthobedroom.co.uk' );
 	define( 'OB_SIGNUPS_DB_VERSION', '1' );
+	define( 'OB_APPLICATIONS_DB_VERSION', '1' );
+	define( 'OB_APPLY_MAX_PER_HOUR', 3 );          // applications allowed per visitor IP per hour (spam guard)
 }
 
-/** "partner", "signup" or "" for a coupon code. */
+/** "signup" for WELCOME- codes, "partner" for every other code (marketer codes: ORIGINAL price), "" for none. */
 function ob_coupon_kind( $code ) {
-	$code = strtolower( (string) $code );
-	if ( 0 === strpos( $code, OB_PARTNER_PREFIX ) ) {
-		return 'partner';
+	$code = strtolower( trim( (string) $code ) );
+	if ( '' === $code ) {
+		return '';
 	}
 	if ( 0 === strpos( $code, OB_SIGNUP_PREFIX ) ) {
 		return 'signup';
 	}
-	return '';
+	return 'partner';
 }
 
 /** Marketer and sign-up codes are always "individual use" (cannot be combined with any other code). */
@@ -259,6 +264,196 @@ add_action( 'admin_post_ob_signups_csv', function () {
 	exit;
 } );
 
+/* ── Visitor IP rate limit (shared by the endpoints) ── */
+
+/** True when this visitor already made $max requests to $bucket this hour; otherwise counts this one. */
+function ob_rate_limited( $bucket, $max ) {
+	// Requests arrive via the site's proxy (Vercel), so REMOTE_ADDR is the proxy's IP; the visitor's IP is the
+	// first entry of X-Forwarded-For.
+	$forwarded = (string) ( $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '' );
+	$visitor   = $forwarded ? trim( explode( ',', $forwarded )[0] ) : (string) ( $_SERVER['REMOTE_ADDR'] ?? '' );
+	$key       = 'ob_' . $bucket . '_' . md5( $visitor );
+	$count     = (int) get_transient( $key );
+	if ( $count >= $max ) {
+		return true;
+	}
+	set_transient( $key, $count + 1, HOUR_IN_SECONDS );
+	return false;
+}
+
+/* ── "Work with Us" applications (database table wp_ob_applications) ── */
+
+function ob_applications_table() {
+	global $wpdb;
+	return $wpdb->prefix . 'ob_applications';
+}
+
+/** Creates the applications table once. */
+add_action( 'init', function () {
+	if ( get_option( 'ob_applications_db' ) === OB_APPLICATIONS_DB_VERSION ) {
+		return;
+	}
+	global $wpdb;
+	require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+	$table   = ob_applications_table();
+	$collate = $wpdb->get_charset_collate();
+	dbDelta( "CREATE TABLE {$table} (
+		id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+		full_name varchar(120) NOT NULL,
+		nationality varchar(80) NOT NULL,
+		whatsapp varchar(30) NOT NULL,
+		email varchar(190) NOT NULL DEFAULT '',
+		has_experience tinyint(1) NOT NULL DEFAULT 0,
+		experience text NOT NULL,
+		created_at datetime NOT NULL,
+		PRIMARY KEY  (id),
+		KEY created_at (created_at)
+	) {$collate};" );
+	update_option( 'ob_applications_db', OB_APPLICATIONS_DB_VERSION );
+} );
+
+/** One application as table / CSV cells. */
+function ob_application_columns( $row ) {
+	return array(
+		ob_signup_date( $row['created_at'] ),
+		$row['full_name'],
+		$row['nationality'],
+		$row['whatsapp'],
+		$row['email'],
+		$row['has_experience'] ? 'Yes' : 'No experience',
+		$row['experience'],
+	);
+}
+
+/** WooCommerce → Marketer applications: everyone who applied, with a CSV download. */
+add_action( 'admin_menu', function () {
+	add_submenu_page( 'woocommerce', 'Marketer applications', 'Marketer applications', 'manage_woocommerce', 'ob-applications', function () {
+		global $wpdb;
+		$table = ob_applications_table();
+		$total = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$table}" );
+		$csv   = wp_nonce_url( admin_url( 'admin-post.php?action=ob_applications_csv' ), 'ob_applications_csv' );
+		echo '<div class="wrap"><h1 class="wp-heading-inline">Marketer applications</h1> ';
+		echo '<a class="page-title-action" href="' . esc_url( $csv ) . '">Download CSV</a>';
+		echo '<p>' . esc_html( $total ) . ' applications from the Work with Us page (latest 500 shown; the CSV has everyone).</p>';
+		echo '<table class="widefat striped"><thead><tr><th>Applied</th><th>Name</th><th>Nationality</th><th>WhatsApp</th><th>Email</th><th>Experience</th><th>About their experience</th></tr></thead><tbody>';
+		$rows = $wpdb->get_results( "SELECT * FROM {$table} ORDER BY created_at DESC LIMIT 500", ARRAY_A );
+		if ( ! $rows ) {
+			echo '<tr><td colspan="7">No applications yet.</td></tr>';
+		}
+		foreach ( $rows as $row ) {
+			echo '<tr>';
+			foreach ( ob_application_columns( $row ) as $cell ) {
+				echo '<td>' . nl2br( esc_html( $cell ) ) . '</td>';
+			}
+			echo '</tr>';
+		}
+		echo '</tbody></table></div>';
+	} );
+} );
+
+add_action( 'admin_post_ob_applications_csv', function () {
+	if ( ! current_user_can( 'manage_woocommerce' ) ) {
+		wp_die( 'Not allowed.' );
+	}
+	check_admin_referer( 'ob_applications_csv' );
+	global $wpdb;
+	header( 'Content-Type: text/csv; charset=utf-8' );
+	header( 'Content-Disposition: attachment; filename=orthobedroom-marketer-applications-' . gmdate( 'Y-m-d' ) . '.csv' );
+	$out = fopen( 'php://output', 'w' );
+	fputcsv( $out, array( 'Applied', 'Name', 'Nationality', 'WhatsApp', 'Email', 'Experience', 'About their experience' ) );
+	$rows = $wpdb->get_results( 'SELECT * FROM ' . ob_applications_table() . ' ORDER BY created_at DESC', ARRAY_A );
+	foreach ( $rows as $row ) {
+		// Spreadsheets run cells starting with = + - @ as formulas; prefix them so they stay plain text.
+		$cells = array_map( function ( $cell ) {
+			return preg_match( '/^[=+\-@]/', (string) $cell ) ? "'" . $cell : $cell;
+		}, ob_application_columns( $row ) );
+		fputcsv( $out, $cells );
+	}
+	fclose( $out );
+	exit;
+} );
+
+/**
+ * POST /wp-json/orthobedroom/v1/apply
+ * { full_name, nationality, whatsapp, email?, has_experience (bool), experience?, website? (honeypot) }
+ */
+add_action( 'rest_api_init', function () {
+	register_rest_route( 'orthobedroom/v1', '/apply', array(
+		'methods'             => 'POST',
+		'permission_callback' => '__return_true',
+		'callback'            => function ( WP_REST_Request $request ) {
+			$thanks = array( 'ok' => true, 'message' => "Thank you! We've received your details and will contact you on WhatsApp." );
+			$fail   = function ( $message ) {
+				return new WP_REST_Response( array( 'ok' => false, 'message' => $message ), 400 );
+			};
+
+			// Honeypot: real visitors never fill this hidden field. Pretend success to bots.
+			if ( '' !== trim( (string) $request->get_param( 'website' ) ) ) {
+				return rest_ensure_response( $thanks );
+			}
+
+			$name        = sanitize_text_field( (string) $request->get_param( 'full_name' ) );
+			$nationality = sanitize_text_field( (string) $request->get_param( 'nationality' ) );
+			$whatsapp    = preg_replace( '/[^0-9+]/', '', (string) $request->get_param( 'whatsapp' ) );
+			$raw_email   = trim( (string) $request->get_param( 'email' ) );
+			$email       = sanitize_email( $raw_email );
+			$experienced = rest_sanitize_boolean( $request->get_param( 'has_experience' ) );
+			$experience  = sanitize_textarea_field( (string) $request->get_param( 'experience' ) );
+
+			if ( mb_strlen( $name ) < 2 || mb_strlen( $name ) > 120 ) {
+				return $fail( 'Please enter your full name.' );
+			}
+			if ( mb_strlen( $nationality ) < 2 || mb_strlen( $nationality ) > 80 ) {
+				return $fail( 'Please enter your nationality.' );
+			}
+			if ( ! preg_match( '/^\+?[0-9]{7,15}$/', $whatsapp ) ) {
+				return $fail( 'Please enter a valid WhatsApp number, including the country code.' );
+			}
+			if ( '' !== $raw_email && ! is_email( $email ) ) {
+				return $fail( 'Please enter a valid email address, or leave it empty.' );
+			}
+			if ( $experienced && mb_strlen( $experience ) < 10 ) {
+				return $fail( 'Please tell us briefly about your digital marketing experience.' );
+			}
+			if ( mb_strlen( $experience ) > 2000 ) {
+				return $fail( 'Please keep your experience summary under 2000 characters.' );
+			}
+			if ( ob_rate_limited( 'apply', OB_APPLY_MAX_PER_HOUR ) ) {
+				return new WP_REST_Response( array( 'ok' => false, 'message' => 'Too many applications from this connection. Please try again later.' ), 429 );
+			}
+
+			global $wpdb;
+			$saved = $wpdb->insert( ob_applications_table(), array(
+				'full_name'      => $name,
+				'nationality'    => $nationality,
+				'whatsapp'       => $whatsapp,
+				'email'          => (string) $email,
+				'has_experience' => $experienced ? 1 : 0,
+				'experience'     => $experience,
+				'created_at'     => current_time( 'mysql', true ),
+			) );
+			if ( ! $saved ) {
+				return new WP_REST_Response( array( 'ok' => false, 'message' => "Sorry, we couldn't save your application. Please try again." ), 500 );
+			}
+
+			// Tell the shop owner (arrives once WP Mail SMTP is set up; the application is saved either way).
+			$lines = array(
+				'Name: ' . $name,
+				'Nationality: ' . $nationality,
+				'WhatsApp: ' . $whatsapp,
+				'Email: ' . $email,
+				'Experience: ' . ( $experienced ? 'Yes' : 'No experience' ),
+				'',
+				$experience,
+				'',
+				'All applications: ' . admin_url( 'admin.php?page=ob-applications' ),
+			);
+			wp_mail( get_option( 'admin_email' ), 'New marketer application: ' . $name, implode( "\n", $lines ) );
+			return rest_ensure_response( $thanks );
+		},
+	) );
+} );
+
 /* ── Sign-up endpoint ── */
 
 function ob_send_signup_email( $email, $first_name, $code, $expires_label ) {
@@ -296,16 +491,10 @@ add_action( 'rest_api_init', function () {
 				return new WP_REST_Response( array( 'ok' => false, 'message' => 'Please enter a valid email address.' ), 400 );
 			}
 
-			// Spam guard: limit sign-ups per visitor IP per hour. Requests arrive via the site's proxy (Vercel), so
-			// REMOTE_ADDR is the proxy's IP; the visitor's IP is the first entry of X-Forwarded-For.
-			$forwarded = (string) ( $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '' );
-			$visitor   = $forwarded ? trim( explode( ',', $forwarded )[0] ) : (string) ( $_SERVER['REMOTE_ADDR'] ?? '' );
-			$ip_key    = 'ob_signup_' . md5( $visitor );
-			$count  = (int) get_transient( $ip_key );
-			if ( $count >= OB_SIGNUP_MAX_PER_HOUR ) {
+			// Spam guard: limit sign-ups per visitor IP per hour.
+			if ( ob_rate_limited( 'signup', OB_SIGNUP_MAX_PER_HOUR ) ) {
 				return new WP_REST_Response( array( 'ok' => false, 'message' => 'Too many sign-ups. Please try again later.' ), 429 );
 			}
-			set_transient( $ip_key, $count + 1, HOUR_IN_SECONDS );
 
 			// Existing customers don't get a first-order code, but are still saved as sign-ups.
 			if ( ob_has_previous_order( $email ) ) {

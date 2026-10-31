@@ -8,6 +8,10 @@
     {
       "source": "/wp-signup/(.*)",
       "destination": "https://peru-armadillo-169520.hostingersite.com/wp-json/orthobedroom/v1/signup/$1"
+    },
+    {
+      "source": "/wp-apply/(.*)",
+      "destination": "https://peru-armadillo-169520.hostingersite.com/wp-json/orthobedroom/v1/apply/$1"
     }
   ]
 }

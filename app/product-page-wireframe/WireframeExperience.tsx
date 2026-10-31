@@ -106,7 +106,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   const [zoomOpen, setZoomOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
-  const { items, addItem, error: cartError, goToCheckout } = useCart();
+  const { items, addItem, error: cartError } = useCart();
   const router = useRouter();
   const [openAccordion, setOpenAccordion] = useState<number | null>(0);
   const [comparisonSlug, setComparisonSlug] = useState<string | null>(null);
@@ -376,14 +376,14 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
                 setAdding(true);
                 try {
                   if (!added) await addItem({ slug: product.slug, name: product.shortName, image: sizeImage.src, price: activeSize.price, size, variationId: product.sizePricing?.[size]?.variationId, href: `/collections/bedroom/mattresses/${product.slug}/` }, quantity);
-                  // WooCommerce checkout when connected; otherwise the basket page.
-                  if (!goToCheckout()) router.push("/cart/");
+                  // To the basket, where the customer can add a discount code before checkout.
+                  router.push("/cart/");
                 } catch {
                   setAdding(false);
                 }
               }}
             >
-              Buy Now
+              Proceed to Checkout
             </button>
           )}
           <small className={`${styles.stockNote} ${styles[STOCK_CLASS[stockState.tone]]}`}>

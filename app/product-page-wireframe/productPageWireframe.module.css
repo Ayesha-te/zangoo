@@ -1984,3 +1984,23 @@
 
 /* Basket error from WooCommerce (e.g. out of stock), shown under the buy buttons. */
 .cartError { margin: 10px 0 0; padding: 10px 12px; border-radius: 8px; background: #fdecec; color: #b3261e; font: 600 13px/1.4 var(--sans); }
+
+/* Readability for our 40+ audience: no text on product pages below 14px. Photo badges stay a little smaller
+   (12px) so they still fit on the image. */
+.wrap .buyCard label,
+.wrap .qty span,
+.wrap .qty strong,
+.wrap .priceRow em,
+.wrap .stockNote,
+.wrap .stockLabel,
+.wrap .textInsert .kicker,
+.wrap .railTrack > a small,
+.wrap .railTrack > a em,
+.wrap :global(.customer-review-sort),
+.wrap :global(.customer-review-sort) select,
+.wrap :global(.customer-review-card) small,
+.wrap :global(.customer-review-card) time,
+.wrap :global(.customer-review-read-more) { font-size: 14px !important; }
+.wrap .saleBadge,
+.wrap .view360,
+.wrap :global([class*="firmnessBar"]) small { font-size: 12px !important; }

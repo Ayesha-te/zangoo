@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { BlogDetailPage } from "@/app/components/blog/BlogDetailPage";
 import { BlogPageLoading } from "@/app/components/blog/BlogPageLoading";
@@ -28,6 +29,24 @@ export async function generateStaticParams() {
   } catch {
     return fallbackSlugs.map((slug) => ({ slug }));
   }
+}
+
+/** WordPress titles arrive as HTML (entities, tags): plain text for the browser tab. */
+function plainTitle(html: string) {
+  return html
+    .replace(/<[^>]*>/g, "")
+    .replace(/&#(\d+);/g, (_, code: string) => String.fromCodePoint(Number(code)))
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&nbsp;/g, " ")
+    .trim();
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getBlogPost(slug);
+  const title = post?.title?.rendered ? plainTitle(post.title.rendered) : "";
+  return { title: title ? `${title} | OrthoBedroom` : "Blog | OrthoBedroom" };
 }
 
 export default async function Page({ params }: { params: Promise<{ slug: string }> }) {

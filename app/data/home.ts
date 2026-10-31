@@ -80,6 +80,7 @@ export const footerMainLinks = [
   { label: "FAQ", href: "/faq/" },
   { label: "Contact", href: "/contact/" },
   { label: "About Us", href: "/about/" },
+  { label: "Work with Us", href: "/work-with-us/" },
 ] as const;
 
 export const footerSocialLinks = [

@@ -33,6 +33,7 @@ export default async function SitemapPage() {
         { label: "Customer reviews", href: "/reviews/" },
         { label: "About us", href: "/about/" },
         { label: "Contact", href: "/contact/" },
+        { label: "Work with Us", href: "/work-with-us/" },
       ],
     },
     {

@@ -14,6 +14,12 @@ import { STORAGE_KEYS, readStorage, writeStorage } from "@/app/utils/browserStor
 
 const pendingSectionKey = STORAGE_KEYS.pendingSection;
 const whatsappHref = "https://wa.me/447830376489";
+// Browser-tab titles for the homepage sections the header links scroll to.
+const sectionTitles: Record<string, string> = {
+  "#blog": "Blog | OrthoBedroom",
+  "#faq": "FAQ | OrthoBedroom",
+  "#contact": "Contact | OrthoBedroom",
+};
 
 function SocialIcon({ label }: { label: string }) {
   if (label === "Instagram") {
@@ -236,6 +242,19 @@ export function SiteHeader() {
     window.requestAnimationFrame(scrollWhenReady);
   }, [isHome]);
 
+  // On the homepage, the tab title follows the section in view (Blog, FAQ, Contact), and returns to the page's own
+  // title elsewhere.
+  const homeTitleRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!isHome) {
+      // Other pages set their own title (Next.js metadata); remember the homepage one afresh next time.
+      homeTitleRef.current = null;
+      return;
+    }
+    homeTitleRef.current ??= document.title;
+    document.title = sectionTitles[activeHref] ?? homeTitleRef.current;
+  }, [isHome, activeHref]);
+
   function onHomeHashClick(event: MouseEvent<HTMLAnchorElement>, href: string) {
     setMenuOpen(false);
 
@@ -272,7 +291,7 @@ export function SiteHeader() {
       <nav ref={navRef} className={`nav${scrolled || searchOpen ? " up" : ""}`} aria-label="Main navigation">
         <div className="announce-bar" aria-label="Store announcements">
           <div className="announce-track">
-            <span>Summer mattress sale now live</span>
+            <span>Winter mattress sale now live</span>
             <span>Free UK delivery on launch offers</span>
             <span>0% interest-free finance available</span>
           </div>

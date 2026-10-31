@@ -779,6 +779,8 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .order-summary>small{display:flex;align-items:center;justify-content:center;gap:6px;color:var(--muted);font-size:13px;font-weight:700}
 .payment-methods{display:flex!important;flex-wrap:wrap;justify-content:center!important;gap:8px!important}
 .payment-methods b{padding:5px 9px;border:1px solid var(--bdr);border-radius:6px;color:var(--navy);font-size:11px;font-weight:800}
+.payment-logos{display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr));align-items:center;gap:6px!important;width:100%}
+.payment-logos img{width:100%;height:auto;max-height:34px;object-fit:contain;display:block}
 .commerce-benefits{display:grid;gap:12px;margin:0;list-style:none;color:var(--body);font-size:14px}
 .commerce-benefits li{display:flex;align-items:center;gap:10px}
 .commerce-benefits svg{flex:none;color:var(--ok)}
@@ -2650,10 +2652,11 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 /* Basket: discount code box and applied-code line */
 .summary-code{display:grid;gap:6px;margin-top:4px}
 .summary-code label{color:var(--navy);font:800 13px/1.2 var(--sans)}
-.summary-code>div{display:flex;gap:8px}
-.summary-code input{flex:1;min-width:0;height:42px;padding:0 12px;border:1px solid var(--bdr);border-radius:var(--r);background:#fff;color:var(--navy);font:600 14px var(--sans);text-transform:uppercase}
+/* Code box on its own full-width row, Apply button underneath, so there is room to type the code. */
+.summary-code>div{display:grid;gap:8px}
+.summary-code input{width:100%;min-width:0;height:46px;padding:0 12px;border:1px solid var(--bdr);border-radius:var(--r);background:#fff;color:var(--navy);font:600 14px var(--sans);text-transform:uppercase}
 .summary-code input:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,87,167,.12)}
-.summary-code .btn{min-height:42px;padding:0 16px;margin:0}
+.summary-code .btn{width:100%;min-height:42px;padding:0 16px;margin:0}
 .summary-discount strong{color:#2e7d32}
 .summary-coupon{margin-left:8px;padding:2px 8px;border:1px solid #9bd5ad;border-radius:999px;background:#e8f7ed;color:#16733a;font:800 11px/1.4 var(--sans);cursor:pointer}
 .foot-newsletter-done,.foot-newsletter-error{margin:8px 0 0;font:600 13px/1.4 var(--sans)}
@@ -2673,3 +2676,22 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .welcome-code-dark small{color:rgba(232,239,247,.78)}
 .foot-newsletter .welcome-code span{display:block}
 .foot-newsletter .welcome-code-row button{width:auto;margin-top:0;min-height:34px;border-color:#9bd5ad;background:#9bd5ad;color:var(--navy)}
+/* "Work with Us" marketer application form. */
+.apply-form{display:grid;gap:16px;max-width:560px;margin-top:24px}
+.apply-form label{display:grid;gap:6px;color:var(--navy);font:700 14px/1.3 var(--sans)}
+.apply-form label em,.apply-form legend em{font-style:normal;font-weight:500;color:var(--body)}
+.apply-form input:not([type=radio]),.apply-form textarea{width:100%;min-height:46px;padding:10px 12px;border:1px solid var(--bdr);border-radius:var(--r);background:#fff;color:var(--navy);font:500 15px/1.4 var(--sans)}
+.apply-form textarea{resize:vertical}
+.apply-form input:focus,.apply-form textarea:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px rgba(21,87,167,.12)}
+.apply-form small{color:var(--body);font:500 12px/1.4 var(--sans)}
+.apply-form fieldset{display:grid;gap:8px;margin:0;padding:0;border:0}
+.apply-form legend{margin-bottom:6px;padding:0;color:var(--navy);font:700 14px/1.3 var(--sans)}
+.apply-form .apply-choice{display:flex;align-items:center;gap:10px;min-height:44px;padding:0 14px;border:1px solid var(--bdr);border-radius:var(--r);background:#fff;font-weight:600;cursor:pointer}
+.apply-form .apply-choice input{width:18px;height:18px;accent-color:var(--blue)}
+.apply-form .btn{justify-self:start;min-width:200px}
+.apply-honeypot{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.apply-error{margin:0;color:#b42318;font:600 14px/1.4 var(--sans)}
+.apply-done{max-width:560px;margin-top:24px;padding:20px;border:1px solid rgba(46,125,50,.28);border-radius:var(--r);background:rgba(46,125,50,.08);color:var(--navy)}
+.apply-done strong{display:block;margin-bottom:6px;color:#2e7d32;font:800 16px/1.3 var(--sans)}
+.apply-done p{margin:0}
+@media(max-width:560px){.apply-form .btn{justify-self:stretch}}

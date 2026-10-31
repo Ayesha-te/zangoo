@@ -37,7 +37,7 @@ export default function CartPage() {
                   <span className={collectionStyles.saleBadge} style={{ backgroundColor: getFirmnessColor(firmness) }}>{firmness}</span>
                 </div>
                 <div className="commerce-item-copy"><h2><Link href={item.href}>{item.name}</Link></h2><p>Open Coil Spring Mattress · {item.size.charAt(0).toUpperCase() + item.size.slice(1)}</p><ProductFeatures turnable={product?.compareSpecs.turnable} /></div>
-                <div className="commerce-item-price"><div className="commerce-price-row"><strong>{formatGBP(item.price)}</strong>{pricing ? <><del>RRP {formatGBP(pricing.regular)}</del><b>Save {formatGBP(pricing.saving)} ({pricing.percent}%)</b></> : null}</div></div>
+                <div className="commerce-item-price"><div className="commerce-price-row"><strong>{formatGBP(item.price)}</strong>{/* No "Save" line when a marketer code has put the item back to its original price. */}{pricing && item.price < pricing.regular ? <><del>RRP {formatGBP(pricing.regular)}</del><b>Save {formatGBP(pricing.saving)} ({pricing.percent}%)</b></> : null}</div></div>
                 <div className="cart-item-controls">
                   <div className="cart-quantity" aria-label={`Quantity for ${item.name}`}><button type="button" aria-label={`Decrease ${item.name} quantity`} disabled={pending} onClick={() => updateQuantity(item.slug, item.size, item.quantity - 1).catch(() => undefined)}>-</button><strong>{item.quantity}</strong><button type="button" aria-label={`Increase ${item.name} quantity`} disabled={pending} onClick={() => updateQuantity(item.slug, item.size, item.quantity + 1).catch(() => undefined)}>+</button></div>
                   <button className="icon-button" type="button" aria-label={`Remove ${item.name}`} disabled={pending} onClick={() => removeItem(item.slug, item.size).catch(() => undefined)}><TrashIcon /></button>
@@ -66,7 +66,15 @@ export default function CartPage() {
                 {error ? <p className="cart-error" role="alert">{error}</p> : null}
                 <button className="btn btn-p" type="button" disabled={pending || (mode === "woocommerce" && !checkoutUrl)} onClick={() => goToCheckout()}>{pending ? "Updating basket…" : <>Proceed to checkout <ArrowIcon /></>}</button>
                 <small><LockIcon width="14" height="14" /> Secure checkout</small>
-                <div className="payment-methods"><b>VISA</b><b>Mastercard</b><b>Apple Pay</b><b>G Pay</b></div>
+                <div className="payment-methods payment-logos" aria-label="Accepted payment methods">
+                  <img src="/payments/visa-svgrepo-com.svg" alt="Visa" />
+                  <img src="/payments/mastercard.svg" alt="Mastercard" />
+                  <img src="/payments/amex.svg" alt="American Express" />
+                  <img src="/payments/maestro.svg" alt="Maestro" />
+                  <img src="/payments/klarna.svg" alt="Klarna" />
+                  <img src="/payments/apple-pay.svg" alt="Apple Pay" />
+                  <img src="/payments/google-pay.svg" alt="Google Pay" />
+                </div>
               </div>
               <ul className="commerce-benefits">{benefits.map((benefit) => <li key={benefit}><CheckCircleIcon />{benefit}</li>)}</ul>
               <div className="cart-help"><h3>Need help with your order?</h3><p>Our team is here to help.</p><Link className="btn btn-s" href="/contact/">Contact us</Link></div>

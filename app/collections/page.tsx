@@ -8,7 +8,7 @@ import { getSentencePreview } from "@/app/utils/collapsibleIntro";
 import styles from "./collections.module.css";
 
 export const metadata: Metadata = {
-  title: "OrthoBedroom Collections | OrthoBedroom",
+  title: "Collections | OrthoBedroom",
   description: "Browse OrthoBedroom collections by room, including bedroom mattresses, living room furniture, dining pieces, and lighting.",
 };
 
