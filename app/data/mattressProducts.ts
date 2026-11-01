@@ -7,6 +7,8 @@ export type MattressProduct = {
   description: string;
   /** Short intro under the product title (falls back to description, e.g. for WooCommerce-only products). */
   heroDescription?: string;
+  /** 360° View frames: photos taken all the way round the mattress, in order (e.g. 36 shots, 10° apart). */
+  spin360?: Array<{ src: string; alt: string }>;
   image: string;
   imageAlt: string;
   gallery?: Array<{ src: string; alt: string }>;

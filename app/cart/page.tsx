@@ -4,12 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { RecommendationStrip } from "@/app/components/commerce/RecommendationStrip";
-import { ArrowIcon, CheckCircleIcon, LockIcon, ProductFeatures, TrashIcon } from "@/app/components/commerce/CommerceIcons";
+import { ArrowIcon, CheckCircleIcon, LockIcon, ProductFeatures, StockNote, TrashIcon } from "@/app/components/commerce/CommerceIcons";
 import { useCart } from "@/app/components/cart/CartProvider";
 import { formatGBP, getProductSizePricing, getSizePricing } from "@/app/data/mattressProducts";
 import { useCatalog } from "@/app/components/catalog/CatalogProvider";
 import { getFirmnessColor } from "@/app/utils/firmness";
 import collectionStyles from "@/app/collections/collections.module.css";
+
+const SIZE_LABELS: Record<string, string> = { single: "Single (90 x 190cm)", double: "Double (135 x 190cm)", king: "King (150 x 200cm)" };
 
 const benefits = ["Free UK delivery", "0% interest-free finance", "1-year guarantee", "FSC certified & carbon neutral", "Made in the UK"];
 
@@ -19,6 +21,14 @@ export default function CartPage() {
   const { getProduct } = useCatalog();
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const count = items.reduce((sum, item) => sum + item.quantity, 0);
+  // "Original Price" = the items at their full (RRP) price; the sale saving is shown as its own line.
+  const originalTotal = items.reduce((sum, item) => {
+    const product = getProduct(item.slug);
+    const pricing = product ? getProductSizePricing(product, item.size) : getSizePricing(item.slug, item.size);
+    return sum + Math.max(pricing?.regular ?? item.price, item.price) * item.quantity;
+  }, 0);
+  const pricedTotal = totals?.subtotal ?? subtotal;
+  const saleSaving = Math.max(0, Math.round((originalTotal - pricedTotal) * 100) / 100);
   return (
     <>
       <SiteHeader /><Breadcrumbs items={[{ label: "Cart" }]} />
@@ -36,10 +46,14 @@ export default function CartPage() {
                   <Link href={item.href} aria-label={`View ${item.name}`}><img src={item.image} alt="" /></Link>
                   <span className={collectionStyles.saleBadge} style={{ backgroundColor: getFirmnessColor(firmness) }}>{firmness}</span>
                 </div>
-                <div className="commerce-item-copy"><h2><Link href={item.href}>{item.name}</Link></h2><p>Open Coil Spring Mattress · {item.size.charAt(0).toUpperCase() + item.size.slice(1)}</p><ProductFeatures turnable={product?.compareSpecs.turnable} /></div>
-                <div className="commerce-item-price"><div className="commerce-price-row"><strong>{formatGBP(item.price)}</strong>{/* No "Save" line when a marketer code has put the item back to its original price. */}{pricing && item.price < pricing.regular ? <><del>RRP {formatGBP(pricing.regular)}</del><b>Save {formatGBP(pricing.saving)} ({pricing.percent}%)</b></> : null}</div></div>
+                <div className="commerce-item-copy"><h2><Link href={item.href}>{item.name}</Link></h2><p>Open Coil Spring Mattress</p><p className="commerce-item-size">Size: <b>{SIZE_LABELS[item.size.toLowerCase()] ?? item.size}</b></p><ProductFeatures turnable={product?.compareSpecs.turnable} /></div>
+                <div className="commerce-item-price">
+                  <div className="commerce-price-row"><strong>{formatGBP(item.price)}</strong>{/* No "Save" line when a marketer code has put the item back to its original price. */}{pricing && item.price < pricing.regular ? <><del>RRP {formatGBP(pricing.regular)}</del><b>Save {formatGBP(pricing.saving)} ({pricing.percent}%)</b></> : null}</div>
+                  <StockNote count={product?.stockCount ?? 10} />
+                </div>
                 <div className="cart-item-controls">
-                  <div className="cart-quantity" aria-label={`Quantity for ${item.name}`}><button type="button" aria-label={`Decrease ${item.name} quantity`} disabled={pending} onClick={() => updateQuantity(item.slug, item.size, item.quantity - 1).catch(() => undefined)}>-</button><strong>{item.quantity}</strong><button type="button" aria-label={`Increase ${item.name} quantity`} disabled={pending} onClick={() => updateQuantity(item.slug, item.size, item.quantity + 1).catch(() => undefined)}>+</button></div>
+                  {/* More than one of the same mattress: the number turns red so it is easy to notice. */}
+                  <div className="cart-quantity" aria-label={`Quantity for ${item.name}`}><button type="button" aria-label={`Decrease ${item.name} quantity`} disabled={pending || item.quantity <= 1} onClick={() => updateQuantity(item.slug, item.size, item.quantity - 1).catch(() => undefined)}>-</button><strong className={item.quantity > 1 ? "is-multiple" : undefined}>{item.quantity}</strong><button type="button" aria-label={`Increase ${item.name} quantity`} disabled={pending} onClick={() => updateQuantity(item.slug, item.size, item.quantity + 1).catch(() => undefined)}>+</button></div>
                   <button className="icon-button" type="button" aria-label={`Remove ${item.name}`} disabled={pending} onClick={() => removeItem(item.slug, item.size).catch(() => undefined)}><TrashIcon /></button>
                 </div>
               </article>;
@@ -47,7 +61,8 @@ export default function CartPage() {
             <aside className="cart-aside">
               <div className="order-summary">
                 <h2>Order summary</h2>
-                <div><span>Subtotal ({count} {count === 1 ? "item" : "items"})</span><strong>{formatGBP(totals?.subtotal ?? subtotal)}</strong></div>
+                <div><span>Original Price ({count} {count === 1 ? "item" : "items"})</span><strong>{formatGBP(originalTotal)}</strong></div>
+                {saleSaving > 0 ? <div className="summary-sale"><span>Sale saving</span><strong>&minus;{formatGBP(saleSaving)}</strong></div> : null}
                 {totals && totals.discount > 0 ? (
                   <div className="summary-discount">
                     <span>Discount {coupons.map((applied) => <button type="button" key={applied} className="summary-coupon" disabled={pending} onClick={() => removeCoupon(applied).catch(() => undefined)} aria-label={`Remove discount code ${applied}`}>{applied.toUpperCase()} ×</button>)}</span>

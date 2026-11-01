@@ -757,9 +757,12 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .icon-button:hover,.icon-button:focus-visible{border-color:#c62828;color:#c62828;background:#fff7f7}
 /* cart */
 .cart-layout{display:grid;grid-template-columns:minmax(0,1fr) 340px;align-items:start;gap:24px}
-.cart-item{grid-template-columns:240px minmax(0,1fr) auto}
-.cart-item .commerce-item-price{align-self:start}
-.cart-item-controls{justify-content:flex-end}
+/* Cart cards use the wishlist card layout: photo | details | price, stock and controls (narrower: sidebar). */
+.cart-item{grid-template-columns:220px minmax(0,1fr) 210px}
+.cart-item-controls{justify-content:flex-start}
+.commerce-item-size{margin:-8px 0 14px!important;color:var(--navy)!important;font-size:15px!important}
+.cart-quantity strong.is-multiple{color:#d02d36;font-weight:900}
+.summary-sale strong{color:#d02d36}
 /* quantity counter: same design as the product page */
 .cart-quantity{width:104px;height:36px;display:grid;grid-template-columns:32px 1fr 32px;overflow:hidden;border:1px solid var(--bdr);border-radius:8px}
 .cart-quantity button{border:0;padding:0;background:#f4f7fb;color:var(--navy);font:900 16px/1 var(--sans);cursor:pointer;transition:background var(--tr,.2s),color var(--tr,.2s)}
@@ -804,9 +807,9 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .recommendation-link strong{margin-top:12px;color:var(--navy);font-size:15px}
 .recommendation-link small{padding-bottom:14px;color:var(--muted);font-size:14px}
 /* large monitors */
-@media(min-width:1600px){.commerce-page{max-width:1440px}.commerce-item{grid-template-columns:340px minmax(0,1fr) 280px}.cart-item{grid-template-columns:280px minmax(0,1fr) auto}.cart-layout{grid-template-columns:minmax(0,1fr) 380px}}
-/* small laptops: the cart sidebar leaves less room, so stack price and controls */
-@media(max-width:1280px){.cart-item{grid-template-columns:220px minmax(0,1fr);grid-template-areas:"media copy" "media price" "media actions"}.cart-item .commerce-item-price{align-self:start}.cart-item-controls{justify-content:flex-start}}
+@media(min-width:1600px){.commerce-page{max-width:1440px}.commerce-item{grid-template-columns:340px minmax(0,1fr) 280px}.cart-item{grid-template-columns:260px minmax(0,1fr) 240px}.cart-layout{grid-template-columns:minmax(0,1fr) 380px}}
+/* small laptops: the cart sidebar leaves less room, so stack details, price and controls (as wishlist tablet) */
+@media(max-width:1280px){.commerce-item.cart-item{grid-template-columns:minmax(220px,40%) minmax(0,1fr);grid-template-areas:"media copy" "media price" "media actions";align-items:start;row-gap:14px}.cart-item .commerce-item-copy,.cart-item .commerce-item-price,.cart-item .cart-item-controls{align-self:start}}
 /* tablet: image takes ~40% of the card, details + price/actions fill the rest */
 @media(max-width:1024px){
   .commerce-page{padding-left:32px;padding-right:32px}
@@ -2533,15 +2536,18 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 /* Wishlist cards: never crop the product photo (the size tag, e.g. "Double", is printed in its
    bottom-left corner), and at tablet widths give price and actions their own rows so the stock
    note can't run underneath the "Add to basket" button. */
-.wishlist-item .commerce-item-media{aspect-ratio:4/3;min-height:0;align-self:start}
+.wishlist-item .commerce-item-media,.cart-item .commerce-item-media{aspect-ratio:4/3;min-height:0;align-self:start}
 @media(max-width:1024px){
+  .commerce-item.cart-item{grid-template-columns:minmax(220px,42%) minmax(0,1fr);grid-template-areas:"media copy" "media price" "media actions";align-items:start;row-gap:14px}
+  .cart-item .cart-item-controls{justify-content:flex-start}
   .commerce-item.wishlist-item{grid-template-columns:minmax(240px,42%) minmax(0,1fr);grid-template-areas:"media copy" "media price" "media actions";align-items:start;row-gap:14px}
   .wishlist-item .commerce-item-copy,.wishlist-item .commerce-item-price,.wishlist-item .commerce-item-actions{align-self:start}
   .wishlist-item .commerce-item-actions{justify-content:flex-start}
   .wishlist-item .commerce-item-actions .btn{flex:1;min-width:0}
 }
 @media(max-width:680px){
-  .commerce-item.wishlist-item{grid-template-columns:minmax(0,1fr);grid-template-areas:"media" "copy" "price" "actions"}
+  .commerce-item.wishlist-item,.commerce-item.cart-item{grid-template-columns:minmax(0,1fr);grid-template-areas:"media" "copy" "price" "actions"}
+  .cart-item .cart-item-controls{justify-content:space-between}
 }
 
 /* Hero certifications when the photo sits below the text (<=900px): anchor the badges to the
@@ -2766,3 +2772,47 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
   .atb-added-actions{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){.atb-backdrop,.atb-panel{animation:none}}
+/* Header basket preview (CartPreview): drops down under the basket icon. */
+.nav-cart-wrap{position:relative;display:flex}
+.nav-cart-preview{position:absolute;top:calc(100% + 12px);right:-12px;z-index:820;width:360px;padding:16px;border:1px solid var(--bdr);border-radius:14px;background:#fff;box-shadow:0 18px 44px rgba(15,35,65,.18);text-align:left;animation:atbFade .15s ease}
+.nav-cart-preview::before{content:"";position:absolute;top:-7px;right:24px;width:12px;height:12px;border-left:1px solid var(--bdr);border-top:1px solid var(--bdr);background:#fff;transform:rotate(45deg)}
+.ncp-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:10px;border-bottom:1px solid var(--bdr)}
+.ncp-head strong{color:var(--navy);font:800 17px/1.2 var(--sans)}
+.ncp-head span{color:var(--body);font:600 14px/1.2 var(--sans)}
+.ncp-items{max-height:300px;overflow-y:auto;margin:0;padding:0;list-style:none}
+.ncp-items li+li{border-top:1px solid var(--bdr)}
+.ncp-items a{display:grid;grid-template-columns:64px minmax(0,1fr) auto;align-items:center;gap:12px;padding:10px 0;color:inherit;text-decoration:none}
+.ncp-items img,.ncp-thumb{width:64px;height:48px;border-radius:8px;object-fit:cover;background:var(--bg4)}
+.ncp-copy strong{display:block;color:var(--navy);font:800 15px/1.3 var(--sans)}
+.ncp-copy small{display:block;margin-top:2px;color:var(--body);font:500 14px/1.3 var(--sans)}
+.ncp-copy b{color:var(--navy)}
+.ncp-copy b.is-multiple{color:#d02d36;font-weight:900}
+.ncp-price{color:var(--navy);font:800 15px/1.2 var(--sans);white-space:nowrap}
+.ncp-items a:hover strong,.ncp-items a:focus-visible strong{color:var(--blue)}
+.ncp-total{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0;border-top:1px solid var(--bdr);color:var(--navy);font:700 15px/1.2 var(--sans)}
+.ncp-total strong{font-size:18px;font-weight:900}
+.ncp-actions .btn{width:100%;justify-content:center;margin:0}
+.ncp-empty{margin:14px 0 4px;color:var(--body);font:500 15px/1.4 var(--sans)}
+/* The header styles every .nav-tools link as a 34px round icon button; links inside the preview are normal. */
+.nav-tools .nav-cart-preview a{width:auto;height:auto;border-radius:0;place-items:normal;color:inherit}
+.nav-tools .nav-cart-preview a:hover,.nav-tools .nav-cart-preview a:focus-visible{background:transparent}
+.nav-tools .nav-cart-preview .ncp-items a{display:grid;place-items:center stretch}
+.nav-tools .nav-cart-preview .btn{display:inline-flex;width:100%;min-height:44px;border-radius:var(--r);color:#fff}
+.nav-tools .nav-cart-preview .btn:hover,.nav-tools .nav-cart-preview .btn:focus-visible{background:#0f3a6e;color:#fff}
+@media(max-width:480px){.nav-cart-wrap{position:static}.nav-cart-preview{position:fixed;top:calc(var(--nav,64px) + 8px);left:12px;right:12px;width:auto}.nav-cart-preview::before{display:none}}
+/* Product "360° View" (SpinViewer). */
+.spin-overlay{position:fixed;inset:0;z-index:950;display:grid;place-items:center;padding:24px;background:rgba(15,28,48,.82)}
+.spin-dialog{width:min(1100px,100%);max-height:100%;display:flex;flex-direction:column;gap:14px;padding:18px 20px 20px;border-radius:16px;background:#fff;outline:none}
+.spin-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.spin-head strong{color:var(--navy);font:800 18px/1.3 var(--sans)}
+.spin-close{width:44px;height:44px;border:0;border-radius:50%;background:var(--bg4);color:var(--navy);font:400 30px/1 var(--sans);cursor:pointer}
+.spin-stage{position:relative;aspect-ratio:4/3;max-height:calc(100vh - 220px);border-radius:12px;overflow:hidden;background:#f4f7fb;cursor:grab;touch-action:pan-y;user-select:none}
+.spin-stage.is-dragging{cursor:grabbing}
+.spin-stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;pointer-events:none}
+.spin-stage img.is-current{opacity:1}
+.spin-hint{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);padding:8px 16px;border-radius:999px;background:rgba(15,28,48,.75);color:#fff;font:700 15px/1.2 var(--sans);white-space:nowrap;pointer-events:none}
+.spin-controls{display:grid;grid-template-columns:48px minmax(0,1fr) 48px;align-items:center;gap:14px}
+.spin-controls button{height:48px;border:1px solid var(--bdr);border-radius:50%;background:#fff;color:var(--navy);font:700 20px/1 var(--sans);cursor:pointer}
+.spin-controls button:hover,.spin-controls button:focus-visible{border-color:var(--blue);color:var(--blue)}
+.spin-controls input{width:100%;accent-color:var(--blue)}
+@media(max-width:600px){.spin-overlay{padding:0}.spin-dialog{height:100%;border-radius:0;justify-content:center}.spin-stage{max-height:none}}

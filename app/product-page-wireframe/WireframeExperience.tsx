@@ -10,6 +10,7 @@ import { FavoriteButton } from "@/app/components/favorites/FavoriteButton";
 import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
 import { customerReviews } from "@/app/data/customerReviews";
 import { ProductFaq } from "@/app/components/site/ProductFaq";
+import { SpinViewer } from "@/app/components/product/SpinViewer";
 import { STORAGE_KEYS, readStorage, writeStorage } from "@/app/utils/browserStorage";
 import { useCart } from "@/app/components/cart/CartProvider";
 import { getStockState, type StockTone } from "@/app/utils/stockState";
@@ -104,6 +105,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   // Open on the main product photo (first gallery image).
   const [activeImage, setActiveImage] = useState(0);
   const [zoomOpen, setZoomOpen] = useState(false);
+  const [spinOpen, setSpinOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
   const { items, addItem, error: cartError } = useCart();
@@ -154,8 +156,6 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   ];
   // Photo saved to the basket / favourites: the selected size's main photo.
   const sizeImage = gallery[sizeIndexes[0] ?? 0] ?? gallery[0];
-  // Room photo beside "Why choose": an evening bedroom shot, else any photo after the main one.
-  const insertPhoto = gallery.find((image) => /evening/i.test(`${image.src} ${image.alt}`)) ?? gallery[1] ?? null;
 
   function changeImage(direction: -1 | 1) {
     setActiveImage((current) => {
@@ -236,7 +236,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
                 </button>
               </>
             ) : null}
-            <button className={styles.view360} type="button">360&deg; View</button>
+            <button className={styles.view360} type="button" onClick={() => setSpinOpen(true)}>360&deg; View</button>
           </div>
           <div className={styles.thumbs} aria-label="Product image thumbnails">
             {thumbnailIndexes.map((index) => (
@@ -253,6 +253,15 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             ))}
           </div>
           </div>
+
+          {spinOpen ? (
+            <SpinViewer
+              title={product.shortName}
+              // A real 360° frame set when the product has one; until then its photos, in thumbnail order.
+              frames={product.spin360?.length ? product.spin360 : thumbnailIndexes.map((index) => gallery[index])}
+              onClose={() => setSpinOpen(false)}
+            />
+          ) : null}
 
           {zoomOpen ? (
             <div className={styles.zoomOverlay} role="presentation" onClick={() => setZoomOpen(false)}>
@@ -414,7 +423,6 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             <p key={paragraph}>{paragraph}</p>
           ))}
         </div>
-        {insertPhoto ? <img className={styles.textInsertPhoto} src={insertPhoto.src} alt={insertPhoto.alt} loading="lazy" decoding="async" /> : null}
       </section>
 
       <CustomerReviews
