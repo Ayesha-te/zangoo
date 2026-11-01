@@ -10,6 +10,10 @@ export const LockIcon = (props: SVGProps<SVGSVGElement>) => <Icon {...props}><re
 export const ArrowIcon = (props: SVGProps<SVGSVGElement>) => <Icon {...props}><path d="M5 12h14M13 6l6 6-6 6" /></Icon>;
 export const CheckCircleIcon = (props: SVGProps<SVGSVGElement>) => <Icon {...props}><circle cx="12" cy="12" r="9" /><path d="m8 12 3 3 5-6" /></Icon>;
 export const BagIcon = (props: SVGProps<SVGSVGElement>) => <Icon {...props}><path d="M6 7h12l1 14H5L6 7z" /><path d="M9 7a3 3 0 0 1 6 0" /></Icon>;
+export const TruckIcon = (props: SVGProps<SVGSVGElement>) => <Icon {...props}><path d="M2 6h12v10H2zM14 9h4l3 3v4h-7" /><circle cx="6" cy="18" r="2" /><circle cx="17" cy="18" r="2" /></Icon>;
+export const CloseIcon = (props: SVGProps<SVGSVGElement>) => <Icon {...props}><path d="M6 6l12 12M18 6 6 18" /></Icon>;
+export const ChevronDownIcon = (props: SVGProps<SVGSVGElement>) => <Icon {...props}><path d="m6 9 6 6 6-6" /></Icon>;
+export const AlertIcon = (props: SVGProps<SVGSVGElement>) => <Icon {...props}><circle cx="12" cy="12" r="9" /><path d="M12 7v6M12 16.5v.5" /></Icon>;
 
 /* Same glyphs the product cards use in the mattress catalogue. */
 export function ProductFeatures({ turnable = true }: { turnable?: boolean }) {

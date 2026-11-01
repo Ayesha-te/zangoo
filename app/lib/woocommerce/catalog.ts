@@ -51,9 +51,44 @@ export const WOO_MATTRESS_CATEGORY = "mattresses";
  * commerce data (prices, variations, images, stock, specs); local content fills what WooCommerce doesn't hold
  * yet (display names, spec list, features, FAQs), so pages render exactly as before.
  */
-function withLocalContent(woo: MattressProduct): MattressProduct {
-  const local = orthoMattressProducts.find((product) => product.slug === woo.slug);
-  if (!local) return woo;
+/** "Capri20Ortho20Single20Morning-1.webp" (WordPress upload) and "/…/Capri Ortho Single Morning.webp" → same key. */
+function photoKey(src: string) {
+  let name = src.split("/").pop() ?? "";
+  try {
+    name = decodeURIComponent(name);
+  } catch {
+    // Keep the raw name.
+  }
+  return name
+    .replace(/\.[a-z0-9]+$/i, "")
+    .replace(/-\d+$/, "")
+    .replace(/20(?=[A-Z])/g, " ")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+}
+
+/**
+ * WooCommerce photos live on the WordPress host, which is slow and drops requests when a page loads many photos at
+ * once. The same files ship with the site (Vercel CDN), so serve those instead; WooCommerce still decides which
+ * photos show and in what order. Photos with no local copy keep their WordPress address.
+ */
+function withLocalPhotos(woo: MattressProduct, local: MattressProduct): MattressProduct {
+  const localSrc = new Map([local.image, ...(local.gallery ?? []).map((image) => image.src)].map((src) => [photoKey(src), src]));
+  const toLocal = (src: string) => localSrc.get(photoKey(src)) ?? src;
+  return {
+    ...woo,
+    image: toLocal(woo.image),
+    gallery: woo.gallery?.map((image) => ({ ...image, src: toLocal(image.src) })),
+    sizePricing: woo.sizePricing
+      ? Object.fromEntries(Object.entries(woo.sizePricing).map(([size, pricing]) => [size, { ...pricing, image: pricing.image && toLocal(pricing.image) }]))
+      : woo.sizePricing,
+  };
+}
+
+function withLocalContent(wooProduct: MattressProduct): MattressProduct {
+  const local = orthoMattressProducts.find((product) => product.slug === wooProduct.slug);
+  if (!local) return wooProduct;
+  const woo = withLocalPhotos(wooProduct, local);
   return {
     ...local,
     ...woo,

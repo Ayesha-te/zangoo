@@ -154,6 +154,8 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   ];
   // Photo saved to the basket / favourites: the selected size's main photo.
   const sizeImage = gallery[sizeIndexes[0] ?? 0] ?? gallery[0];
+  // Room photo beside "Why choose": an evening bedroom shot, else any photo after the main one.
+  const insertPhoto = gallery.find((image) => /evening/i.test(`${image.src} ${image.alt}`)) ?? gallery[1] ?? null;
 
   function changeImage(direction: -1 | 1) {
     setActiveImage((current) => {
@@ -405,11 +407,14 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
       </section>
 
       <section className={styles.textInsert} aria-labelledby="insert-title">
-        <p className={styles.kicker}>Free UK delivery &bull; 60-night trial &bull; WhatsApp support</p>
-        <h2 id="insert-title">Why choose {product.shortName}?</h2>
-        {(product.whyChoose?.length ? product.whyChoose : [product.description]).map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
+        <div className={styles.textInsertCopy}>
+          <p className={styles.kicker}>Free UK delivery &bull; 60-night trial &bull; WhatsApp support</p>
+          <h2 id="insert-title">Why choose {product.shortName}?</h2>
+          {(product.whyChoose?.length ? product.whyChoose : [product.description]).map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
+          ))}
+        </div>
+        {insertPhoto ? <img className={styles.textInsertPhoto} src={insertPhoto.src} alt={insertPhoto.alt} loading="lazy" decoding="async" /> : null}
       </section>
 
       <CustomerReviews

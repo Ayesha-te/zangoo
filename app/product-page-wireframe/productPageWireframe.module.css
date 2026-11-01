@@ -659,6 +659,30 @@
   font: 500 15px/1.7 var(--sans);
 }
 
+/* Text left, room photo right (fills the space the 760px text column leaves on wide screens). */
+.textInsert {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 36%);
+  gap: 32px;
+  align-items: center;
+}
+
+.textInsertCopy { min-width: 0; }
+
+.textInsertPhoto {
+  width: 100%;
+  height: 100%;
+  max-height: 360px;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+@media (max-width: 900px) {
+  .textInsert { grid-template-columns: 1fr; gap: 20px; }
+  .textInsertPhoto { height: auto; max-height: none; }
+}
+
 .wrap :global(.customer-reviews) {
   margin-top: 20px;
   padding: 26px;
