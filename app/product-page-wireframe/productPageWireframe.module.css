@@ -2005,3 +2005,11 @@
 .wrap .saleBadge,
 .wrap .view360,
 .wrap :global([class*="firmnessBar"]) small { font-size: 12px !important; }
+
+/* Readability layer (40+ audience): reading text 16px / 1.7, supporting text 15px. */
+:global(html body) .wrap .accordionPanelInner p,
+:global(html body) .wrap .summaryCard p,
+:global(html body) .wrap .textInsert p,
+:global(html body) .wrap .faqHeader p { font-size: 16px; line-height: 1.7; }
+:global(html body) .wrap .benefits li,
+:global(html body) .wrap .accordionSummary { font-size: 15px; }

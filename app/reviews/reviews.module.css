@@ -60,3 +60,6 @@
     font-size: 15px;
   }
 }
+
+/* Readability layer (40+ audience): uppercase label 13px, modest letter-spacing. */
+:global(html body) .eyebrow { font-size: 13px; letter-spacing: .06em; }

@@ -2482,3 +2482,46 @@
     padding-left: 9px;
   }
 }
+
+/* Readability layer (40+ audience), same scale as globals.css: reading 16px · supporting 15px ·
+   small print 14px · uppercase labels 13px · photo badges 12px. ":global(html body)" makes these win. */
+:global(html body) .cardTop p,
+:global(html body) .helpBox p,
+:global(html body) .guideCard small { font-size: 16px; line-height: 1.7; }
+:global(html body) .mattressSpecs > span,
+:global(html body) .mattressFeel,
+:global(html body) .filterOption,
+:global(html body) .filterGroup strong,
+:global(html body) .filterHead strong,
+:global(html body) .helpBox strong,
+:global(html body) .helpBox a,
+:global(html body) .mattressButton,
+:global(html body) .cardBottom a,
+:global(html body) .cardBottom span,
+:global(html body) .mattressToolbarActions label,
+:global(html body) .mattressToolbar select,
+:global(html body) .filterTrigger,
+:global(html body) .mattressCount strong,
+:global(html body) .guideCard strong { font-size: 15px; }
+:global(html body) .mattressPrice small,
+:global(html body) .mattressPrice small b,
+:global(html body) .mattressPrice small s,
+:global(html body) .compareCheck > span,
+:global(html body) .compareTraySlot,
+:global(html body) .compareTraySlot span,
+:global(html body) .compareTraySlot small,
+:global(html body) .compareTrayButton,
+:global(html body) .compareTrayCount,
+:global(html body) .compareTrayClear,
+:global(html body) .filterHead button,
+:global(html body) .filterClearBtn,
+:global(html body) .sortApplyBtn,
+:global(html body) .stockLabel { font-size: 14px; }
+:global(html body) .hero span { font-size: 13px; letter-spacing: .06em; }
+:global(html body) .badge,
+:global(html body) .liveBadge,
+:global(html body) .saleBadge { font-size: 12px; letter-spacing: .04em; }
+/* At 14px the RRP / Save line can wrap: keep "RRP £260.00" and "Save £39.00 (15%)" each in one piece. */
+:global(html body) .mattressPrice small { display: flex; flex-wrap: wrap; column-gap: 10px; row-gap: 2px; }
+:global(html body) .mattressPrice small s,
+:global(html body) .mattressPrice small b { white-space: nowrap; }

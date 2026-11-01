@@ -2816,3 +2816,58 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .spin-controls button:hover,.spin-controls button:focus-visible{border-color:var(--blue);color:var(--blue)}
 .spin-controls input{width:100%;accent-color:var(--blue)}
 @media(max-width:600px){.spin-overlay{padding:0}.spin-dialog{height:100%;border-radius:0;justify-content:center}.spin-stage{max-height:none}}
+
+/* ══ Readability layer (40+ audience) ══════════════════════════════════════════════════════════════════
+   Last in the file and prefixed with "html body" so it wins over the component rules above.
+   Scale: reading text 16px / line-height 1.7 · supporting text (labels, links, meta, buttons) 15px ·
+   small print 14px · uppercase labels 13px with modest letter-spacing (.06em) · photo badges 12px.
+   Page-specific classes are handled the same way at the end of their own .module.css files. */
+html body{word-spacing:.02em}
+html body :where(p,li,dd){text-wrap:pretty}
+html body :where(main) :where(p+p){margin-top:.9em}
+
+/* Reading text */
+html body .bc-exc,html body .lp-faq-body,html body .customer-review-card p,html body .fi-a,html body .simple-faq-answer,
+html body .blog-list-body>span,html body .featured-card p,html body .sc-desc,html body .nl-intro,html body .faq-intro,
+html body .collections .sec-hdr p,html body .blog .sec-hdr p,html body .contact-section-head p,html body .awards-intro{font-size:16px;line-height:1.7}
+html body .foot-brand p,html body .foot-newsletter p,html body .feat-sub,html body .map-addr{font-size:15px;line-height:1.65}
+
+/* Supporting text */
+html body .bc-head{font-size:17px;line-height:1.35}
+html body .bc-meta,html body .blog-detail-meta,html body .mq-name,html body .sc-badge,html body .nl-list li,html body .cc-count,html body .act,
+html body .map-hours-row,html body .map-name,html body .customer-review-sort,html body .customer-review-sort select,html body .customer-review-read-more,html body .fg,
+html body .customer-review-form label,html body .customer-review-comment,html body .customer-review-upload,html body .customer-review-file-name,html body .customer-review-file-button,
+html body .customer-review-card small,html body .customer-review-rating time,html body .hero-trust,html body .rating-text,html body .sec-lnk,html body .shared-section-link,html body .faq-link,
+html body .blog-load-more,html body .lp-faq-btn,html body .fi-q,html body .cc-name,html body .sc-vis-sub,html body .sc-vis-lbl,html body .apply-form small{font-size:15px}
+html body .btn,html body .foot-newsletter button,html body .foot-newsletter label{font-size:15px}
+html body .nav-item>a,html body .nav-item>button,html body a.nav-item{font-size:15px}
+html body .foot-links a{font-size:15px;min-height:32px;line-height:1.4}
+html body .foot-copy{font-size:14px}
+html body .announce-track,html body .announce-track span{font-size:13px;letter-spacing:.06em}
+html body .site-trust-bar-in,html body .site-trust-bar-in span{font-size:14px}
+html body .hero-badge{font-size:13px}
+
+/* Uppercase labels: a little larger, letter-spacing reduced so the words hold together */
+html body .sec-lbl,html body .hero-eye,html body .nl-tag,html body .feat-tag,html body .bc-tag,html body .mq-org,html body .mq-year,html body .scroll-hint{font-size:13px;letter-spacing:.06em}
+html body footer h2{font-size:14px!important;letter-spacing:.06em!important}
+
+/* Photo badges */
+html body .cc-badge,html body .featured-card-badge-coming-soon,html body .featured-card-meta,html body .featured-card span{font-size:12px;letter-spacing:.04em}
+
+/* Text sized on a parent or shrunk by <small> */
+html body .foot-copy small{font-size:inherit}
+html body .breadcrumbs ol{font-size:14px}
+html body .fg label{font-size:15px}
+html body .map-info .map-hours-row span,html body .map-info .map-hours-row strong{font-size:15px}
+html body .hero-badge strong,html body .hero-trust,html body .hero-certifications .hero-trust strong{font-size:14px}
+html body .hero-badge s{font-size:13px}
+
+@media(max-width:1024px){
+  html body .nav-item>a,html body .nav-item>button,html body a.nav-item{font-size:14px}
+}
+@media(max-width:640px){
+  html body .bc-exc,html body .lp-faq-body,html body .customer-review-card p,html body .fi-a,html body .simple-faq-answer,html body .blog-list-body>span,html body .featured-card p{font-size:16px}
+  html body .site-trust-bar-in,html body .site-trust-bar-in span{font-size:12px}
+  html body .announce-track,html body .announce-track span{font-size:12px}
+  html body .foot-links a{font-size:15px}
+}

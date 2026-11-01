@@ -31,3 +31,6 @@
   font: 800 11px/1 var(--sans);
   white-space: nowrap;
 }
+
+/* Readability layer (40+ audience): firmness label 14px. */
+:global(html body) .wrap small { font-size: 14px; }

@@ -267,3 +267,9 @@
     padding: 0 16px;
   }
 }
+
+/* Readability layer (40+ audience): uppercase labels 13px, reading text 16px. */
+:global(html body) .kicker,
+:global(html body) .valueCard span { font-size: 13px; letter-spacing: .06em; }
+:global(html body) .valueCard p { font-size: 16px; line-height: 1.7; }
+:global(html body) .stat span { font-size: 15px; }
