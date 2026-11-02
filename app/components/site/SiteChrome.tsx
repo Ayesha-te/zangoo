@@ -297,7 +297,7 @@ export function SiteHeader() {
         </div>
         <div className="nav-in">
           <Link href="/" className="nav-logo" aria-label="OrthoBedroom.co.uk home">
-            OrthoBedroom.co.uk
+            <img src="/logo-orthobedroom.webp" alt="OrthoBedroom.co.uk – Sleep Better. Live Healthier." width="640" height="221" />
           </Link>
           <ul className="nav-links" role="list">
             {navLinks.map((link) => {
@@ -545,7 +545,7 @@ export function SiteFooter() {
       <div className="foot-in">
         <div className="foot-brand">
           <Link href="/" className="foot-logo" aria-label="OrthoBedroom.co.uk home">
-            OrthoBedroom.co.uk
+            <img src="/logo-orthobedroom.webp" alt="OrthoBedroom.co.uk – Sleep Better. Live Healthier." width="640" height="221" loading="lazy" />
           </Link>
           <p>Shop UK-made orthopaedic mattresses online, with medium-to-firm, firm and extra-firm options in single, double and king sizes. More furniture collections are coming soon.</p>
           <div className="foot-social" aria-label="Social links">

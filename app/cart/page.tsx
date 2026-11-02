@@ -21,14 +21,15 @@ export default function CartPage() {
   const { getProduct } = useCatalog();
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const count = items.reduce((sum, item) => sum + item.quantity, 0);
-  // "Original Price" = the items at their full (RRP) price; the sale saving is shown as its own line.
+  // Items at their original (RRP) price: marketer codes take their percentage off this.
   const originalTotal = items.reduce((sum, item) => {
     const product = getProduct(item.slug);
     const pricing = product ? getProductSizePricing(product, item.size) : getSizePricing(item.slug, item.size);
     return sum + Math.max(pricing?.regular ?? item.price, item.price) * item.quantity;
   }, 0);
-  const pricedTotal = totals?.subtotal ?? subtotal;
-  const saleSaving = Math.max(0, Math.round((originalTotal - pricedTotal) * 100) / 100);
+  // Marketer codes (anything but WELCOME-) are calculated from the original price: say so under the discount.
+  const marketerCode = coupons.some((code) => !code.toLowerCase().startsWith("welcome-"));
+  const discountPercent = totals && originalTotal ? Math.round((totals.discount / originalTotal) * 100) : 0;
   return (
     <>
       <SiteHeader /><Breadcrumbs items={[{ label: "Cart" }]} />
@@ -48,7 +49,9 @@ export default function CartPage() {
                 </div>
                 <div className="commerce-item-copy"><h2><Link href={item.href}>{item.name}</Link></h2><p>Open Coil Spring Mattress</p><p className="commerce-item-size">Size: <b>{SIZE_LABELS[item.size.toLowerCase()] ?? item.size}</b></p><ProductFeatures turnable={product?.compareSpecs.turnable} /></div>
                 <div className="commerce-item-price">
-                  <div className="commerce-price-row"><strong>{formatGBP(item.price)}</strong>{/* No "Save" line when a marketer code has put the item back to its original price. */}{pricing && item.price < pricing.regular ? <><del>RRP {formatGBP(pricing.regular)}</del><b>Save {formatGBP(pricing.saving)} ({pricing.percent}%)</b></> : null}</div>
+                  {/* Always the 15% sale price here, even when a marketer code is applied (WooCommerce then prices the line at
+                      the original price); the code's own discount is shown in the order summary. */}
+                  <div className="commerce-price-row"><strong>{formatGBP(pricing?.sale ?? item.price)}</strong>{pricing && pricing.saving > 0 ? <><del>RRP {formatGBP(pricing.regular)}</del><b>Save {formatGBP(pricing.saving)} ({pricing.percent}%)</b></> : null}</div>
                   <StockNote count={product?.stockCount ?? 10} />
                 </div>
                 <div className="cart-item-controls">
@@ -61,13 +64,16 @@ export default function CartPage() {
             <aside className="cart-aside">
               <div className="order-summary">
                 <h2>Order summary</h2>
-                <div><span>Original Price ({count} {count === 1 ? "item" : "items"})</span><strong>{formatGBP(originalTotal)}</strong></div>
-                {saleSaving > 0 ? <div className="summary-sale"><span>Sale saving</span><strong>&minus;{formatGBP(saleSaving)}</strong></div> : null}
                 {totals && totals.discount > 0 ? (
                   <div className="summary-discount">
                     <span>Discount {coupons.map((applied) => <button type="button" key={applied} className="summary-coupon" disabled={pending} onClick={() => removeCoupon(applied).catch(() => undefined)} aria-label={`Remove discount code ${applied}`}>{applied.toUpperCase()} ×</button>)}</span>
                     <strong>−{formatGBP(totals.discount)}</strong>
                   </div>
+                ) : null}
+                {totals && totals.discount > 0 ? (
+                  <p className="summary-discount-note" role="status">
+                    {marketerCode ? `${discountPercent}% discount applied to original price` : "Welcome discount applied to the sale price"}
+                  </p>
                 ) : null}
                 <div><span>Delivery</span><strong>Free</strong></div>
                 {mode === "woocommerce" ? (

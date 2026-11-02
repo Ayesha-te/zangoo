@@ -335,7 +335,7 @@ add_action( 'admin_menu', function () {
 		echo '<div class="wrap"><h1 class="wp-heading-inline">Marketer applications</h1> ';
 		echo '<a class="page-title-action" href="' . esc_url( $csv ) . '">Download CSV</a>';
 		echo '<p>' . esc_html( $total ) . ' applications from the Work with Us page (latest 500 shown; the CSV has everyone).</p>';
-		echo '<table class="widefat striped"><thead><tr><th>Applied</th><th>Name</th><th>Nationality</th><th>WhatsApp</th><th>Email</th><th>Experience</th><th>About their experience</th></tr></thead><tbody>';
+		echo '<table class="widefat striped"><thead><tr><th>Applied</th><th>Name</th><th>Country of residence</th><th>WhatsApp</th><th>Email</th><th>Experience</th><th>About their experience</th></tr></thead><tbody>';
 		$rows = $wpdb->get_results( "SELECT * FROM {$table} ORDER BY created_at DESC LIMIT 500", ARRAY_A );
 		if ( ! $rows ) {
 			echo '<tr><td colspan="7">No applications yet.</td></tr>';
@@ -360,7 +360,7 @@ add_action( 'admin_post_ob_applications_csv', function () {
 	header( 'Content-Type: text/csv; charset=utf-8' );
 	header( 'Content-Disposition: attachment; filename=orthobedroom-marketer-applications-' . gmdate( 'Y-m-d' ) . '.csv' );
 	$out = fopen( 'php://output', 'w' );
-	fputcsv( $out, array( 'Applied', 'Name', 'Nationality', 'WhatsApp', 'Email', 'Experience', 'About their experience' ) );
+	fputcsv( $out, array( 'Applied', 'Name', 'Country of residence', 'WhatsApp', 'Email', 'Experience', 'About their experience' ) );
 	$rows = $wpdb->get_results( 'SELECT * FROM ' . ob_applications_table() . ' ORDER BY created_at DESC', ARRAY_A );
 	foreach ( $rows as $row ) {
 		// Spreadsheets run cells starting with = + - @ as formulas; prefix them so they stay plain text.
@@ -404,7 +404,7 @@ add_action( 'rest_api_init', function () {
 				return $fail( 'Please enter your full name.' );
 			}
 			if ( mb_strlen( $nationality ) < 2 || mb_strlen( $nationality ) > 80 ) {
-				return $fail( 'Please enter your nationality.' );
+				return $fail( 'Please enter your country of residence.' );
 			}
 			if ( ! preg_match( '/^\+?[0-9]{7,15}$/', $whatsapp ) ) {
 				return $fail( 'Please enter a valid WhatsApp number, including the country code.' );
@@ -439,7 +439,7 @@ add_action( 'rest_api_init', function () {
 			// Tell the shop owner (arrives once WP Mail SMTP is set up; the application is saved either way).
 			$lines = array(
 				'Name: ' . $name,
-				'Nationality: ' . $nationality,
+				'Country of residence: ' . $nationality,
 				'WhatsApp: ' . $whatsapp,
 				'Email: ' . $email,
 				'Experience: ' . ( $experienced ? 'Yes' : 'No experience' ),

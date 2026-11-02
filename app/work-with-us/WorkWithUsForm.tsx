@@ -65,7 +65,7 @@ export function WorkWithUsForm() {
         <input name="full_name" required minLength={2} maxLength={120} autoComplete="name" />
       </label>
       <label>
-        <span>Nationality</span>
+        <span>Country of residence</span>
         <input name="nationality" required minLength={2} maxLength={80} autoComplete="country-name" />
       </label>
       <label>
