@@ -12,6 +12,10 @@
     {
       "source": "/wp-apply/(.*)",
       "destination": "https://peru-armadillo-169520.hostingersite.com/wp-json/orthobedroom/v1/apply/$1"
+    },
+    {
+      "source": "/wc-stripe-order-status/",
+      "destination": "https://peru-armadillo-169520.hostingersite.com/?wc-ajax=wc_stripe_update_order_status"
     }
   ]
 }

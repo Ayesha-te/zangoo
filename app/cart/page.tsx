@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { RecommendationStrip } from "@/app/components/commerce/RecommendationStrip";
 import { ArrowIcon, CheckCircleIcon, LockIcon, ProductFeatures, StockNote, TrashIcon } from "@/app/components/commerce/CommerceIcons";
@@ -18,6 +19,7 @@ const benefits = ["Free UK delivery", "0% interest-free finance", "1-year guaran
 export default function CartPage() {
   const { items, updateQuantity, removeItem, pending, error, checkoutUrl, goToCheckout, mode, coupons, totals, applyCoupon, removeCoupon } = useCart();
   const [code, setCode] = useState("");
+  const router = useRouter();
   const { getProduct } = useCatalog();
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const count = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -85,7 +87,7 @@ export default function CartPage() {
                 <hr />
                 <div className="summary-total"><span>Total</span><strong>{formatGBP(totals?.total ?? subtotal)}</strong></div>
                 {error ? <p className="cart-error" role="alert">{error}</p> : null}
-                <button className="btn btn-p" type="button" disabled={pending || (mode === "woocommerce" && !checkoutUrl)} onClick={() => goToCheckout()}>{pending ? "Updating basket…" : <>Proceed to checkout <ArrowIcon /></>}</button>
+                <button className="btn btn-p" type="button" disabled={pending || (mode === "woocommerce" && !checkoutUrl)} onClick={() => (mode === "woocommerce" ? router.push("/checkout/") : goToCheckout())}>{pending ? "Updating basket…" : <>Proceed to checkout <ArrowIcon /></>}</button>
                 <small><LockIcon width="14" height="14" /> Secure checkout</small>
                 <div className="payment-methods payment-logos" aria-label="Accepted payment methods">
                   <img src="/payments/visa-svgrepo-com.svg" alt="Visa" />

@@ -41,7 +41,27 @@ type CartContextValue = {
   totals: { subtotal: number; discount: number; total: number } | null;
   applyCoupon: (code: string) => Promise<void>;
   removeCoupon: (code: string) => Promise<void>;
+  /** Places the order for this basket (Store API checkout); WooCommerce takes the payment and empties the basket. */
+  placeOrder: (order: unknown) => Promise<StoreCheckoutResult>;
+  /** Reloads the basket from WooCommerce (e.g. after an order). */
+  refreshCart: () => Promise<void>;
 };
+
+/** Store API checkout response (the parts the checkout page uses). */
+export type StoreCheckoutResult = {
+  order_id: number;
+  order_key: string;
+  order_number?: string;
+  status: string;
+  payment_result?: { payment_status: string; redirect_url: string; payment_details?: Array<{ key: string; value: string }> };
+};
+
+/** Store API error: message plus code (e.g. a declined card). */
+export class StoreApiError extends Error {
+  constructor(message: string, public code = "") {
+    super(message);
+  }
+}
 
 const CartContext = createContext<CartContextValue | null>(null);
 const LOCAL_CART_KEY = STORAGE_KEYS.cart;
@@ -210,6 +230,33 @@ export function CartProvider({ children }: { children: ReactNode }) {
       },
       removeCoupon: async (code) => {
         if (mode === "woocommerce") await storeRequest("/cart/remove-coupon", { code });
+      },
+      refreshCart: async () => {
+        if (mode === "woocommerce") await storeRequest("/cart").catch(() => undefined);
+      },
+      placeOrder: async (order) => {
+        // Queued behind any basket update, so the order is placed for the basket the customer sees.
+        const run = async () => {
+          setPending(true);
+          try {
+            const response = await fetch(`${STORE_API}/checkout/`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json", ...(tokenRef.current ? { "Cart-Token": tokenRef.current } : {}) },
+              body: JSON.stringify(order),
+            });
+            const data = await response.json().catch(() => null);
+            if (!response.ok) {
+              const message = data?.message ? decodeEntities(String(data.message).replace(/<[^>]+>/g, "")) : `Checkout failed (${response.status})`;
+              throw new StoreApiError(message, String(data?.code ?? ""));
+            }
+            return data as StoreCheckoutResult;
+          } finally {
+            setPending(false);
+          }
+        };
+        const next = queue.current.then(run, run);
+        queue.current = next.catch(() => undefined);
+        return next;
       },
       addItem: async (item, quantity) => {
         const variationId = item.variationId ?? getProduct(item.slug)?.sizePricing?.[item.size.toLowerCase()]?.variationId;
