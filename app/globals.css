@@ -2887,3 +2887,4 @@ html body .foot-logo img{display:block;width:auto;height:58px}
 .whatsapp-cta strong{display:block;font:800 18px/1.2 var(--sans)}
 .whatsapp-cta small{display:block;margin-top:3px;font:600 16px/1.2 var(--sans);letter-spacing:.02em}
 .summary-discount-note{margin:-4px 0 4px;padding:8px 12px;border-radius:8px;background:#fdecee;color:#c62828;font:700 14px/1.35 var(--sans)}
+.trust-flag{display:inline-block;width:18px;height:12px;margin-right:4px;vertical-align:-1px;border-radius:2px}

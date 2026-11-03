@@ -993,7 +993,7 @@ function Contact() {
               />
             </div>
             <div className="map-info">
-              <p className="map-name">OrthoBedroom Address:</p>
+              <p className="map-name">Showroom Address:</p>
               <p className="map-addr">
                 70 Ilford Lane
                 <br />

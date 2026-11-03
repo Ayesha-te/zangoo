@@ -291,7 +291,7 @@ export function SiteHeader() {
         <div className="announce-bar" aria-label="Store announcements">
           <div className="announce-track">
             <span>Winter mattress sale now live</span>
-            <span>Free UK delivery on launch offers</span>
+            <span>Free delivery on all orders</span>
             <span>0% interest-free finance available</span>
           </div>
         </div>
@@ -426,8 +426,8 @@ export function SiteHeader() {
         </div>
         <div className="site-trust-bar" aria-label="OrthoBedroom.co.uk trust benefits">
           <div className="site-trust-bar-in" role="list">
-            <span role="listitem">🇬🇧 Made in the UK</span>
-            <span role="listitem">🚚 Free UK Delivery</span>
+            <span role="listitem"><img src="/flags/gb.svg" alt="" width="18" height="12" className="trust-flag" /> Made in the UK</span>
+            <span role="listitem">🚚 Free Delivery</span>
             <span role="listitem">💳 0% Interest-Free Finance</span>
             <span role="listitem">🛡️ 1-Year Guarantee</span>
             <span role="listitem">🌱 FSC Certified &amp; Carbon Neutral</span>

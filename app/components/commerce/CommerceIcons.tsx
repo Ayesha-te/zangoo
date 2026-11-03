@@ -1,5 +1,6 @@
 import type { ReactNode, SVGProps } from "react";
 import { getStockState } from "@/app/utils/stockState";
+import { getCardCopy } from "@/app/data/mattressProducts";
 
 function Icon({ children, ...props }: SVGProps<SVGSVGElement> & { children: ReactNode }) {
   return <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" focusable="false" {...props}>{children}</svg>;
@@ -16,11 +17,11 @@ export const ChevronDownIcon = (props: SVGProps<SVGSVGElement>) => <Icon {...pro
 export const AlertIcon = (props: SVGProps<SVGSVGElement>) => <Icon {...props}><circle cx="12" cy="12" r="9" /><path d="M12 7v6M12 16.5v.5" /></Icon>;
 
 /* Same glyphs the product cards use in the mattress catalogue. */
-export function ProductFeatures({ turnable = true }: { turnable?: boolean }) {
+export function ProductFeatures({ turnable = true, slug = "" }: { turnable?: boolean; slug?: string }) {
   const features = [
     ["↻", turnable ? "Double-sided" : "Single-sided"],
     ["✣", "Hand-tufted"],
-    ["▧", "Wire edge"],
+    ["▧", getCardCopy(slug).feature],
     ["◇", "Approx. 26cm deep"],
   ];
   return <ul className="commerce-features">{features.map(([glyph, label]) => <li key={label}><i aria-hidden="true">{glyph}</i><span>{label}</span></li>)}</ul>;

@@ -316,6 +316,13 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
           <p className={styles.sku}>SKU: {product.slug.toUpperCase()}</p>
           <h1 id="wireframe-title">{product.name}</h1>
           <FirmnessBar firmness={product.firmness} />
+          {product.highlight ? (
+            <div className={styles.highlight}>
+              <span className={styles.highlightBadge}>Key feature</span>
+              <strong>{product.highlight.title}</strong>
+              <p>{product.highlight.text}</p>
+            </div>
+          ) : null}
           <p>{product.heroDescription ?? product.description}</p>
           <h2>Features You Will Love</h2>
           <ul className={styles.benefits} role="list">

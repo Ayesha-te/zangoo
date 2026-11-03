@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { formatGBP, getProductSizePricing } from "@/app/data/mattressProducts";
+import { formatGBP, getCardCopy, getProductSizePricing } from "@/app/data/mattressProducts";
 import { useCatalog } from "@/app/components/catalog/CatalogProvider";
 import { useCart } from "@/app/components/cart/CartProvider";
 import { BagIcon, ProductFeatures, StockNote, TrashIcon } from "@/app/components/commerce/CommerceIcons";
@@ -43,7 +43,7 @@ export function WishlistContent() {
               <span className={collectionStyles.saleBadge} style={{ backgroundColor: getFirmnessColor(firmness) }}>{firmness}</span>
               <FavoriteButton className={collectionStyles.heartBadge} activeClassName={collectionStyles.heartBadgeActive} item={item} />
             </div>
-            <div className="commerce-item-copy"><h2><Link href={item.href}>{item.name}</Link></h2><p>Open Coil Spring Mattress</p><ProductFeatures turnable={product?.compareSpecs.turnable} /></div>
+            <div className="commerce-item-copy"><h2><Link href={item.href}>{item.name}</Link></h2><p>{getCardCopy(item.slug).type}</p><ProductFeatures turnable={product?.compareSpecs.turnable} slug={item.slug} /></div>
             <div className="commerce-item-price">
               <div className="commerce-price-row"><strong>{formatGBP(price)}</strong>{pricing ? <><del>RRP {formatGBP(pricing.regular)}</del><b>Save {formatGBP(pricing.saving)} ({pricing.percent}%)</b></> : null}</div>
               <StockNote count={product?.stockCount ?? 10} />

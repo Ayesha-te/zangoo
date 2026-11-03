@@ -2,7 +2,7 @@
 
 import { useEffect, useId, useRef, useState, type KeyboardEvent } from "react";
 import Link from "next/link";
-import { formatGBP, getProductSizePricing, type MattressProduct } from "@/app/data/mattressProducts";
+import { formatGBP, getCardCopy, getProductSizePricing, type MattressProduct } from "@/app/data/mattressProducts";
 import { useCart } from "@/app/components/cart/CartProvider";
 import { AlertIcon, ArrowIcon, BagIcon, CheckCircleIcon, ChevronDownIcon, CloseIcon, ProductFeatures, TruckIcon } from "@/app/components/commerce/CommerceIcons";
 import type { FavoriteItem } from "./FavoritesProvider";
@@ -146,7 +146,7 @@ export function AddToBasketDrawer({ item, product, onClose }: { item: FavoriteIt
           {image ? <img src={image} alt="" /> : null}
           <div>
             <strong>{item.name}</strong>
-            <span>Open Coil Spring Mattress</span>
+            <span>{getCardCopy(item.slug).type}</span>
             <b>{selected ? formatGBP(selected.sale * quantity) : fromPrice ? <><small>From</small> {formatGBP(fromPrice)}</> : null}</b>
           </div>
         </div>
@@ -230,7 +230,7 @@ export function AddToBasketDrawer({ item, product, onClose }: { item: FavoriteIt
               </div>
             </div>
 
-            <div className="atb-features"><ProductFeatures turnable={product?.compareSpecs.turnable} /></div>
+            <div className="atb-features"><ProductFeatures turnable={product?.compareSpecs.turnable} slug={item.slug} /></div>
 
             <p className="atb-delivery"><TruckIcon width="30" height="30" /> Free UK delivery</p>
 

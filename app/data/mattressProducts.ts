@@ -7,6 +7,8 @@ export type MattressProduct = {
   description: string;
   /** Short intro under the product title (falls back to description, e.g. for WooCommerce-only products). */
   heroDescription?: string;
+  /** Main selling point, shown as a highlighted box near the top of the product page. */
+  highlight?: { title: string; text: string };
   /** 360° View frames: photos taken all the way round the mattress, in order (e.g. 36 shots, 10° apart). */
   spin360?: Array<{ src: string; alt: string }>;
   image: string;
@@ -49,13 +51,13 @@ const allOrthoMattressProducts: MattressProduct[] = [
     name: "Capri Ortho Mattress",
     shortName: "Capri Ortho",
     price: "From £749",
-    firmness: "Medium to Firm",
+    firmness: "Firm",
     description:
-      "A UK-made, medium-to-firm orthopaedic mattress with an open coil spring system, wire-edge support, deep polyester filling and a deep-tufted damask finish. Capri Ortho is double-sided and approximately 26cm deep.",
+      "A UK-made, firm orthopaedic mattress with an open coil spring system, wire-edge support, deep polyester filling and a deep-tufted damask finish. Capri Ortho is double-sided and approximately 26cm deep.",
     heroDescription:
-      "Capri Ortho is a UK-made medium-to-firm orthopaedic mattress combining open coil spring support with a reinforced wire edge, deep polyester filling and a quality damask cover. Its deep-tufted, double-sided construction is designed to be flipped and rotated regularly, helping both sleeping surfaces wear more evenly. Approximately 26cm deep, Capri Ortho is available in single, double and king sizes and is suitable for low-hazard domestic use under the stated BS 7177 specification.",
+      "Capri Ortho is a UK-made firm orthopaedic mattress combining open coil spring support with a reinforced wire edge, deep polyester filling and a quality damask cover. Its deep-tufted, double-sided construction is designed to be flipped and rotated regularly, helping both sleeping surfaces wear more evenly. Approximately 26cm deep, Capri Ortho is available in single, double and king sizes and is suitable for low-hazard domestic use under the stated BS 7177 specification.",
     whyChoose: [
-      `The Capri Ortho Mattress is a medium-to-firm orthopaedic mattress designed for sleepers who prefer balanced support with a traditional sprung feel. Built around an interconnected open coil spring system with reinforced wire-edge support, it provides a consistent and supportive sleeping surface. Deep polyester fillings add cushioning above the springs, while the quality damask fabric and deep-tufted construction provide a traditional, durable mattress finish.
+      `The Capri Ortho Mattress is a firm orthopaedic mattress designed for sleepers who prefer balanced support with a traditional sprung feel. Built around an interconnected open coil spring system with reinforced wire-edge support, it provides a consistent and supportive sleeping surface. Deep polyester fillings add cushioning above the springs, while the quality damask fabric and deep-tufted construction provide a traditional, durable mattress finish.
 
       Designed with a practical double-sided construction, Capri Ortho can be flipped and rotated regularly to help distribute everyday wear across both sleeping surfaces. Expertly made in the UK, this orthopaedic mattress has an approximate depth of 26cm and is available in three standard UK sizes: Single, Double and King.
 
@@ -63,7 +65,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
     ],
     accordionContent: {
       features:
-        `• <strong>Medium-to-firm comfort</strong> - A balanced feel for sleepers who prefer noticeable support without choosing an extra-firm mattress.
+        `• <strong>Firm comfort</strong> - A balanced feel for sleepers who prefer noticeable support without choosing an extra-firm mattress.
         • <strong>Open coil spring system</strong> - Interconnected springs create a consistent, traditionally sprung mattress feel across the sleeping surface.
         • <strong>Wire-edge support</strong> - A reinforced perimeter helps support the mattress structure around its edges.
         • <strong>Deep polyester filling</strong> - Adds a comfort layer above the spring unit.
@@ -74,7 +76,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
         • <strong>Made in the UK</strong> - Expertly crafted in the UK.
         • <strong>BS 7177 fire-safety information</strong> - Ignition Source 2 for low-hazard domestic use, where applicable to the supplied product specification.`,
       benefits:
-        `• <strong>Balanced medium-to-firm comfort</strong> - Capri Ortho is designed for people who prefer a medium-to-firm, traditionally sprung mattress rather than a soft or deeply sinking sleep surface.
+        `• <strong>Balanced firm comfort</strong> - Capri Ortho is designed for people who prefer a firm, traditionally sprung mattress rather than a soft or deeply sinking sleep surface.
         • <strong>Consistent support and cushioning</strong> - Its wire-edge reinforced open coil system provides a consistent feel across the mattress, while deep polyester filling adds cushioning above the springs.
         • <strong>Double-sided practical design</strong> - Because Capri Ortho is double-sided, both sleeping surfaces can be used as part of a regular flip-and-rotate care routine.
         • <strong>Traditional UK-made construction</strong> - It may be a good match if you want a UK-made mattress with straightforward construction, a supportive feel and fewer complex comfort layers.
@@ -107,7 +109,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
         alt: `Capri Ortho ${view} product image`,
       })),
     ],
-    bullets: ["Medium-to-firm orthopaedic feel", "Open coil spring system", "Wire-edge support", "Double-sided, deep-tufted design"],
+    bullets: ["Firm orthopaedic feel", "Open coil spring system", "Wire-edge support", "Double-sided, deep-tufted design"],
     specs: [
       { label: "Firmness", value: "7/10", note: "Firm support" },
       { label: "Profile", value: "28cm", note: "Deep quilted build" },
@@ -127,10 +129,10 @@ const allOrthoMattressProducts: MattressProduct[] = [
       },
     ],
     faqs: [
-      { question: "How firm is the Capri Ortho mattress?", answer: "Capri Ortho has a medium-to-firm feel. It is designed for sleepers who want a supportive, stable surface without moving into the firmer feel of Hampton Ortho or the extra-firm feel of Deluxe Ortho. Mattress firmness is subjective, so body weight and personal comfort preference can affect how it feels to you." },
-      { question: "Can the Capri Ortho mattress help with back pain?", answer: "Capri Ortho provides a medium-to-firm, supportive sleep surface, but no mattress can be guaranteed to treat or relieve back pain. The right mattress depends on factors including your comfort preference, body weight and sleeping position. Persistent or severe back pain should be discussed with a qualified healthcare professional rather than relying on a mattress as treatment." },
-      { question: "Is the Capri Ortho mattress suitable for side sleepers?", answer: "It can suit some side sleepers who prefer a medium-to-firm mattress, but there is no single firmness that works for every side sleeper. Your body weight, shoulder and hip comfort, and personal preference will affect how the mattress feels. If you prefer more cushioning, compare Capri Ortho with the other firmness and comfort constructions in our range before ordering." },
-      { question: "What is an open coil orthopaedic mattress?", answer: "An open coil mattress uses interconnected springs that work together as a single spring unit. In Capri Ortho, the open coil system is combined with wire-edge support, polyester filling, damask fabric and deep tufting to create its medium-to-firm feel. “Orthopaedic” describes the product’s supportive positioning rather than a medical treatment or one specific spring technology." },
+      { question: "How firm is the Capri Ortho mattress?", answer: "Capri Ortho has a firm feel. It is designed for sleepers who want a supportive, stable surface without moving into the firmer feel of Hampton Ortho or the extra-firm feel of Deluxe Ortho. Mattress firmness is subjective, so body weight and personal comfort preference can affect how it feels to you." },
+      { question: "Can the Capri Ortho mattress help with back pain?", answer: "Capri Ortho provides a firm, supportive sleep surface, but no mattress can be guaranteed to treat or relieve back pain. The right mattress depends on factors including your comfort preference, body weight and sleeping position. Persistent or severe back pain should be discussed with a qualified healthcare professional rather than relying on a mattress as treatment." },
+      { question: "Is the Capri Ortho mattress suitable for side sleepers?", answer: "It can suit some side sleepers who prefer a firm mattress, but there is no single firmness that works for every side sleeper. Your body weight, shoulder and hip comfort, and personal preference will affect how the mattress feels. If you prefer more cushioning, compare Capri Ortho with the other firmness and comfort constructions in our range before ordering." },
+      { question: "What is an open coil orthopaedic mattress?", answer: "An open coil mattress uses interconnected springs that work together as a single spring unit. In Capri Ortho, the open coil system is combined with wire-edge support, polyester filling, damask fabric and deep tufting to create its firm feel. “Orthopaedic” describes the product’s supportive positioning rather than a medical treatment or one specific spring technology." },
       { question: "Should I flip and rotate the Capri Ortho mattress?", answer: "Yes. Capri Ortho is a double-sided mattress, so it is designed to be flipped and rotated regularly. Alternating the sleeping surfaces helps distribute normal wear more evenly. Follow the care schedule supplied with your mattress and avoid bending or folding the spring unit when turning it." },
       { question: "Can I buy the Capri Ortho mattress online in the UK?", answer: "Yes. Capri Ortho is available to order online in single, double and king sizes, with free UK delivery, 0% interest-free finance and a 1-year guarantee. Current price, firmness, specifications and stock availability are shown on this product page before you order." },
     ],
@@ -248,6 +250,10 @@ const allOrthoMattressProducts: MattressProduct[] = [
   },
   {
     slug: "hampton-ortho",
+    highlight: {
+      title: "Deep adaptive memory foam layer",
+      text: "Memory foam moulds to your body to relieve pressure on shoulders, hips and back, on top of firm orthopaedic spring support.",
+    },
     name: "Hampton Ortho Mattress",
     shortName: "Hampton Ortho",
     price: "From £599",
@@ -450,6 +456,20 @@ export const regularSizePrices: Record<string, Record<MattressSize, number>> = {
 
 const toPennies = (value: number) => Math.round(value * 100) / 100;
 export const formatGBP = (value: number) => `£${value.toFixed(2)}`;
+
+/**
+ * Short card copy per mattress (catalogue cards, basket, wishlist, checkout): the type line under the name and
+ * the third feature row. Client wording, 03/11/2026.
+ */
+const CARD_COPY: Record<string, { type: string; feature: string }> = {
+  "capri-ortho-mattress": { type: "Orthopaedic Coil Spring Mattress", feature: "Wire edge support" },
+  "classic-ortho": { type: "Orthopaedic Coil Spring Mattress", feature: "Luxury feel fabric" },
+  "hampton-ortho": { type: "Adaptive Memory Foam Layer", feature: "Orthopaedic spring" },
+  "deluxe-ortho": { type: "Orthopaedic Coil Spring Mattress", feature: "Luxurious coir filling" },
+};
+export function getCardCopy(slug: string) {
+  return CARD_COPY[slug] ?? { type: "Orthopaedic Coil Spring Mattress", feature: "Wire edge support" };
+}
 
 /** Regular price, sale price and saving for one size of a product (size is case-insensitive). */
 export function getSizePricing(slug: string, size: string) {

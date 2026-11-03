@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import type { MattressProduct } from "@/app/data/mattressProducts";
-import { formatGBP, getCardPricing } from "@/app/data/mattressProducts";
+import { formatGBP, getCardCopy, getCardPricing } from "@/app/data/mattressProducts";
 import { getFirmnessRank } from "@/app/utils/firmness";
 import { getFirmnessColor } from "@/app/utils/firmness";
 import { FavoriteButton } from "@/app/components/favorites/FavoriteButton";
@@ -149,11 +149,11 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
                 <span className={styles.mattressInfo}>
                   <strong><Link className={styles.titleLink} href={`/collections/bedroom/mattresses/${mattress.slug}/`}>{mattress.shortName}</Link></strong>
                   <FirmnessBar firmness={mattress.firmness} />
-                  <span className={styles.mattressFeel}>Open Coil Spring Mattress</span>
+                  <span className={styles.mattressFeel}>{getCardCopy(mattress.slug).type}</span>
                   <span className={styles.mattressSpecs}>
                     <span><span aria-hidden="true">↻</span>{mattress.compareSpecs.turnable ? "Double-sided" : "Single-sided"}</span>
                     <span><span aria-hidden="true">✣</span>Hand-tufted</span>
-                    <span><span aria-hidden="true">▧</span>Wire edge</span>
+                    <span><span aria-hidden="true">▧</span>{getCardCopy(mattress.slug).feature}</span>
                     <span><span aria-hidden="true">◇</span>Approx. 26cm deep</span>
                   </span>
                   <CatalogStockNote count={mattress.stockCount} />

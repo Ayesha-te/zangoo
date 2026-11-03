@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type
 import Link from "next/link";
 import { StoreApiError, useCart, type StoreCheckoutResult } from "@/app/components/cart/CartProvider";
 import { useCatalog } from "@/app/components/catalog/CatalogProvider";
-import { formatGBP, getProductSizePricing } from "@/app/data/mattressProducts";
+import { formatGBP, getCardCopy, getProductSizePricing } from "@/app/data/mattressProducts";
 import { subscribeToNewsletter } from "@/app/lib/newsletter";
 import styles from "./checkout.module.css";
 
@@ -382,7 +382,7 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
 
   const header = (
     <>
-      <div className={styles.topBar}>Free UK delivery on launch offers</div>
+      <div className={styles.topBar}>Free delivery on all orders</div>
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <Link href="/" aria-label="OrthoBedroom.co.uk home" className={styles.logo}>
@@ -486,7 +486,7 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
               <div className={styles.cardHead}>
                 <span className={styles.num}>2</span>
                 <h2 id="co-address">Delivery address</h2>
-                <p className={styles.headNote}>Delivering to <b>United Kingdom</b> <span aria-hidden="true">🇬🇧</span></p>
+                <p className={styles.headNote}>Delivering to <b>United Kingdom</b> <UkFlag /></p>
               </div>
               <div className={styles.grid}>
                 {field("firstName", <>First name <i>*</i></>, text("firstName", { autoComplete: "given-name", placeholder: "John" }))}
@@ -583,7 +583,7 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
                       </span>
                       <span className={styles.itemCopy}>
                         <strong>{item.name}</strong>
-                        <small>Open Coil Spring Mattress</small>
+                        <small>{getCardCopy(item.slug).type}</small>
                         <small>{SIZE_LABELS[item.size] ?? item.size}</small>
                       </span>
                       <span className={styles.itemPrice}>{formatGBP((pricing?.sale ?? item.price) * item.quantity)}</span>
@@ -627,7 +627,7 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
             <section className={styles.card} aria-labelledby="co-why">
               <h2 id="co-why" className={styles.asideTitle}>Why buy from OrthoBedroom?</h2>
               <ul className={styles.why}>
-                <li><span aria-hidden="true">🇬🇧</span><strong>Made in the UK</strong><small>Quality British-made mattresses</small></li>
+                <li><UkFlag /><strong>Made in the UK</strong><small>Quality British-made mattresses</small></li>
                 <li><TruckIcon /><strong>Free UK delivery</strong><small>To most of the UK mainland</small></li>
                 <li><ShieldIcon /><strong>1 year guarantee</strong><small>Shop with confidence</small></li>
                 <li><CoinsIcon /><strong>0% interest-free finance</strong><small>Subject to eligibility</small></li>
@@ -698,4 +698,6 @@ const CoinsIcon = () => svg(<><ellipse cx="12" cy="6" rx="7" ry="3" /><path d="M
 const WhatsAppIcon = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="#25D366"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.2 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.2-.8-2.7-1.1-4.4-3.8-4.5-4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 1.9 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.1.1.6-.1 1.2Z" /></svg>
 );
+/** Union Jack as an image: Windows has no flag emoji (it shows the letters "GB"). */
+const UkFlag = () => <img src="/flags/gb.svg" alt="" width="22" height="14" style={{ display: "inline-block", verticalAlign: "-2px", borderRadius: 2 }} />;
 const Chevron = ({ open }: { open: boolean }) => <span className={styles.chevron} data-open={open || undefined}>{svg(<path d="m6 9 6 6 6-6" />, 18)}</span>;

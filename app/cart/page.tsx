@@ -7,7 +7,7 @@ import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteC
 import { RecommendationStrip } from "@/app/components/commerce/RecommendationStrip";
 import { ArrowIcon, CheckCircleIcon, LockIcon, ProductFeatures, StockNote, TrashIcon } from "@/app/components/commerce/CommerceIcons";
 import { useCart } from "@/app/components/cart/CartProvider";
-import { formatGBP, getProductSizePricing, getSizePricing } from "@/app/data/mattressProducts";
+import { formatGBP, getCardCopy, getProductSizePricing, getSizePricing } from "@/app/data/mattressProducts";
 import { useCatalog } from "@/app/components/catalog/CatalogProvider";
 import { getFirmnessColor } from "@/app/utils/firmness";
 import collectionStyles from "@/app/collections/collections.module.css";
@@ -49,7 +49,7 @@ export default function CartPage() {
                   <Link href={item.href} aria-label={`View ${item.name}`}><img src={item.image} alt="" /></Link>
                   <span className={collectionStyles.saleBadge} style={{ backgroundColor: getFirmnessColor(firmness) }}>{firmness}</span>
                 </div>
-                <div className="commerce-item-copy"><h2><Link href={item.href}>{item.name}</Link></h2><p>Open Coil Spring Mattress</p><p className="commerce-item-size">Size: <b>{SIZE_LABELS[item.size.toLowerCase()] ?? item.size}</b></p><ProductFeatures turnable={product?.compareSpecs.turnable} /></div>
+                <div className="commerce-item-copy"><h2><Link href={item.href}>{item.name}</Link></h2><p>{getCardCopy(item.slug).type}</p><p className="commerce-item-size">Size: <b>{SIZE_LABELS[item.size.toLowerCase()] ?? item.size}</b></p><ProductFeatures turnable={product?.compareSpecs.turnable} slug={item.slug} /></div>
                 <div className="commerce-item-price">
                   {/* Always the 15% sale price here, even when a marketer code is applied (WooCommerce then prices the line at
                       the original price); the code's own discount is shown in the order summary. */}
