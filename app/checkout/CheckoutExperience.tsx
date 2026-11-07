@@ -33,6 +33,8 @@ function loadStripeJs() {
   return stripeScript;
 }
 
+/** Stripe's smallest card payment in GBP (30p); below it Stripe won't show its payment form. */
+const MIN_CARD_PENNIES = 30;
 const WHATSAPP_NUMBER = "+44 7830 376489";
 const WHATSAPP_LINK = "https://wa.me/447830376489";
 /** 3D Secure etc.: proxied to WordPress (vercel.json / next.config.ts) so the browser stays on this site. */
@@ -135,6 +137,11 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
   const subtotal = totals?.subtotal ?? items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const total = totals?.total ?? subtotal;
   const totalPennies = Math.round(total * 100);
+  // A 100% discount: nothing to pay, so the order is placed without a card.
+  const freeOrder = items.length > 0 && totals !== null && totalPennies === 0;
+  // Between 1p and 29p Stripe can't take a card payment (e.g. a 99.99% test code).
+  const belowCardMinimum = totalPennies > 0 && totalPennies < MIN_CARD_PENNIES;
+  const cardPayable = totalPennies >= MIN_CARD_PENNIES;
   const marketerCode = coupons.some((applied) => !applied.toLowerCase().startsWith("welcome-"));
   const originalTotal = items.reduce((sum, item) => {
     const product = getProduct(item.slug);
@@ -207,13 +214,18 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
         billing_address: billing,
         shipping_address: delivery,
         customer_note: f.instructions.trim(),
-        payment_method: "stripe",
-        payment_data: [
-          { key: "payment_method", value: "stripe" },
-          { key: "wc-stripe-payment-method", value: paymentMethodId },
-          { key: "express_payment_type", value: expressType },
-          { key: "wc-stripe-is-deferred-intent", value: true },
-        ],
+        // Nothing to pay (100% discount): WooCommerce completes the order without a payment method.
+        ...(paymentMethodId
+          ? {
+              payment_method: "stripe",
+              payment_data: [
+                { key: "payment_method", value: "stripe" },
+                { key: "wc-stripe-payment-method", value: paymentMethodId },
+                { key: "express_payment_type", value: expressType },
+                { key: "wc-stripe-is-deferred-intent", value: true },
+              ],
+            }
+          : {}),
       });
       const redirect = result.payment_result?.redirect_url ?? "";
       const confirm = redirect.match(/#wc-stripe-confirm-(pi|si):(.+):(.+):(.+)$/);
@@ -229,7 +241,7 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
         }).catch(() => undefined); // Stripe's webhook also updates the order.
         if (outcome.error) throw new Error(outcome.error.message ?? "Your payment could not be confirmed.");
         if (!["succeeded", "processing", "requires_capture"].includes(outcome.paymentIntent?.status)) throw new Error("Your payment was not completed. Please try again.");
-      } else if (result.payment_result?.payment_status !== "success") {
+      } else if (paymentMethodId && result.payment_result?.payment_status !== "success") {
         throw new Error("Your payment was not completed. Please check your details and try again.");
       } else if (redirect && !/order-received/.test(redirect)) {
         // Pay-later / bank redirect methods (e.g. Klarna) finish on the provider's page.
@@ -250,21 +262,39 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
     setPayError(message || "Your payment could not be completed. Please try again.");
   };
 
-  // Stripe Payment Element (card, Klarna, Link, wallets) + Express Checkout (Apple Pay / Google Pay buttons).
+  // Start downloading Stripe.js as soon as the checkout opens, so the payment form is ready sooner.
   useEffect(() => {
-    if (!stripePublishableKey || mode !== "woocommerce" || placed || !items.length || totalPennies <= 0) return;
-    if (elementsRef.current) {
-      elementsRef.current.update({ amount: totalPennies });
-      return;
-    }
+    if (stripePublishableKey) loadStripeJs().catch(() => setStripeFailed(true));
+  }, [stripePublishableKey]);
+
+  // Latest values for Stripe's event handlers, which are attached once.
+  const completeOrderRef = useRef(completeOrder);
+  const showErrorsRef = useRef(showErrors);
+  const totalPenniesRef = useRef(totalPennies);
+  useEffect(() => {
+    completeOrderRef.current = completeOrder;
+    showErrorsRef.current = showErrors;
+    totalPenniesRef.current = totalPennies;
+  }, [completeOrder, showErrors, totalPennies]);
+
+  // Keep Stripe's amount in step with the basket (only amounts Stripe can charge).
+  useEffect(() => {
+    if (elementsRef.current && cardPayable) elementsRef.current.update({ amount: totalPennies });
+  }, [cardPayable, totalPennies]);
+
+  // Stripe Payment Element (card, Klarna, Link, wallets) + Express Checkout (Apple Pay / Google Pay buttons).
+  // Created once, when there is something Stripe can charge; it is not rebuilt when the basket refreshes.
+  const hasItems = items.length > 0;
+  useEffect(() => {
+    if (!stripePublishableKey || mode !== "woocommerce" || placed || !hasItems || !cardPayable || elementsRef.current) return;
     let cancelled = false;
     loadStripeJs()
       .then(() => {
-        if (cancelled || !window.Stripe || !paymentMountRef.current) return;
+        if (cancelled || elementsRef.current || !window.Stripe || !paymentMountRef.current) return;
         const stripe = window.Stripe(stripePublishableKey);
         const elements = stripe.elements({
           mode: "payment",
-          amount: totalPennies,
+          amount: totalPenniesRef.current,
           currency: "gbp",
           paymentMethodCreation: "manual",
           appearance: {
@@ -280,6 +310,8 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
         });
         payment.mount(paymentMountRef.current);
         payment.on("ready", () => setStripeReady(true));
+        // Stripe refused to show the form (e.g. unsupported amount or blocked network): say so instead of waiting.
+        payment.on("loaderror", () => setStripeFailed(true));
         payment.on("change", (event: { complete: boolean }) => setPaymentComplete(event.complete));
 
         if (expressMountRef.current) {
@@ -292,7 +324,7 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
             // Wallet payments still need the delivery details from this form first.
             const found = validate(fieldsRef.current);
             if (Object.keys(found).length) {
-              showErrors(found);
+              showErrorsRef.current(found);
               return;
             }
             event.resolve();
@@ -305,7 +337,7 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
               if (submitted.error) throw new Error(submitted.error.message);
               const created = await stripe.createPaymentMethod({ elements });
               if (created.error) throw new Error(created.error.message);
-              await completeOrder(created.paymentMethod.id, event.expressPaymentType);
+              await completeOrderRef.current(created.paymentMethod.id, event.expressPaymentType);
             } catch (caught) {
               event.paymentFailed();
               failPayment(caught);
@@ -321,16 +353,28 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
     return () => {
       cancelled = true;
     };
-  }, [stripePublishableKey, mode, placed, items.length, totalPennies, completeOrder, showErrors]);
+  }, [stripePublishableKey, mode, placed, hasItems, cardPayable]);
 
   async function onPay(event?: FormEvent) {
     event?.preventDefault();
     clearError();
     setPayError(null);
     const found = validate(fields);
-    if (!paymentComplete && stripeReady) found.payment = "Please complete your payment details.";
+    if (belowCardMinimum) found.payment = "This total is below the £0.30 minimum for card payments.";
+    else if (!freeOrder && !paymentComplete && stripeReady) found.payment = "Please complete your payment details.";
     if (Object.keys(found).length) {
       showErrors(found);
+      return;
+    }
+    if (freeOrder) {
+      setPaying(true);
+      try {
+        await completeOrder("");
+      } catch (caught) {
+        failPayment(caught);
+      } finally {
+        setPaying(false);
+      }
       return;
     }
     const stripe = stripeRef.current;
@@ -554,12 +598,19 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
               </div>
               {expressAvailable ? <div className={styles.divider}><span>Or pay by card</span></div> : null}
               <div data-field="payment" className={errors.payment ? styles.invalid : undefined}>
-                {!stripePublishableKey || stripeFailed ? (
-                  <p className={styles.error} role="alert">Card payment isn&rsquo;t available right now. Please message us on WhatsApp ({WHATSAPP_NUMBER}) to complete your order.</p>
+                {freeOrder ? (
+                  <p className={styles.notice}>Your discount covers the full order, so no payment is needed. Press <b>Place order</b> to finish.</p>
+                ) : belowCardMinimum ? (
+                  <p className={styles.notice} role="alert">
+                    Card payments need a total of at least £0.30. With your discount this order comes to {formatGBP(total)}, so it can&rsquo;t be paid by card.
+                    Please remove the discount code, or message us on WhatsApp ({WHATSAPP_NUMBER}).
+                  </p>
+                ) : !stripePublishableKey || stripeFailed ? (
+                  <p className={styles.error} role="alert">Card payment isn&rsquo;t available right now. Please refresh the page, or message us on WhatsApp ({WHATSAPP_NUMBER}) to complete your order.</p>
                 ) : !stripeReady ? (
                   <p className={styles.subtle}>Loading secure payment form…</p>
                 ) : null}
-                <div ref={paymentMountRef} className={styles.paymentMount} />
+                <div ref={paymentMountRef} className={styles.paymentMount} hidden={!cardPayable} />
                 {errors.payment ? <small className={styles.error} role="alert">{errors.payment}</small> : null}
               </div>
             </section>
@@ -661,8 +712,8 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
               ) : null}
               {payError ? <p className={styles.payError} role="alert">{payError}</p> : null}
               {touched && Object.keys(errors).length ? <p className={styles.payError} role="alert">Please complete the highlighted fields.</p> : null}
-              <button type="submit" className={styles.payButton} disabled={paying || pending}>
-                <LockIcon /> {paying ? "Processing payment…" : `Pay ${formatGBP(total)} securely`} {!paying ? <span aria-hidden="true">→</span> : null}
+              <button type="submit" className={styles.payButton} disabled={paying || pending || belowCardMinimum}>
+                <LockIcon /> {paying ? "Processing payment…" : freeOrder ? "Place order" : `Pay ${formatGBP(total)} securely`} {!paying ? <span aria-hidden="true">→</span> : null}
               </button>
               <p className={styles.terms}>
                 By placing your order, you agree to our <Link href="/faq/">Terms &amp; Conditions</Link>, <Link href="/contact/">Privacy Notice</Link> and <Link href="/faq/">Returns &amp; Guarantee</Link>.

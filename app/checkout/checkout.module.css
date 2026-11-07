@@ -182,3 +182,4 @@
   .thanks { padding: 28px 18px; }
   .thanks h1 { font-size: 32px; }
 }
+.notice { margin: 0 0 12px; padding: 12px 14px; border: 1px solid #f0c98a; border-radius: 10px; background: #fff8ec; color: var(--navy); font: 600 15px/1.5 var(--sans); }
