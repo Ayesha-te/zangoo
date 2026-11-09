@@ -2888,3 +2888,17 @@ html body .foot-logo img{display:block;width:auto;height:58px}
 .whatsapp-cta small{display:block;margin-top:3px;font:600 16px/1.2 var(--sans);letter-spacing:.02em}
 .summary-discount-note{margin:-4px 0 4px;padding:8px 12px;border-radius:8px;background:#fdecee;color:#c62828;font:700 14px/1.35 var(--sans)}
 .trust-flag{display:inline-block;width:18px;height:12px;margin-right:4px;vertical-align:-1px;border-radius:2px}
+
+/* Site-wide sizes matched to the client's reference (mattressnextday.co.uk, measured 09/11/2026):
+   menu 16 medium · reading text 16/1.8 regular · buttons and footer links 16 · banner 15. */
+html body .nav-item>a,html body .nav-item>button,html body a.nav-item{font-size:16px;font-weight:500}
+html body .bc-exc,html body .lp-faq-body,html body .customer-review-card p,html body .fi-a,html body .simple-faq-answer,
+html body .blog-list-body>span,html body .featured-card p,html body .sc-desc,html body .nl-intro,html body .faq-intro,
+html body .collections .sec-hdr p,html body .blog .sec-hdr p,html body .contact-section-head p,html body .awards-intro{font-weight:400;line-height:1.8}
+html body .btn,html body .foot-links a{font-size:16px}
+html body .announce-track,html body .announce-track span{font-size:15px}
+html body .customer-review-card small{font-size:14px}
+@media(max-width:1180px){html body .nav-item>a,html body .nav-item>button,html body a.nav-item{font-size:15px}}
+@media(max-width:640px){html body .announce-track,html body .announce-track span{font-size:13px}}
+html body .lp-faq-btn,html body .fi-q{font-size:18px;font-weight:700;line-height:1.4}
+html body .lp-faq-body,html body .fi-a{font-size:16px}
