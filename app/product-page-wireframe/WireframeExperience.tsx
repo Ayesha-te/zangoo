@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import type { MattressProduct } from "@/app/data/mattressProducts";
 import { formatGBP, getProductSizePricing, orthoMattressProducts } from "@/app/data/mattressProducts";
 import { FirmnessBar } from "@/app/components/collections/FirmnessBar";
@@ -11,6 +11,7 @@ import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
 import { customerReviews } from "@/app/data/customerReviews";
 import { ProductFaq } from "@/app/components/site/ProductFaq";
 import { SpinViewer } from "@/app/components/product/SpinViewer";
+import { FeaturesAndBenefits, FeaturesYoullLove, QuickFacts, SizeBoxes } from "./PocketSprungLayout";
 import { STORAGE_KEYS, readStorage, writeStorage } from "@/app/utils/browserStorage";
 import { useCart } from "@/app/components/cart/CartProvider";
 import { getStockState, type StockTone } from "@/app/utils/stockState";
@@ -189,13 +190,24 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
     deliveryReturns: "Please review the current delivery, guarantee and returns guidance before ordering.",
   };
 
-  const accordions = [
-    { title: "Description", body: product.description },
-    { title: "Features", body: accordionContent.features },
-    { title: "Benefits", body: accordionContent.benefits },
-    { title: "Dimensions and Size Guide", body: accordionContent.dimensions },
-    { title: product.copy?.deliveryTitle ?? "Delivery, Guarantee & Returns", body: accordionContent.deliveryReturns },
-  ];
+  // Pocket sprung range: Mattress Next Day style (size boxes, tick-list, icon features).
+  const pocket = product.layout === "pocket";
+  const accordions: Array<{ title: string; body: string; node?: ReactNode }> = pocket
+    ? [
+        { title: "Description", body: product.description },
+        { title: "Features & Benefits", body: "", node: <FeaturesAndBenefits features={accordionContent.features} benefits={accordionContent.benefits} /> },
+        { title: "Dimensions and Size Guide", body: accordionContent.dimensions },
+        { title: product.copy?.deliveryTitle ?? "Delivery, Guarantee & Returns", body: accordionContent.deliveryReturns },
+      ]
+    : [
+        { title: "Description", body: product.description },
+        { title: "Features", body: accordionContent.features },
+        { title: "Benefits", body: accordionContent.benefits },
+        { title: "Dimensions and Size Guide", body: accordionContent.dimensions },
+        { title: product.copy?.deliveryTitle ?? "Delivery, Guarantee & Returns", body: accordionContent.deliveryReturns },
+      ];
+  const addSelected = () =>
+    addItem({ slug: product.slug, name: product.shortName, image: sizeImage.src, price: activeSize.price, size, variationId: product.sizePricing?.[size]?.variationId, href: `/collections/bedroom/mattresses/${product.slug}/` }, quantity);
 
   const faqItems = [...product.faqs];
 
@@ -207,7 +219,8 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
         <div className={styles.leftColumn}>
           <div className={styles.galleryCard}>
           <div className={styles.media}>
-            {!product.comingSoon ? <span className={styles.saleBadge}>-15%</span> : null}
+            {/* Only when there is a real saving (the pocket sprung range has none). */}
+            {!product.comingSoon && sizes.some((option) => option.compare > option.price + 0.004) ? <span className={styles.saleBadge}>-15%</span> : null}
             <button
               type="button"
               className={styles.zoomTrigger}
@@ -277,6 +290,8 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             </div>
           ) : null}
 
+          {pocket && product.love?.length ? <FeaturesYoullLove cards={product.love} /> : null}
+
           <div className={styles.accordionCard} aria-label="Product information">
             {accordions.map((item, index) => {
               const isOpen = openAccordion === index;
@@ -292,7 +307,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
                   </button>
                   <div className={styles.accordionPanel} data-open={isOpen || undefined}>
                     <div className={styles.accordionPanelInner}>
-                      <p style={{ whiteSpace: "pre-line", lineHeight: 1.7 }}>
+                      {item.node ?? <p style={{ whiteSpace: "pre-line", lineHeight: 1.7 }}>
                         {item.body.split(/(<strong>.*?<\/strong>)/g).map((part, index) =>
                           part.startsWith("<strong>") && part.endsWith("</strong>") ? (
                             <strong key={index}>
@@ -302,7 +317,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
                             part
                           )
                         )}
-                      </p>
+                      </p>}
                     </div>
                   </div>
                 </div>
@@ -312,6 +327,94 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
         </div>
 
         <div className={styles.rightColumn}>
+          {pocket ? (
+            <article className={`${styles.summaryCard} ${styles.pocketTop}`} aria-label="Product purchase options">
+              <h1 id="wireframe-title">{product.name}</h1>
+              {product.quickFacts?.length ? <QuickFacts facts={product.quickFacts} /> : null}
+              {product.comingSoon ? (
+                <div className={styles.comingSoon}>
+                  <span className={styles.comingSoonBadge}>Coming soon</span>
+                  <strong>Price coming soon</strong>
+                  <p>This mattress will be available to order shortly. Message us on WhatsApp for prices, sizes and availability.</p>
+                  <a className={styles.addButton} href={`https://wa.me/447830376489?text=${encodeURIComponent(`Hello OrthoBedroom, I'm interested in the ${product.shortName} mattress.`)}`} target="_blank" rel="noopener noreferrer">
+                    Ask about {product.shortName} on WhatsApp
+                  </a>
+                </div>
+              ) : (
+                <>
+                  <p className={styles.fromPrice}><span>from</span> {formatGBP(Math.min(...sizes.map((option) => option.price)))}</p>
+                  <p className={styles.sizeLabel}>Size</p>
+                  <SizeBoxes sizes={sizes} selected={size} onSelect={chooseSize} />
+                  <div className={styles.deliveryBox}>
+                    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 7l9-4 9 4v10l-9 4-9-4z" /><path d="M3 7l9 4 9-4M12 11v10" /></svg>
+                    <span><b>FREE delivery</b> on all orders</span>
+                  </div>
+                  <div className={styles.qty}>
+                    <span>Quantity</span>
+                    <div>
+                      <button type="button" aria-label="Decrease quantity" onClick={() => setQuantity((value) => Math.max(1, value - 1))}>-</button>
+                      <strong>{quantity}</strong>
+                      <button type="button" aria-label="Increase quantity" onClick={() => setQuantity((value) => value + 1)}>+</button>
+                    </div>
+                  </div>
+                  <p className={styles.pocketTotal}>Total: <b>{formatGBP(total)}</b></p>
+                  <div className={styles.buyActions}>
+                    <button
+                      className={`${styles.addButton} ${added ? styles.addedButton : ""}`}
+                      type="button"
+                      disabled={outOfStock || added || adding}
+                      onClick={async () => {
+                        setAdding(true);
+                        try {
+                          await addSelected();
+                        } catch {
+                          // The cart error is shown below the button.
+                        } finally {
+                          setAdding(false);
+                        }
+                      }}
+                    >
+                      {outOfStock ? "Out of Stock" : adding ? "Adding..." : added ? "Added to Basket" : "Add to basket"}
+                    </button>
+                    <FavoriteButton
+                      className={styles.favoriteButton}
+                      activeClassName={styles.favoriteActive}
+                      item={{ slug: product.slug, name: product.shortName, href: `/collections/bedroom/mattresses/${product.slug}/`, image: sizeImage.src, price: product.price, firmness: product.firmness }}
+                    />
+                  </div>
+                  {cartError ? <p className={styles.cartError} role="alert">{cartError}</p> : null}
+                  <button
+                    className={styles.buyButton}
+                    type="button"
+                    disabled={adding || outOfStock}
+                    onClick={async () => {
+                      setAdding(true);
+                      try {
+                        if (!added) await addSelected();
+                        router.push("/cart/");
+                      } catch {
+                        setAdding(false);
+                      }
+                    }}
+                  >
+                    Proceed to Checkout
+                  </button>
+                  <div className={styles.paymentMethods} aria-label="Accepted payment methods">
+                    <img src="/payments/visa-svgrepo-com.svg" alt="Visa" />
+                    <img src="/payments/mastercard.svg" alt="Mastercard" />
+                    <img src="/payments/amex.svg" alt="American Express" />
+                    <img src="/payments/maestro.svg" alt="Maestro" />
+                    <img src="/payments/klarna.svg" alt="Klarna" />
+                    <img src="/payments/apple-pay.svg" alt="Apple Pay" />
+                    <img src="/payments/google-pay.svg" alt="Google Pay" />
+                  </div>
+                </>
+              )}
+              {product.copy?.notice ? <p className={styles.productNotice}>{product.copy.notice}</p> : null}
+              <p className={styles.pocketIntro}>{product.heroDescription ?? product.description}</p>
+            </article>
+          ) : (
+          <>
           <article className={styles.summaryCard}>
           {!product.comingSoon ? <p className={styles.sku}>SKU: {product.slug.toUpperCase()}</p> : null}
           <h1 id="wireframe-title">{product.name}</h1>
@@ -433,6 +536,8 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
           </div>
           {product.copy?.notice ? <p className={styles.productNotice}>{product.copy.notice}</p> : null}
           </aside>
+          )}
+          </>
           )}
         </div>
       </section>

@@ -12,6 +12,12 @@ export type MattressProduct = {
   /** Not on sale yet (no confirmed prices): the page shows "price coming soon" instead of the basket, and the
    *  product stays out of listings. Becomes purchasable once a WooCommerce product with this slug exists. */
   comingSoon?: boolean;
+  /** "pocket": the pocket sprung range layout (size boxes, tick-list, icon features). */
+  layout?: "pocket";
+  /** Tick-list under the product name (pocket layout). */
+  quickFacts?: string[];
+  /** "Features you'll love" cards under the photos (pocket layout). */
+  love?: Array<{ icon: import("@/app/product-page-wireframe/PocketSprungLayout").MattressIconName; label: string; title: string; text: string }>;
   /** Page wording that differs per product (falls back to the Ortho range's wording). */
   copy?: {
     seoTitle?: string;

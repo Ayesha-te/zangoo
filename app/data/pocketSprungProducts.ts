@@ -2,8 +2,9 @@ import type { MattressProduct } from "./mattressProducts";
 
 // Pocket sprung range (Air Flow 2000, Ella 3000, Harmony 1000, Mirage 2000, Newby). Wording from the client's
 // "Website Content Replacement Guide" PDFs (13/11/2026), mapped onto the Capri Ortho page sections.
-// Left out until confirmed, as the guides instruct: 60-night sleep trial, BS 7177 statements, unconfirmed size
-// ranges (Ella, Harmony, Mirage) and unconfirmed warranty terms. All five are "coming soon" until prices exist.
+// Left out until confirmed, as the guides instruct: 60-night sleep trial, BS 7177 statements and unconfirmed
+// warranty terms (Ella, Harmony, Mirage, Newby). Sizes: Single, Double, King (client price table, 13/11/2026).
+// Each is "coming soon" until its WooCommerce product (with prices) exists.
 
 const IMG = "/Pocket Sprung Product Images";
 const photos = (name: string, alts: [string, string, string]) => ({
@@ -23,6 +24,13 @@ const SIZE_NOTE = `<strong>Please note:</strong> Please check the selected mattr
 export const pocketSprungProducts: MattressProduct[] = [
   {
     slug: "air-flow-2000-pocket-sprung-mattress",
+    layout: "pocket",
+    quickFacts: ["Up to 2,000 Pocket Springs", "Memory Foam & Pillow Top", "28cm Depth", "Firmness: Medium to Firm"],
+    love: [
+      { icon: "springs", label: "Support System", title: "Pocket Springs", text: "Up to 2,000 individually wrapped springs respond independently to pressure and movement." },
+      { icon: "pillow", label: "Comfort Fillings", title: "Memory Foam & Pillow Top", text: "Pressure-responsive memory foam and a plush pillow top add cushioning above the springs." },
+      { icon: "firmness", label: "Firmness", title: "Medium to Firm", text: "A supportive feel complemented by cushioning from the upper comfort layers." },
+    ],
     name: "Air Flow 2000 Pocket Sprung Mattress",
     shortName: "Air Flow 2000",
     price: "Price coming soon",
@@ -104,6 +112,13 @@ export const pocketSprungProducts: MattressProduct[] = [
   },
   {
     slug: "ella-3000-pocket-sprung-mattress",
+    layout: "pocket",
+    quickFacts: ["Up to 3,000 Pocket Springs", "Cooling Gel & Memory Foam", "31cm Depth", "Firmness: Firm to Extra Firm"],
+    love: [
+      { icon: "springs", label: "Support System", title: "Pocket Springs", text: "Up to 3,000 individually pocketed springs respond independently to pressure and movement." },
+      { icon: "cooling", label: "Comfort Fillings", title: "Cooling Gel & Memory Foam", text: "Four foam layers, including cooling gel and memory foam, add comfort above the springs." },
+      { icon: "firmness", label: "Firmness", title: "Firm to Extra Firm", text: "Designed for sleepers who prefer a noticeably firmer mattress surface." },
+    ],
     name: "Ella 3000 Pocket Sprung Mattress",
     shortName: "Ella 3000",
     price: "Price coming soon",
@@ -141,7 +156,9 @@ export const pocketSprungProducts: MattressProduct[] = [
         • <strong>Practical single-sided design</strong> - The designated sleeping surface remains facing upwards, removing the need to flip the mattress over.`,
       dimensions: `• <strong>Mattress Depth</strong> - Approximately 31cm
 
-        Available sizes and exact dimensions will be confirmed shortly.
+        • <strong>Single (3ft)</strong> - 90 × 190cm
+        • <strong>Double (4ft 6in)</strong> - 135 × 190cm
+        • <strong>King Size (5ft)</strong> - 150 × 200cm
 
         ${SIZE_NOTE}`,
       deliveryReturns: `${DELIVERY}
@@ -176,6 +193,13 @@ export const pocketSprungProducts: MattressProduct[] = [
   },
   {
     slug: "harmony-1000-pocket-sprung-mattress",
+    layout: "pocket",
+    quickFacts: ["Up to 1,000 Pocket Springs", "Generous Memory Foam", "31cm Depth", "Firmness: Medium to Firm"],
+    love: [
+      { icon: "springs", label: "Support System", title: "Pocket Springs", text: "Up to 1,000 individually pocketed springs respond independently to pressure and movement." },
+      { icon: "foam", label: "Comfort Fillings", title: "Memory Foam", text: "A generous memory foam layer adds cushioning above the pocket spring support system." },
+      { icon: "firmness", label: "Firmness", title: "Medium to Firm", text: "Noticeable underlying support with cushioning at the surface." },
+    ],
     name: "Harmony 1000 Pocket Sprung Mattress",
     shortName: "Harmony 1000",
     price: "Price coming soon",
@@ -213,7 +237,9 @@ export const pocketSprungProducts: MattressProduct[] = [
         • <strong>Practical single-sided construction</strong> - The designated sleeping surface remains facing upwards, so the mattress does not need to be flipped.`,
       dimensions: `• <strong>Mattress Depth</strong> - Approximately 31cm
 
-        Available sizes and exact dimensions will be confirmed shortly.
+        • <strong>Single (3ft)</strong> - 90 × 190cm
+        • <strong>Double (4ft 6in)</strong> - 135 × 190cm
+        • <strong>King Size (5ft)</strong> - 150 × 200cm
 
         ${SIZE_NOTE} Due to the mattress depth, please also check that your fitted sheets have a suitable pocket depth.
 
@@ -250,6 +276,13 @@ export const pocketSprungProducts: MattressProduct[] = [
   },
   {
     slug: "mirage-firm-2000-pocket-sprung-mattress",
+    layout: "pocket",
+    quickFacts: ["Up to 2,000 Pocket Springs", "Memory Foam & Deep Support Foam", "31cm Depth", "Firmness: Firm"],
+    love: [
+      { icon: "springs", label: "Support System", title: "Pocket Springs", text: "Up to 2,000 individually pocketed springs respond independently across the sleeping surface." },
+      { icon: "foam", label: "Comfort Fillings", title: "Three Foam Layers", text: "Memory foam and deep support foam add cushioning above the pocket spring system." },
+      { icon: "firmness", label: "Firmness", title: "Firm", text: "For sleepers who prefer a supportive mattress with a firmer underlying feel." },
+    ],
     name: "Mirage Firm 2000 Pocket Sprung Mattress",
     shortName: "Mirage 2000",
     price: "Price coming soon",
@@ -288,7 +321,9 @@ export const pocketSprungProducts: MattressProduct[] = [
         • <strong>Single-sided mattress care</strong> - The mattress does not need to be flipped. Follow the manufacturer's instructions for any recommended rotation schedule.`,
       dimensions: `• <strong>Mattress Depth</strong> - Approximately 31cm
 
-        Available sizes and exact dimensions will be confirmed shortly.
+        • <strong>Single (3ft)</strong> - 90 × 190cm
+        • <strong>Double (4ft 6in)</strong> - 135 × 190cm
+        • <strong>King Size (5ft)</strong> - 150 × 200cm
 
         <strong>Please note:</strong> Please check your selected mattress dimensions against your existing bed frame or divan base before ordering. Dimensions are approximate, and small manufacturing tolerances may apply. For a mattress approximately 31cm deep, check that your fitted sheets have a suitable pocket depth.
 
@@ -327,6 +362,13 @@ export const pocketSprungProducts: MattressProduct[] = [
   },
   {
     slug: "newby-medium-pocket-sprung-mattress",
+    layout: "pocket",
+    quickFacts: ["Up to 1,000 Pocket Springs", "Memory Foam", "26cm Depth", "Firmness: Medium"],
+    love: [
+      { icon: "springs", label: "Support System", title: "Pocket Springs", text: "Up to 1,000 individually wrapped springs respond separately to pressure." },
+      { icon: "foam", label: "Comfort Fillings", title: "Memory Foam", text: "A memory foam comfort layer adds body-contouring cushioning above the springs." },
+      { icon: "firmness", label: "Firmness", title: "Medium", text: "A balanced feel between softer cushioning and firmer support." },
+    ],
     name: "Newby Medium Pocket Sprung Memory Foam Mattress",
     shortName: "Newby",
     price: "Price coming soon",

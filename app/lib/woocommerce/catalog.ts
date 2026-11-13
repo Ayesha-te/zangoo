@@ -104,6 +104,9 @@ function withLocalContent(wooProduct: MattressProduct): MattressProduct {
     features: woo.features.length ? woo.features : local.features,
     faqs: woo.faqs.length ? woo.faqs : local.faqs,
     bestFor: local.bestFor,
+    // Pocket sprung range: always the site's own photos (WordPress renames uploads like "Air Flow 2000 Main", so
+    // they can't be matched back to the local files).
+    ...(local.layout === "pocket" ? { image: local.image, imageAlt: local.imageAlt, gallery: local.gallery } : {}),
     // In WooCommerce (so it has prices): on sale, even if the local record still says "coming soon".
     comingSoon: false,
   };
