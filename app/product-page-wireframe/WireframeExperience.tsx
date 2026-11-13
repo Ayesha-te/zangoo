@@ -194,7 +194,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
     { title: "Features", body: accordionContent.features },
     { title: "Benefits", body: accordionContent.benefits },
     { title: "Dimensions and Size Guide", body: accordionContent.dimensions },
-    { title: "Delivery, Guarantee & Returns", body: accordionContent.deliveryReturns },
+    { title: product.copy?.deliveryTitle ?? "Delivery, Guarantee & Returns", body: accordionContent.deliveryReturns },
   ];
 
   const faqItems = [...product.faqs];
@@ -207,7 +207,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
         <div className={styles.leftColumn}>
           <div className={styles.galleryCard}>
           <div className={styles.media}>
-            <span className={styles.saleBadge}>-15%</span>
+            {!product.comingSoon ? <span className={styles.saleBadge}>-15%</span> : null}
             <button
               type="button"
               className={styles.zoomTrigger}
@@ -313,7 +313,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
 
         <div className={styles.rightColumn}>
           <article className={styles.summaryCard}>
-          <p className={styles.sku}>SKU: {product.slug.toUpperCase()}</p>
+          {!product.comingSoon ? <p className={styles.sku}>SKU: {product.slug.toUpperCase()}</p> : null}
           <h1 id="wireframe-title">{product.name}</h1>
           <FirmnessBar firmness={product.firmness} />
           {product.highlight ? (
@@ -324,7 +324,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             </div>
           ) : null}
           <p>{product.heroDescription ?? product.description}</p>
-          <h2>Features You Will Love</h2>
+          <h2>{product.copy?.featuresHeading ?? "Features You Will Love"}</h2>
           <ul className={styles.benefits} role="list">
             {product.bullets.map((benefit) => (
               <li key={benefit}>{benefit}</li>
@@ -332,6 +332,19 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
           </ul>
           </article>
 
+          {product.comingSoon ? (
+            <aside className={styles.buyCard} aria-label="Product availability">
+              <div className={styles.comingSoon}>
+                <span className={styles.comingSoonBadge}>Coming soon</span>
+                <strong>Price coming soon</strong>
+                <p>This mattress will be available to order shortly. Message us on WhatsApp for prices, sizes and availability.</p>
+                <a className={styles.addButton} href={`https://wa.me/447830376489?text=${encodeURIComponent(`Hello OrthoBedroom, I'm interested in the ${product.shortName} mattress.`)}`} target="_blank" rel="noopener noreferrer">
+                  Ask about {product.shortName} on WhatsApp
+                </a>
+              </div>
+              {product.copy?.notice ? <p className={styles.productNotice}>{product.copy.notice}</p> : null}
+            </aside>
+          ) : (
           <aside className={styles.buyCard} aria-label="Product purchase options">
           <label>
             Size
@@ -418,30 +431,34 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             <img src="/payments/apple-pay.svg" alt="Apple Pay" />
             <img src="/payments/google-pay.svg" alt="Google Pay" />
           </div>
+          {product.copy?.notice ? <p className={styles.productNotice}>{product.copy.notice}</p> : null}
           </aside>
+          )}
         </div>
       </section>
 
       <section className={styles.textInsert} aria-labelledby="insert-title">
         <div className={styles.textInsertCopy}>
-          <p className={styles.kicker}>Free UK delivery &bull; 60-night trial &bull; WhatsApp support</p>
-          <h2 id="insert-title">Why choose {product.shortName}?</h2>
+          <p className={styles.kicker}>{product.copy?.insertKicker ?? "Free UK delivery • 60-night trial • WhatsApp support"}</p>
+          <h2 id="insert-title">{product.copy?.whyChooseTitle ?? `Why choose ${product.shortName}?`}</h2>
           {(product.whyChoose?.length ? product.whyChoose : [product.description]).map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>
           ))}
         </div>
       </section>
 
-      <CustomerReviews
-        title="What Our Customers Say"
-        intro={`Verified feedback from customers who chose ${product.shortName}.`}
-        reviews={customerReviews}
-      />
+      {!product.comingSoon ? (
+        <CustomerReviews
+          title="What Our Customers Say"
+          intro={`Verified feedback from customers who chose ${product.shortName}.`}
+          reviews={customerReviews}
+        />
+      ) : null}
 
       <section className={styles.faq} aria-labelledby="faq-title">
         <div className={styles.faqHeader}>
           <h2 id="faq-title">Frequently Asked Questions</h2>
-          <p>Helpful answers about comfort, delivery, support, and caring for your mattress.</p>
+          <p>{product.copy?.faqIntro ?? "Helpful answers about comfort, delivery, support, and caring for your mattress."}</p>
           <Link className={styles.faqHeaderLink} href="/faq/"><span style={{ textTransform: "none" }}>View all FAQs</span></Link>
         </div>
         <ProductFaq faqs={faqItems} />

@@ -9,6 +9,22 @@ export type MattressProduct = {
   heroDescription?: string;
   /** Main selling point, shown as a highlighted box near the top of the product page. */
   highlight?: { title: string; text: string };
+  /** Not on sale yet (no confirmed prices): the page shows "price coming soon" instead of the basket, and the
+   *  product stays out of listings. Becomes purchasable once a WooCommerce product with this slug exists. */
+  comingSoon?: boolean;
+  /** Page wording that differs per product (falls back to the Ortho range's wording). */
+  copy?: {
+    seoTitle?: string;
+    metaDescription?: string;
+    /** Line above "Why choose …", e.g. "UK made • 1-year warranty". */
+    insertKicker?: string;
+    whyChooseTitle?: string;
+    featuresHeading?: string;
+    faqIntro?: string;
+    deliveryTitle?: string;
+    /** Note under the buy box, e.g. "Mattress only…". */
+    notice?: string;
+  };
   /** 360° View frames: photos taken all the way round the mattress, in order (e.g. 36 shots, 10° apart). */
   spin360?: Array<{ src: string; alt: string }>;
   image: string;
@@ -466,6 +482,11 @@ const CARD_COPY: Record<string, { type: string; feature: string }> = {
   "classic-ortho": { type: "Orthopaedic Coil Spring Mattress", feature: "Luxury feel fabric" },
   "hampton-ortho": { type: "Adaptive Memory Foam Layer", feature: "Orthopaedic spring" },
   "deluxe-ortho": { type: "Orthopaedic Coil Spring Mattress", feature: "Luxurious coir filling" },
+  "air-flow-2000-pocket-sprung-mattress": { type: "2000 Pocket Sprung Pillow Top", feature: "Deep memory foam layer" },
+  "ella-3000-pocket-sprung-mattress": { type: "3000 Pocket Sprung Mattress", feature: "Cooling gel & memory foam" },
+  "harmony-1000-pocket-sprung-mattress": { type: "1000 Pocket Sprung Mattress", feature: "Generous memory foam layer" },
+  "mirage-firm-2000-pocket-sprung-mattress": { type: "2000 Pocket Sprung Mattress", feature: "Three foam layers" },
+  "newby-medium-pocket-sprung-mattress": { type: "1000 Pocket Sprung Mattress", feature: "Memory foam comfort layer" },
 };
 export function getCardCopy(slug: string) {
   return CARD_COPY[slug] ?? { type: "Orthopaedic Coil Spring Mattress", feature: "Wire edge support" };

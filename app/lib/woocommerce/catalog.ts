@@ -1,6 +1,7 @@
 // Storefront entry point: WooCommerce is the source of truth for products, with the local catalogue as a
 // safety net so a missing category, empty catalogue or API outage never breaks the build or the shop.
 import { orthoMattressProducts, type MattressProduct } from "@/app/data/mattressProducts";
+import { pocketSprungProducts } from "@/app/data/pocketSprungProducts";
 import { getWooCategoryBySlug, getWooProductVariations, getWooProducts } from "./api";
 import { isWooConfigured, WooCommerceError } from "./client";
 import { mapWooProduct } from "./mapper";
@@ -85,8 +86,11 @@ function withLocalPhotos(woo: MattressProduct, local: MattressProduct): Mattress
   };
 }
 
+/** Every product with local editorial content (Ortho range + pocket sprung range). */
+const LOCAL_PRODUCTS = [...orthoMattressProducts, ...pocketSprungProducts];
+
 function withLocalContent(wooProduct: MattressProduct): MattressProduct {
-  const local = orthoMattressProducts.find((product) => product.slug === wooProduct.slug);
+  const local = LOCAL_PRODUCTS.find((product) => product.slug === wooProduct.slug);
   if (!local) return wooProduct;
   const woo = withLocalPhotos(wooProduct, local);
   return {
@@ -100,13 +104,22 @@ function withLocalContent(wooProduct: MattressProduct): MattressProduct {
     features: woo.features.length ? woo.features : local.features,
     faqs: woo.faqs.length ? woo.faqs : local.faqs,
     bestFor: local.bestFor,
+    // In WooCommerce (so it has prices): on sale, even if the local record still says "coming soon".
+    comingSoon: false,
   };
 }
 
-/** The store's mattress catalogue (WooCommerce, merged with local content; local catalogue as fallback). */
-export async function getStoreCatalog(): Promise<CatalogResult> {
+/**
+ * The store's mattress catalogue (WooCommerce, merged with local content; local catalogue as fallback).
+ * Products not in WooCommerce yet ("coming soon": no prices) are left out of listings; product pages ask for them
+ * with includeComingSoon so they can still be reviewed by link.
+ */
+export async function getStoreCatalog(options: { includeComingSoon?: boolean } = {}): Promise<CatalogResult> {
   const result = await getCatalogProducts(WOO_MATTRESS_CATEGORY, orthoMattressProducts);
-  return result.source === "woocommerce" ? { ...result, products: result.products.map(withLocalContent) } : result;
+  const products = result.source === "woocommerce" ? result.products.map(withLocalContent) : result.products;
+  if (!options.includeComingSoon) return { ...result, products };
+  const comingSoon = pocketSprungProducts.filter((local) => !products.some((product) => product.slug === local.slug));
+  return { ...result, products: [...products, ...comingSoon] };
 }
 
 /** Public WooCommerce site URL for browser-side cart requests (not a secret; null when not configured). */
