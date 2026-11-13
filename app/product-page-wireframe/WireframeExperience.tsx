@@ -220,7 +220,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
         <div className={styles.leftColumn}>
           <div className={styles.galleryCard}>
           <div className={styles.media}>
-            {/* Only when there is a real saving (the pocket sprung range has none). */}
+            {/* Only when there is a real saving (WooCommerce sale price below the RRP). */}
             {!product.comingSoon && sizes.some((option) => option.compare > option.price + 0.004) ? <span className={styles.saleBadge}>-15%</span> : null}
             <button
               type="button"

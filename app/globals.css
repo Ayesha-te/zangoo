@@ -2473,9 +2473,9 @@ footer h2{margin:0 0 10px!important;font-family:var(--sans)!important;font-size:
 .nav-links .mega-links a.mega-link{text-decoration:none}
 .mega-products-panel .mega-products{margin-top:0}
 
-/* Trust bar: one row stops fitting below ~820px, so it becomes two centred rows at a fixed height:
+/* Trust bar: one row (14px text) stops fitting below ~1000px, so it becomes two centred rows at a fixed height:
    --nav grows by the same 12px (44px -> 56px bar) so the fixed header never overlaps page content. */
-@media(max-width:860px){
+@media(max-width:1000px){
   :root{--nav:154px}
   .site-trust-bar{height:56px}
   .site-trust-bar-in{flex-wrap:wrap;align-content:center;justify-content:center;gap:4px 16px;padding:0 16px;overflow:hidden}

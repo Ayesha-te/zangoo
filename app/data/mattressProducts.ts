@@ -483,19 +483,20 @@ export const formatGBP = (value: number) => `£${value.toFixed(2)}`;
  * Short card copy per mattress (catalogue cards, basket, wishlist, checkout): the type line under the name and
  * the third feature row. Client wording, 03/11/2026.
  */
-const CARD_COPY: Record<string, { type: string; feature: string }> = {
+const CARD_COPY: Record<string, { type: string; feature: string; finish?: string; depth?: string }> = {
   "capri-ortho-mattress": { type: "Orthopaedic Coil Spring Mattress", feature: "Wire edge support" },
   "classic-ortho": { type: "Orthopaedic Coil Spring Mattress", feature: "Luxury feel fabric" },
   "hampton-ortho": { type: "Adaptive Memory Foam Layer", feature: "Orthopaedic spring" },
   "deluxe-ortho": { type: "Orthopaedic Coil Spring Mattress", feature: "Luxurious coir filling" },
-  "air-flow-2000-pocket-sprung-mattress": { type: "2000 Pocket Sprung Pillow Top", feature: "Deep memory foam layer" },
-  "ella-3000-pocket-sprung-mattress": { type: "3000 Pocket Sprung Mattress", feature: "Cooling gel & memory foam" },
-  "harmony-1000-pocket-sprung-mattress": { type: "1000 Pocket Sprung Mattress", feature: "Generous memory foam layer" },
-  "mirage-firm-2000-pocket-sprung-mattress": { type: "2000 Pocket Sprung Mattress", feature: "Three foam layers" },
+  "air-flow-2000-pocket-sprung-mattress": { type: "2000 Pocket Sprung Pillow Top", feature: "Deep memory foam layer", finish: "Quilted finish", depth: "Approx. 28cm deep" },
+  "ella-3000-pocket-sprung-mattress": { type: "3000 Pocket Sprung Mattress", feature: "Cooling gel & memory foam", finish: "Quilted finish", depth: "Approx. 31cm deep" },
+  "harmony-1000-pocket-sprung-mattress": { type: "1000 Pocket Sprung Mattress", feature: "Generous memory foam layer", finish: "Deep-tufted", depth: "Approx. 31cm deep" },
+  "mirage-firm-2000-pocket-sprung-mattress": { type: "2000 Pocket Sprung Mattress", feature: "Three foam layers", depth: "Approx. 31cm deep" },
   "newby-medium-pocket-sprung-mattress": { type: "1000 Pocket Sprung Mattress", feature: "Memory foam comfort layer" },
 };
 export function getCardCopy(slug: string) {
-  return CARD_COPY[slug] ?? { type: "Orthopaedic Coil Spring Mattress", feature: "Wire edge support" };
+  const copy = CARD_COPY[slug] ?? { type: "Orthopaedic Coil Spring Mattress", feature: "Wire edge support" };
+  return { finish: "Hand-tufted", depth: "Approx. 26cm deep", ...copy };
 }
 
 /** Regular price, sale price and saving for one size of a product (size is case-insensitive). */

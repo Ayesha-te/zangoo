@@ -18,11 +18,12 @@ export const AlertIcon = (props: SVGProps<SVGSVGElement>) => <Icon {...props}><c
 
 /* Same glyphs the product cards use in the mattress catalogue. */
 export function ProductFeatures({ turnable = true, slug = "" }: { turnable?: boolean; slug?: string }) {
+  const copy = getCardCopy(slug);
   const features = [
     ["↻", turnable ? "Double-sided" : "Single-sided"],
-    ["✣", "Hand-tufted"],
-    ["▧", getCardCopy(slug).feature],
-    ["◇", "Approx. 26cm deep"],
+    ["✣", copy.finish],
+    ["▧", copy.feature],
+    ["◇", copy.depth],
   ];
   return <ul className="commerce-features">{features.map(([glyph, label]) => <li key={label}><i aria-hidden="true">{glyph}</i><span>{label}</span></li>)}</ul>;
 }

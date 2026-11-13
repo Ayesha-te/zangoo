@@ -152,9 +152,9 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
                   <span className={styles.mattressFeel}>{getCardCopy(mattress.slug).type}</span>
                   <span className={styles.mattressSpecs}>
                     <span><span aria-hidden="true">↻</span>{mattress.compareSpecs.turnable ? "Double-sided" : "Single-sided"}</span>
-                    <span><span aria-hidden="true">✣</span>Hand-tufted</span>
+                    <span><span aria-hidden="true">✣</span>{getCardCopy(mattress.slug).finish}</span>
                     <span><span aria-hidden="true">▧</span>{getCardCopy(mattress.slug).feature}</span>
-                    <span><span aria-hidden="true">◇</span>Approx. 26cm deep</span>
+                    <span><span aria-hidden="true">◇</span>{getCardCopy(mattress.slug).depth}</span>
                   </span>
                   <CatalogStockNote count={mattress.stockCount} />
                   <span className={styles.mattressPrice}>
