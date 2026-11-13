@@ -147,14 +147,15 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
   const sizeIndependentIndexes = gallery
     .map((_, index) => index)
     .filter((index) => index !== 0 && !allSizeIndexes.has(index));
-  const thumbnailIndexes = [
+  // Each photo once (a size can use the main photo, e.g. WooCommerce variations without their own image).
+  const thumbnailIndexes = [...new Set([
     0,
     ...sizeIndependentIndexes,
     ...sizeIndexes,
     ...gallery
       .map((_, index) => index)
       .filter((index) => index !== 0 && !sizeIndependentIndexes.includes(index) && !sizeIndexes.includes(index)),
-  ];
+  ])];
   // Photo saved to the basket / favourites: the selected size's main photo.
   const sizeImage = gallery[sizeIndexes[0] ?? 0] ?? gallery[0];
 
