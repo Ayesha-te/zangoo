@@ -63,12 +63,12 @@ export default async function CollectionProductPage({ params }: ProductPageProps
     "Back Pain",
     "Side Sleepers",
     "Orthopaedic",
-    "Non-orthopaedic",
+    "Pocket Spring",
     "Turnable / Double-Sided",
     "Stomach Sleepers",
     "Heavy Sleepers (90kg+)",
   ];
-  const feelFilters = ["Medium to Firm", "Firm", "Extra Firm"];
+  const feelFilters = ["Medium", "Medium to Firm", "Firm", "Firm to Extra Firm", "Extra Firm"];
   const sizeFilters = ["Single", "Double", "King"];
   const mattressGuides = [
     {

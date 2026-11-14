@@ -61,8 +61,9 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
   const filteredProducts = useMemo(() => {
     const matches = products.filter((product) => {
       const needMatch = selectedNeed.length === 0 || selectedNeed.some((filter) => {
-        if (filter === "Orthopaedic") return true;
-        if (filter === "Non-orthopaedic") return false;
+        // Ortho range vs the pocket spring range (layout "pocket").
+        if (filter === "Orthopaedic") return product.layout !== "pocket";
+        if (filter === "Pocket Spring") return product.layout === "pocket";
         return product.bestFor.includes(filter);
       });
       const feelMatch = selectedFeel.length === 0 || selectedFeel.includes(product.firmness);

@@ -1,5 +1,57 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    {
+      "source": "/collections/bedroom/mattresses/air-flow-2000-pocket-sprung-mattress",
+      "destination": "/collections/bedroom/mattresses/air-flow-2000-pocket-spring-mattress/",
+      "permanent": true
+    },
+    {
+      "source": "/collections/bedroom/mattresses/air-flow-2000-pocket-sprung-mattress/",
+      "destination": "/collections/bedroom/mattresses/air-flow-2000-pocket-spring-mattress/",
+      "permanent": true
+    },
+    {
+      "source": "/collections/bedroom/mattresses/ella-3000-pocket-sprung-mattress",
+      "destination": "/collections/bedroom/mattresses/ella-3000-pocket-spring-mattress/",
+      "permanent": true
+    },
+    {
+      "source": "/collections/bedroom/mattresses/ella-3000-pocket-sprung-mattress/",
+      "destination": "/collections/bedroom/mattresses/ella-3000-pocket-spring-mattress/",
+      "permanent": true
+    },
+    {
+      "source": "/collections/bedroom/mattresses/harmony-1000-pocket-sprung-mattress",
+      "destination": "/collections/bedroom/mattresses/harmony-1000-pocket-spring-mattress/",
+      "permanent": true
+    },
+    {
+      "source": "/collections/bedroom/mattresses/harmony-1000-pocket-sprung-mattress/",
+      "destination": "/collections/bedroom/mattresses/harmony-1000-pocket-spring-mattress/",
+      "permanent": true
+    },
+    {
+      "source": "/collections/bedroom/mattresses/mirage-firm-2000-pocket-sprung-mattress",
+      "destination": "/collections/bedroom/mattresses/mirage-firm-2000-pocket-spring-mattress/",
+      "permanent": true
+    },
+    {
+      "source": "/collections/bedroom/mattresses/mirage-firm-2000-pocket-sprung-mattress/",
+      "destination": "/collections/bedroom/mattresses/mirage-firm-2000-pocket-spring-mattress/",
+      "permanent": true
+    },
+    {
+      "source": "/collections/bedroom/mattresses/newby-medium-pocket-sprung-mattress",
+      "destination": "/collections/bedroom/mattresses/newby-1000-pocket-spring-mattress/",
+      "permanent": true
+    },
+    {
+      "source": "/collections/bedroom/mattresses/newby-medium-pocket-sprung-mattress/",
+      "destination": "/collections/bedroom/mattresses/newby-1000-pocket-spring-mattress/",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/wc-store/(.*)",

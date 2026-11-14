@@ -488,11 +488,11 @@ const CARD_COPY: Record<string, { type: string; feature: string; finish?: string
   "classic-ortho": { type: "Orthopaedic Coil Spring Mattress", feature: "Luxury feel fabric" },
   "hampton-ortho": { type: "Adaptive Memory Foam Layer", feature: "Orthopaedic spring" },
   "deluxe-ortho": { type: "Orthopaedic Coil Spring Mattress", feature: "Luxurious coir filling" },
-  "air-flow-2000-pocket-sprung-mattress": { type: "2000 Pocket Sprung Pillow Top", feature: "Deep memory foam layer", finish: "Quilted finish", depth: "Approx. 28cm deep" },
-  "ella-3000-pocket-sprung-mattress": { type: "3000 Pocket Sprung Mattress", feature: "Cooling gel & memory foam", finish: "Quilted finish", depth: "Approx. 31cm deep" },
-  "harmony-1000-pocket-sprung-mattress": { type: "1000 Pocket Sprung Mattress", feature: "Generous memory foam layer", finish: "Deep-tufted", depth: "Approx. 31cm deep" },
-  "mirage-firm-2000-pocket-sprung-mattress": { type: "2000 Pocket Sprung Mattress", feature: "Three foam layers", depth: "Approx. 31cm deep" },
-  "newby-medium-pocket-sprung-mattress": { type: "1000 Pocket Sprung Mattress", feature: "Memory foam comfort layer" },
+  "air-flow-2000-pocket-spring-mattress": { type: "2000 Pocket Spring Pillow Top", feature: "Deep memory foam layer", finish: "Quilted finish", depth: "Approx. 28cm deep" },
+  "ella-3000-pocket-spring-mattress": { type: "3000 Pocket Spring Mattress", feature: "Cooling gel & memory foam", finish: "Quilted finish", depth: "Approx. 31cm deep" },
+  "harmony-1000-pocket-spring-mattress": { type: "1000 Pocket Spring Mattress", feature: "Generous memory foam layer", finish: "Deep-tufted", depth: "Approx. 31cm deep" },
+  "mirage-firm-2000-pocket-spring-mattress": { type: "2000 Pocket Spring Mattress", feature: "Three foam layers", depth: "Approx. 31cm deep" },
+  "newby-1000-pocket-spring-mattress": { type: "1000 Pocket Spring Mattress", feature: "Memory foam comfort layer" },
 };
 export function getCardCopy(slug: string) {
   const copy = CARD_COPY[slug] ?? { type: "Orthopaedic Coil Spring Mattress", feature: "Wire edge support" };

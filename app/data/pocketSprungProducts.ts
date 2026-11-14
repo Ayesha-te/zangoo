@@ -1,9 +1,9 @@
 import type { MattressProduct } from "./mattressProducts";
 
-// Pocket sprung range (Air Flow 2000, Ella 3000, Harmony 1000, Mirage 2000, Newby). Wording from the client's
+// Pocket sprung range (Air Flow 2000, Ella 3000, Harmony 1000, Mirage 2000, Newby 1000). Wording from the client's
 // "Website Content Replacement Guide" PDFs (13/11/2026), mapped onto the Capri Ortho page sections.
 // Left out until confirmed, as the guides instruct: 60-night sleep trial, BS 7177 statements and unconfirmed
-// warranty terms (Ella, Harmony, Mirage, Newby). Sizes: Single, Double, King (client price table, 13/11/2026).
+// warranty terms (Ella, Harmony, Mirage, Newby 1000). Sizes: Single, Double, King (client price table, 13/11/2026).
 // Each is "coming soon" until its WooCommerce product (with prices) exists.
 
 const IMG = "/Pocket Sprung Product Images";
@@ -23,7 +23,7 @@ const SIZE_NOTE = `<strong>Please note:</strong> Please check the selected mattr
 
 export const pocketSprungProducts: MattressProduct[] = [
   {
-    slug: "air-flow-2000-pocket-sprung-mattress",
+    slug: "air-flow-2000-pocket-spring-mattress",
     layout: "pocket",
     quickFacts: ["Up to 2,000 Pocket Springs", "Memory Foam & Pillow Top", "28cm Depth", "Firmness: Medium to Firm"],
     love: [
@@ -31,13 +31,13 @@ export const pocketSprungProducts: MattressProduct[] = [
       { icon: "pillow", label: "Comfort Fillings", title: "Memory Foam & Pillow Top", text: "Pressure-responsive memory foam and a plush pillow top add cushioning above the springs." },
       { icon: "firmness", label: "Firmness", title: "Medium to Firm", text: "A supportive feel complemented by cushioning from the upper comfort layers." },
     ],
-    name: "Air Flow 2000 Pocket Sprung Mattress",
+    name: "Air Flow 2000 Pocket Spring Mattress",
     shortName: "Air Flow 2000",
     price: "Price coming soon",
     firmness: "Medium to Firm",
     comingSoon: true,
     copy: {
-      seoTitle: "2000 Pocket Sprung Mattress | Air Flow 2000 Pillow Top",
+      seoTitle: "2000 Pocket Spring Mattress | Air Flow 2000 Pillow Top",
       metaDescription: "Shop the Air Flow 2000 pocket sprung mattress with up to 2,000 pocket springs, memory foam and a plush pillow top. Single, Double and King sizes.",
       insertKicker: "UK made • 1-year warranty",
       whyChooseTitle: "Why Choose the Air Flow 2000 Mattress?",
@@ -89,9 +89,9 @@ export const pocketSprungProducts: MattressProduct[] = [
     ],
     faqs: [
       { question: "How firm is the Air Flow 2000 mattress?", answer: "The Air Flow 2000 is rated medium to firm. Its pocket spring system provides responsive underlying support, while the memory foam and plush pillow top add cushioning at the surface. The overall feel may vary depending on body weight, sleeping position and personal preference." },
-      { question: "Is a 2000 pocket sprung mattress good?", answer: "A 2000 pocket sprung mattress can be a good option for sleepers looking for responsive support. Pocket springs respond independently to pressure, while comfort layers influence the overall mattress feel. However, spring count alone does not determine mattress quality or suitability. Firmness, materials, construction and individual preferences are also important." },
+      { question: "Is a 2000 pocket spring mattress good?", answer: "A 2000 pocket sprung mattress can be a good option for sleepers looking for responsive support. Pocket springs respond independently to pressure, while comfort layers influence the overall mattress feel. However, spring count alone does not determine mattress quality or suitability. Firmness, materials, construction and individual preferences are also important." },
       { question: "Is the Air Flow 2000 suitable for side sleepers?", answer: "The Air Flow 2000 combines medium-to-firm support with a cushioned memory foam layer and plush pillow top. Some side sleepers may appreciate this balance, although those who prefer a particularly soft mattress may find the underlying feel firmer than expected. Suitability depends on body weight and personal comfort preferences." },
-      { question: "What is a pocket sprung pillow top mattress?", answer: "A pocket sprung pillow top mattress combines individually wrapped pocket springs with an additional cushioned layer at the sleeping surface. The springs respond independently to pressure, while the pillow top adds surface comfort. The Air Flow 2000 also includes a deep memory foam layer to complement its pocket spring construction." },
+      { question: "What is a pocket spring pillow top mattress?", answer: "A pocket sprung pillow top mattress combines individually wrapped pocket springs with an additional cushioned layer at the sleeping surface. The springs respond independently to pressure, while the pillow top adds surface comfort. The Air Flow 2000 also includes a deep memory foam layer to complement its pocket spring construction." },
       { question: "Should I flip or rotate the Air Flow 2000 mattress?", answer: "The Air Flow 2000 is a single-sided mattress and should not be flipped over. Keep the designated sleeping surface facing upwards and follow the manufacturer’s care instructions for any recommended rotation schedule." },
       { question: "Does the Air Flow 2000 include the divan base or headboard?", answer: "No. The Air Flow 2000 is sold as a mattress only. The divan base, headboard, bedding and other bedroom accessories shown in the product imagery are not included." },
     ],
@@ -106,12 +106,12 @@ export const pocketSprungProducts: MattressProduct[] = [
       { title: "Responsive pocket spring support", body: "Up to 2,000 individually pocketed springs respond independently to pressure and movement.", points: ["Up to 2,000 pocket springs", "Medium-to-firm support", "Single-sided construction"] },
       { title: "Memory foam and pillow top comfort", body: "A deep memory foam layer and a plush pillow top add cushioning at the sleeping surface.", points: ["Deep memory foam layer", "Plush pillow top", "Quilted knitted fabric"] },
     ],
-    bestFor: ["Non-orthopaedic", "Side Sleepers"],
+    bestFor: ["Pocket Spring", "Side Sleepers"],
     stockCount: 1000,
     compareSpecs: { springType: "Up to 2,000 pocket springs", comfortLayer: "Memory foam & pillow top", cover: "Quilted knitted fabric", turnable: false, weight: "To be confirmed" },
   },
   {
-    slug: "ella-3000-pocket-sprung-mattress",
+    slug: "ella-3000-pocket-spring-mattress",
     layout: "pocket",
     quickFacts: ["Up to 3,000 Pocket Springs", "Cooling Gel & Memory Foam", "31cm Depth", "Firmness: Firm to Extra Firm"],
     love: [
@@ -119,13 +119,13 @@ export const pocketSprungProducts: MattressProduct[] = [
       { icon: "cooling", label: "Comfort Fillings", title: "Cooling Gel & Memory Foam", text: "Four foam layers, including cooling gel and memory foam, add comfort above the springs." },
       { icon: "firmness", label: "Firmness", title: "Firm to Extra Firm", text: "Designed for sleepers who prefer a noticeably firmer mattress surface." },
     ],
-    name: "Ella 3000 Pocket Sprung Mattress",
+    name: "Ella 3000 Pocket Spring Mattress",
     shortName: "Ella 3000",
     price: "Price coming soon",
     firmness: "Firm to Extra Firm",
     comingSoon: true,
     copy: {
-      seoTitle: "3000 Pocket Sprung Mattress | Ella 3000 Firm Gel Foam",
+      seoTitle: "3000 Pocket Spring Mattress | Ella 3000 Firm Gel Foam",
       metaDescription: "Discover the Ella 3000 pocket sprung mattress with up to 3,000 springs, cooling gel, memory foam and firm-to-extra-firm support. UK handcrafted.",
       insertKicker: "UK handcrafted • Firm-to-extra-firm support • Cooling gel & memory foam",
       whyChooseTitle: "Why Choose the Ella 3000 Mattress?",
@@ -170,9 +170,9 @@ export const pocketSprungProducts: MattressProduct[] = [
     ],
     faqs: [
       { question: "Is the Ella 3000 a firm mattress?", answer: "Yes. The Ella 3000 is rated firm to extra firm, making it an option for sleepers who prefer a more supportive feel with less surface softness. Its foam layers add cushioning, but individual perceptions of firmness may vary." },
-      { question: "Is a 3000 pocket sprung mattress good?", answer: "A 3000 pocket sprung mattress can be a good choice for those seeking responsive spring support. However, overall mattress comfort depends on much more than spring count, including firmness, comfort layers, construction and individual preferences. The Ella 3000 combines pocket springs with a firm-to-extra-firm feel and multiple foam layers." },
+      { question: "Is a 3000 pocket spring mattress good?", answer: "A 3000 pocket sprung mattress can be a good choice for those seeking responsive spring support. However, overall mattress comfort depends on much more than spring count, including firmness, comfort layers, construction and individual preferences. The Ella 3000 combines pocket springs with a firm-to-extra-firm feel and multiple foam layers." },
       { question: "Do more pocket springs make a mattress firmer?", answer: "Not necessarily. Spring count alone does not determine mattress firmness. The spring design, tension, comfort materials and overall construction all influence how a mattress feels. The Ella 3000 has a manufacturer-specified firm-to-extra-firm rating." },
-      { question: "What is foam encapsulation in a pocket sprung mattress?", answer: "Foam encapsulation uses foam reinforcement around the pocket spring unit to help stabilise the mattress perimeter. The Ella 3000 uses a foam-encapsulated design intended to provide edge-to-edge stability." },
+      { question: "What is foam encapsulation in a pocket spring mattress?", answer: "Foam encapsulation uses foam reinforcement around the pocket spring unit to help stabilise the mattress perimeter. The Ella 3000 uses a foam-encapsulated design intended to provide edge-to-edge stability." },
       { question: "Should I flip the Ella 3000 mattress?", answer: "No. The Ella 3000 has a single-sided construction and should be used with its designated sleeping surface facing upwards. Follow the manufacturer’s care instructions for any recommended rotation schedule." },
       { question: "Does the Ella 3000 contain cooling gel and memory foam?", answer: "Yes. The Ella 3000 features four foam layers, including cooling gel and memory foam. These form part of the comfort system above its pocket springs. The presence of cooling gel does not guarantee a particular sleeping temperature for every person." },
     ],
@@ -187,12 +187,12 @@ export const pocketSprungProducts: MattressProduct[] = [
       { title: "Firm pocket spring support", body: "Up to 3,000 pocket springs and a foam-encapsulated perimeter for edge-to-edge stability.", points: ["Up to 3,000 pocket springs", "Firm-to-extra-firm feel", "Foam-encapsulated edges"] },
       { title: "Cooling gel and memory foam", body: "Four foam layers, including cooling gel and memory foam, add cushioning above the springs.", points: ["Four foam layers", "Cooling gel foam", "Quilted knitted fabric"] },
     ],
-    bestFor: ["Non-orthopaedic", "Heavy Sleepers (90kg+)", "Stomach Sleepers"],
+    bestFor: ["Pocket Spring", "Heavy Sleepers (90kg+)", "Stomach Sleepers"],
     stockCount: 1000,
     compareSpecs: { springType: "Up to 3,000 pocket springs", comfortLayer: "4 foam layers incl. cooling gel & memory foam", cover: "Quilted knitted fabric", turnable: false, weight: "To be confirmed" },
   },
   {
-    slug: "harmony-1000-pocket-sprung-mattress",
+    slug: "harmony-1000-pocket-spring-mattress",
     layout: "pocket",
     quickFacts: ["Up to 1,000 Pocket Springs", "Generous Memory Foam", "31cm Depth", "Firmness: Medium to Firm"],
     love: [
@@ -200,13 +200,13 @@ export const pocketSprungProducts: MattressProduct[] = [
       { icon: "foam", label: "Comfort Fillings", title: "Memory Foam", text: "A generous memory foam layer adds cushioning above the pocket spring support system." },
       { icon: "firmness", label: "Firmness", title: "Medium to Firm", text: "Noticeable underlying support with cushioning at the surface." },
     ],
-    name: "Harmony 1000 Pocket Sprung Mattress",
+    name: "Harmony 1000 Pocket Spring Mattress",
     shortName: "Harmony 1000",
     price: "Price coming soon",
     firmness: "Medium to Firm",
     comingSoon: true,
     copy: {
-      seoTitle: "1000 Pocket Sprung Mattress | Harmony Memory Foam",
+      seoTitle: "1000 Pocket Spring Mattress | Harmony Memory Foam",
       metaDescription: "Discover the Harmony 1000 pocket sprung mattress with memory foam, medium-to-firm support and foam-encapsulated sides. UK handcrafted, approx. 31cm deep.",
       insertKicker: "UK handcrafted • Memory foam comfort • 31cm deep",
       whyChooseTitle: "Why Choose the Harmony 1000 Mattress?",
@@ -243,7 +243,7 @@ export const pocketSprungProducts: MattressProduct[] = [
 
         ${SIZE_NOTE} Due to the mattress depth, please also check that your fitted sheets have a suitable pocket depth.
 
-        <strong>Product Type:</strong> Pocket Sprung Memory Foam Mattress · <strong>Firmness:</strong> Medium to Firm · <strong>Construction:</strong> Single-Sided`,
+        <strong>Product Type:</strong> Pocket Spring Memory Foam Mattress · <strong>Firmness:</strong> Medium to Firm · <strong>Construction:</strong> Single-Sided`,
       deliveryReturns: `${DELIVERY}
 
         ${RETURNS}`,
@@ -253,8 +253,8 @@ export const pocketSprungProducts: MattressProduct[] = [
     ],
     faqs: [
       { question: "How firm is the Harmony 1000 mattress?", answer: "Harmony has a medium-to-firm comfort rating. Its pocket spring system provides underlying support, while the generous memory foam layer adds cushioning. The mattress may feel different depending on body weight, sleeping position and personal preference." },
-      { question: "Is a 1000 pocket sprung mattress any good?", answer: "A 1000 pocket sprung mattress can be a good option for sleepers seeking responsive support. Pocket springs react independently to pressure, while the comfort layers influence the overall feel. Spring count alone does not determine quality or comfort. Harmony combines up to 1,000 pocket springs with memory foam and a medium-to-firm rating." },
-      { question: "What does 1000 pocket sprung mean?", answer: "A 1000 pocket sprung mattress is designed around a support system containing approximately 1,000 individually pocketed springs, depending on the manufacturer’s specification. Each spring sits in its own fabric pocket and can respond independently to pressure. Harmony is specified as having up to 1,000 pocket springs; the exact number for each mattress size has not been confirmed." },
+      { question: "Is a 1000 pocket spring mattress any good?", answer: "A 1000 pocket sprung mattress can be a good option for sleepers seeking responsive support. Pocket springs react independently to pressure, while the comfort layers influence the overall feel. Spring count alone does not determine quality or comfort. Harmony combines up to 1,000 pocket springs with memory foam and a medium-to-firm rating." },
+      { question: "What does 1000 pocket spring mean?", answer: "A 1000 pocket sprung mattress is designed around a support system containing approximately 1,000 individually pocketed springs, depending on the manufacturer’s specification. Each spring sits in its own fabric pocket and can respond independently to pressure. Harmony is specified as having up to 1,000 pocket springs; the exact number for each mattress size has not been confirmed." },
       { question: "Does the Harmony 1000 mattress contain memory foam?", answer: "Yes. Harmony includes a generous memory foam comfort layer above its pocket spring support system. Memory foam responds to body pressure and provides additional cushioning, complementing the mattress’s medium-to-firm feel." },
       { question: "Should I flip or rotate the Harmony mattress?", answer: "Harmony is a single-sided mattress and should not be flipped over. Keep the designated sleeping surface facing upwards and follow the manufacturer’s care guidance for any recommended rotation schedule." },
       { question: "What are foam-encapsulated sides on a mattress?", answer: "Foam-encapsulated sides use foam reinforcement around the perimeter of the pocket spring unit. This helps stabilise the mattress edges and support its outer structure. Harmony features foam-encapsulated sides as part of its construction." },
@@ -270,12 +270,12 @@ export const pocketSprungProducts: MattressProduct[] = [
       { title: "Pocket spring support", body: "Up to 1,000 pocket springs with foam-encapsulated sides for edge stability.", points: ["Up to 1,000 pocket springs", "Medium-to-firm feel", "Foam-encapsulated sides"] },
       { title: "Generous memory foam", body: "A generous memory foam layer adds cushioning above the springs, with a deep-tufted knitted finish.", points: ["Memory foam comfort layer", "Deep-tufted finish", "Luxurious knitted fabric"] },
     ],
-    bestFor: ["Non-orthopaedic", "Side Sleepers"],
+    bestFor: ["Pocket Spring", "Side Sleepers"],
     stockCount: 1000,
     compareSpecs: { springType: "Up to 1,000 pocket springs", comfortLayer: "Generous memory foam layer", cover: "Knitted fabric, deep-tufted", turnable: false, weight: "To be confirmed" },
   },
   {
-    slug: "mirage-firm-2000-pocket-sprung-mattress",
+    slug: "mirage-firm-2000-pocket-spring-mattress",
     layout: "pocket",
     quickFacts: ["Up to 2,000 Pocket Springs", "Memory Foam & Deep Support Foam", "31cm Depth", "Firmness: Firm"],
     love: [
@@ -283,16 +283,16 @@ export const pocketSprungProducts: MattressProduct[] = [
       { icon: "foam", label: "Comfort Fillings", title: "Three Foam Layers", text: "Memory foam and deep support foam add cushioning above the pocket spring system." },
       { icon: "firmness", label: "Firmness", title: "Firm", text: "For sleepers who prefer a supportive mattress with a firmer underlying feel." },
     ],
-    name: "Mirage Firm 2000 Pocket Sprung Mattress",
+    name: "Mirage Firm 2000 Pocket Spring Mattress",
     shortName: "Mirage 2000",
     price: "Price coming soon",
     firmness: "Firm",
     comingSoon: true,
     copy: {
-      seoTitle: "Firm 2000 Pocket Sprung Mattress | Mirage Memory Foam",
+      seoTitle: "Firm 2000 Pocket Spring Mattress | Mirage Memory Foam",
       metaDescription: "Discover the Mirage firm 2000 pocket sprung mattress with up to 2,000 springs, memory foam, reinforced edges and hand tufting. UK handcrafted, approx. 31cm deep.",
       insertKicker: "UK handcrafted • Firm pocket spring support • Memory foam comfort",
-      whyChooseTitle: "Why Choose the Mirage Firm Pocket Sprung Mattress?",
+      whyChooseTitle: "Why Choose the Mirage Firm Pocket Spring Mattress?",
       featuresHeading: "Features You’ll Love",
       faqIntro: "Helpful answers about Mirage’s firm support, pocket springs, memory foam, edge construction and mattress care.",
       deliveryTitle: "Delivery, Warranty & Returns",
@@ -327,7 +327,7 @@ export const pocketSprungProducts: MattressProduct[] = [
 
         <strong>Please note:</strong> Please check your selected mattress dimensions against your existing bed frame or divan base before ordering. Dimensions are approximate, and small manufacturing tolerances may apply. For a mattress approximately 31cm deep, check that your fitted sheets have a suitable pocket depth.
 
-        <strong>Mattress Type:</strong> Pocket Sprung Memory Foam Mattress · <strong>Firmness Rating:</strong> Firm · <strong>Construction:</strong> Single-Sided · <strong>Spring Count:</strong> Up to 2,000 Pocket Springs`,
+        <strong>Mattress Type:</strong> Pocket Spring Memory Foam Mattress · <strong>Firmness Rating:</strong> Firm · <strong>Construction:</strong> Single-Sided · <strong>Spring Count:</strong> Up to 2,000 Pocket Springs`,
       deliveryReturns: `${DELIVERY}
 
         • <strong>Returns & Cancellations</strong> - Please review our current Returns Policy for details of cancellation rights, return eligibility, collection or return arrangements, and any applicable charges.`,
@@ -338,12 +338,12 @@ export const pocketSprungProducts: MattressProduct[] = [
       "With its single-sided construction, Mirage offers a practical choice for customers seeking a firm pocket sprung mattress with the additional cushioning of memory foam. The right mattress firmness is a personal decision and should take account of sleeping position, body weight and individual comfort preferences.",
     ],
     faqs: [
-      { question: "How firm is the Mirage 2000 pocket sprung mattress?", answer: "Mirage has a firm comfort rating. It combines a supportive pocket spring system with three foam layers, including memory foam and deep support foam. Although designed to provide a firmer feel, the perceived firmness will vary depending on body weight, sleeping position and personal preference." },
-      { question: "Is a 2000 pocket sprung mattress good?", answer: "A 2000 pocket sprung mattress can be a good option for sleepers who prefer responsive spring support. Individually pocketed springs allow different areas of the mattress to react to pressure. However, spring count alone does not determine comfort or quality. Mirage combines up to 2,000 pocket springs with foam cushioning and a firm comfort rating." },
+      { question: "How firm is the Mirage 2000 pocket spring mattress?", answer: "Mirage has a firm comfort rating. It combines a supportive pocket spring system with three foam layers, including memory foam and deep support foam. Although designed to provide a firmer feel, the perceived firmness will vary depending on body weight, sleeping position and personal preference." },
+      { question: "Is a 2000 pocket spring mattress good?", answer: "A 2000 pocket sprung mattress can be a good option for sleepers who prefer responsive spring support. Individually pocketed springs allow different areas of the mattress to react to pressure. However, spring count alone does not determine comfort or quality. Mirage combines up to 2,000 pocket springs with foam cushioning and a firm comfort rating." },
       { question: "Do more pocket springs make a mattress firmer?", answer: "Not necessarily. Mattress firmness depends on several factors, including spring tension, spring design, foam layers and overall construction. A higher spring count does not automatically mean a firmer mattress. Mirage is rated firm by the manufacturer and incorporates up to 2,000 pocket springs." },
-      { question: "Does the Mirage pocket sprung mattress contain memory foam?", answer: "Yes. Mirage features three foam layers, including memory foam and deep support foam. These materials add cushioning above the pocket spring support system while maintaining the mattress's manufacturer-rated firm feel." },
+      { question: "Does the Mirage pocket spring mattress contain memory foam?", answer: "Yes. Mirage features three foam layers, including memory foam and deep support foam. These materials add cushioning above the pocket spring support system while maintaining the mattress's manufacturer-rated firm feel." },
       { question: "Should I flip or rotate the Mirage mattress?", answer: "Mirage has a single-sided construction and should not be flipped over. Always keep the designated sleeping surface facing upwards. Follow the manufacturer's care instructions for any recommended rotation schedule." },
-      { question: "What is foam encapsulation in a pocket sprung mattress?", answer: "Foam encapsulation uses reinforced foam around the perimeter of a pocket spring unit. It is designed to improve structural stability towards the mattress edges. Mirage incorporates a foam-encapsulated perimeter as part of its support system." },
+      { question: "What is foam encapsulation in a pocket spring mattress?", answer: "Foam encapsulation uses reinforced foam around the perimeter of a pocket spring unit. It is designed to improve structural stability towards the mattress edges. Mirage incorporates a foam-encapsulated perimeter as part of its support system." },
     ],
     ...photos("Mirage 2000", ["Mirage pocket sprung mattress with hand-tufted knitted fabric sleeping surface", "Mirage firm pocket sprung mattress on a divan base", "Mirage pocket sprung mattress with a deep hand-tufted mattress profile"]),
     specs: [
@@ -356,12 +356,12 @@ export const pocketSprungProducts: MattressProduct[] = [
       { title: "Firm pocket spring support", body: "Firm pocket sprung mattress with up to 2,000 springs, memory foam cushioning and reinforced edges.", points: ["Up to 2,000 pocket springs", "Firm comfort rating", "Foam-encapsulated edges"] },
       { title: "Memory foam and deep support foam", body: "Three foam layers add cushioning above the springs, finished with traditional hand tufting.", points: ["Three foam layers", "Hand-tufted finish", "Soft-touch knitted fabric"] },
     ],
-    bestFor: ["Non-orthopaedic", "Back Pain"],
+    bestFor: ["Pocket Spring", "Back Pain"],
     stockCount: 1000,
     compareSpecs: { springType: "Up to 2,000 pocket springs", comfortLayer: "3 foam layers incl. memory foam", cover: "Soft-touch knitted fabric", turnable: false, weight: "To be confirmed" },
   },
   {
-    slug: "newby-medium-pocket-sprung-mattress",
+    slug: "newby-1000-pocket-spring-mattress",
     layout: "pocket",
     quickFacts: ["Up to 1,000 Pocket Springs", "Memory Foam", "26cm Depth", "Firmness: Medium"],
     love: [
@@ -369,25 +369,25 @@ export const pocketSprungProducts: MattressProduct[] = [
       { icon: "foam", label: "Comfort Fillings", title: "Memory Foam", text: "A memory foam comfort layer adds body-contouring cushioning above the springs." },
       { icon: "firmness", label: "Firmness", title: "Medium", text: "A balanced feel between softer cushioning and firmer support." },
     ],
-    name: "Newby Medium Pocket Sprung Memory Foam Mattress",
-    shortName: "Newby",
+    name: "Newby 1000 Pocket Spring Memory Foam Mattress",
+    shortName: "Newby 1000",
     price: "Price coming soon",
     firmness: "Medium",
     comingSoon: true,
     copy: {
-      seoTitle: "Newby Medium Pocket Sprung Mattress | Memory Foam",
-      metaDescription: "Discover the Newby medium pocket sprung mattress with memory foam, up to 1,000 pocket springs and hand-tufted comfort. Made in the UK, approx. 26cm deep.",
+      seoTitle: "Newby 1000 Pocket Spring Mattress | Memory Foam",
+      metaDescription: "Discover the Newby 1000 medium pocket sprung mattress with memory foam, up to 1,000 pocket springs and hand-tufted comfort. Made in the UK, approx. 26cm deep.",
       insertKicker: "Made in the UK • Memory foam comfort • Medium feel",
-      whyChooseTitle: "Why Choose the Newby Medium Pocket Sprung Mattress?",
+      whyChooseTitle: "Why Choose the Newby 1000 Pocket Spring Mattress?",
       featuresHeading: "Features You’ll Love",
-      faqIntro: "Helpful answers about Newby’s medium feel, pocket springs, memory foam and mattress care.",
+      faqIntro: "Helpful answers about Newby 1000’s medium feel, pocket springs, memory foam and mattress care.",
       deliveryTitle: "Delivery, Warranty & Returns",
       notice: "Mattress only. Bed base, headboard, bedding and decorative accessories are not included.",
     },
     heroDescription:
-      "The Newby is a UK-made medium pocket sprung mattress combining up to 1,000 individually wrapped pocket springs with a memory foam comfort layer. Designed for a balanced feel, it features wire-edge support, deep polyester fillings and a hand-tufted finish. Its single-sided construction offers convenient mattress care, while the approximately 26cm depth provides a substantial sleeping surface. Available as a mattress only, without a bed base or headboard.",
+      "The Newby 1000 is a UK-made medium pocket sprung mattress combining up to 1,000 individually wrapped pocket springs with a memory foam comfort layer. Designed for a balanced feel, it features wire-edge support, deep polyester fillings and a hand-tufted finish. Its single-sided construction offers convenient mattress care, while the approximately 26cm depth provides a substantial sleeping surface. Available as a mattress only, without a bed base or headboard.",
     description:
-      "The Newby is a medium pocket sprung mattress designed to combine responsive spring support with the cushioning comfort of memory foam. Manufactured in the UK, it features up to 1,000 individually wrapped pocket springs, wire-edge support, deep polyester fillings and a traditional hand-tufted finish. Its single-sided design means the mattress does not need flipping. With an approximate depth of 26cm, Newby is a practical choice for sleepers seeking a balanced mattress feel with the added comfort of memory foam.",
+      "The Newby 1000 is a medium pocket sprung mattress designed to combine responsive spring support with the cushioning comfort of memory foam. Manufactured in the UK, it features up to 1,000 individually wrapped pocket springs, wire-edge support, deep polyester fillings and a traditional hand-tufted finish. Its single-sided design means the mattress does not need flipping. With an approximate depth of 26cm, Newby 1000 is a practical choice for sleepers seeking a balanced mattress feel with the added comfort of memory foam.",
     bullets: ["Balanced medium comfort", "Up to 1,000 individually wrapped pocket springs", "Wire-edge support for mattress structure", "Memory foam comfort layer and hand-tufted finish"],
     accordionContent: {
       features: `• <strong>Medium comfort feel</strong> - Designed for sleepers who prefer a balanced feel between softer cushioning and firmer support.
@@ -400,13 +400,13 @@ export const pocketSprungProducts: MattressProduct[] = [
         • <strong>Single-sided design</strong> - Designed to be slept on one side without the need for flipping.
         • <strong>Approx. 26cm mattress depth</strong> - Offers a substantial mattress profile.
         • <strong>Made in the UK</strong> - Manufactured in the United Kingdom.`,
-      benefits: `• <strong>Balanced everyday comfort</strong> - Newby combines a medium mattress feel with a cushioning memory foam layer for sleepers who prefer neither an especially soft nor an extra-firm surface.
+      benefits: `• <strong>Balanced everyday comfort</strong> - Newby 1000 combines a medium mattress feel with a cushioning memory foam layer for sleepers who prefer neither an especially soft nor an extra-firm surface.
         • <strong>Responsive pocket spring support</strong> - Individually wrapped springs respond to pressure independently, helping the mattress adapt to movement and different areas of the body.
         • <strong>Cushioning where you need it</strong> - The memory foam layer adds contouring comfort around the body's contact points.
         • <strong>Supportive edge construction</strong> - Wire-edge support helps provide structural support around the mattress perimeter.
         • <strong>Convenient single-sided care</strong> - There is no need to flip the mattress, making regular care more straightforward.
         • <strong>Traditional UK craftsmanship</strong> - Hand tufting, deep fillings and UK manufacturing combine traditional mattress construction with modern pocket springs.`,
-      dimensions: `Newby is designed for standard UK mattress sizes. Please select from the available size options.
+      dimensions: `Newby 1000 is designed for standard UK mattress sizes. Please select from the available size options.
 
         • <strong>Single</strong> - 90 × 190cm
         • <strong>Double</strong> - 135 × 190cm
@@ -421,17 +421,17 @@ export const pocketSprungProducts: MattressProduct[] = [
         ${RETURNS}`,
     },
     whyChoose: [
-      "The Newby Medium Pocket Sprung Memory Foam Mattress is designed for sleepers looking for balanced support with a comfortable, cushioning surface. Combining up to 1,000 individually wrapped pocket springs with a memory foam comfort layer, Newby offers a responsive sleeping surface with the added contouring feel of memory foam. Wire-edge support helps support the mattress perimeter, while deep polyester fillings and traditional hand tufting complete its carefully constructed design. Made in the UK and measuring approximately 26cm deep, this single-sided mattress is a practical option for everyday comfort. Whether you're looking for a medium pocket sprung mattress for your main bedroom or exploring pocket spring and memory foam options, Newby brings together responsive support, cushioning and traditional mattress craftsmanship.",
+      "The Newby 1000 Pocket Spring Memory Foam Mattress is designed for sleepers looking for balanced support with a comfortable, cushioning surface. Combining up to 1,000 individually wrapped pocket springs with a memory foam comfort layer, Newby 1000 offers a responsive sleeping surface with the added contouring feel of memory foam. Wire-edge support helps support the mattress perimeter, while deep polyester fillings and traditional hand tufting complete its carefully constructed design. Made in the UK and measuring approximately 26cm deep, this single-sided mattress is a practical option for everyday comfort. Whether you're looking for a medium pocket sprung mattress for your main bedroom or exploring pocket spring and memory foam options, Newby 1000 brings together responsive support, cushioning and traditional mattress craftsmanship.",
     ],
     faqs: [
-      { question: "How firm is the Newby mattress?", answer: "The Newby has a medium comfort rating. It is designed to provide a balanced feel between cushioning and support, rather than an especially soft or extra-firm sleeping surface. Individual comfort will depend on body weight, sleeping position and personal preference." },
-      { question: "Is the Newby mattress suitable for side sleepers?", answer: "Newby may appeal to side sleepers who prefer a medium mattress with a cushioning comfort layer. Its pocket springs provide responsive support, while the memory foam adds contouring comfort. Suitability depends on individual body shape, weight and personal preference." },
-      { question: "How many pocket springs does the Newby mattress have?", answer: "Newby features up to 1,000 individually wrapped pocket springs. The exact number may vary depending on mattress size. Pocket springs respond separately to pressure, helping provide more individualised support across the mattress surface." },
-      { question: "Does the Newby mattress contain memory foam?", answer: "Yes. The Newby combines a pocket spring support system with a memory foam comfort layer. The memory foam adds cushioning and helps the sleeping surface contour to the body." },
-      { question: "Do I need to flip the Newby mattress?", answer: "No. Newby is a single-sided mattress and is not designed to be flipped. Follow the manufacturer's care instructions regarding rotation to help maintain even wear." },
-      { question: "Can I buy the Newby mattress without a bed base?", answer: "Yes. Newby is offered as a mattress-only product. The bed base and headboard shown in lifestyle photographs are not included." },
+      { question: "How firm is the Newby 1000 mattress?", answer: "The Newby 1000 has a medium comfort rating. It is designed to provide a balanced feel between cushioning and support, rather than an especially soft or extra-firm sleeping surface. Individual comfort will depend on body weight, sleeping position and personal preference." },
+      { question: "Is the Newby 1000 mattress suitable for side sleepers?", answer: "Newby 1000 may appeal to side sleepers who prefer a medium mattress with a cushioning comfort layer. Its pocket springs provide responsive support, while the memory foam adds contouring comfort. Suitability depends on individual body shape, weight and personal preference." },
+      { question: "How many pocket springs does the Newby 1000 mattress have?", answer: "Newby 1000 features up to 1,000 individually wrapped pocket springs. The exact number may vary depending on mattress size. Pocket springs respond separately to pressure, helping provide more individualised support across the mattress surface." },
+      { question: "Does the Newby 1000 mattress contain memory foam?", answer: "Yes. The Newby 1000 combines a pocket spring support system with a memory foam comfort layer. The memory foam adds cushioning and helps the sleeping surface contour to the body." },
+      { question: "Do I need to flip the Newby 1000 mattress?", answer: "No. Newby 1000 is a single-sided mattress and is not designed to be flipped. Follow the manufacturer's care instructions regarding rotation to help maintain even wear." },
+      { question: "Can I buy the Newby 1000 mattress without a bed base?", answer: "Yes. Newby 1000 is offered as a mattress-only product. The bed base and headboard shown in lifestyle photographs are not included." },
     ],
-    ...photos("Newby", ["Newby medium pocket sprung mattress with hand-tufted surface", "Newby UK-made pocket sprung mattress in bedroom setting", "Newby mattress showing its hand-tufted sleeping surface"]),
+    ...photos("Newby", ["Newby 1000 medium pocket sprung mattress with hand-tufted surface", "Newby 1000 UK-made pocket sprung mattress in bedroom setting", "Newby 1000 mattress showing its hand-tufted sleeping surface"]),
     specs: [
       { label: "Firmness", value: "Medium", note: "Balanced feel" },
       { label: "Profile", value: "26cm", note: "Approximate depth" },
@@ -442,7 +442,7 @@ export const pocketSprungProducts: MattressProduct[] = [
       { title: "Balanced medium comfort", body: "Up to 1,000 individually wrapped pocket springs with wire-edge support.", points: ["Medium comfort feel", "Up to 1,000 pocket springs", "Wire-edge support"] },
       { title: "Memory foam and hand tufting", body: "A memory foam comfort layer and deep polyester fillings, with a traditional hand-tufted finish.", points: ["Memory foam comfort layer", "Deep polyester fillings", "Hand-tufted construction"] },
     ],
-    bestFor: ["Non-orthopaedic", "Side Sleepers"],
+    bestFor: ["Pocket Spring", "Side Sleepers"],
     stockCount: 1000,
     compareSpecs: { springType: "Up to 1,000 pocket springs", comfortLayer: "Memory foam & deep polyester fillings", cover: "Soft-touch knitted fabric", turnable: false, weight: "To be confirmed" },
   },
