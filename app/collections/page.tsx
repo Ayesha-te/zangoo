@@ -1,20 +1,26 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { collections } from "@/app/data/home";
-import { orthoMattressProducts } from "@/app/data/mattressProducts";
+import { collectionCategories, collections } from "@/app/data/home";
+import { getStoreCatalog } from "@/app/lib/woocommerce/catalog";
 import { CollapsibleIntro } from "@/app/components/site/CollapsibleIntro";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { getSentencePreview } from "@/app/utils/collapsibleIntro";
 import styles from "./collections.module.css";
+
+/** Number of categories on a collection's page (e.g. Bedroom: Mattresses, Beds, Bedside Tables). */
+function categoryCount(slug: string) {
+  return collectionCategories.find((item) => item.href === `/collections/${slug}/`)?.groups.length ?? 0;
+}
 
 export const metadata: Metadata = {
   title: "Collections | OrthoBedroom",
   description: "Browse OrthoBedroom collections by room, including bedroom mattresses, living room furniture, dining pieces, and lighting.",
 };
 
-export default function CollectionsPage() {
-  const intro =
-    "Explore our furniture collections by room. Our Bedroom collection is live with four UK-made orthopaedic mattresses in single, double and king sizes, while Dining, Lighting and Living Room collections are coming soon.";
+export default async function CollectionsPage() {
+  // Counts come from the live catalogue and the menu data, so they stay right as products are added.
+  const { products } = await getStoreCatalog();
+  const intro = `Explore our furniture collections by room. Our Bedroom collection is live with ${products.length} UK-made orthopaedic and pocket spring mattresses in single, double and king sizes, while Dining, Lighting and Living Room collections are coming soon.`;
   const introPreview = getSentencePreview(intro);
 
   return (
@@ -53,7 +59,7 @@ export default function CollectionsPage() {
                   <p>{collection.description}</p>
                 </div>
                 <div className={styles.cardBottom}>
-                  {isLive ? <><span>{orthoMattressProducts.length} products</span><Link href={`/collections/${collection.slug}/`} aria-label={`${collection.name} collection details`}>Explore Bedroom</Link></> : null}
+                  {isLive ? <><span>{categoryCount(collection.slug)} categories</span><Link href={`/collections/${collection.slug}/`} aria-label={`${collection.name} collection details`}>Explore Bedroom</Link></> : null}
                 </div>
               </article>
             );

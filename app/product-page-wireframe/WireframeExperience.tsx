@@ -417,7 +417,8 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
           ) : (
           <>
           <article className={styles.summaryCard}>
-          {!product.comingSoon ? <p className={styles.sku}>SKU: {product.slug.toUpperCase()}</p> : null}
+          {/* Real WooCommerce SKU only (it used to show the page address in capitals). */}
+          {!product.comingSoon && product.sku ? <p className={styles.sku}>SKU: {product.sku}</p> : null}
           <h1 id="wireframe-title">{product.name}</h1>
           <FirmnessBar firmness={product.firmness} />
           {product.highlight ? (

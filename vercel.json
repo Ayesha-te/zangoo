@@ -50,6 +50,46 @@
       "source": "/collections/bedroom/mattresses/newby-medium-pocket-sprung-mattress/",
       "destination": "/collections/bedroom/mattresses/newby-1000-pocket-spring-mattress/",
       "permanent": true
+    },
+    {
+      "source": "/collections/bedroom/mattresses/capri-ortho-mattress",
+      "destination": "/collections/bedroom/mattresses/capri-orthopaedic-mattress/",
+      "permanent": true
+    },
+    {
+      "source": "/collections/bedroom/mattresses/capri-ortho-mattress/",
+      "destination": "/collections/bedroom/mattresses/capri-orthopaedic-mattress/",
+      "permanent": true
+    },
+    {
+      "source": "/collections/bedroom/mattresses/classic-ortho",
+      "destination": "/collections/bedroom/mattresses/classic-orthopaedic-mattress/",
+      "permanent": true
+    },
+    {
+      "source": "/collections/bedroom/mattresses/classic-ortho/",
+      "destination": "/collections/bedroom/mattresses/classic-orthopaedic-mattress/",
+      "permanent": true
+    },
+    {
+      "source": "/collections/bedroom/mattresses/hampton-ortho",
+      "destination": "/collections/bedroom/mattresses/hampton-orthopaedic-mattress/",
+      "permanent": true
+    },
+    {
+      "source": "/collections/bedroom/mattresses/hampton-ortho/",
+      "destination": "/collections/bedroom/mattresses/hampton-orthopaedic-mattress/",
+      "permanent": true
+    },
+    {
+      "source": "/collections/bedroom/mattresses/deluxe-ortho",
+      "destination": "/collections/bedroom/mattresses/deluxe-orthopaedic-mattress/",
+      "permanent": true
+    },
+    {
+      "source": "/collections/bedroom/mattresses/deluxe-ortho/",
+      "destination": "/collections/bedroom/mattresses/deluxe-orthopaedic-mattress/",
+      "permanent": true
     }
   ],
   "rewrites": [

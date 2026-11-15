@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import type { MattressProduct } from "@/app/data/mattressProducts";
 import { formatGBP, getCardCopy, getCardPricing } from "@/app/data/mattressProducts";
@@ -46,6 +46,14 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
   const [sortBy, setSortBy] = useState<SortOption>("best-selling");
   const [pendingSort, setPendingSort] = useState<SortOption>("best-selling");
   const [compareSelection, setCompareSelection] = useState<string[]>([]);
+
+  // Links like ?type=pocket-spring (home page cards) open the listing with that filter ticked.
+  useEffect(() => {
+    const type = new URLSearchParams(window.location.search).get("type");
+    const filter = type === "pocket-spring" ? "Pocket Spring" : type === "orthopaedic" ? "Orthopaedic" : null;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- one-off read of the address on arrival
+    if (filter) setSelectedNeed([filter]);
+  }, []);
   const [modalOpen, setModalOpen] = useState(false);
 
   const toggle = (list: string[], setList: (value: string[]) => void, filter: string) => {

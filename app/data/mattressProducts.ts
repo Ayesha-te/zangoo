@@ -12,6 +12,8 @@ export type MattressProduct = {
   /** Not on sale yet (no confirmed prices): the page shows "price coming soon" instead of the basket, and the
    *  product stays out of listings. Becomes purchasable once a WooCommerce product with this slug exists. */
   comingSoon?: boolean;
+  /** WooCommerce SKU (shown on the product page only when set). */
+  sku?: string;
   /** "pocket": the pocket sprung range layout (size boxes, tick-list, icon features). */
   layout?: "pocket";
   /** Tick-list under the product name (pocket layout). */
@@ -69,7 +71,7 @@ export type MattressProduct = {
 
 const allOrthoMattressProducts: MattressProduct[] = [
   {
-    slug: "capri-ortho-mattress",
+    slug: "capri-orthopaedic-mattress",
     name: "Capri Ortho Mattress",
     shortName: "Capri Ortho",
     price: "From £749",
@@ -169,7 +171,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
     },
   },
   {
-    slug: "classic-ortho",
+    slug: "classic-orthopaedic-mattress",
     name: "Classic Ortho Mattress",
     shortName: "Classic Ortho",
     price: "From £449",
@@ -271,7 +273,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
     },
   },
   {
-    slug: "hampton-ortho",
+    slug: "hampton-orthopaedic-mattress",
     highlight: {
       title: "Deep adaptive memory foam layer",
       text: "Memory foam moulds to your body to relieve pressure on shoulders, hips and back, on top of firm orthopaedic spring support.",
@@ -372,7 +374,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
     },
   },
   {
-    slug: "deluxe-ortho",
+    slug: "deluxe-orthopaedic-mattress",
     name: "Deluxe Ortho Mattress",
     shortName: "Deluxe Ortho",
     price: "From £829",
@@ -470,10 +472,10 @@ const allOrthoMattressProducts: MattressProduct[] = [
 export type MattressSize = "single" | "double" | "king";
 export const SALE_DISCOUNT = 0.15;
 export const regularSizePrices: Record<string, Record<MattressSize, number>> = {
-  "hampton-ortho": { single: 326, double: 403, king: 450 },
-  "deluxe-ortho": { single: 307, double: 377, king: 431 },
-  "capri-ortho-mattress": { single: 277, double: 317, king: 367 },
-  "classic-ortho": { single: 260, double: 294, king: 333 },
+  "hampton-orthopaedic-mattress": { single: 326, double: 403, king: 450 },
+  "deluxe-orthopaedic-mattress": { single: 307, double: 377, king: 431 },
+  "capri-orthopaedic-mattress": { single: 277, double: 317, king: 367 },
+  "classic-orthopaedic-mattress": { single: 260, double: 294, king: 333 },
 };
 
 const toPennies = (value: number) => Math.round(value * 100) / 100;
@@ -484,10 +486,10 @@ export const formatGBP = (value: number) => `£${value.toFixed(2)}`;
  * the third feature row. Client wording, 03/11/2026.
  */
 const CARD_COPY: Record<string, { type: string; feature: string; finish?: string; depth?: string }> = {
-  "capri-ortho-mattress": { type: "Orthopaedic Coil Spring Mattress", feature: "Wire edge support" },
-  "classic-ortho": { type: "Orthopaedic Coil Spring Mattress", feature: "Luxury feel fabric" },
-  "hampton-ortho": { type: "Adaptive Memory Foam Layer", feature: "Orthopaedic spring" },
-  "deluxe-ortho": { type: "Orthopaedic Coil Spring Mattress", feature: "Luxurious coir filling" },
+  "capri-orthopaedic-mattress": { type: "Orthopaedic Coil Spring Mattress", feature: "Wire edge support" },
+  "classic-orthopaedic-mattress": { type: "Orthopaedic Coil Spring Mattress", feature: "Luxury feel fabric" },
+  "hampton-orthopaedic-mattress": { type: "Adaptive Memory Foam Layer", feature: "Orthopaedic spring" },
+  "deluxe-orthopaedic-mattress": { type: "Orthopaedic Coil Spring Mattress", feature: "Luxurious coir filling" },
   "air-flow-2000-pocket-spring-mattress": { type: "2000 Pocket Spring Pillow Top", feature: "Deep memory foam layer", finish: "Quilted finish", depth: "Approx. 28cm deep" },
   "ella-3000-pocket-spring-mattress": { type: "3000 Pocket Spring Mattress", feature: "Cooling gel & memory foam", finish: "Quilted finish", depth: "Approx. 31cm deep" },
   "harmony-1000-pocket-spring-mattress": { type: "1000 Pocket Spring Mattress", feature: "Generous memory foam layer", finish: "Deep-tufted", depth: "Approx. 31cm deep" },
@@ -529,7 +531,7 @@ export function getCardPricing(product: Pick<MattressProduct, "slug" | "pricing"
 
 // Launch catalogue: retain the other data for future releases, but expose only the approved four products.
 // "From" price = the Single sale price.
-const launchProductSlugs = new Set(["classic-ortho", "capri-ortho-mattress", "deluxe-ortho", "hampton-ortho"]);
+const launchProductSlugs = new Set(["classic-orthopaedic-mattress", "capri-orthopaedic-mattress", "deluxe-orthopaedic-mattress", "hampton-orthopaedic-mattress"]);
 export const orthoMattressProducts = allOrthoMattressProducts
   .filter((product) => launchProductSlugs.has(product.slug))
   .map((product) => {

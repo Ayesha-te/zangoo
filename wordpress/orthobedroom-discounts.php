@@ -37,7 +37,7 @@ if ( ! defined( 'OB_PARTNER_PREFIX' ) ) {
 	define( 'OB_SIGNUP_MAX_PER_HOUR', 5 );         // sign-ups allowed per visitor IP per hour (spam guard)
 	define( 'OB_SITE_URL', 'https://www.orthobedroom.co.uk' );
 	define( 'OB_SIGNUPS_DB_VERSION', '1' );
-	define( 'OB_APPLICATIONS_DB_VERSION', '1' );
+	define( 'OB_APPLICATIONS_DB_VERSION', '2' );   // 2: social media profile columns
 	define( 'OB_APPLY_MAX_PER_HOUR', 3 );          // applications allowed per visitor IP per hour (spam guard)
 }
 
@@ -349,6 +349,11 @@ add_action( 'init', function () {
 		email varchar(190) NOT NULL DEFAULT '',
 		has_experience tinyint(1) NOT NULL DEFAULT 0,
 		experience text NOT NULL,
+		instagram varchar(255) NOT NULL DEFAULT '',
+		facebook varchar(255) NOT NULL DEFAULT '',
+		twitter varchar(255) NOT NULL DEFAULT '',
+		tiktok varchar(255) NOT NULL DEFAULT '',
+		youtube varchar(255) NOT NULL DEFAULT '',
 		created_at datetime NOT NULL,
 		PRIMARY KEY  (id),
 		KEY created_at (created_at)
@@ -356,8 +361,49 @@ add_action( 'init', function () {
 	update_option( 'ob_applications_db', OB_APPLICATIONS_DB_VERSION );
 } );
 
+/** Social networks marketers can share on the Work with Us form, with the sites their links may point to. */
+function ob_social_networks() {
+	return array(
+		'instagram' => array( 'Instagram', array( 'instagram.com' ), 'https://www.instagram.com/%s' ),
+		'facebook'  => array( 'Facebook', array( 'facebook.com', 'fb.com' ), 'https://www.facebook.com/%s' ),
+		'twitter'   => array( 'X (Twitter)', array( 'x.com', 'twitter.com' ), 'https://x.com/%s' ),
+		'tiktok'    => array( 'TikTok', array( 'tiktok.com' ), 'https://www.tiktok.com/@%s' ),
+		'youtube'   => array( 'YouTube', array( 'youtube.com', 'youtu.be' ), 'https://www.youtube.com/@%s' ),
+	);
+}
+
+/** "@name", "name" or a link on the network's own site → profile link; '' when empty; false when not valid. */
+function ob_social_url( $value, $network ) {
+	$value = trim( (string) $value );
+	if ( '' === $value ) {
+		return '';
+	}
+	if ( strlen( $value ) > 200 ) {
+		return false;
+	}
+	list( , $domains, $pattern ) = $network;
+	$handle = ltrim( $value, '@' );
+	if ( preg_match( '/^[A-Za-z0-9._-]{1,50}$/', $handle ) && false === strpos( $handle, '..' ) ) {
+		return sprintf( $pattern, $handle );
+	}
+	$url  = preg_match( '#^https?://#i', $value ) ? $value : 'https://' . $value;
+	$host = strtolower( (string) wp_parse_url( $url, PHP_URL_HOST ) );
+	$host = preg_replace( '/^(www\.|m\.|mobile\.)/', '', $host );
+	$path = trim( (string) wp_parse_url( $url, PHP_URL_PATH ), '/' );
+	if ( ! in_array( $host, $domains, true ) || '' === $path ) {
+		return false;
+	}
+	return esc_url_raw( preg_replace( '#^http://#i', 'https://', $url ) );
+}
+
 /** One application as table / CSV cells. */
 function ob_application_columns( $row ) {
+	$socials = array();
+	foreach ( ob_social_networks() as $key => $network ) {
+		if ( ! empty( $row[ $key ] ) ) {
+			$socials[] = $network[0] . ': ' . $row[ $key ];
+		}
+	}
 	return array(
 		ob_signup_date( $row['created_at'] ),
 		$row['full_name'],
@@ -366,6 +412,7 @@ function ob_application_columns( $row ) {
 		$row['email'],
 		$row['has_experience'] ? 'Yes' : 'No experience',
 		$row['experience'],
+		implode( "\n", $socials ),
 	);
 }
 
@@ -379,10 +426,10 @@ add_action( 'admin_menu', function () {
 		echo '<div class="wrap"><h1 class="wp-heading-inline">Marketer applications</h1> ';
 		echo '<a class="page-title-action" href="' . esc_url( $csv ) . '">Download CSV</a>';
 		echo '<p>' . esc_html( $total ) . ' applications from the Work with Us page (latest 500 shown; the CSV has everyone).</p>';
-		echo '<table class="widefat striped"><thead><tr><th>Applied</th><th>Name</th><th>Country of residence</th><th>WhatsApp</th><th>Email</th><th>Experience</th><th>About their experience</th></tr></thead><tbody>';
+		echo '<table class="widefat striped"><thead><tr><th>Applied</th><th>Name</th><th>Country of residence</th><th>WhatsApp</th><th>Email</th><th>Experience</th><th>About their experience</th><th>Social profiles</th></tr></thead><tbody>';
 		$rows = $wpdb->get_results( "SELECT * FROM {$table} ORDER BY created_at DESC LIMIT 500", ARRAY_A );
 		if ( ! $rows ) {
-			echo '<tr><td colspan="7">No applications yet.</td></tr>';
+			echo '<tr><td colspan="8">No applications yet.</td></tr>';
 		}
 		foreach ( $rows as $row ) {
 			echo '<tr>';
@@ -404,7 +451,7 @@ add_action( 'admin_post_ob_applications_csv', function () {
 	header( 'Content-Type: text/csv; charset=utf-8' );
 	header( 'Content-Disposition: attachment; filename=orthobedroom-marketer-applications-' . gmdate( 'Y-m-d' ) . '.csv' );
 	$out = fopen( 'php://output', 'w' );
-	fputcsv( $out, array( 'Applied', 'Name', 'Country of residence', 'WhatsApp', 'Email', 'Experience', 'About their experience' ) );
+	fputcsv( $out, array( 'Applied', 'Name', 'Country of residence', 'WhatsApp', 'Email', 'Experience', 'About their experience', 'Social profiles' ) );
 	$rows = $wpdb->get_results( 'SELECT * FROM ' . ob_applications_table() . ' ORDER BY created_at DESC', ARRAY_A );
 	foreach ( $rows as $row ) {
 		// Spreadsheets run cells starting with = + - @ as formulas; prefix them so they stay plain text.
@@ -419,7 +466,8 @@ add_action( 'admin_post_ob_applications_csv', function () {
 
 /**
  * POST /wp-json/orthobedroom/v1/apply
- * { full_name, nationality, whatsapp, email?, has_experience (bool), experience?, website? (honeypot) }
+ * { full_name, nationality, whatsapp, email?, has_experience (bool), experience?, instagram?, facebook?, twitter?, tiktok?,
+ *   youtube?, website? (honeypot), turnstile? }
  */
 add_action( 'rest_api_init', function () {
 	register_rest_route( 'orthobedroom/v1', '/apply', array(
@@ -465,6 +513,14 @@ add_action( 'rest_api_init', function () {
 			if ( mb_strlen( $experience ) > 2000 ) {
 				return $fail( 'Please keep your experience summary under 2000 characters.' );
 			}
+			$socials = array();
+			foreach ( ob_social_networks() as $key => $network ) {
+				$url = ob_social_url( $request->get_param( $key ), $network );
+				if ( false === $url ) {
+					return $fail( 'Please check your ' . $network[0] . ' profile link.' );
+				}
+				$socials[ $key ] = $url;
+			}
 			if ( ob_rate_limited( 'apply', OB_APPLY_MAX_PER_HOUR ) ) {
 				return new WP_REST_Response( array( 'ok' => false, 'message' => 'Too many applications from this connection. Please try again later.' ), 429 );
 			}
@@ -477,6 +533,11 @@ add_action( 'rest_api_init', function () {
 				'email'          => (string) $email,
 				'has_experience' => $experienced ? 1 : 0,
 				'experience'     => $experience,
+				'instagram'      => $socials['instagram'],
+				'facebook'       => $socials['facebook'],
+				'twitter'        => $socials['twitter'],
+				'tiktok'         => $socials['tiktok'],
+				'youtube'        => $socials['youtube'],
 				'created_at'     => current_time( 'mysql', true ),
 			) );
 			if ( ! $saved ) {
@@ -492,6 +553,9 @@ add_action( 'rest_api_init', function () {
 				'Experience: ' . ( $experienced ? 'Yes' : 'No experience' ),
 				'',
 				$experience,
+				'',
+				'Social profiles:',
+				implode( "\n", array_filter( $socials ) ) ?: 'None given',
 				'',
 				'All applications: ' . admin_url( 'admin.php?page=ob-applications' ),
 			);

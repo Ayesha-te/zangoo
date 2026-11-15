@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
-import { orthoMattressProducts } from "@/app/data/mattressProducts";
+import { getStoreCatalog } from "@/app/lib/woocommerce/catalog";
 import { getBlogPosts } from "@/app/data/wordpressBlog";
 
 export const metadata: Metadata = {
@@ -20,7 +20,7 @@ const decode = (text: string) =>
     .trim();
 
 export default async function SitemapPage() {
-  const posts = await getBlogPosts();
+  const [posts, { products }] = await Promise.all([getBlogPosts(), getStoreCatalog()]);
 
   const sections: Array<{ title: string; links: Array<{ label: string; href: string }> }> = [
     {
@@ -41,7 +41,8 @@ export default async function SitemapPage() {
       links: [
         { label: "Bedroom", href: "/collections/bedroom/" },
         { label: "Mattresses", href: "/collections/bedroom/mattresses/" },
-        ...orthoMattressProducts.map((product) => ({
+        // Every mattress on sale (WooCommerce), so new products appear here automatically.
+        ...products.map((product) => ({
           label: product.shortName,
           href: `/collections/bedroom/mattresses/${product.slug}/`,
         })),

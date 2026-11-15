@@ -318,6 +318,8 @@ section[id]{scroll-margin-top:calc(var(--nav) + 16px)}
 .featured-card-meta span{display:inline-flex;align-items:center;padding:5px 10px;border-radius:999px;background:#C62828;color:#fff}
 .featured-card-photo span{background:#C62828;color:#fff}
 .featured-card-photo span.featured-card-badge-coming-soon{background:var(--blue);color:#fff}
+.featured-card-disabled{cursor:default}
+.featured-card-disabled:hover{border-color:var(--bdr);box-shadow:var(--sh1)}
 .featured-card-photo strong,.featured-card-photo p,.featured-card-photo em{color:#fff}
 /* ── STATS ── */
 .stats{background:var(--bg3);padding:96px 0}
@@ -2905,3 +2907,17 @@ html body .customer-review-card small{font-size:14px}
 @media(max-width:640px){html body .announce-track,html body .announce-track span{font-size:13px}}
 html body .lp-faq-btn,html body .fi-q{font-size:18px;font-weight:700;line-height:1.4}
 html body .lp-faq-body,html body .fi-a{font-size:16px}
+
+/* Invalid email (client, 15/11/2026): a clearly red field and a bold, noticeable message on every sign-up form. */
+html body .foot-newsletter input[aria-invalid=true]{border:2px solid #ff6b5e;background:rgba(255,107,94,.12);box-shadow:0 0 0 3px rgba(255,107,94,.18)}
+html body .foot-newsletter-error{display:flex;gap:8px;align-items:flex-start;margin:10px 0 0;padding:10px 12px;border-radius:8px;background:rgba(255,107,94,.16);color:#ffd2cd;font:700 14px/1.45 var(--sans)}
+html body .foot-newsletter-error::before{content:"!";flex:none;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:#ff6b5e;color:#1a2e44;font-weight:900}
+html body .fg input[aria-invalid=true],html body .campaign-popup-form input[aria-invalid=true]{border:2px solid #d92d20;background:#fff5f4;box-shadow:0 0 0 3px rgba(217,45,32,.14)}
+html body .f-err.show,html body .campaign-popup-error{margin-top:6px;padding:8px 10px;border-radius:8px;background:#fdecee;color:#b42318;font:700 14px/1.45 var(--sans)}
+/* Work with Us: field errors (red border + noticeable message), social profiles group */
+html body .apply-form .apply-invalid input:not([type=radio]),html body .apply-form .apply-invalid textarea{border:2px solid #d92d20;background:#fff5f4;box-shadow:0 0 0 3px rgba(217,45,32,.12)}
+html body .apply-form .apply-invalid .apply-choice{border-color:#d92d20}
+html body .apply-form .apply-field-error{display:block;padding:8px 10px;border-radius:8px;background:#fdecee;color:#b42318;font:700 14px/1.45 var(--sans)}
+html body .apply-form .apply-socials{gap:12px;padding:16px;border:1px solid var(--bdr);border-radius:var(--r);background:#fff}
+html body .apply-form .apply-socials legend{float:left;width:100%;margin:0}
+html body .apply-form .apply-error{padding:10px 12px;border-radius:8px;background:#fdecee;font-weight:700}

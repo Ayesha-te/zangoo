@@ -7,7 +7,7 @@ import { FavoriteButton } from "@/app/components/favorites/FavoriteButton";
 import { useFavorites } from "@/app/components/favorites/FavoritesProvider";
 import collectionStyles from "@/app/collections/collections.module.css";
 
-const recommendedSlugs = ["classic-ortho", "hampton-ortho", "deluxe-ortho", "capri-ortho-mattress"];
+const recommendedSlugs = ["classic-orthopaedic-mattress", "hampton-orthopaedic-mattress", "deluxe-orthopaedic-mattress", "capri-orthopaedic-mattress"];
 const cleanPrice = (price: string) => price.replace("From ", "").replace("Â£", "£");
 
 export function RecommendationStrip({ exclude = [] }: { exclude?: string[] }) {

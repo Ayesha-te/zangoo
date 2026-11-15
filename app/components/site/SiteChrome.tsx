@@ -9,6 +9,7 @@ import { useFavorites } from "@/app/components/favorites/FavoritesProvider";
 import { CartPreview } from "@/app/components/cart/CartPreview";
 import { NavSearch } from "@/app/components/site/NavSearch";
 import { subscribeToNewsletter, type WelcomeCode } from "@/app/lib/newsletter";
+import { emailDomainAcceptsMail, emailError, emailSuggestion } from "@/app/lib/validation";
 import { WelcomeCodeCard } from "@/app/components/site/WelcomeCodeCard";
 import { STORAGE_KEYS, readStorage, writeStorage } from "@/app/utils/browserStorage";
 
@@ -573,15 +574,6 @@ export function SiteFooter() {
               <Link href="/faq/">Returns &amp; Guarantee</Link>
             </li>
             <li>
-              <Link href="/contact/">Secure Enquiry</Link>
-            </li>
-            <li>
-              <Link href="/contact/">Privacy Notice</Link>
-            </li>
-            <li>
-              <Link href="/contact/">Accessibility Statement</Link>
-            </li>
-            <li>
               <Link href="/contact/">Contact Support</Link>
             </li>
             <li>
@@ -618,12 +610,23 @@ export function Breadcrumbs({ items }: { items: Array<{ label: string; href?: st
 /** Footer sign-up: shows (and emails) a one-time 10% welcome code (see app/lib/newsletter.ts). */
 function FooterNewsletter() {
   const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<{ state: "idle" | "sending" | "done" | "error"; message?: string; welcome?: WelcomeCode }>({ state: "idle" });
+  const [status, setStatus] = useState<{ state: "idle" | "sending" | "done" | "error" | "invalid"; message?: string; welcome?: WelcomeCode }>({ state: "idle" });
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const website = String(new FormData(event.currentTarget).get("website") ?? "");
+    // Check the address here first: clear message + red field instead of a technical error later.
+    const problem = emailError(email);
+    if (problem) {
+      const suggestion = emailSuggestion(email);
+      setStatus({ state: "invalid", message: suggestion ? `Please check your email address. Did you mean ${suggestion}?` : problem });
+      return;
+    }
     setStatus({ state: "sending" });
+    if ((await emailDomainAcceptsMail(email)) === false) {
+      setStatus({ state: "invalid", message: "This email address can't receive emails. Please check it for typos." });
+      return;
+    }
     const result = await subscribeToNewsletter({ email, website });
     setStatus({ state: result.ok ? "done" : "error", message: result.message, welcome: result.welcome });
     if (result.ok) setEmail("");
@@ -635,13 +638,25 @@ function FooterNewsletter() {
       <p>Sign up for 10% off your first order, plus mattress offers, new product updates and practical buying guides.</p>
       <label>
         <span>Email address</span>
-        <input type="email" placeholder="you@example.com" required value={email} onChange={(event) => setEmail(event.target.value.slice(0, 80))} />
+        <input
+          type="email"
+          placeholder="you@example.com"
+          required
+          maxLength={80}
+          value={email}
+          aria-invalid={status.state === "invalid"}
+          aria-describedby="foot-newsletter-message"
+          onChange={(event) => {
+            setEmail(event.target.value.slice(0, 80));
+            if (status.state === "invalid") setStatus({ state: "idle" });
+          }}
+        />
       </label>
       {/* Honeypot: hidden from people, filled by bots. */}
       <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" style={{ position: "absolute", left: "-9999px" }} />
       <button type="submit" disabled={status.state === "sending"}>{status.state === "sending" ? "Sending…" : "Subscribe"}</button>
       {status.message ? (
-        <p className={status.state === "error" ? "foot-newsletter-error" : "foot-newsletter-done"} role="status">
+        <p id="foot-newsletter-message" className={status.state === "error" || status.state === "invalid" ? "foot-newsletter-error" : "foot-newsletter-done"} role={status.state === "invalid" || status.state === "error" ? "alert" : "status"}>
           {status.message}
         </p>
       ) : null}

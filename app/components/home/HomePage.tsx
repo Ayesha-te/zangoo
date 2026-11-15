@@ -1,15 +1,18 @@
 "use client";
 
 import { subscribeToNewsletter, type WelcomeCode } from "@/app/lib/newsletter";
+import { emailDomainAcceptsMail, emailError, emailSuggestion } from "@/app/lib/validation";
 import { WelcomeCodeCard } from "@/app/components/site/WelcomeCodeCard";
 import { ChangeEvent, FormEvent, type CSSProperties, type MouseEvent, type RefObject, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { awards, blogPosts, collections, faqs, reviews } from "@/app/data/home";
+import { awards, blogPosts, collectionCategories, collections, faqs, reviews } from "@/app/data/home";
 import { primaryButtonClasses, secondaryButtonClasses } from "@/app/components/site/buttonClasses";
 import { SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { AwardIcon, BlogVisual } from "./Illustrations";
 import { CustomerReviews } from "@/app/components/reviews/CustomerReviews";
+import { useCatalog } from "@/app/components/catalog/CatalogProvider";
+import { getCardPricing, type MattressProduct } from "@/app/data/mattressProducts";
 
 type HomepageBlogPost = {
   id: number | string;
@@ -143,8 +146,9 @@ function validateNewsletter(emailValue: string, firstNameValue: string, websiteV
     errors.email = "Email address is required.";
   } else if (email.length > 80) {
     errors.email = "Email address must be 80 characters or fewer.";
-  } else if (!emailPattern.test(email) || !hasValidEmailParts(email)) {
-    errors.email = "Enter a valid email address, for example name@example.com.";
+  } else if (!emailPattern.test(email) || !hasValidEmailParts(email) || emailError(email)) {
+    const suggestion = emailSuggestion(email);
+    errors.email = suggestion ? `Please check your email address. Did you mean ${suggestion}?` : "Enter a valid email address, for example name@example.com.";
   }
 
   if (firstName && !namePattern.test(firstName)) {
@@ -356,12 +360,19 @@ function Hero() {
   );
 }
 
+/** Real figures only: live collections show how many categories their page has; the rest are coming soon. */
+function collectionCountLabel(collection: (typeof collections)[number]) {
+  if (collection.name !== "Bedroom") return "Coming soon";
+  const groups: number = collectionCategories.find((item) => item.href === `/collections/${collection.slug}/`)?.groups.length ?? 0;
+  return `${groups} ${groups === 1 ? "category" : "categories"}`;
+}
+
 function Collections() {
   return (
     <section className="collections" id="collections" aria-labelledby="coll-h">
       <div className="wrap">
         <div className="coll-wrap">
-          <Link href="/collections/bedroom/mattresses/classic-ortho/" className="feat-card rv" aria-label="View Classic Ortho mattress">
+          <Link href="/collections/bedroom/mattresses/classic-orthopaedic-mattress/" className="feat-card rv" aria-label="View Classic Ortho mattress">
             <div className="feat-thumb feat-thumb-photo" style={imageStyle(remoteImages.feature)} aria-hidden="true" />
             <div className="feat-info">
               <span className="feat-tag">MEDIUM-TO-FIRM</span>
@@ -379,7 +390,7 @@ function Collections() {
                 <h2 className="h2lt rv" id="coll-h">
                   Explore Our Orthopaedic Mattresses
                 </h2>
-                <p>Compare our four UK-made orthopaedic mattresses by firmness, construction and care style. Available in single, double and king sizes, with delivery across London and the UK.</p>
+                <p>Compare our UK-made orthopaedic and pocket spring mattresses by firmness, construction and care style. Available in single, double and king sizes, with delivery across London and the UK.</p>
               </div>
               <Link href="/collections/" className="sec-lnk sec-lnk-lt shared-section-link rv" aria-label="View all collections">
                 View All Mattresses
@@ -393,7 +404,7 @@ function Collections() {
                   className={`cc rv${collection.name === "Bedroom" ? "" : " cc-disabled"}`}
                   aria-disabled={collection.name === "Bedroom" ? undefined : true}
                   tabIndex={collection.name === "Bedroom" ? undefined : -1}
-                  aria-label={`${collection.name}, ${collection.count}`}
+                  aria-label={`${collection.name}, ${collectionCountLabel(collection)}`}
                   style={{ transitionDelay: `${index * 0.08}s` }}
                   key={collection.name}
                 >
@@ -408,7 +419,7 @@ function Collections() {
                   </div>
                   <div className="cc-info">
                     <p className="cc-name">{collection.name}</p>
-                    <p className="cc-count">{collection.count}</p>
+                    <p className="cc-count">{collectionCountLabel(collection)}</p>
                   </div>
                 </a>
               ))}
@@ -420,21 +431,45 @@ function Collections() {
   );
 }
 
+/** Lowest price customers pay across these products (the sale price of their cheapest size). */
+function lowestPrice(products: MattressProduct[]) {
+  const prices = products
+    .map((product) => getCardPricing(product)?.sale ?? Number(product.price.replace(/[^0-9.]/g, "")))
+    .filter((price) => Number.isFinite(price) && price > 0);
+  if (!prices.length) return undefined;
+  const lowest = Math.min(...prices);
+  return `From £${Number.isInteger(lowest) ? lowest : lowest.toFixed(2)}`;
+}
+
 function FeaturedMattresses() {
-  const featured = [
+  // Prices come from the live catalogue (WooCommerce), so the cards always match the mattress listing.
+  const { products } = useCatalog();
+  const ortho = products.filter((product) => product.layout !== "pocket" && !product.comingSoon);
+  const pocket = products.filter((product) => product.layout === "pocket" && !product.comingSoon);
+  const featured: Array<{ title: string; copy: string; price?: string; image: string; badge: string; href?: string }> = [
     {
       title: "Orthopaedic Mattress",
       copy: "Coir-enhanced open coil support with wire-edge and butterfly support for a distinctly extra-firm feel.",
-      price: "From £211",
+      price: lowestPrice(ortho),
       image: remoteImages.orthopaedicCard,
       badge: "Mattress Sale",
+      href: "/collections/bedroom/mattresses/?type=orthopaedic",
     },
-    {
-      title: "Pocket Spring Mattress",
-      copy: "Double-sided open coil support with damask fabric, deep polyester filling and a hand-tufted finish.",
-      image: remoteImages.featured[0],
-      badge: "Coming Soon",
-    },
+    pocket.length
+      ? {
+          title: "Pocket Spring Mattress",
+          copy: "Individually wrapped pocket springs with memory foam comfort layers, from medium to extra-firm feels.",
+          price: lowestPrice(pocket),
+          image: "/Pocket%20Sprung%20Product%20Images/Ella%203000%20Main.webp",
+          badge: "Mattress Sale",
+          href: "/collections/bedroom/mattresses/?type=pocket-spring",
+        }
+      : {
+          title: "Pocket Spring Mattress",
+          copy: "Individually wrapped pocket springs with memory foam comfort layers.",
+          image: remoteImages.featured[0],
+          badge: "Coming Soon",
+        },
     {
       title: "Hybrid Comfort Mattress",
       copy: "A firm spring mattress with foam encapsulation, deep adaptive memory foam and a premium knitted finish.",
@@ -455,24 +490,28 @@ function FeaturedMattresses() {
           </div>
         </div>
         <div className="featured-grid">
-          {featured.map(({ title, copy, price, image, badge }, index) => (
-            <Link
-              className="featured-card featured-card-photo rv"
-              href="/collections/bedroom/mattresses/"
-              style={{ ...imageStyle(image), transitionDelay: `${index * 0.08}s` }}
-              key={title}
-            >
-              <span className={badge === "Coming Soon" ? "featured-card-badge-coming-soon" : undefined}>{badge}</span>
-              <strong>{title}</strong>
-              <p>{copy}</p>
-              {price ? (
-                <em className="featured-card-meta">
-                  <span>{price}</span>
-                  <span>Single · Double · King</span>
-                </em>
-              ) : null}
-            </Link>
-          ))}
+          {featured.map(({ title, copy, price, image, badge, href }, index) => {
+            const content = (
+              <>
+                <span className={badge === "Coming Soon" ? "featured-card-badge-coming-soon" : undefined}>{badge}</span>
+                <strong>{title}</strong>
+                <p>{copy}</p>
+                {price ? (
+                  <em className="featured-card-meta">
+                    <span>{price}</span>
+                    <span>Single · Double · King</span>
+                  </em>
+                ) : null}
+              </>
+            );
+            const style = { ...imageStyle(image), transitionDelay: `${index * 0.08}s` };
+            // Coming-soon ranges aren't clickable until they launch.
+            return href ? (
+              <Link className="featured-card featured-card-photo rv" href={href} style={style} key={title}>{content}</Link>
+            ) : (
+              <div className="featured-card featured-card-photo featured-card-disabled rv" style={style} aria-disabled="true" key={title}>{content}</div>
+            );
+          })}
         </div>
       </div>
     </section>
@@ -879,6 +918,11 @@ function Contact() {
 
     // Sign up and email the 10% welcome code (WordPress discount snippet).
     setSubmitting(true);
+    if ((await emailDomainAcceptsMail(email)) === false) {
+      setSubmitting(false);
+      setErrors({ email: "This email address can't receive emails. Please check it for typos." });
+      return;
+    }
     const result = await subscribeToNewsletter({ email, firstName, website });
     setSubmitting(false);
     if (!result.ok) {
@@ -1101,6 +1145,11 @@ function CampaignPopup() {
 
     // Sign up and email the 10% welcome code (WordPress discount snippet).
     setSubmitting(true);
+    if ((await emailDomainAcceptsMail(email)) === false) {
+      setSubmitting(false);
+      setErrors({ email: "This email address can't receive emails. Please check it for typos." });
+      return;
+    }
     const result = await subscribeToNewsletter({ email, firstName, website });
     setSubmitting(false);
     if (!result.ok) {

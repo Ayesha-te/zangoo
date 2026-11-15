@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { CollapsibleIntro } from "@/app/components/site/CollapsibleIntro";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { collectionCategories, collections } from "@/app/data/home";
-import { orthoMattressProducts } from "@/app/data/mattressProducts";
+import { getStoreCatalog } from "@/app/lib/woocommerce/catalog";
 import { getSentencePreview } from "@/app/utils/collapsibleIntro";
 import styles from "../collections.module.css";
 
@@ -37,7 +37,8 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
   const isLive = collection.name === "Bedroom";
   const isBedroom = collection.slug === "bedroom";
   const category = collectionCategories.find((item) => item.href === `/collections/${collection.slug}/`);
-  const intro = `Shop our bedroom collection online, starting with four UK-made orthopaedic mattresses in medium-to-firm, firm and extra-firm feels. Choose from single, double and king sizes with free UK delivery, while additional bedroom collections including beds and bedside tables are coming soon.`;
+  const { products } = await getStoreCatalog();
+  const intro = `Shop our bedroom collection online, starting with ${products.length} UK-made orthopaedic and pocket spring mattresses in medium to extra-firm feels. Choose from single, double and king sizes with free UK delivery, while additional bedroom collections including beds and bedside tables are coming soon.`;
   const introPreview = getSentencePreview(intro);
 
   return (
@@ -101,11 +102,11 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
                     )}
                     <p>
                       {isMattresses
-                        ? "Shop four UK-made orthopaedic mattresses in medium-to-firm, firm and extra-firm feels, available in single, double and king sizes."
+                        ? `Shop ${products.length} UK-made orthopaedic and pocket spring mattresses in medium to extra-firm feels, available in single, double and king sizes.`
                         : `${group.label} products are being prepared for launch.`}
                     </p>
                   </div>
-                  {isMattresses ? <div className={styles.cardBottom}><span>{orthoMattressProducts.length} products live</span><Link href={group.href} aria-label={`View ${group.label} in ${collection.name}`}>Explore Mattresses</Link></div> : null}
+                  {isMattresses ? <div className={styles.cardBottom}><span>{products.length} products live</span><Link href={group.href} aria-label={`View ${group.label} in ${collection.name}`}>Explore Mattresses</Link></div> : null}
                 </article>
               );
             })}

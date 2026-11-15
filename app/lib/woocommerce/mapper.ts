@@ -69,6 +69,7 @@ export function mapWooProduct(product: WooProduct, variations: WooVariation[] = 
 
   return {
     slug: product.slug,
+    sku: product.sku?.trim() || undefined,
     name: product.name,
     shortName: product.name,
     price: pricing ? `${variations.length ? "From " : ""}${formatGBP(pricing.sale)}` : "Price on request",

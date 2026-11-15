@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Standalone product page wireframe preview for a mattress product layout.",
 };
 
-const product = getMattressProduct("capri-ortho-mattress") ?? orthoMattressProducts[0];
+const product = getMattressProduct("capri-orthopaedic-mattress") ?? orthoMattressProducts[0];
 const relatedProducts = orthoMattressProducts.filter((item) => item.slug !== product.slug).slice(0, 4);
 
 export default function ProductPageWireframe() {
