@@ -1,6 +1,7 @@
 // Newsletter sign-up: sends the email to the WordPress discount snippet (wordpress/orthobedroom-discounts.php),
 // which saves the sign-up and returns (and emails) a one-time 10% welcome code. Same-origin /wp-signup/ is proxied
 // (vercel.json / next.config.ts).
+import { getTurnstileToken } from "./turnstile";
 
 export type WelcomeCode = { code: string; percent: number; expires: string | null };
 export type SignupResult = { ok: boolean; message: string; welcome?: WelcomeCode };
@@ -21,7 +22,13 @@ export async function subscribeToNewsletter(input: { email: string; firstName?: 
     const response = await fetch("/wp-signup/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: input.email.trim(), first_name: input.firstName?.trim() ?? "", website: input.website ?? "" }),
+      body: JSON.stringify({
+        email: input.email.trim().slice(0, 254),
+        first_name: input.firstName?.trim().slice(0, 40) ?? "",
+        website: input.website ?? "",
+        // Spam check token ("" while Turnstile is off).
+        turnstile: await getTurnstileToken("signup"),
+      }),
     });
     const data = (await response.json().catch(() => null)) as SignupResponse | null;
     const message = typeof data?.message === "string" ? data.message : undefined;

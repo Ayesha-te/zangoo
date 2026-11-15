@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { RecommendationStrip } from "@/app/components/commerce/RecommendationStrip";
-import { ArrowIcon, CheckCircleIcon, LockIcon, ProductFeatures, StockNote, TrashIcon } from "@/app/components/commerce/CommerceIcons";
+import { ArrowIcon, LockIcon, ProductFeatures, StockNote, TrashIcon } from "@/app/components/commerce/CommerceIcons";
 import { useCart } from "@/app/components/cart/CartProvider";
 import { formatGBP, getCardCopy, getProductSizePricing, getSizePricing } from "@/app/data/mattressProducts";
 import { useCatalog } from "@/app/components/catalog/CatalogProvider";
@@ -14,7 +14,14 @@ import collectionStyles from "@/app/collections/collections.module.css";
 
 const SIZE_LABELS: Record<string, string> = { single: "Single (90 x 190cm)", double: "Double (135 x 190cm)", king: "King (150 x 200cm)" };
 
-const benefits = ["Free UK delivery", "0% interest-free finance", "1-year guarantee", "FSC certified & carbon neutral", "Made in the UK"];
+// Same icons as the trust bar under the menu (SiteChrome). The flag is an image: Windows has no flag emoji.
+const benefits: Array<{ icon: string; label: string }> = [
+  { icon: "🚚", label: "Free UK delivery" },
+  { icon: "💳", label: "0% interest-free finance" },
+  { icon: "🛡️", label: "1-year guarantee" },
+  { icon: "🌱", label: "FSC certified & carbon neutral" },
+  { icon: "gb", label: "Made in the UK" },
+];
 
 export default function CartPage() {
   const { items, updateQuantity, removeItem, pending, error, checkoutUrl, goToCheckout, mode, coupons, totals, applyCoupon, removeCoupon } = useCart();
@@ -38,7 +45,8 @@ export default function CartPage() {
       <main className="simple-page"><section className="wrap commerce-page">
         <div className="commerce-heading"><div><span className="sec-lbl">Cart</span><h1>Your cart.</h1><p>Review your items and proceed to a secure checkout.</p></div></div>
         {!items.length ? <div className="wishlist-empty"><p>Your basket is currently empty.</p></div> : <>
-          <div className="commerce-count">{count} {count === 1 ? "item" : "items"}</div>
+          {/* Anything but 1 item turns red, like the quantity, so a wrong quantity is easy to notice. */}
+          <div className={count !== 1 ? "commerce-count is-multiple" : "commerce-count"}>{count} {count === 1 ? "item" : "items"}</div>
           <div className="cart-layout">
             <div className="commerce-list">{items.map((item) => {
               const product = getProduct(item.slug);
@@ -99,7 +107,7 @@ export default function CartPage() {
                   <img src="/payments/google-pay.svg" alt="Google Pay" />
                 </div>
               </div>
-              <ul className="commerce-benefits">{benefits.map((benefit) => <li key={benefit}><CheckCircleIcon />{benefit}</li>)}</ul>
+              <ul className="commerce-benefits">{benefits.map((benefit) => <li key={benefit.label}>{benefit.icon === "gb" ? <img src="/flags/gb.svg" alt="" width="20" height="13" className="benefit-icon benefit-flag" /> : <span className="benefit-icon" aria-hidden="true">{benefit.icon}</span>}{benefit.label}</li>)}</ul>
               <div className="cart-help"><h3>Need help with your order?</h3><p>Our team is here to help.</p><Link className="btn btn-s" href="/contact/">Contact us</Link></div>
             </aside>
           </div>

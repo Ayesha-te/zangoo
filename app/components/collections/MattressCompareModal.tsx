@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import type { MattressProduct } from "@/app/data/mattressProducts";
+import { getCardCopy, type MattressProduct } from "@/app/data/mattressProducts";
 import { getFirmnessPercent } from "@/app/utils/firmness";
 import styles from "./mattressCompareModal.module.css";
 
@@ -41,9 +41,12 @@ export function MattressCompareModal({ products, onClose }: MattressCompareModal
     { label: "Spring type", render: (item) => item.compareSpecs.springType },
     { label: "Comfort layers", render: (item) => item.compareSpecs.comfortLayer },
     { label: "Cover", render: (item) => item.compareSpecs.cover },
+    { label: "Finish", render: (item) => getCardCopy(item.slug).finish },
+    { label: "Depth", render: (item) => getCardCopy(item.slug).depth },
     { label: "Turnable", render: (item) => (item.compareSpecs.turnable ? "Yes" : "No") },
-    { label: "Weight", render: (item) => item.compareSpecs.weight },
-    { label: "Rating", render: () => <span className={styles.ratingCell}>&#9733;&#9733;&#9733;&#9733;&#9733; 4.8 (358)</span> },
+    { label: "Weight", render: (item) => (item.compareSpecs.weight && item.compareSpecs.weight !== "—" ? item.compareSpecs.weight : "Not listed") },
+    // Rating hidden for now (client, 14/11/2026): there are no per-mattress reviews yet.
+    // { label: "Rating", render: () => <span className={styles.ratingCell}>&#9733;&#9733;&#9733;&#9733;&#9733; 4.8 (358)</span> },
   ];
 
   return (
@@ -66,10 +69,11 @@ export function MattressCompareModal({ products, onClose }: MattressCompareModal
           {products.map((item) => (
             <div className={styles.productHead} key={item.slug}>
               <span className={styles.productVisual}>
-                <img src={item.gallery?.[0]?.src ?? item.image} alt={item.imageAlt} />
+                {/* The main product photo (the first gallery photo can be a bedroom scene). */}
+                <img src={item.image} alt={item.imageAlt} />
               </span>
               <strong>{item.shortName}</strong>
-              <small>Orthopaedic Mattress</small>
+              <small>{getCardCopy(item.slug).type}</small>
             </div>
           ))}
         </div>

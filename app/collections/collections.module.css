@@ -2525,3 +2525,21 @@
 :global(html body) .mattressPrice small { display: flex; flex-wrap: wrap; column-gap: 10px; row-gap: 2px; }
 :global(html body) .mattressPrice small s,
 :global(html body) .mattressPrice small b { white-space: nowrap; }
+
+/* Cards line up row by row (client, 14/11/2026): every card in a grid row shares the same row tracks (subgrid),
+   so names, type lines, specs, stock, prices and buttons sit at the same height whatever wraps in one card.
+   Tracks: image · name · firmness · type · specs · stock · price · button · compare. */
+:global(html body) .mattressGrid { align-items: stretch; }
+:global(html body) .mattressCard { display: grid; grid-row: span 9; grid-template-rows: subgrid; row-gap: 0; height: auto; min-height: 0; }
+:global(html body) .mattressCardBody { display: grid; grid-row: span 8; grid-template-rows: subgrid; row-gap: 0; min-height: 0; }
+:global(html body) .mattressInfo { display: grid; grid-row: span 7; grid-template-rows: subgrid; row-gap: 0; align-items: start; }
+:global(html body) .mattressInfo > .mattressPrice { align-self: end; padding-bottom: 16px; container-type: inline-size; }
+/* (Size containment is on the price, not the card: a size container can't be a subgrid.) */
+:global(html body) .mattressInfo > .mattressButton { margin-top: 0; }
+:global(html body) .compareCheck { align-self: start; }
+/* Price line: "RRP £x" and "Save £y (15%)" side by side when the card is wide enough, otherwise on two lines,
+   the same for every card (they share one width), never one card wrapped and the next not. */
+:global(html body) .mattressPrice small { display: flex; flex-wrap: nowrap; align-items: baseline; column-gap: 10px; row-gap: 2px; }
+@container (max-width: 264px) {
+  :global(html body) .mattressPrice small { flex-direction: column; align-items: flex-start; }
+}

@@ -1,13 +1,8 @@
 /* Checkout page (design: light page, white rounded cards, navy numbered steps, order column on the right). */
 .page { min-height: 100vh; background: #f3f6fb; color: var(--navy); font-family: var(--sans); }
 
-.topBar { padding: 7px 16px; background: #c62828; color: #fff; text-align: center; font: 800 13px/1.3 var(--sans); letter-spacing: .06em; text-transform: uppercase; }
-.header { background: #fff; border-bottom: 1px solid var(--bdr); }
-.headerInner { max-width: 1240px; margin: 0 auto; padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
-.logo img { display: block; width: auto; height: 50px; }
-.secure { display: inline-flex; align-items: center; gap: 8px; font: 700 15px/1.2 var(--sans); }
-
-.main { max-width: 1240px; margin: 0 auto; padding: 24px 24px 64px; }
+/* The site menu (SiteHeader) is fixed at the top: content starts below it (--nav). */
+.main { max-width: 1240px; margin: 0 auto; padding: calc(var(--nav) + 24px) 24px 64px; }
 .titleRow { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; margin-bottom: 20px; }
 .titleRow h1 { margin: 0; font: 500 40px/1.1 var(--serif); color: var(--navy); }
 .titleRow p { margin: 6px 0 0; font-size: 16px; color: var(--body); }
@@ -23,7 +18,9 @@
 
 .layout { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 24px; align-items: start; }
 .formColumn, .aside { display: grid; gap: 18px; min-width: 0; }
-.aside { position: sticky; top: 16px; }
+/* Not sticky: the column is taller than the screen, and a sticky column jumped up and down whenever the form
+   column changed height (e.g. opening "Delivery instructions"). */
+.aside { position: static; align-self: start; }
 
 .card { padding: 22px 24px; border: 1px solid var(--bdr); border-radius: 14px; background: #fff; box-shadow: 0 2px 10px rgba(15, 35, 65, .04); }
 .cardHead { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 4px 14px; margin-bottom: 16px; }
@@ -45,8 +42,9 @@
 .field input:focus, .phone select:focus, .collapse textarea:focus, .codeRow input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(21, 87, 167, .14); }
 .invalid input, .invalid select { border-color: #d92d20 !important; }
 .error { margin: 0; color: #b42318; font: 600 14px/1.4 var(--sans); }
-.phone { display: grid; grid-template-columns: 112px minmax(0, 1fr); }
-.phone select { border-radius: 8px 0 0 8px; border-right: 0; padding-right: 6px; }
+.phone { display: grid; grid-template-columns: auto minmax(0, 1fr); }
+/* Fixed UK prefix (UK numbers only), no dropdown arrow. */
+.dial { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 14px; border: 1px solid #c3d0e0; border-right: 0; border-radius: 8px 0 0 8px; background: #f3f6fb; color: var(--navy); font: 700 16px/1 var(--sans); white-space: nowrap; }
 .phone input { border-radius: 0 8px 8px 0; }
 .search { position: relative; }
 .search svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--body); }
@@ -118,7 +116,8 @@
 .total dd small { display: block; color: var(--body); font: 500 13px/1.3 var(--sans); }
 
 .why { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 14px 0 0; padding: 0; list-style: none; }
-.why li { display: grid; grid-template-columns: 32px minmax(0, 1fr); column-gap: 10px; align-items: start; }
+.why li { display: grid; grid-template-columns: 32px minmax(0, 1fr); grid-template-rows: auto auto; column-gap: 10px; align-items: start; align-content: start; }
+.whyIcon { display: flex; align-items: center; height: 24px; }
 .why li > span, .why li > svg { grid-row: span 2; color: var(--blue); font-size: 24px; line-height: 1; }
 .why strong { font: 800 15px/1.3 var(--sans); }
 .why small { color: var(--body); font-size: 14px; line-height: 1.35; }
@@ -143,7 +142,7 @@
 .secureRow svg { width: 18px; height: 18px; }
 .secureRow img { height: 22px; width: auto; }
 
-.thanksWrap { display: grid; place-items: center; min-height: 70vh; padding: 32px 16px; }
+.thanksWrap { display: grid; place-items: center; min-height: 70vh; padding: calc(var(--nav) + 32px) 16px 32px; }
 .thanks { width: min(640px, 100%); padding: 36px 32px; border: 1px solid var(--bdr); border-radius: 16px; background: #fff; text-align: center; }
 .thanksIcon { display: inline-grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: #2e7d32; color: #fff; font: 800 30px/1 var(--sans); }
 .thanks h1 { margin: 16px 0 8px; font: 500 40px/1.15 var(--serif); color: var(--navy); }
@@ -158,13 +157,9 @@
 
 @media (max-width: 1080px) {
   .layout { grid-template-columns: minmax(0, 1fr); }
-  .aside { position: static; }
 }
 @media (max-width: 640px) {
-  .headerInner { padding: 8px 16px; }
-  .logo img { height: 40px; }
-  .secure { font-size: 14px; }
-  .main { padding: 16px 12px 48px; }
+  .main { padding: calc(var(--nav) + 16px) 12px 48px; }
   .titleRow h1 { font-size: 32px; }
   .steps li { font-size: 0; gap: 0; }
   .steps li span { font-size: 14px; }
@@ -183,3 +178,18 @@
   .thanks h1 { font-size: 32px; }
 }
 .notice { margin: 0 0 12px; padding: 12px 14px; border: 1px solid #f0c98a; border-radius: 10px; background: #fff8ec; color: var(--navy); font: 600 15px/1.5 var(--sans); }
+
+.hint { color: var(--body); font: 500 14px/1.4 var(--sans); }
+.hint .linkButton { font-size: 14px; }
+.counter { display: block; margin: -8px 16px 12px 0; color: var(--body); font: 500 13px/1 var(--sans); text-align: right; }
+/* Which payment method is chosen, and what happens next. */
+.methodNote { margin-top: 14px; padding: 12px 14px; border: 1px solid #c3d0e0; border-radius: 10px; background: #f4f8fe; }
+.methodNote strong { display: block; color: var(--navy); font: 800 16px/1.3 var(--sans); }
+.methodNote p { margin: 4px 0 0; color: var(--body); font: 500 15px/1.5 var(--sans); }
+.methodNote b { color: var(--navy); }
+.methodReady { border-color: rgba(46, 125, 50, .45); background: #eef8f0; }
+.methodReady strong { color: #2e7d32; }
+/* Honeypot field: off-screen for people, still in the form for bots. */
+.trap { position: absolute !important; left: -9999px !important; width: 1px !important; height: 1px !important; opacity: 0 !important; }
+
+

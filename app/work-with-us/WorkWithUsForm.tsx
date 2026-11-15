@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { getTurnstileToken } from "@/app/lib/turnstile";
 
 type Status = { state: "idle" | "sending" | "done" | "error"; message?: string };
 
@@ -32,6 +33,7 @@ export function WorkWithUsForm() {
           has_experience: hasExperience === "yes",
           experience: field("experience"),
           website: field("website"),
+          turnstile: await getTurnstileToken("apply"),
         }),
       });
       const result = (await response.json().catch(() => null)) as { ok?: unknown; message?: unknown } | null;

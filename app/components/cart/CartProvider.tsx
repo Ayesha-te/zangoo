@@ -42,7 +42,8 @@ type CartContextValue = {
   applyCoupon: (code: string) => Promise<void>;
   removeCoupon: (code: string) => Promise<void>;
   /** Places the order for this basket (Store API checkout); WooCommerce takes the payment and empties the basket. */
-  placeOrder: (order: unknown) => Promise<StoreCheckoutResult>;
+  /** extraHeaders: e.g. the spam-check token (X-OB-Turnstile), checked by the WordPress snippet. */
+  placeOrder: (order: unknown, extraHeaders?: Record<string, string>) => Promise<StoreCheckoutResult>;
   /** Reloads the basket from WooCommerce (e.g. after an order). */
   refreshCart: () => Promise<void>;
 };
@@ -234,14 +235,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
       refreshCart: async () => {
         if (mode === "woocommerce") await storeRequest("/cart").catch(() => undefined);
       },
-      placeOrder: async (order) => {
+      placeOrder: async (order, extraHeaders = {}) => {
         // Queued behind any basket update, so the order is placed for the basket the customer sees.
         const run = async () => {
           setPending(true);
           try {
             const response = await fetch(`${STORE_API}/checkout/`, {
               method: "POST",
-              headers: { "Content-Type": "application/json", ...(tokenRef.current ? { "Cart-Token": tokenRef.current } : {}) },
+              headers: { "Content-Type": "application/json", ...(tokenRef.current ? { "Cart-Token": tokenRef.current } : {}), ...extraHeaders },
               body: JSON.stringify(order),
             });
             const data = await response.json().catch(() => null);

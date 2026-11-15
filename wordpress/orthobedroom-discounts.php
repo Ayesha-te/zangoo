@@ -17,6 +17,12 @@
  *    View or download them (CSV) in WooCommerce → Sign-ups.
  * 4. "Work with Us" applications from digital marketers (www.orthobedroom.co.uk/work-with-us/) are saved in
  *    wp_ob_applications. View or download them (CSV) in WooCommerce → Marketer applications.
+ * 5. Spam protection (Cloudflare Turnstile) for checkout, sign-ups and applications. OFF until switched on:
+ *    Cloudflare dashboard → Turnstile → Add widget (domain www.orthobedroom.co.uk, mode "Managed"), then
+ *    - add the SECRET key to wp-config.php:  define( 'OB_TURNSTILE_SECRET', 'your-secret-key' );
+ *    - add the SITE key in Vercel as NEXT_PUBLIC_TURNSTILE_SITE_KEY and redeploy the site.
+ *    Add the Vercel key first (or both together): once the secret is set, requests without a valid token are refused.
+ *    Note: with the secret set, orders can only be placed from www.orthobedroom.co.uk (not WordPress' own checkout).
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -281,6 +287,44 @@ function ob_rate_limited( $bucket, $max ) {
 	return false;
 }
 
+/* ── Spam protection: Cloudflare Turnstile (off until OB_TURNSTILE_SECRET is defined in wp-config.php) ── */
+
+/** True when the token is valid, or when Turnstile is off / Cloudflare can't be reached (never block customers then). */
+function ob_turnstile_ok( $token ) {
+	if ( ! defined( 'OB_TURNSTILE_SECRET' ) || '' === (string) OB_TURNSTILE_SECRET ) {
+		return true;
+	}
+	$token = trim( (string) $token );
+	if ( '' === $token || strlen( $token ) > 2048 ) {
+		return false;
+	}
+	$forwarded = (string) ( $_SERVER['HTTP_X_FORWARDED_FOR'] ?? '' );
+	$visitor   = $forwarded ? trim( explode( ',', $forwarded )[0] ) : (string) ( $_SERVER['REMOTE_ADDR'] ?? '' );
+	$response  = wp_remote_post( 'https://challenges.cloudflare.com/turnstile/v0/siteverify', array(
+		'timeout' => 8,
+		'body'    => array( 'secret' => OB_TURNSTILE_SECRET, 'response' => $token, 'remoteip' => $visitor ),
+	) );
+	if ( is_wp_error( $response ) ) {
+		return true;
+	}
+	$data = json_decode( wp_remote_retrieve_body( $response ), true );
+	return is_array( $data ) && ! empty( $data['success'] );
+}
+
+/** Checkout (WooCommerce Store API): the site sends the token in the X-OB-Turnstile header. */
+add_filter( 'rest_pre_dispatch', function ( $result, $server, $request ) {
+	if ( null !== $result || 'POST' !== $request->get_method() ) {
+		return $result;
+	}
+	if ( ! preg_match( '#^/wc/store(/v\d+)?/checkout/?$#', (string) $request->get_route() ) ) {
+		return $result;
+	}
+	if ( ob_turnstile_ok( $request->get_header( 'x_ob_turnstile' ) ) ) {
+		return $result;
+	}
+	return new WP_Error( 'ob_security_check', 'Our security check could not confirm your order. Please refresh the page and try again.', array( 'status' => 403 ) );
+}, 10, 3 );
+
 /* ── "Work with Us" applications (database table wp_ob_applications) ── */
 
 function ob_applications_table() {
@@ -391,6 +435,9 @@ add_action( 'rest_api_init', function () {
 			if ( '' !== trim( (string) $request->get_param( 'website' ) ) ) {
 				return rest_ensure_response( $thanks );
 			}
+			if ( ! ob_turnstile_ok( $request->get_param( 'turnstile' ) ) ) {
+				return $fail( 'Our security check failed. Please refresh the page and try again.' );
+			}
 
 			$name        = sanitize_text_field( (string) $request->get_param( 'full_name' ) );
 			$nationality = sanitize_text_field( (string) $request->get_param( 'nationality' ) );
@@ -484,10 +531,13 @@ add_action( 'rest_api_init', function () {
 			if ( '' !== trim( (string) $request->get_param( 'website' ) ) ) {
 				return rest_ensure_response( $signed_up );
 			}
+			if ( ! ob_turnstile_ok( $request->get_param( 'turnstile' ) ) ) {
+				return new WP_REST_Response( array( 'ok' => false, 'message' => 'Our security check failed. Please refresh the page and try again.' ), 403 );
+			}
 
 			$email      = sanitize_email( (string) $request->get_param( 'email' ) );
-			$first_name = sanitize_text_field( (string) $request->get_param( 'first_name' ) );
-			if ( ! is_email( $email ) ) {
+			$first_name = mb_substr( sanitize_text_field( (string) $request->get_param( 'first_name' ) ), 0, 40 );
+			if ( strlen( $email ) > 254 || ! is_email( $email ) ) {
 				return new WP_REST_Response( array( 'ok' => false, 'message' => 'Please enter a valid email address.' ), 400 );
 			}
 
