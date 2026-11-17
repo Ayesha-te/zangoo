@@ -70,6 +70,11 @@ export function mapWooProduct(product: WooProduct, variations: WooVariation[] = 
   return {
     slug: product.slug,
     sku: product.sku?.trim() || undefined,
+    // "Delivery area" attribute: "London only" → london, "UK" → uk; not set → left to the local data / default (UK).
+    ...(() => {
+      const area = attributeValue(product.attributes, /deliver/i);
+      return area ? { deliveryArea: /london/i.test(area) ? ("london" as const) : ("uk" as const) } : {};
+    })(),
     name: product.name,
     shortName: product.name,
     price: pricing ? `${variations.length ? "From " : ""}${formatGBP(pricing.sale)}` : "Price on request",

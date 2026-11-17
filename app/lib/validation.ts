@@ -8,7 +8,7 @@ export const LIMITS = {
   address: 80,
   city: 40,
   postcode: 8,
-  phone: 16,
+  phone: 20,
   instructions: 500,
   code: 40,
 } as const;
@@ -110,6 +110,15 @@ export function ukPhoneNational(raw: string): string | null {
   if (/^7[1-57-9]\d{8}$/.test(digits)) return digits;
   if (/^(1\d{8,9}|2\d{9}|3\d{9})$/.test(digits)) return digits;
   return null;
+}
+
+/**
+ * A UK mobile only (client, 17/11/2026: no landlines; delivery updates go by text): 07 + 9 digits, in any common
+ * format (07123 456789, +44 7123 456789, 0044…). Returns "7123456789" or null.
+ */
+export function ukMobileNational(raw: string): string | null {
+  const national = ukPhoneNational(raw);
+  return national && /^7[1-57-9]\d{8}$/.test(national) ? national : null;
 }
 
 /** "+44 7700 900123" style, for the order. */

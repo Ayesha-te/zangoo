@@ -12,6 +12,8 @@ import { customerReviews } from "@/app/data/customerReviews";
 import { ProductFaq } from "@/app/components/site/ProductFaq";
 import { SpinViewer } from "@/app/components/product/SpinViewer";
 import { FeaturesAndBenefits, FeaturesYoullLove, QuickFacts, SizeBoxes } from "./PocketSprungLayout";
+import { DeliveryReturnsPanel } from "./DeliveryReturnsPanel";
+import { DELIVERY_AREA_LABEL, deliveryAreaOf } from "@/app/data/policies";
 import { STORAGE_KEYS, readStorage, writeStorage } from "@/app/utils/browserStorage";
 import { useCart } from "@/app/components/cart/CartProvider";
 import { getStockState, type StockTone } from "@/app/utils/stockState";
@@ -198,14 +200,14 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
         { title: "Description", body: product.description },
         { title: "Features & Benefits", body: "", node: <FeaturesAndBenefits features={accordionContent.features} benefits={accordionContent.benefits} /> },
         { title: "Dimensions and Size Guide", body: accordionContent.dimensions },
-        { title: product.copy?.deliveryTitle ?? "Delivery, Guarantee & Returns", body: accordionContent.deliveryReturns },
+        { title: product.copy?.deliveryTitle ?? "Delivery, Guarantee & Returns", body: "", node: <DeliveryReturnsPanel product={product} deliveryReturns={accordionContent.deliveryReturns} /> },
       ]
     : [
         { title: "Description", body: product.description },
         { title: "Features", body: accordionContent.features },
         { title: "Benefits", body: accordionContent.benefits },
         { title: "Dimensions and Size Guide", body: accordionContent.dimensions },
-        { title: product.copy?.deliveryTitle ?? "Delivery, Guarantee & Returns", body: accordionContent.deliveryReturns },
+        { title: product.copy?.deliveryTitle ?? "Delivery, Guarantee & Returns", body: "", node: <DeliveryReturnsPanel product={product} deliveryReturns={accordionContent.deliveryReturns} /> },
       ];
   const addSelected = () =>
     addItem({ slug: product.slug, name: product.shortName, image: sizeImage.src, price: activeSize.price, size, variationId: product.sizePricing?.[size]?.variationId, href: `/collections/bedroom/mattresses/${product.slug}/` }, quantity);
@@ -348,7 +350,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
                   <SizeBoxes sizes={sizes} selected={size} onSelect={chooseSize} />
                   <div className={styles.deliveryBox}>
                     <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 7l9-4 9 4v10l-9 4-9-4z" /><path d="M3 7l9 4 9-4M12 11v10" /></svg>
-                    <span><b>FREE delivery</b> on all orders</span>
+                    <span><b>FREE delivery</b> · {DELIVERY_AREA_LABEL[deliveryAreaOf(product)].short}</span>
                   </div>
                   <div className={styles.qty}>
                     <span>Quantity</span>
@@ -476,6 +478,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             <span>{formatGBP(activeSize.compare * quantity)}</span>
             <em>You Save {formatGBP((activeSize.compare - activeSize.price) * quantity)}</em>
           </div>
+          <p className={styles.deliveryArea}>Free delivery · {DELIVERY_AREA_LABEL[deliveryAreaOf(product)].short}</p>
           <div className={styles.buyActions}>
             <button
               className={`${styles.addButton} ${added ? styles.addedButton : ""}`}
@@ -609,7 +612,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
               >
                 &times;
               </button>
-              <img src={comparisonProduct!.gallery?.[0]?.src ?? comparisonProduct!.image} alt={comparisonProduct!.imageAlt} />
+              <img src={comparisonProduct!.image} alt={comparisonProduct!.imageAlt} />
               <strong>{comparisonProduct!.shortName}</strong>
               <small>{comparisonProduct!.firmness}</small>
               <span>{comparisonProduct!.price.replace("From ", "")}</span>
@@ -629,7 +632,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
               {relatedProducts.map((item) => (
                 <li key={item.slug}>
                   <button type="button" onClick={() => chooseComparison(item.slug)}>
-                    <img src={item.gallery?.[0]?.src ?? item.image} alt="" />
+                    <img src={item.image} alt="" />
                     <span>
                       <strong>{item.shortName}</strong>
                       <small>{item.firmness}</small>

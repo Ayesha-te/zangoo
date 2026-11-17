@@ -218,7 +218,8 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
               const item = compareProducts[slot];
               return item ? (
                 <div className={styles.compareTraySlot} key={item.slug}>
-                  <img src={item.gallery?.[0]?.src ?? item.image} alt="" />
+                  {/* Same main photo as the card (17/11/2026). */}
+                  <img src={item.image} alt="" />
                   <span>
                     <strong>{item.shortName}</strong>
                     <small>{cleanPrice(item.price)}</small>

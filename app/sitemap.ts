@@ -30,6 +30,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .filter((post) => post.slug)
       .map((post) => ({ ...page(`/blog/${post.slug}/`, 0.5, "monthly"), lastModified: post.date ? new Date(post.date) : now })),
     page("/faq/", 0.5, "monthly"),
+    page("/delivery/", 0.5, "monthly"),
+    page("/returns/", 0.5, "monthly"),
     page("/reviews/", 0.5),
     page("/about/", 0.4, "monthly"),
     page("/contact/", 0.4, "monthly"),

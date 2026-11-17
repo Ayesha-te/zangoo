@@ -69,6 +69,14 @@ function observedSectionId(href: string) {
   return sectionIdFromHref(href);
 }
 
+const ANNOUNCEMENTS = [
+  "Winter mattress sale now live",
+  "Free delivery on all orders",
+  "0% interest-free finance available",
+  "Made in the UK",
+  "1-year guarantee",
+];
+
 export function SiteHeader() {
   const { favorites } = useFavorites();
   const pathname = usePathname();
@@ -290,10 +298,14 @@ export function SiteHeader() {
     <header>
       <nav ref={navRef} className={`nav${scrolled || searchOpen ? " up" : ""}`} aria-label="Main navigation">
         <div className="announce-bar" aria-label="Store announcements">
-          <div className="announce-track">
-            <span>Winter mattress sale now live</span>
-            <span>Free delivery on all orders</span>
-            <span>0% interest-free finance available</span>
+          {/* Continuous right-to-left ticker (client, 17/11/2026). The list is repeated so the loop has no gap;
+              the copies are hidden from screen readers. */}
+          <div className="announce-ticker">
+            {[0, 1].map((copy) => (
+              <ul className="announce-run" aria-hidden={copy === 1 ? true : undefined} key={copy}>
+                {ANNOUNCEMENTS.map((text) => <li key={text}>{text}</li>)}
+              </ul>
+            ))}
           </div>
         </div>
         <div className="nav-in">
@@ -571,7 +583,10 @@ export function SiteFooter() {
           <h2>Support</h2>
           <ul className="foot-links" role="list">
             <li>
-              <Link href="/faq/">Returns &amp; Guarantee</Link>
+              <Link href="/delivery/">Delivery Information</Link>
+            </li>
+            <li>
+              <Link href="/returns/">Returns &amp; Guarantee</Link>
             </li>
             <li>
               <Link href="/contact/">Contact Support</Link>

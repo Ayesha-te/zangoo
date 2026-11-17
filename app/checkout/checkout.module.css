@@ -21,6 +21,8 @@
 /* Not sticky: the column is taller than the screen, and a sticky column jumped up and down whenever the form
    column changed height (e.g. opening "Delivery instructions"). */
 .aside { position: static; align-self: start; }
+/* Desktop: the order summary is short now (17/11/2026), so it can stay in view while the form scrolls. */
+@media (min-width: 1081px) { .aside { position: sticky; top: calc(var(--nav) + 16px); } }
 
 .card { padding: 22px 24px; border: 1px solid var(--bdr); border-radius: 14px; background: #fff; box-shadow: 0 2px 10px rgba(15, 35, 65, .04); }
 .cardHead { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 4px 14px; margin-bottom: 16px; }
@@ -157,6 +159,8 @@
 
 @media (max-width: 1080px) {
   .layout { grid-template-columns: minmax(0, 1fr); }
+  /* Tablet and phone: the order (products, discount code, total) comes first, then the form. */
+  .aside { order: -1; }
 }
 @media (max-width: 640px) {
   .main { padding: calc(var(--nav) + 16px) 12px 48px; }
@@ -193,3 +197,11 @@
 .trap { position: absolute !important; left: -9999px !important; width: 1px !important; height: 1px !important; opacity: 0 !important; }
 
 
+
+/* Pay button straight under the payment methods (client, 17/11/2026). */
+.paySection { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--bdr); }
+.paySection > .check:first-child { margin-top: 0; }
+.phone { position: relative; }
+.phoneHint { grid-column: 1 / -1; margin-top: 6px; color: var(--body); font: 500 14px/1.4 var(--sans); }
+/* Placeholders clearly lighter than typed text, so they are never mistaken for filled-in values. */
+.field input::placeholder { color: #a9b6c7; font-weight: 400; }

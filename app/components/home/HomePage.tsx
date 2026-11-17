@@ -438,7 +438,8 @@ function lowestPrice(products: MattressProduct[]) {
     .filter((price) => Number.isFinite(price) && price > 0);
   if (!prices.length) return undefined;
   const lowest = Math.min(...prices);
-  return `From £${Number.isInteger(lowest) ? lowest : lowest.toFixed(2)}`;
+  // Same format on every card: pounds and pence (£221.00, £268.60).
+  return `From £${lowest.toFixed(2)}`;
 }
 
 function FeaturedMattresses() {

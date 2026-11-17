@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Breadcrumbs, SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
@@ -24,8 +23,7 @@ const benefits: Array<{ icon: string; label: string }> = [
 ];
 
 export default function CartPage() {
-  const { items, updateQuantity, removeItem, pending, error, checkoutUrl, goToCheckout, mode, coupons, totals, applyCoupon, removeCoupon } = useCart();
-  const [code, setCode] = useState("");
+  const { items, updateQuantity, removeItem, pending, error, checkoutUrl, goToCheckout, mode, coupons, totals, removeCoupon } = useCart();
   const router = useRouter();
   const { getProduct } = useCatalog();
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -86,12 +84,8 @@ export default function CartPage() {
                   </p>
                 ) : null}
                 <div><span>Delivery</span><strong>Free</strong></div>
-                {mode === "woocommerce" ? (
-                  <form className="summary-code" onSubmit={(event) => { event.preventDefault(); applyCoupon(code).then(() => setCode("")).catch(() => undefined); }}>
-                    <label htmlFor="discount-code">Discount code</label>
-                    <div><input id="discount-code" value={code} onChange={(event) => setCode(event.target.value)} placeholder="Enter code" autoComplete="off" disabled={pending} /><button type="submit" className="btn btn-s" disabled={pending || !code.trim()}>Apply</button></div>
-                  </form>
-                ) : null}
+                {/* Discount codes are entered at checkout only (client, 17/11/2026). */}
+                <p className="summary-code-note">Have a discount code? You can add it at checkout.</p>
                 <hr />
                 <div className="summary-total"><span>Total</span><strong>{formatGBP(totals?.total ?? subtotal)}</strong></div>
                 {error ? <p className="cart-error" role="alert">{error}</p> : null}

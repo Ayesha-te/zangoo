@@ -12,6 +12,8 @@ export type MattressProduct = {
   /** Not on sale yet (no confirmed prices): the page shows "price coming soon" instead of the basket, and the
    *  product stays out of listings. Becomes purchasable once a WooCommerce product with this slug exists. */
   comingSoon?: boolean;
+  /** Delivery area (WooCommerce "Delivery area" attribute: "London only" or "UK"). Default: UK. */
+  deliveryArea?: "london" | "uk";
   /** WooCommerce SKU (shown on the product page only when set). */
   sku?: string;
   /** "pocket": the pocket sprung range layout (size boxes, tick-list, icon features). */

@@ -10,7 +10,7 @@ import { SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { getTurnstileToken } from "@/app/lib/turnstile";
 import {
   LIMITS, addressError, cityError, emailDomainAcceptsMail, emailError, emailSuggestion, formatUkPhone, nameError, postcodeError,
-  ukPhoneNational,
+  ukMobileNational,
 } from "@/app/lib/validation";
 import styles from "./checkout.module.css";
 
@@ -90,7 +90,8 @@ function validate(fields: Fields, emailDomainBad = false): Errors {
     if (message) errors[name] = message;
   };
   put("email", emailError(fields.email) ?? (emailDomainBad ? EMAIL_DOMAIN_ERROR : null));
-  put("phone", !fields.phone.trim() ? "Please enter your mobile number." : ukPhoneNational(fields.phone) ? null : "Please enter a valid UK mobile or landline number, e.g. 07700 900123.");
+  // UK mobiles only (client, 17/11/2026): used for delivery updates by text.
+  put("phone", !fields.phone.trim() ? "Please enter your mobile number. We need it for delivery updates." : ukMobileNational(fields.phone) ? null : "Please enter a valid UK mobile number: 11 digits starting with 07.");
   put("firstName", nameError(fields.firstName, "first name"));
   put("lastName", nameError(fields.lastName, "surname"));
   put("address1", addressError(fields.address1, true));
@@ -121,6 +122,9 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
   const [fields, setFields] = useState<Fields>(EMPTY);
   const [errors, setErrors] = useState<Errors>({});
   const [touched, setTouched] = useState(false);
+  // Fields the customer has left (their errors show), and the field being typed in (its error waits until they leave).
+  const [blurred, setBlurred] = useState<ReadonlySet<string>>(() => new Set());
+  const [editing, setEditing] = useState<string | null>(null);
   const [manualAddress, setManualAddress] = useState(false);
   const [instructionsOpen, setInstructionsOpen] = useState(false);
   const [codeOpen, setCodeOpen] = useState(true);
@@ -183,8 +187,17 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
       setEmailDomainBad(false);
       emailDomainBadRef.current = false;
     }
-    if (touched) setErrors(validate(next, domainBad));
+    if (typeof value === "string") setEditing(name);
+    setErrors(validate(next, domainBad));
   };
+  const leaveField = (name: string) => {
+    setEditing((current) => (current === name ? null : current));
+    setBlurred((current) => (current.has(name) ? current : new Set(current).add(name)));
+  };
+  /** The error to show for a field: only once it has been left or Pay was pressed, and not while typing in it. */
+  const shownError = (name: FieldName | "payment") =>
+    errors[name] && editing !== name && (touched || blurred.has(name)) ? errors[name] : undefined;
+  const hasShownErrors = (Object.keys(errors) as Array<FieldName | "payment">).some((name) => shownError(name));
 
   /** Does the email's domain accept mail? Shown as an error straight away when it clearly doesn't. */
   const checkEmailDomain = useCallback(async (email: string) => {
@@ -212,7 +225,7 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
 
   /** Woo address objects from the form. */
   const addresses = useCallback((f: Fields) => {
-    const national = ukPhoneNational(f.phone);
+    const national = ukMobileNational(f.phone);
     const phone = national ? formatUkPhone(national) : f.phone.trim();
     const delivery = {
       first_name: f.firstName.trim(), last_name: f.lastName.trim(), company: "", address_1: f.address1.trim(), address_2: f.address2.trim(),
@@ -230,12 +243,18 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
   /** Shows the first problem and moves the customer to it. */
   const showErrors = useCallback((found: Errors) => {
     setTouched(true);
+    setEditing(null);
     setErrors(found);
+    // There is no address lookup: missing address lines open the full address form straight away.
+    if (found.address1 || found.city) setManualAddress(true);
     const first = Object.keys(found)[0];
     if (first) {
-      const el = document.querySelector<HTMLElement>(`[data-field="${first}"]`);
-      el?.scrollIntoView({ behavior: "smooth", block: "center" });
-      el?.querySelector<HTMLElement>("input, select, textarea")?.focus({ preventScroll: true });
+      // After the re-render (the address fields may have just appeared).
+      setTimeout(() => {
+        const el = document.querySelector<HTMLElement>(`[data-field="${first}"]`);
+        el?.scrollIntoView({ behavior: "smooth", block: "center" });
+        el?.querySelector<HTMLElement>("input, select, textarea")?.focus({ preventScroll: true });
+      }, 0);
     }
   }, []);
 
@@ -504,18 +523,22 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
   }
 
   const field = (name: FieldName, label: ReactNode, input: ReactNode, wide = false) => (
-    <label className={`${styles.field}${wide ? ` ${styles.wide}` : ""}${errors[name] ? ` ${styles.invalid}` : ""}`} data-field={name}>
+    <label className={`${styles.field}${wide ? ` ${styles.wide}` : ""}${shownError(name) ? ` ${styles.invalid}` : ""}`} data-field={name}>
       <span className={styles.label}>{label}</span>
       {input}
-      {errors[name] ? <small className={styles.error} role="alert">{errors[name]}</small> : null}
+      {shownError(name) ? <small className={styles.error} role="alert">{shownError(name)}</small> : null}
     </label>
   );
   const text = (name: FieldName, props: React.InputHTMLAttributes<HTMLInputElement> = {}) => (
     <input
       value={String(fields[name])}
       onChange={(event) => set(name, event.target.value as never)}
-      aria-invalid={Boolean(errors[name])}
+      aria-invalid={Boolean(shownError(name))}
       {...props}
+      onBlur={(event) => {
+        props.onBlur?.(event);
+        leaveField(name);
+      }}
     />
   );
 
@@ -615,13 +638,14 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
                   <div className={styles.phone}>
                     <span className={styles.dial} title="UK numbers only"><UkFlag /> +44</span>
                     {text("phone", {
-                      type: "tel", autoComplete: "tel-national", inputMode: "tel", placeholder: "07700 900123", maxLength: LIMITS.phone,
-                      // A valid mobile is tidied to the usual UK format, e.g. "+44 (0)7700900123" → "07700 900123".
+                      type: "tel", autoComplete: "tel-national", inputMode: "tel", placeholder: "07xxx xxxxxx", maxLength: LIMITS.phone,
+                      // A valid mobile is tidied to the usual UK format, e.g. "+44 (0)7123456789" → "07123 456789".
                       onBlur: (event) => {
-                        const national = ukPhoneNational(event.target.value);
-                        if (national?.startsWith("7")) set("phone", `0${national.slice(0, 4)} ${national.slice(4)}`);
+                        const national = ukMobileNational(event.target.value);
+                        if (national) set("phone", `0${national.slice(0, 4)} ${national.slice(4)}`);
                       },
                     })}
+                    <small className={styles.phoneHint}>Required for delivery updates by text.</small>
                   </div>,
                 )}
               </div>
@@ -638,8 +662,8 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
                 <p className={styles.headNote}>Delivering to <b>United Kingdom</b> <UkFlag /></p>
               </div>
               <div className={styles.grid}>
-                {field("firstName", <>First name <i>*</i></>, text("firstName", { autoComplete: "given-name", placeholder: "John", maxLength: LIMITS.name }))}
-                {field("lastName", <>Surname <i>*</i></>, text("lastName", { autoComplete: "family-name", placeholder: "Smith", maxLength: LIMITS.name }))}
+                {field("firstName", <>First name <i>*</i></>, text("firstName", { autoComplete: "given-name", maxLength: LIMITS.name }))}
+                {field("lastName", <>Surname <i>*</i></>, text("lastName", { autoComplete: "family-name", maxLength: LIMITS.name }))}
                 {!manualAddress ? (
                   <>
                     {field(
@@ -662,9 +686,6 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
                   </>
                 )}
               </div>
-              {touched && !manualAddress && (errors.address1 || errors.city) ? (
-                <p className={styles.error} role="alert">Please enter your full address. <button type="button" className={styles.linkButton} onClick={() => setManualAddress(true)}>Enter address manually</button></p>
-              ) : null}
             </section>
 
             <section className={styles.card} aria-labelledby="co-delivery">
@@ -705,7 +726,7 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
                 <div ref={expressMountRef} className={styles.expressMount} />
               </div>
               {expressAvailable ? <div className={styles.divider}><span>Or pay by card</span></div> : null}
-              <div data-field="payment" className={errors.payment ? styles.invalid : undefined}>
+              <div data-field="payment" className={shownError("payment") ? styles.invalid : undefined}>
                 {freeOrder ? (
                   <p className={styles.notice}>Your discount covers the full order, so no payment is needed. Press <b>Place order</b> to finish.</p>
                 ) : belowCardMinimum ? (
@@ -733,11 +754,46 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
                   ) : (
                     <div className={paymentComplete ? `${styles.methodNote} ${styles.methodReady}` : styles.methodNote} role="status">
                       <strong>{paymentComplete ? "✓ Card details entered" : "Paying by card"}</strong>
-                      <p>{paymentComplete ? <>Press <b>Pay {formatGBP(total)} securely</b> below to finish.</> : "Enter your card number, expiry date and security code above."}</p>
+                      <p>{paymentComplete ? <>Press <b>Pay {formatGBP(total)} securely</b> below to finish.</> : "Enter your card number, expiry date and security code above, then press Pay below."}</p>
                     </div>
                   )
                 ) : null}
-                {errors.payment ? <small className={styles.error} role="alert">{errors.payment}</small> : null}
+                {shownError("payment") ? <small className={styles.error} role="alert">{shownError("payment")}</small> : null}
+              </div>
+              <div className={styles.paySection}>
+              <label className={styles.check}>
+                <input type="checkbox" checked={fields.billingSame} onChange={(event) => set("billingSame", event.target.checked)} />
+                <span>Billing address is the same as delivery address</span>
+              </label>
+              {!fields.billingSame ? (
+                <div className={`${styles.grid} ${styles.billing}`}>
+                  {field("billFirstName", <>First name <i>*</i></>, text("billFirstName", { autoComplete: "billing given-name", maxLength: LIMITS.name }))}
+                  {field("billLastName", <>Surname <i>*</i></>, text("billLastName", { autoComplete: "billing family-name", maxLength: LIMITS.name }))}
+                  {field("billAddress1", <>Address line 1 <i>*</i></>, text("billAddress1", { autoComplete: "billing address-line1", maxLength: LIMITS.address }), true)}
+                  {field("billAddress2", <>Address line 2 <em>(optional)</em></>, text("billAddress2", { autoComplete: "billing address-line2", maxLength: LIMITS.address }), true)}
+                  {field("billCity", <>Town / City <i>*</i></>, text("billCity", { autoComplete: "billing address-level2", maxLength: LIMITS.city }))}
+                  {field("billPostcode", <>Postcode <i>*</i></>, text("billPostcode", { autoComplete: "billing postal-code", maxLength: LIMITS.postcode }))}
+                </div>
+              ) : null}
+              {/* Honeypot: hidden from people (and screen readers), filled in by bots. */}
+              <input className={styles.trap} type="text" name="company_website" tabIndex={-1} autoComplete="off" aria-hidden="true" onChange={(event) => { trapRef.current = event.target.value; }} />
+              {payError ? <p className={styles.payError} role="alert">{payError}</p> : null}
+              {touched && hasShownErrors ? <p className={styles.payError} role="alert">Please complete the highlighted fields.</p> : null}
+              <button type="submit" className={styles.payButton} disabled={paying || pending || belowCardMinimum}>
+                <LockIcon /> {paying ? "Processing payment…" : freeOrder ? "Place order" : redirectMethod ? `Continue to ${redirectMethod}` : `Pay ${formatGBP(total)} securely`} {!paying ? <span aria-hidden="true">→</span> : null}
+              </button>
+              <p className={styles.terms}>
+                By placing your order, you agree to our <Link href="/faq/">Terms &amp; Conditions</Link>, <Link href="/contact/">Privacy Notice</Link> and <Link href="/returns/">Returns &amp; Guarantee</Link>.
+              </p>
+              <div className={styles.secureRow}>
+                <ShieldIcon /> <span>Secure payments:</span>
+                <img src="/payments/visa-svgrepo-com.svg" alt="Visa" />
+                <img src="/payments/mastercard.svg" alt="Mastercard" />
+                <img src="/payments/amex.svg" alt="American Express" />
+                <img src="/payments/klarna.svg" alt="Klarna" />
+                <img src="/payments/apple-pay.svg" alt="Apple Pay" />
+                <img src="/payments/google-pay.svg" alt="Google Pay" />
+              </div>
               </div>
             </section>
           </div>
@@ -801,61 +857,6 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
               </dl>
             </section>
 
-            <section className={styles.card} aria-labelledby="co-why">
-              <h2 id="co-why" className={styles.asideTitle}>Why buy from OrthoBedroom?</h2>
-              <ul className={styles.why}>
-                <li><span className={styles.whyIcon}><UkFlag /></span><strong>Made in the UK</strong><small>Quality British-made mattresses</small></li>
-                <li><TruckIcon /><strong>Free UK delivery</strong><small>To most of the UK mainland</small></li>
-                <li><ShieldIcon /><strong>1 year guarantee</strong><small>Shop with confidence</small></li>
-                <li><CoinsIcon /><strong>0% interest-free finance</strong><small>Subject to eligibility</small></li>
-              </ul>
-            </section>
-
-            <section className={`${styles.card} ${styles.help}`} aria-labelledby="co-help">
-              <ChatIcon />
-              <div>
-                <h2 id="co-help" className={styles.asideTitle}>Need help with your order?</h2>
-                <p>Our friendly team is here to help with any questions.</p>
-                <p className={styles.helpPhone}><WhatsAppIcon /> WhatsApp: <a href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">{WHATSAPP_NUMBER}</a><small>Mon–Fri 9am–5pm</small></p>
-              </div>
-              <a className={styles.outlineButton} href={WHATSAPP_LINK} target="_blank" rel="noopener noreferrer">Contact us</a>
-            </section>
-
-            <section className={styles.card}>
-              <label className={styles.check}>
-                <input type="checkbox" checked={fields.billingSame} onChange={(event) => set("billingSame", event.target.checked)} />
-                <span>Billing address is the same as delivery address</span>
-              </label>
-              {!fields.billingSame ? (
-                <div className={`${styles.grid} ${styles.billing}`}>
-                  {field("billFirstName", <>First name <i>*</i></>, text("billFirstName", { autoComplete: "billing given-name", maxLength: LIMITS.name }))}
-                  {field("billLastName", <>Surname <i>*</i></>, text("billLastName", { autoComplete: "billing family-name", maxLength: LIMITS.name }))}
-                  {field("billAddress1", <>Address line 1 <i>*</i></>, text("billAddress1", { autoComplete: "billing address-line1", maxLength: LIMITS.address }), true)}
-                  {field("billAddress2", <>Address line 2 <em>(optional)</em></>, text("billAddress2", { autoComplete: "billing address-line2", maxLength: LIMITS.address }), true)}
-                  {field("billCity", <>Town / City <i>*</i></>, text("billCity", { autoComplete: "billing address-level2", maxLength: LIMITS.city }))}
-                  {field("billPostcode", <>Postcode <i>*</i></>, text("billPostcode", { autoComplete: "billing postal-code", maxLength: LIMITS.postcode }))}
-                </div>
-              ) : null}
-              {/* Honeypot: hidden from people (and screen readers), filled in by bots. */}
-              <input className={styles.trap} type="text" name="company_website" tabIndex={-1} autoComplete="off" aria-hidden="true" onChange={(event) => { trapRef.current = event.target.value; }} />
-              {payError ? <p className={styles.payError} role="alert">{payError}</p> : null}
-              {touched && Object.keys(errors).length ? <p className={styles.payError} role="alert">Please complete the highlighted fields.</p> : null}
-              <button type="submit" className={styles.payButton} disabled={paying || pending || belowCardMinimum}>
-                <LockIcon /> {paying ? "Processing payment…" : freeOrder ? "Place order" : redirectMethod ? `Continue to ${redirectMethod}` : `Pay ${formatGBP(total)} securely`} {!paying ? <span aria-hidden="true">→</span> : null}
-              </button>
-              <p className={styles.terms}>
-                By placing your order, you agree to our <Link href="/faq/">Terms &amp; Conditions</Link>, <Link href="/contact/">Privacy Notice</Link> and <Link href="/faq/">Returns &amp; Guarantee</Link>.
-              </p>
-              <div className={styles.secureRow}>
-                <ShieldIcon /> <span>Secure payments:</span>
-                <img src="/payments/visa-svgrepo-com.svg" alt="Visa" />
-                <img src="/payments/mastercard.svg" alt="Mastercard" />
-                <img src="/payments/amex.svg" alt="American Express" />
-                <img src="/payments/klarna.svg" alt="Klarna" />
-                <img src="/payments/apple-pay.svg" alt="Apple Pay" />
-                <img src="/payments/google-pay.svg" alt="Google Pay" />
-              </div>
-            </section>
           </aside>
         </form>
       </main>
@@ -874,10 +875,6 @@ const TruckIcon = () => svg(<><path d="M2 6h12v10H2zM14 9h4l3 3v4h-7" /><circle 
 const ChatIcon = () => svg(<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z" />, 22);
 const TagIcon = () => svg(<><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8Z" /><circle cx="7.5" cy="7.5" r="1.5" /></>, 18);
 const ShieldIcon = () => svg(<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z" />, 26);
-const CoinsIcon = () => svg(<><ellipse cx="12" cy="6" rx="7" ry="3" /><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6" /></>, 26);
-const WhatsAppIcon = () => (
-  <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="#25D366"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.2 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-3.2-.8-2.7-1.1-4.4-3.8-4.5-4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.2c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 1.9 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1l.8-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.1.1.6-.1 1.2Z" /></svg>
-);
 /** Union Jack as an image: Windows has no flag emoji (it shows the letters "GB"). */
 const UkFlag = () => <img src="/flags/gb.svg" alt="" width="22" height="14" style={{ display: "inline-block", verticalAlign: "-2px", borderRadius: 2 }} />;
 const Chevron = ({ open }: { open: boolean }) => <span className={styles.chevron} data-open={open || undefined}>{svg(<path d="m6 9 6 6 6-6" />, 18)}</span>;
