@@ -1086,8 +1086,8 @@ function Contact() {
             <button className="modal-close" type="button" aria-label="Close subscription confirmation" onClick={() => setShowSuccess(false)}>
               x
             </button>
-            <span className="modal-kicker">Subscribed</span>
-            <h3 id="subscribe-success-title">Thank you for subscribing.</h3>
+            <span className="modal-kicker">{welcome?.code ? "Subscribed" : "Check your inbox"}</span>
+            <h3 id="subscribe-success-title">{welcome?.code ? "Thank you for subscribing." : "Please confirm your email."}</h3>
             <p id="subscribe-success-copy">
               {welcome?.code
                 ? "Here's your welcome code. We've also emailed it to you, so you can use it whenever you're ready."

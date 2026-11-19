@@ -1,12 +1,16 @@
-// Newsletter sign-up: sends the email to the WordPress discount snippet (wordpress/orthobedroom-discounts.php),
-// which saves the sign-up and returns (and emails) a one-time 10% welcome code. Same-origin /wp-signup/ is proxied
-// (vercel.json / next.config.ts).
+// Newsletter sign-up with DOUBLE OPT-IN (client, 19/11/2026), handled by the WordPress snippet
+// (wordpress/orthobedroom-discounts.php):
+//   1. subscribeToNewsletter → /wp-signup/: saves the sign-up and emails a "confirm your email" link (Brevo).
+//   2. The link opens /confirm-email/?token=… → confirmNewsletter → /wp-confirm/: subscribes the person (Brevo list)
+//      and returns + emails the one-time 10% welcome code.
+// Same-origin /wp-signup/ and /wp-confirm/ are proxied (vercel.json / next.config.ts).
 import { getTurnstileToken } from "./turnstile";
 
 export type WelcomeCode = { code: string; percent: number; expires: string | null };
-export type SignupResult = { ok: boolean; message: string; welcome?: WelcomeCode };
+/** pending: a confirmation email was sent; the welcome code comes after the link is clicked. */
+export type SignupResult = { ok: boolean; message: string; welcome?: WelcomeCode; pending?: boolean };
 
-type SignupResponse = { ok?: unknown; message?: unknown; code?: unknown; percent?: unknown; expires?: unknown };
+type SignupResponse = { ok?: unknown; message?: unknown; code?: unknown; percent?: unknown; expires?: unknown; pending?: unknown };
 
 function readWelcomeCode(data: SignupResponse): WelcomeCode | undefined {
   if (typeof data.code !== "string" || !/^[A-Z0-9-]{4,40}$/i.test(data.code)) return undefined;
@@ -33,12 +37,27 @@ export async function subscribeToNewsletter(input: { email: string; firstName?: 
     const data = (await response.json().catch(() => null)) as SignupResponse | null;
     const message = typeof data?.message === "string" ? data.message : undefined;
     if (response.ok && data?.ok === true) {
-      return { ok: true, message: message ?? "Thanks! Check your inbox for your welcome code.", welcome: readWelcomeCode(data) };
+      return { ok: true, message: message ?? "Almost there! Check your inbox and click the link to confirm your email.", welcome: readWelcomeCode(data), pending: data.pending === true };
     }
     // Only show messages from our own endpoint (it always sends "ok"); WordPress' own errors are technical.
     const ownMessage = data && typeof data.ok === "boolean" ? message : undefined;
     return { ok: false, message: ownMessage ?? "Sorry, we couldn't sign you up right now. Please try again." };
   } catch {
     return { ok: false, message: "Sorry, we couldn't sign you up right now. Please check your connection and try again." };
+  }
+}
+
+/** Step 2 of double opt-in: the token from the confirmation link. */
+export async function confirmNewsletter(token: string): Promise<SignupResult> {
+  if (!/^[A-Za-z0-9]{32}$/.test(token)) return { ok: false, message: "This confirmation link is not valid. Please sign up again to get a new link." };
+  try {
+    const response = await fetch("/wp-confirm/", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token }) });
+    const data = (await response.json().catch(() => null)) as SignupResponse | null;
+    const message = typeof data?.message === "string" ? data.message : undefined;
+    if (response.ok && data?.ok === true) return { ok: true, message: message ?? "Your email is confirmed. Thank you!", welcome: readWelcomeCode(data) };
+    const ownMessage = data && typeof data.ok === "boolean" ? message : undefined;
+    return { ok: false, message: ownMessage ?? "Sorry, we couldn't confirm your email right now. Please try the link again in a few minutes." };
+  } catch {
+    return { ok: false, message: "Sorry, we couldn't confirm your email right now. Please check your connection and try again." };
   }
 }

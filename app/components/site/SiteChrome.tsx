@@ -622,7 +622,7 @@ export function Breadcrumbs({ items }: { items: Array<{ label: string; href?: st
   );
 }
 
-/** Footer sign-up: shows (and emails) a one-time 10% welcome code (see app/lib/newsletter.ts). */
+/** Footer sign-up: double opt-in; the confirmation email leads to the welcome code (see app/lib/newsletter.ts). */
 function FooterNewsletter() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<{ state: "idle" | "sending" | "done" | "error" | "invalid"; message?: string; welcome?: WelcomeCode }>({ state: "idle" });

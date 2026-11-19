@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
         rewrites: async () => [
           { source: "/wc-store/:path*", destination: `${storeApi}/:path*` },
           { source: "/wp-signup/:path*", destination: `${siteUrl}/wp-json/orthobedroom/v1/signup/:path*` },
+          { source: "/wp-confirm/:path*", destination: `${siteUrl}/wp-json/orthobedroom/v1/confirm/:path*` },
           { source: "/wp-apply/:path*", destination: `${siteUrl}/wp-json/orthobedroom/v1/apply/:path*` },
           { source: "/wc-stripe-order-status/", destination: `${siteUrl}/?wc-ajax=wc_stripe_update_order_status` },
         ],

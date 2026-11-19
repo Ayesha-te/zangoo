@@ -10,11 +10,17 @@
  *    the ORIGINAL (regular) price. While one is applied, cart prices revert from the sale price to the regular
  *    price. Never combinable with other codes.
  *    Create them in Marketing → Coupons: any code name, "Percentage discount", amount 30.
- * 2. Sign-up codes (start with WELCOME-): created automatically when someone signs up on www.orthobedroom.co.uk,
- *    shown on screen and emailed to them, 10% off the current (sale) price, one use, first order only (checked at
- *    checkout), expires after OB_SIGNUP_EXPIRY_DAYS. Never combinable with other codes.
- * 3. Every sign-up email is saved in the database table wp_ob_signups.
- *    View or download them (CSV) in WooCommerce → Sign-ups.
+ * 2. Sign-up codes (start with WELCOME-): 10% off the current (sale) price, one use, first order only (checked at
+ *    checkout), expire after OB_SIGNUP_EXPIRY_DAYS. Never combinable with other codes.
+ * 3. Newsletter sign-ups use DOUBLE OPT-IN: signing up on www.orthobedroom.co.uk sends a "confirm your email" link.
+ *    Only after the link is clicked is the person subscribed: they are added to the Brevo list and get their
+ *    welcome code (on screen and by email). Every sign-up is saved in the database table wp_ob_signups, with the
+ *    date it was confirmed. View or download them (CSV) in WooCommerce → Sign-ups.
+ *    Emails are sent with Brevo. Add to wp-config.php (above "That's all, stop editing!"):
+ *      define( 'OB_BREVO_API_KEY', 'xkeysib-...' );         // Brevo → SMTP & API → API keys
+ *      define( 'OB_BREVO_LIST_ID', 3 );                     // Brevo → Contacts → Lists → the list's ID number
+ *      define( 'OB_MAIL_FROM', 'hello@orthobedroom.co.uk' ); // a sender verified in Brevo → Senders & domains
+ *    Without the API key, emails fall back to WordPress' own mail (wp_mail) and no Brevo list is updated.
  * 4. "Work with Us" applications from digital marketers (www.orthobedroom.co.uk/work-with-us/) are saved in
  *    wp_ob_applications. View or download them (CSV) in WooCommerce → Marketer applications.
  * 5. Spam protection (Cloudflare Turnstile) for checkout, sign-ups and applications. OFF until switched on:
@@ -36,7 +42,10 @@ if ( ! defined( 'OB_PARTNER_PREFIX' ) ) {
 	define( 'OB_SIGNUP_EXPIRY_DAYS', 30 );         // 0 = never expires; e.g. 30 = expires after 30 days
 	define( 'OB_SIGNUP_MAX_PER_HOUR', 5 );         // sign-ups allowed per visitor IP per hour (spam guard)
 	define( 'OB_SITE_URL', 'https://www.orthobedroom.co.uk' );
-	define( 'OB_SIGNUPS_DB_VERSION', '1' );
+	define( 'OB_SIGNUPS_DB_VERSION', '2' );        // 2: double opt-in columns
+	define( 'OB_CONFIRM_LINK_DAYS', 7 );           // how long a "confirm your email" link works
+	define( 'OB_CONFIRM_RESEND_MINUTES', 5 );      // no new confirmation email for the same address within this time
+	define( 'OB_MAIL_FROM_NAME', 'OrthoBedroom' );
 	define( 'OB_APPLICATIONS_DB_VERSION', '2' );   // 2: social media profile columns
 	define( 'OB_APPLY_MAX_PER_HOUR', 3 );          // applications allowed per visitor IP per hour (spam guard)
 }
@@ -169,10 +178,15 @@ add_action( 'init', function () {
 		first_name varchar(100) NOT NULL DEFAULT '',
 		code varchar(60) NOT NULL DEFAULT '',
 		expires_at datetime NULL,
+		confirm_token char(64) NOT NULL DEFAULT '',
+		confirm_sent_at datetime NULL,
+		confirmed_at datetime NULL,
+		brevo_synced tinyint(1) NOT NULL DEFAULT 0,
 		created_at datetime NOT NULL,
 		updated_at datetime NOT NULL,
 		PRIMARY KEY  (id),
-		UNIQUE KEY email (email)
+		UNIQUE KEY email (email),
+		KEY confirm_token (confirm_token)
 	) {$collate};" );
 
 	$ids = get_posts( array(
@@ -215,8 +229,16 @@ function ob_signup_date( $gmt ) {
 
 /** One row of the admin table / CSV. */
 function ob_signup_columns( $row ) {
+	if ( ! empty( $row['confirmed_at'] ) ) {
+		$confirmed = ob_signup_date( $row['confirmed_at'] );
+	} elseif ( ! empty( $row['confirm_sent_at'] ) ) {
+		$confirmed = 'Waiting for confirmation';
+	} else {
+		$confirmed = 'No (signed up before double opt-in)';
+	}
 	return array(
 		ob_signup_date( $row['created_at'] ),
+		$confirmed,
 		$row['email'],
 		$row['first_name'],
 		strtoupper( $row['code'] ),
@@ -233,11 +255,11 @@ add_action( 'admin_menu', function () {
 		$csv   = wp_nonce_url( admin_url( 'admin-post.php?action=ob_signups_csv' ), 'ob_signups_csv' );
 		echo '<div class="wrap"><h1 class="wp-heading-inline">Sign-ups</h1> ';
 		echo '<a class="page-title-action" href="' . esc_url( $csv ) . '">Download CSV</a>';
-		echo '<p>' . esc_html( $total ) . ' people have signed up on the website (latest 500 shown; the CSV has everyone).</p>';
-		echo '<table class="widefat striped"><thead><tr><th>Signed up</th><th>Email</th><th>First name</th><th>Welcome code</th><th>Expires</th><th>Code used</th></tr></thead><tbody>';
+		echo '<p>' . esc_html( $total ) . ' people have signed up on the website (latest 500 shown; the CSV has everyone). Only people with a date under "Email confirmed" have agreed to marketing emails (double opt-in) and are on the Brevo list.</p>';
+		echo '<table class="widefat striped"><thead><tr><th>Signed up</th><th>Email confirmed</th><th>Email</th><th>First name</th><th>Welcome code</th><th>Expires</th><th>Code used</th></tr></thead><tbody>';
 		$rows = ob_signup_rows( 500 );
 		if ( ! $rows ) {
-			echo '<tr><td colspan="6">No sign-ups yet.</td></tr>';
+			echo '<tr><td colspan="7">No sign-ups yet.</td></tr>';
 		}
 		foreach ( $rows as $row ) {
 			echo '<tr>';
@@ -258,7 +280,7 @@ add_action( 'admin_post_ob_signups_csv', function () {
 	header( 'Content-Type: text/csv; charset=utf-8' );
 	header( 'Content-Disposition: attachment; filename=orthobedroom-signups-' . gmdate( 'Y-m-d' ) . '.csv' );
 	$out = fopen( 'php://output', 'w' );
-	fputcsv( $out, array( 'Signed up', 'Email', 'First name', 'Welcome code', 'Expires', 'Code used' ) );
+	fputcsv( $out, array( 'Signed up', 'Email confirmed', 'Email', 'First name', 'Welcome code', 'Expires', 'Code used' ) );
 	foreach ( ob_signup_rows() as $row ) {
 		// Spreadsheets run cells starting with = + - @ as formulas; prefix them so they stay plain text.
 		$cells = array_map( function ( $cell ) {
@@ -565,41 +587,151 @@ add_action( 'rest_api_init', function () {
 	) );
 } );
 
-/* ── Sign-up endpoint ── */
+/* ── Email (Brevo) ── */
 
-function ob_send_signup_email( $email, $first_name, $code, $expires_label ) {
-	$hello   = $first_name ? sprintf( 'Hi %s,', esc_html( $first_name ) ) : 'Hi,';
-	$subject = sprintf( 'Your %d%% welcome code from OrthoBedroom.co.uk', OB_SIGNUP_PERCENT );
-	$body    = '<p>' . $hello . '</p>'
-		. '<p>Thanks for signing up. Here is your welcome code for <strong>' . OB_SIGNUP_PERCENT . '% off your first order</strong>:</p>'
-		. '<p style="font-size:22px;font-weight:700;letter-spacing:1px">' . esc_html( strtoupper( $code ) ) . '</p>'
-		. '<p>Enter it in your basket or at checkout. It can be used once, on your first order, and cannot be combined with other codes.'
-		. ( $expires_label ? ' It expires on ' . esc_html( $expires_label ) . '.' : '' ) . '</p>'
-		. '<p><a href="' . esc_url( OB_SITE_URL . '/collections/bedroom/mattresses/' ) . '">Shop orthopaedic mattresses</a></p>'
-		. '<p>OrthoBedroom.co.uk</p>';
-	return wp_mail( $email, $subject, $body, array( 'Content-Type: text/html; charset=UTF-8' ) );
+function ob_mail_from() {
+	return defined( 'OB_MAIL_FROM' ) && OB_MAIL_FROM ? OB_MAIL_FROM : get_option( 'admin_email' );
 }
 
+/** Sends an HTML email with Brevo (transactional API), or with wp_mail when Brevo isn't set up. True when accepted. */
+function ob_mail( $to, $name, $subject, $html ) {
+	if ( defined( 'OB_BREVO_API_KEY' ) && OB_BREVO_API_KEY ) {
+		$recipient = array( 'email' => $to );
+		if ( '' !== (string) $name ) {
+			$recipient['name'] = $name;
+		}
+		$response = wp_remote_post( 'https://api.brevo.com/v3/smtp/email', array(
+			'timeout' => 15,
+			'headers' => array( 'api-key' => OB_BREVO_API_KEY, 'Content-Type' => 'application/json', 'Accept' => 'application/json' ),
+			'body'    => wp_json_encode( array(
+				'sender'      => array( 'name' => OB_MAIL_FROM_NAME, 'email' => ob_mail_from() ),
+				'to'          => array( $recipient ),
+				'subject'     => $subject,
+				'htmlContent' => $html,
+				'tags'        => array( 'orthobedroom-signup' ),
+			) ),
+		) );
+		$code = is_wp_error( $response ) ? 0 : (int) wp_remote_retrieve_response_code( $response );
+		if ( $code >= 200 && $code < 300 ) {
+			return true;
+		}
+		error_log( 'OrthoBedroom Brevo email failed (' . $code . '): ' . ( is_wp_error( $response ) ? $response->get_error_message() : wp_remote_retrieve_body( $response ) ) );
+		return false;
+	}
+	return wp_mail( $to, $subject, $html, array( 'Content-Type: text/html; charset=UTF-8', 'From: ' . OB_MAIL_FROM_NAME . ' <' . ob_mail_from() . '>' ) );
+}
+
+/** Adds a CONFIRMED subscriber to the Brevo list (marketing emails go to this list only). */
+function ob_brevo_subscribe( $email, $first_name ) {
+	if ( ! defined( 'OB_BREVO_API_KEY' ) || ! OB_BREVO_API_KEY || ! defined( 'OB_BREVO_LIST_ID' ) || ! OB_BREVO_LIST_ID ) {
+		return false;
+	}
+	$contact = array( 'email' => $email, 'listIds' => array( (int) OB_BREVO_LIST_ID ), 'updateEnabled' => true );
+	if ( '' !== (string) $first_name ) {
+		$contact['attributes'] = array( 'FIRSTNAME' => $first_name );
+	}
+	$response = wp_remote_post( 'https://api.brevo.com/v3/contacts', array(
+		'timeout' => 15,
+		'headers' => array( 'api-key' => OB_BREVO_API_KEY, 'Content-Type' => 'application/json', 'Accept' => 'application/json' ),
+		'body'    => wp_json_encode( $contact ),
+	) );
+	$code = is_wp_error( $response ) ? 0 : (int) wp_remote_retrieve_response_code( $response );
+	if ( $code >= 200 && $code < 300 ) {
+		return true;
+	}
+	error_log( 'OrthoBedroom Brevo contact failed (' . $code . '): ' . ( is_wp_error( $response ) ? $response->get_error_message() : wp_remote_retrieve_body( $response ) ) );
+	return false;
+}
+
+/** Simple branded email wrapper. */
+function ob_email_html( $first_name, $paragraphs_html ) {
+	$hello = $first_name ? sprintf( 'Hi %s,', esc_html( $first_name ) ) : 'Hi,';
+	return '<div style="font-family:Arial,Helvetica,sans-serif;font-size:16px;line-height:1.6;color:#1a2e44;max-width:560px">'
+		. '<p>' . $hello . '</p>' . $paragraphs_html
+		. '<p style="color:#5b6b80;font-size:13px">OrthoBedroom.co.uk</p></div>';
+}
+
+function ob_send_confirmation_email( $email, $first_name, $token ) {
+	$link   = OB_SITE_URL . '/confirm-email/?token=' . rawurlencode( $token );
+	$button = '<p><a href="' . esc_url( $link ) . '" style="display:inline-block;padding:14px 26px;border-radius:8px;background:#1557a7;color:#ffffff;font-weight:700;text-decoration:none">Confirm my email</a></p>';
+	$html   = ob_email_html( $first_name,
+		'<p>Thanks for signing up to OrthoBedroom emails. Please confirm your email address to complete your subscription and get your <strong>' . OB_SIGNUP_PERCENT . '% welcome code</strong>.</p>'
+		. $button
+		. '<p style="font-size:14px;color:#5b6b80">Or copy this link into your browser:<br>' . esc_html( $link ) . '</p>'
+		. '<p style="font-size:14px;color:#5b6b80">The link works for ' . (int) OB_CONFIRM_LINK_DAYS . ' days. If you didn\'t sign up, you can ignore this email and you won\'t be subscribed.</p>'
+	);
+	return ob_mail( $email, $first_name, 'Please confirm your email address - OrthoBedroom', $html );
+}
+
+function ob_send_signup_email( $email, $first_name, $code, $expires_label ) {
+	$html = ob_email_html( $first_name,
+		'<p>Your email is confirmed - welcome to OrthoBedroom. Here is your welcome code for <strong>' . OB_SIGNUP_PERCENT . '% off your first order</strong>:</p>'
+		. '<p style="font-size:22px;font-weight:700;letter-spacing:1px">' . esc_html( strtoupper( $code ) ) . '</p>'
+		. '<p>Enter it at checkout. It can be used once, on your first order, and cannot be combined with other codes.'
+		. ( $expires_label ? ' It expires on ' . esc_html( $expires_label ) . '.' : '' ) . '</p>'
+		. '<p><a href="' . esc_url( OB_SITE_URL . '/collections/bedroom/mattresses/' ) . '">Shop mattresses</a></p>'
+	);
+	return ob_mail( $email, $first_name, sprintf( 'Your %d%% welcome code from OrthoBedroom.co.uk', OB_SIGNUP_PERCENT ), $html );
+}
+
+/** The welcome code for an email (existing or new). */
+function ob_signup_coupon_for( $email, $first_name ) {
+	$coupon = ob_find_signup_coupon( $email );
+	if ( $coupon ) {
+		return $coupon;
+	}
+	$coupon = new WC_Coupon();
+	$coupon->set_code( OB_SIGNUP_PREFIX . strtolower( wp_generate_password( 8, false, false ) ) );
+	$coupon->set_discount_type( 'percent' );
+	$coupon->set_amount( OB_SIGNUP_PERCENT );
+	$coupon->set_individual_use( true );
+	$coupon->set_usage_limit( 1 );
+	$coupon->set_usage_limit_per_user( 1 );
+	// No email restriction: it would stop the code being applied in the basket (email unknown there).
+	// The code is random, single-use, and first-order-only (checked against the billing email at checkout).
+	$coupon->set_description( 'Sign-up welcome code for ' . $email );
+	if ( OB_SIGNUP_EXPIRY_DAYS > 0 ) {
+		$coupon->set_date_expires( time() + OB_SIGNUP_EXPIRY_DAYS * DAY_IN_SECONDS );
+	}
+	$coupon->save();
+	update_post_meta( $coupon->get_id(), '_ob_signup_email', $email );
+	update_post_meta( $coupon->get_id(), '_ob_signup_first_name', $first_name );
+	return $coupon;
+}
+
+function ob_signup_row( $email ) {
+	global $wpdb;
+	return $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . ob_signups_table() . ' WHERE email = %s', $email ), ARRAY_A );
+}
+
+/* ── Sign-up endpoint (step 1: sends the confirmation email) ── */
+
 /**
- * POST /wp-json/orthobedroom/v1/signup  { email, first_name?, website? (honeypot) }
- * Returns { ok, message } plus { code, percent, expires (Y-m-d or null) } when there is a code to show.
+ * POST /wp-json/orthobedroom/v1/signup  { email, first_name?, website? (honeypot), turnstile? }
+ * Returns { ok, pending, message }. No code is given until the email address is confirmed.
  */
 add_action( 'rest_api_init', function () {
 	register_rest_route( 'orthobedroom/v1', '/signup', array(
 		'methods'             => 'POST',
 		'permission_callback' => '__return_true',
 		'callback'            => function ( WP_REST_Request $request ) {
-			$signed_up = array( 'ok' => true, 'message' => "Thanks! You're signed up." );
+			$check_inbox = function ( $email ) {
+				return rest_ensure_response( array(
+					'ok'      => true,
+					'pending' => true,
+					'message' => 'Almost there! We\'ve sent a confirmation email to ' . $email . '. Click the link in it to confirm your subscription and get your welcome code. If you can\'t see it, check your spam or junk folder.',
+				) );
+			};
 
 			// Honeypot: real visitors never fill this hidden field. Pretend success to bots.
 			if ( '' !== trim( (string) $request->get_param( 'website' ) ) ) {
-				return rest_ensure_response( $signed_up );
+				return $check_inbox( 'your email address' );
 			}
 			if ( ! ob_turnstile_ok( $request->get_param( 'turnstile' ) ) ) {
 				return new WP_REST_Response( array( 'ok' => false, 'message' => 'Our security check failed. Please refresh the page and try again.' ), 403 );
 			}
 
-			$email      = sanitize_email( (string) $request->get_param( 'email' ) );
+			$email      = strtolower( sanitize_email( (string) $request->get_param( 'email' ) ) );
 			$first_name = mb_substr( sanitize_text_field( (string) $request->get_param( 'first_name' ) ), 0, 40 );
 			if ( strlen( $email ) > 254 || ! is_email( $email ) ) {
 				return new WP_REST_Response( array( 'ok' => false, 'message' => 'Please enter a valid email address.' ), 400 );
@@ -610,50 +742,97 @@ add_action( 'rest_api_init', function () {
 				return new WP_REST_Response( array( 'ok' => false, 'message' => 'Too many sign-ups. Please try again later.' ), 429 );
 			}
 
-			// Existing customers don't get a first-order code, but are still saved as sign-ups.
+			ob_save_signup( $email, $first_name );
+			$row = ob_signup_row( $email );
+
+			// Already confirmed: nothing more to do.
+			if ( $row && ! empty( $row['confirmed_at'] ) ) {
+				return rest_ensure_response( array( 'ok' => true, 'pending' => false, 'message' => "You're already subscribed - thank you! Your welcome code was sent when you confirmed your email." ) );
+			}
+
+			// Don't send another confirmation email to the same address within a few minutes.
+			if ( $row && ! empty( $row['confirm_sent_at'] ) && strtotime( $row['confirm_sent_at'] . ' UTC' ) > time() - OB_CONFIRM_RESEND_MINUTES * MINUTE_IN_SECONDS ) {
+				return $check_inbox( $email );
+			}
+
+			$token = wp_generate_password( 32, false, false );
+			global $wpdb;
+			$wpdb->update( ob_signups_table(), array(
+				'confirm_token'   => hash( 'sha256', $token ),
+				'confirm_sent_at' => current_time( 'mysql', true ),
+			), array( 'email' => $email ) );
+
+			if ( ! ob_send_confirmation_email( $email, $first_name ? $first_name : ( $row['first_name'] ?? '' ), $token ) ) {
+				// Let them try again straight away.
+				$wpdb->update( ob_signups_table(), array( 'confirm_sent_at' => null ), array( 'email' => $email ) );
+				return new WP_REST_Response( array( 'ok' => false, 'message' => "Sorry, we couldn't send the confirmation email right now. Please try again in a few minutes." ), 500 );
+			}
+			return $check_inbox( $email );
+		},
+	) );
+} );
+
+/* ── Confirm endpoint (step 2: the link in the email) ── */
+
+/**
+ * POST /wp-json/orthobedroom/v1/confirm  { token }
+ * Confirms the email, adds it to the Brevo list and returns { ok, message } plus { code, percent, expires }.
+ */
+add_action( 'rest_api_init', function () {
+	register_rest_route( 'orthobedroom/v1', '/confirm', array(
+		'methods'             => 'POST',
+		'permission_callback' => '__return_true',
+		'callback'            => function ( WP_REST_Request $request ) {
+			$invalid = new WP_REST_Response( array( 'ok' => false, 'message' => 'This confirmation link is not valid or has expired. Please sign up again to get a new link.' ), 400 );
+			$token   = (string) $request->get_param( 'token' );
+			if ( ! preg_match( '/^[A-Za-z0-9]{32}$/', $token ) ) {
+				return $invalid;
+			}
+			if ( ob_rate_limited( 'confirm', 30 ) ) {
+				return new WP_REST_Response( array( 'ok' => false, 'message' => 'Too many attempts. Please try again later.' ), 429 );
+			}
+
+			global $wpdb;
+			$table = ob_signups_table();
+			$row   = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE confirm_token = %s", hash( 'sha256', $token ) ), ARRAY_A );
+			if ( ! $row || empty( $row['confirm_sent_at'] ) ) {
+				return $invalid;
+			}
+			$first_time = empty( $row['confirmed_at'] );
+			if ( $first_time && strtotime( $row['confirm_sent_at'] . ' UTC' ) < time() - OB_CONFIRM_LINK_DAYS * DAY_IN_SECONDS ) {
+				return $invalid;
+			}
+
+			$email      = $row['email'];
+			$first_name = $row['first_name'];
+			if ( $first_time ) {
+				$wpdb->update( $table, array( 'confirmed_at' => current_time( 'mysql', true ), 'updated_at' => current_time( 'mysql', true ) ), array( 'id' => $row['id'] ) );
+			}
+			if ( empty( $row['brevo_synced'] ) && ob_brevo_subscribe( $email, $first_name ) ) {
+				$wpdb->update( $table, array( 'brevo_synced' => 1 ), array( 'id' => $row['id'] ) );
+			}
+
+			// Existing customers are subscribed but get no first-order code.
 			if ( ob_has_previous_order( $email ) ) {
-				ob_save_signup( $email, $first_name );
-				return rest_ensure_response( $signed_up );
+				return rest_ensure_response( array( 'ok' => true, 'message' => "Your email is confirmed and you're subscribed. Thank you!" ) );
 			}
 
-			// One code per email: show the existing one again instead of creating another.
-			$coupon = ob_find_signup_coupon( $email );
-			if ( ! $coupon ) {
-				$coupon = new WC_Coupon();
-				$coupon->set_code( OB_SIGNUP_PREFIX . strtolower( wp_generate_password( 8, false, false ) ) );
-				$coupon->set_discount_type( 'percent' );
-				$coupon->set_amount( OB_SIGNUP_PERCENT );
-				$coupon->set_individual_use( true );
-				$coupon->set_usage_limit( 1 );
-				$coupon->set_usage_limit_per_user( 1 );
-				// No email restriction: it would stop the code being applied in the basket (email unknown there).
-				// The code is random, single-use, and first-order-only (checked against the billing email at checkout).
-				$coupon->set_description( 'Sign-up welcome code for ' . $email );
-				if ( OB_SIGNUP_EXPIRY_DAYS > 0 ) {
-					$coupon->set_date_expires( time() + OB_SIGNUP_EXPIRY_DAYS * DAY_IN_SECONDS );
-				}
-				$coupon->save();
-				update_post_meta( $coupon->get_id(), '_ob_signup_email', $email );
-				update_post_meta( $coupon->get_id(), '_ob_signup_first_name', $first_name );
-			}
+			$coupon = ob_signup_coupon_for( $email, $first_name );
 			ob_save_signup( $email, $first_name, $coupon );
-
 			$expires = $coupon->get_date_expires();
 			if ( $coupon->get_usage_count() >= max( 1, (int) $coupon->get_usage_limit() ) ) {
-				return rest_ensure_response( array( 'ok' => true, 'message' => "Thanks for signing up! You've already used your welcome code on an order." ) );
+				return rest_ensure_response( array( 'ok' => true, 'message' => "Your email is confirmed. You've already used your welcome code on an order." ) );
 			}
 			if ( $expires && $expires->getTimestamp() < time() ) {
-				return rest_ensure_response( array( 'ok' => true, 'message' => 'Thanks for signing up! The welcome code for this email has expired.' ) );
+				return rest_ensure_response( array( 'ok' => true, 'message' => 'Your email is confirmed. The welcome code for this email has expired.' ) );
 			}
-
-			// The code is shown on screen as well, so a failed email no longer blocks the sign-up.
-			$expires_label = $expires ? wp_date( 'j F Y', $expires->getTimestamp() ) : '';
-			if ( ! ob_send_signup_email( $email, $first_name, $coupon->get_code(), $expires_label ) ) {
-				error_log( 'OrthoBedroom sign-up: wp_mail failed for ' . $email );
+			if ( $first_time ) {
+				$expires_label = $expires ? wp_date( 'j F Y', $expires->getTimestamp() ) : '';
+				ob_send_signup_email( $email, $first_name, $coupon->get_code(), $expires_label );
 			}
 			return rest_ensure_response( array(
 				'ok'      => true,
-				'message' => "Here's your welcome code. We've also emailed it to you.",
+				'message' => "Your email is confirmed and you're subscribed. Here's your welcome code - we've emailed it to you too.",
 				'code'    => strtoupper( $coupon->get_code() ),
 				'percent' => OB_SIGNUP_PERCENT,
 				'expires' => $expires ? wp_date( 'Y-m-d', $expires->getTimestamp() ) : null,
