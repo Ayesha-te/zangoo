@@ -13,6 +13,7 @@ import { ProductFaq } from "@/app/components/site/ProductFaq";
 import { SpinViewer } from "@/app/components/product/SpinViewer";
 import { FeaturesAndBenefits, FeaturesYoullLove, QuickFacts, SizeBoxes } from "./PocketSprungLayout";
 import { DeliveryReturnsPanel } from "./DeliveryReturnsPanel";
+import { KlarnaMessage } from "@/app/components/commerce/KlarnaMessage";
 import { DELIVERY_AREA_LABEL, deliveryAreaOf } from "@/app/data/policies";
 import { STORAGE_KEYS, readStorage, writeStorage } from "@/app/utils/browserStorage";
 import { useCart } from "@/app/components/cart/CartProvider";
@@ -23,6 +24,8 @@ type WireframeExperienceProps = {
   product: MattressProduct;
   relatedProducts: MattressProduct[];
   isPreview?: boolean;
+  /** Stripe publishable key (public), for the Klarna instalment message. */
+  stripeKey?: string | null;
 };
 
 const SIZE_TIERS = [
@@ -94,7 +97,7 @@ const COMPARE_ROWS: CompareRow[] = [
   { label: "Weight", value: (item) => item.compareSpecs.weight },
 ];
 
-export function WireframeExperience({ product, relatedProducts, isPreview = true }: WireframeExperienceProps) {
+export function WireframeExperience({ product, relatedProducts, isPreview = true, stripeKey = null }: WireframeExperienceProps) {
   const gallery = useMemo(
     // Main photo first, then the gallery. WooCommerce galleries already include the main photo, so drop repeats.
     () =>
@@ -361,6 +364,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
                     </div>
                   </div>
                   <p className={styles.pocketTotal}>Total: <b>{formatGBP(total)}</b></p>
+                  <KlarnaMessage amount={total} publishableKey={stripeKey} className={styles.klarna} />
                   <div className={styles.buyActions}>
                     <button
                       className={`${styles.addButton} ${added ? styles.addedButton : ""}`}
@@ -478,6 +482,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
             <span>{formatGBP(activeSize.compare * quantity)}</span>
             <em>You Save {formatGBP((activeSize.compare - activeSize.price) * quantity)}</em>
           </div>
+          <KlarnaMessage amount={total} publishableKey={stripeKey} className={styles.klarna} />
           <p className={styles.deliveryArea}>Free delivery · {DELIVERY_AREA_LABEL[deliveryAreaOf(product)].short}</p>
           <div className={styles.buyActions}>
             <button

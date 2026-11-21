@@ -8,36 +8,16 @@ import { formatGBP, getCardCopy, getProductSizePricing } from "@/app/data/mattre
 import { subscribeToNewsletter } from "@/app/lib/newsletter";
 import { SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { getTurnstileToken } from "@/app/lib/turnstile";
+import { loadStripeJs } from "@/app/lib/stripe";
+import { KlarnaMessage } from "@/app/components/commerce/KlarnaMessage";
 import {
   LIMITS, addressError, cityError, emailDomainAcceptsMail, emailError, emailSuggestion, formatUkPhone, nameError, postcodeError,
   ukMobileNational,
 } from "@/app/lib/validation";
 import styles from "./checkout.module.css";
 
-// ── Stripe.js (loaded from js.stripe.com; card details are entered in Stripe's own secure fields) ──
-/* eslint-disable @typescript-eslint/no-explicit-any */
-type StripeJs = any;
-declare global {
-  interface Window {
-    Stripe?: (key: string) => StripeJs;
-  }
-}
-let stripeScript: Promise<void> | null = null;
-function loadStripeJs() {
-  stripeScript ??= new Promise<void>((resolve, reject) => {
-    if (window.Stripe) return resolve();
-    const script = document.createElement("script");
-    script.src = "https://js.stripe.com/v3/";
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => {
-      stripeScript = null;
-      reject(new Error("Stripe could not be loaded"));
-    };
-    document.head.append(script);
-  });
-  return stripeScript;
-}
+// Stripe.js (card details are entered in Stripe's own secure fields).
+type StripeJs = import("@/app/lib/stripe").StripeJs;
 
 /** Stripe's smallest card payment in GBP (30p); below it Stripe won't show its payment form. */
 const MIN_CARD_PENNIES = 30;
@@ -855,6 +835,8 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
                 <div><dt>Delivery</dt><dd>FREE</dd></div>
                 <div className={styles.total}><dt>Total</dt><dd>{formatGBP(total)}<small>(incl. VAT)</small></dd></div>
               </dl>
+              {/* Klarna instalments, so customers see the option before they reach the payment step. */}
+              {cardPayable ? <KlarnaMessage amount={total} publishableKey={stripePublishableKey} className={styles.klarna} /> : null}
             </section>
 
           </aside>

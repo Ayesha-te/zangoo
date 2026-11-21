@@ -2155,3 +2155,4 @@
 .policyPanel p { margin: 14px 0 0; color: var(--body); font: 500 16px/1.6 var(--sans); }
 .policyPanel a { color: var(--blue); font-weight: 700; text-decoration: underline; }
 :global(html body) .wrap .deliveryArea { margin: 8px 0 0; color: #1f7a3d; font: 700 16px/1.4 var(--sans); }
+:global(html body) .wrap .klarna { margin: 10px 0 0; min-height: 0; }

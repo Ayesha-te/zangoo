@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getStripeCheckoutConfig } from "@/app/lib/woocommerce/api";
 import { getStoreCatalog } from "@/app/lib/woocommerce/catalog";
 import { SiteFooter, SiteHeader } from "@/app/components/site/SiteChrome";
 import { WireframeExperience } from "@/app/product-page-wireframe/WireframeExperience";
@@ -11,7 +12,7 @@ type BedroomMattressPageProps = {
 
 // One page per product in the store catalogue (WooCommerce, or the local catalogue as fallback).
 export async function generateStaticParams() {
-  const { products } = await getStoreCatalog({ includeComingSoon: true });
+  const [{ products }, stripe] = await Promise.all([getStoreCatalog({ includeComingSoon: true }), getStripeCheckoutConfig()]);
   return products.map((mattress) => ({ item: mattress.slug }));
 }
 
@@ -27,7 +28,7 @@ export async function generateMetadata({ params }: BedroomMattressPageProps): Pr
 
 export default async function BedroomMattressPage({ params }: BedroomMattressPageProps) {
   const { item } = await params;
-  const { products } = await getStoreCatalog({ includeComingSoon: true });
+  const [{ products }, stripe] = await Promise.all([getStoreCatalog({ includeComingSoon: true }), getStripeCheckoutConfig()]);
   const product = products.find((mattress) => mattress.slug === item);
   if (!product) notFound();
 
@@ -38,7 +39,7 @@ export default async function BedroomMattressPage({ params }: BedroomMattressPag
     <>
       <SiteHeader />
       <main className={wireframeStyles.page}>
-        <WireframeExperience product={product} relatedProducts={relatedProducts} isPreview={false} />
+        <WireframeExperience product={product} relatedProducts={relatedProducts} isPreview={false} stripeKey={stripe?.publishableKey ?? null} />
       </main>
       <SiteFooter />
     </>
