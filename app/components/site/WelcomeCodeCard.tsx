@@ -32,7 +32,7 @@ export function WelcomeCodeCard({ welcome, tone = "light" }: { welcome: WelcomeC
       </div>
       <small>
         {expiry ? <>Expires <b>{expiry}</b>. </> : null}
-        One use, on your first order. Enter it in your basket.
+        One use, on your first order. Enter it at checkout.
       </small>
     </div>
   );
