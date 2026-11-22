@@ -2949,3 +2949,10 @@ html body .featured-card-meta{flex-direction:column;align-items:flex-start;gap:8
 .confirm-ok{border-color:rgba(46,125,50,.35)}
 .confirm-failed{border-color:rgba(217,45,32,.35)}
 @media(max-width:560px){.confirm-box{padding:22px 18px}}
+/* Footer company details */
+html body .foot-company{display:grid;gap:6px;max-width:none;line-height:1.5;color:rgba(255,255,255,.72)}
+html body .foot-company p{margin:0;font-size:14px}
+html body .foot-company .foot-company-name{color:#fff;font-weight:700}
+html body .foot-company a{color:#8fc1ff;text-decoration:underline}
+html body .foot-company span{margin:0 6px;opacity:.6}
+html body .foot-company .foot-company-copy{margin-top:10px;color:rgba(255,255,255,.6)}

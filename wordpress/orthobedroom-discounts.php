@@ -19,7 +19,7 @@
  *    Emails are sent with Brevo. Add to wp-config.php (above "That's all, stop editing!"):
  *      define( 'OB_BREVO_API_KEY', 'xkeysib-...' );         // Brevo → SMTP & API → API keys
  *      define( 'OB_BREVO_LIST_ID', 3 );                     // Brevo → Contacts → Lists → the list's ID number
- *      define( 'OB_MAIL_FROM', 'hello@orthobedroom.co.uk' ); // a sender verified in Brevo → Senders & domains
+ *      define( 'OB_MAIL_FROM', 'info@tqpl.co.uk' );   // optional: the sender (default info@tqpl.co.uk, verified in Brevo)
  *    Without the API key, emails fall back to WordPress' own mail (wp_mail) and no Brevo list is updated.
  * 4. "Work with Us" applications from digital marketers (www.orthobedroom.co.uk/work-with-us/) are saved in
  *    wp_ob_applications. View or download them (CSV) in WooCommerce → Marketer applications.
@@ -590,7 +590,8 @@ add_action( 'rest_api_init', function () {
 /* ── Email (Brevo) ── */
 
 function ob_mail_from() {
-	return defined( 'OB_MAIL_FROM' ) && OB_MAIL_FROM ? OB_MAIL_FROM : get_option( 'admin_email' );
+	// Emails come from the TQPL domain (authenticated in Brevo), unless wp-config sets another sender.
+	return defined( 'OB_MAIL_FROM' ) && OB_MAIL_FROM ? OB_MAIL_FROM : 'info@tqpl.co.uk';
 }
 
 /** Sends an HTML email with Brevo (transactional API), or with wp_mail when Brevo isn't set up. True when accepted. */

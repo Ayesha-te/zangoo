@@ -597,9 +597,15 @@ export function SiteFooter() {
           </ul>
         </nav>
         <FooterNewsletter />
-        <p className="foot-copy">
-          <small>&copy; 2026 OrthoBedroom. All rights reserved.</small>
-        </p>
+        {/* Company details (client, 22/11/2026): OrthoBedroom is run by The Quality Products Ltd. */}
+        <div className="foot-copy foot-company">
+          <p className="foot-company-name">The Quality Products Ltd</p>
+          <p>Registered Office: 88 High Street, Cheltenham, England, GL50 1EG</p>
+          <p>
+            Company Number: 12728828 <span aria-hidden="true">|</span> Email: <a href="mailto:info@tqpl.co.uk">info@tqpl.co.uk</a>
+          </p>
+          <p className="foot-company-copy">&copy; 2020 - {new Date().getFullYear()} The Quality Products Ltd (TQPL). All rights reserved.</p>
+        </div>
       </div>
     </footer>
   );
