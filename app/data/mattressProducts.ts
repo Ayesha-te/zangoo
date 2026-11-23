@@ -16,7 +16,9 @@ export type MattressProduct = {
   deliveryArea?: "london" | "uk";
   /** WooCommerce SKU (shown on the product page only when set). */
   sku?: string;
-  /** "pocket": the pocket sprung range layout (size boxes, tick-list, icon features). */
+  /** Product range, for the Orthopaedic / Pocket Spring filters and home page cards (default: ortho). */
+  range?: "ortho" | "pocket";
+  /** "pocket": the Mattress Next Day style layout (now used by every mattress) (size boxes, tick-list, icon features). */
   layout?: "pocket";
   /** Tick-list under the product name (pocket layout). */
   quickFacts?: string[];
@@ -74,6 +76,14 @@ export type MattressProduct = {
 const allOrthoMattressProducts: MattressProduct[] = [
   {
     slug: "capri-orthopaedic-mattress",
+    layout: "pocket",
+    range: "ortho",
+    quickFacts: ["Open Coil Springs & Wire-Edge Support", "Deep Polyester Filling", "Double-Sided, 26cm Depth", "Firmness: Firm"],
+    love: [
+      { icon: "springs", label: "Support System", title: "Open Coil Springs", text: "Interconnected springs with reinforced wire-edge support give a consistent, traditionally sprung feel." },
+      { icon: "foam", label: "Comfort Fillings", title: "Deep Polyester Filling", text: "A cushioning layer above the springs, finished in quality damask fabric with deep tufting." },
+      { icon: "firmness", label: "Firmness", title: "Firm", text: "Noticeable support for sleepers who don't want an extra-firm mattress." },
+    ],
     name: "Capri Ortho Mattress",
     shortName: "Capri Ortho",
     price: "From £749",
@@ -174,6 +184,14 @@ const allOrthoMattressProducts: MattressProduct[] = [
   },
   {
     slug: "classic-orthopaedic-mattress",
+    layout: "pocket",
+    range: "ortho",
+    quickFacts: ["Open Coil Springs & Wire-Edge Support", "Deep Polyester Filling", "Double-Sided, 26cm Depth", "Firmness: Medium to Firm"],
+    love: [
+      { icon: "springs", label: "Support System", title: "Open Coil Springs", text: "Interconnected springs with wire-edge support create a consistent, traditionally sprung feel." },
+      { icon: "foam", label: "Comfort Fillings", title: "Deep Polyester Filling", text: "Cushioning above the springs, with a hand-tufted quality damask finish." },
+      { icon: "firmness", label: "Firmness", title: "Medium to Firm", text: "Dependable support with a little more give than our firm mattresses." },
+    ],
     name: "Classic Ortho Mattress",
     shortName: "Classic Ortho",
     price: "From £449",
@@ -276,6 +294,14 @@ const allOrthoMattressProducts: MattressProduct[] = [
   },
   {
     slug: "hampton-orthopaedic-mattress",
+    layout: "pocket",
+    range: "ortho",
+    quickFacts: ["Open Coil Orthopaedic Springs", "Deep Adaptive Memory Foam", "Single-Sided, 26cm Depth", "Firmness: Firm"],
+    love: [
+      { icon: "springs", label: "Support System", title: "Foam-Encapsulated Springs", text: "An open coil orthopaedic spring unit with foam encapsulation for a supportive core." },
+      { icon: "foam", label: "Comfort Fillings", title: "Adaptive Memory Foam", text: "A deep memory foam layer responds to your body above the springs." },
+      { icon: "firmness", label: "Firmness", title: "Firm", text: "Firm support with responsive cushioning, finished in luxurious knitted fabric." },
+    ],
     highlight: {
       title: "Deep adaptive memory foam layer",
       text: "Memory foam moulds to your body to relieve pressure on shoulders, hips and back, on top of firm orthopaedic spring support.",
@@ -377,6 +403,14 @@ const allOrthoMattressProducts: MattressProduct[] = [
   },
   {
     slug: "deluxe-orthopaedic-mattress",
+    layout: "pocket",
+    range: "ortho",
+    quickFacts: ["Open Coil Springs", "Wire-Edge & Butterfly Support", "Coir & Deep Polyester Layers", "Firmness: Extra Firm"],
+    love: [
+      { icon: "springs", label: "Support System", title: "Reinforced Open Coil", text: "Wire-edge and butterfly support help keep the spring unit stable and supportive." },
+      { icon: "foam", label: "Comfort Fillings", title: "Coir & Deep Polyester", text: "Coir filling adds structure, while a deep polyester layer adds cushioning above the springs." },
+      { icon: "firmness", label: "Firmness", title: "Extra Firm", text: "A highly stable, low-sink sleep surface for sleepers who like a very firm feel." },
+    ],
     name: "Deluxe Ortho Mattress",
     shortName: "Deluxe Ortho",
     price: "From £829",

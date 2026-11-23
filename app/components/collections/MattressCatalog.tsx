@@ -70,16 +70,24 @@ export function MattressCatalog({ products, needFilters, feelFilters, sizeFilter
     const matches = products.filter((product) => {
       const needMatch = selectedNeed.length === 0 || selectedNeed.some((filter) => {
         // Ortho range vs the pocket spring range (layout "pocket").
-        if (filter === "Orthopaedic") return product.layout !== "pocket";
-        if (filter === "Pocket Spring") return product.layout === "pocket";
+        if (filter === "Orthopaedic") return product.range !== "pocket";
+        if (filter === "Pocket Spring") return product.range === "pocket";
         return product.bestFor.includes(filter);
       });
       const feelMatch = selectedFeel.length === 0 || selectedFeel.includes(product.firmness);
       return needMatch && feelMatch;
     });
 
-    const sorted = [...matches];
-    if (sortBy === "price-low") {
+    let sorted = [...matches];
+    if (sortBy === "best-selling") {
+      // Best selling (client, 23/11/2026, until real sales figures are used): Ortho and Pocket Spring mattresses
+      // alternate, each range keeping its own order.
+      const ortho = sorted.filter((product) => product.range !== "pocket");
+      const pocket = sorted.filter((product) => product.range === "pocket");
+      sorted = Array.from({ length: Math.max(ortho.length, pocket.length) }, (_, index) => [ortho[index], pocket[index]])
+        .flat()
+        .filter((product): product is MattressProduct => Boolean(product));
+    } else if (sortBy === "price-low") {
       sorted.sort((a, b) => priceNumber(a.price) - priceNumber(b.price));
     } else if (sortBy === "firmness") {
       sorted.sort((a, b) => getFirmnessRank(a.firmness) - getFirmnessRank(b.firmness));

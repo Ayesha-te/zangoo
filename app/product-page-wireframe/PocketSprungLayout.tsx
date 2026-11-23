@@ -108,7 +108,7 @@ function iconFor(title: string): MattressIconName {
   const t = title.toLowerCase();
   if (/gel|cool/.test(t)) return "cooling";
   if (/pillow/.test(t)) return "pillow";
-  if (/memory|foam layer|foam comfort|foam layers|cushion/.test(t)) return "foam";
+  if (/memory|foam layer|foam comfort|foam layers|cushion|filling|coir|polyester/.test(t)) return "foam";
   if (/spring/.test(t)) return "springs";
   if (/edge|perimeter|encapsulat|sides/.test(t)) return "edge";
   if (/depth|cm/.test(t)) return "depth";

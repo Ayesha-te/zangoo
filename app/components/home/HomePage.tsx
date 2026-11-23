@@ -445,8 +445,8 @@ function lowestPrice(products: MattressProduct[]) {
 function FeaturedMattresses() {
   // Prices come from the live catalogue (WooCommerce), so the cards always match the mattress listing.
   const { products } = useCatalog();
-  const ortho = products.filter((product) => product.layout !== "pocket" && !product.comingSoon);
-  const pocket = products.filter((product) => product.layout === "pocket" && !product.comingSoon);
+  const ortho = products.filter((product) => product.range !== "pocket" && !product.comingSoon);
+  const pocket = products.filter((product) => product.range === "pocket" && !product.comingSoon);
   const featured: Array<{ title: string; copy: string; price?: string; image: string; badge: string; href?: string }> = [
     {
       title: "Orthopaedic Mattress",

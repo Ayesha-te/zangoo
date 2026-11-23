@@ -25,6 +25,7 @@ export const pocketSprungProducts: MattressProduct[] = [
   {
     slug: "air-flow-2000-pocket-spring-mattress",
     layout: "pocket",
+    range: "pocket",
     quickFacts: ["Up to 2,000 Pocket Springs", "Memory Foam & Pillow Top", "28cm Depth", "Firmness: Medium to Firm"],
     love: [
       { icon: "springs", label: "Support System", title: "Pocket Springs", text: "Up to 2,000 individually wrapped springs respond independently to pressure and movement." },
@@ -113,6 +114,7 @@ export const pocketSprungProducts: MattressProduct[] = [
   {
     slug: "ella-3000-pocket-spring-mattress",
     layout: "pocket",
+    range: "pocket",
     quickFacts: ["Up to 3,000 Pocket Springs", "Cooling Gel & Memory Foam", "31cm Depth", "Firmness: Firm to Extra Firm"],
     love: [
       { icon: "springs", label: "Support System", title: "Pocket Springs", text: "Up to 3,000 individually pocketed springs respond independently to pressure and movement." },
@@ -194,6 +196,7 @@ export const pocketSprungProducts: MattressProduct[] = [
   {
     slug: "harmony-1000-pocket-spring-mattress",
     layout: "pocket",
+    range: "pocket",
     quickFacts: ["Up to 1,000 Pocket Springs", "Generous Memory Foam", "31cm Depth", "Firmness: Medium to Firm"],
     love: [
       { icon: "springs", label: "Support System", title: "Pocket Springs", text: "Up to 1,000 individually pocketed springs respond independently to pressure and movement." },
@@ -277,6 +280,7 @@ export const pocketSprungProducts: MattressProduct[] = [
   {
     slug: "mirage-firm-2000-pocket-spring-mattress",
     layout: "pocket",
+    range: "pocket",
     quickFacts: ["Up to 2,000 Pocket Springs", "Memory Foam & Deep Support Foam", "31cm Depth", "Firmness: Firm"],
     love: [
       { icon: "springs", label: "Support System", title: "Pocket Springs", text: "Up to 2,000 individually pocketed springs respond independently across the sleeping surface." },
@@ -363,6 +367,7 @@ export const pocketSprungProducts: MattressProduct[] = [
   {
     slug: "newby-1000-pocket-spring-mattress",
     layout: "pocket",
+    range: "pocket",
     quickFacts: ["Up to 1,000 Pocket Springs", "Memory Foam", "26cm Depth", "Firmness: Medium"],
     love: [
       { icon: "springs", label: "Support System", title: "Pocket Springs", text: "Up to 1,000 individually wrapped springs respond separately to pressure." },
