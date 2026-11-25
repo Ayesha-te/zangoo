@@ -94,8 +94,7 @@ const COMPARE_ROWS: CompareRow[] = [
   { label: "Comfort layers", value: (item) => item.compareSpecs.comfortLayer },
   { label: "Cover", value: (item) => item.compareSpecs.cover },
   { label: "Turnable", value: (item) => (item.compareSpecs.turnable ? "Yes" : "No") },
-  // Only weights the client has provided; the rest show "Not listed".
-  { label: "Weight", value: (item) => (item.compareSpecs.weight && item.compareSpecs.weight !== "—" ? item.compareSpecs.weight : "Not listed") },
+  // Weight row removed (client, 26/11/2026): weights are not confirmed.
 ];
 
 export function WireframeExperience({ product, relatedProducts, isPreview = true, stripeKey = null }: WireframeExperienceProps) {

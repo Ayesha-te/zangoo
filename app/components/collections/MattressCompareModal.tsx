@@ -44,7 +44,7 @@ export function MattressCompareModal({ products, onClose }: MattressCompareModal
     { label: "Finish", render: (item) => getCardCopy(item.slug).finish },
     { label: "Depth", render: (item) => getCardCopy(item.slug).depth },
     { label: "Turnable", render: (item) => (item.compareSpecs.turnable ? "Yes" : "No") },
-    { label: "Weight", render: (item) => (item.compareSpecs.weight && item.compareSpecs.weight !== "—" ? item.compareSpecs.weight : "Not listed") },
+    // Weight row removed (client, 26/11/2026): weights are not confirmed.
     // Rating hidden for now (client, 14/11/2026): there are no per-mattress reviews yet.
     // { label: "Rating", render: () => <span className={styles.ratingCell}>&#9733;&#9733;&#9733;&#9733;&#9733; 4.8 (358)</span> },
   ];
