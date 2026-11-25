@@ -38,7 +38,7 @@ export default async function CollectionDetailPage({ params }: CollectionPagePro
   const isBedroom = collection.slug === "bedroom";
   const category = collectionCategories.find((item) => item.href === `/collections/${collection.slug}/`);
   const { products } = await getStoreCatalog();
-  const intro = `Shop our bedroom collection online, starting with ${products.length} UK-made orthopaedic and pocket spring mattresses in medium to extra-firm feels. Choose from single, double and king sizes with free UK delivery, while additional bedroom collections including beds and bedside tables are coming soon.`;
+  const intro = `Shop our bedroom collection online, starting with ${products.length} UK-made orthopaedic and pocket spring mattresses in medium to extra-firm feels. Choose from single, double and king sizes with free delivery within Greater London, while additional bedroom collections including beds and bedside tables are coming soon.`;
   const introPreview = getSentencePreview(intro);
 
   return (

@@ -232,7 +232,7 @@ export function AddToBasketDrawer({ item, product, onClose }: { item: FavoriteIt
 
             <div className="atb-features"><ProductFeatures turnable={product?.compareSpecs.turnable} slug={item.slug} /></div>
 
-            <p className="atb-delivery"><TruckIcon width="30" height="30" /> Free UK delivery</p>
+            <p className="atb-delivery"><TruckIcon width="30" height="30" /> Free delivery in Greater London</p>
 
             {cartError ? <p className="cart-error" role="alert">{cartError}</p> : null}
             <button

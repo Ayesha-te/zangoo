@@ -97,7 +97,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
 
       Designed with a practical double-sided construction, Capri Ortho can be flipped and rotated regularly to help distribute everyday wear across both sleeping surfaces. Expertly made in the UK, this orthopaedic mattress has an approximate depth of 26cm and is available in three standard UK sizes: Single, Double and King.
 
-      Order your Capri Ortho Mattress online from our mattress business in Ilford, London. Enjoy free UK delivery, a 1-year guarantee and the option of 0% interest-free finance, subject to applicable terms and eligibility requirements.`,
+      Order your Capri Ortho Mattress online from our mattress business in Ilford, London. Enjoy free delivery within Greater London, a 1-year guarantee and the option of 0% interest-free finance, subject to applicable terms and eligibility requirements.`,
     ],
     accordionContent: {
       features:
@@ -127,7 +127,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
 
         <strong>Please note:</strong> Check your existing bed frame or divan dimensions before ordering. Mattress dimensions are approximate and small manufacturing tolerances may apply.`,
       deliveryReturns:
-        `• <strong>Free UK Delivery</strong> - Free UK delivery is available on Capri Ortho mattresses. Your estimated delivery timing will be shown or confirmed as part of the ordering process.
+        `• <strong>Free Greater London Delivery</strong> - Free delivery within Greater London is available on Capri Ortho mattresses. Your estimated delivery timing will be shown or confirmed as part of the ordering process.
 
         • <strong>1-Year Guarantee & Finance</strong> - Capri Ortho is covered by our 1-year guarantee. 0% interest-free finance is also available subject to the applicable finance terms and eligibility requirements.
 
@@ -150,7 +150,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
       { label: "Firmness", value: "7/10", note: "Firm support" },
       { label: "Profile", value: "28cm", note: "Deep quilted build" },
       { label: "Trial", value: "60 nights", note: "At-home comfort check" },
-      { label: "Delivery", value: "Free", note: "UK mainland" },
+      { label: "Delivery", value: "Free", note: "Greater London" },
     ],
     features: [
       {
@@ -170,14 +170,14 @@ const allOrthoMattressProducts: MattressProduct[] = [
       { question: "Is the Capri Ortho mattress suitable for side sleepers?", answer: "It can suit some side sleepers who prefer a firm mattress, but there is no single firmness that works for every side sleeper. Your body weight, shoulder and hip comfort, and personal preference will affect how the mattress feels. If you prefer more cushioning, compare Capri Ortho with the other firmness and comfort constructions in our range before ordering." },
       { question: "What is an open coil orthopaedic mattress?", answer: "An open coil mattress uses interconnected springs that work together as a single spring unit. In Capri Ortho, the open coil system is combined with wire-edge support, polyester filling, damask fabric and deep tufting to create its firm feel. “Orthopaedic” describes the product’s supportive positioning rather than a medical treatment or one specific spring technology." },
       { question: "Should I flip and rotate the Capri Ortho mattress?", answer: "Yes. Capri Ortho is a double-sided mattress, so it is designed to be flipped and rotated regularly. Alternating the sleeping surfaces helps distribute normal wear more evenly. Follow the care schedule supplied with your mattress and avoid bending or folding the spring unit when turning it." },
-      { question: "Can I buy the Capri Ortho mattress online in the UK?", answer: "Yes. Capri Ortho is available to order online in single, double and king sizes, with free UK delivery, 0% interest-free finance and a 1-year guarantee. Current price, firmness, specifications and stock availability are shown on this product page before you order." },
+      { question: "Can I buy the Capri Ortho mattress online in the UK?", answer: "Yes. Capri Ortho is available to order online in single, double and king sizes, with free delivery within Greater London, 0% interest-free finance and a 1-year guarantee. Current price, firmness, specifications and stock availability are shown on this product page before you order." },
     ],
     bestFor: ["Back Pain", "Firm Support", "Turnable / Double-Sided"],
     stockCount: 4,
     compareSpecs: {
-      springType: "Open coil springs",
-      comfortLayer: "Quilted foam comfort layer",
-      cover: "Quilted fabric cover",
+      springType: "Open coil springs with wire-edge support",
+      comfortLayer: "Deep polyester filling",
+      cover: "Quality damask fabric",
       turnable: true,
       weight: "~24kg (Double)",
     },
@@ -205,7 +205,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
 
       Featuring a hand-tufted, double-sided design, Classic Ortho allows both sleeping surfaces to be used as part of a regular flip-and-rotate care routine. Handcrafted in the UK using traditional mattress-making techniques, this orthopaedic mattress measures approximately 26cm deep and is available in three standard UK sizes: Single, Double and King.
 
-      Order your Classic Ortho Mattress online from our mattress business at 70 Ilford Lane, Ilford, London IG1 2LA. Enjoy free UK delivery, a 1-year guarantee and the option of 0% interest-free finance, subject to applicable terms and eligibility requirements.`,
+      Order your Classic Ortho Mattress online from our mattress business at 70 Ilford Lane, Ilford, London IG1 2LA. Enjoy free delivery within Greater London, a 1-year guarantee and the option of 0% interest-free finance, subject to applicable terms and eligibility requirements.`,
     ],
     accordionContent: {
       features:
@@ -240,7 +240,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
 
         <strong>Please note:</strong> Check your existing bed frame or divan dimensions before ordering. Mattress dimensions are approximate and small manufacturing tolerances may apply.`,
       deliveryReturns:
-        `• <strong>Free UK Delivery</strong> - Free UK delivery is available on Classic Ortho mattresses. Your estimated delivery timing will be shown or confirmed as part of the ordering process.
+        `• <strong>Free Greater London Delivery</strong> - Free delivery within Greater London is available on Classic Ortho mattresses. Your estimated delivery timing will be shown or confirmed as part of the ordering process.
 
         • <strong>1-Year Guarantee & Finance</strong> - Classic Ortho is covered by our 1-year guarantee. 0% interest-free finance is also available subject to the applicable finance terms and eligibility requirements.
 
@@ -260,7 +260,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
       { label: "Firmness", value: "6/10", note: "Medium to firm support" },
       { label: "Depth", value: "24cm", note: "Traditional profile" },
       { label: "Trial", value: "60 nights", note: "At-home comfort check" },
-      { label: "Delivery", value: "Free", note: "UK mainland" },
+      { label: "Delivery", value: "Free", note: "Greater London" },
     ],
     features: [
       {
@@ -280,14 +280,14 @@ const allOrthoMattressProducts: MattressProduct[] = [
       { question: "Can the Classic Ortho mattress help with back pain?", answer: "Classic Ortho provides a supportive medium-to-firm sleep surface, but no mattress can be guaranteed to treat or relieve back pain. Comfort depends on factors such as firmness preference, body weight and sleeping position. Persistent or severe back pain should be discussed with a qualified healthcare professional rather than relying on a mattress as treatment." },
       { question: "What is an open coil mattress, and how is it different from pocket sprung?", answer: "An open coil mattress uses interconnected springs that move together as one spring unit, while a pocket sprung mattress uses individual springs housed in separate fabric pockets so they can respond more independently. Classic Ortho uses an open coil spring system with wire-edge support for a traditional, consistent mattress feel." },
       { question: "Should I flip and rotate the Classic Ortho mattress?", answer: "Yes. Classic Ortho is double-sided, so it is designed to be flipped and rotated regularly. Alternating the sleeping surfaces helps distribute normal wear more evenly. Follow the care guidance supplied with the mattress and avoid bending or folding the spring unit when turning it." },
-      { question: "Can I buy the Classic Ortho mattress online in the UK?", answer: "Yes. Classic Ortho is available to order online in single, double and king sizes, with free UK delivery, 0% interest-free finance and a 1-year guarantee. Current price, firmness, specifications and stock availability are shown on this product page before you order." },
+      { question: "Can I buy the Classic Ortho mattress online in the UK?", answer: "Yes. Classic Ortho is available to order online in single, double and king sizes, with free delivery within Greater London, 0% interest-free finance and a 1-year guarantee. Current price, firmness, specifications and stock availability are shown on this product page before you order." },
     ],
     bestFor: ["Back Pain", "Turnable / Double-Sided"],
     stockCount: 10,
     compareSpecs: {
-      springType: "Open coil springs",
-      comfortLayer: "Fibre comfort layer",
-      cover: "Woven fabric cover",
+      springType: "Open coil springs with wire-edge support",
+      comfortLayer: "Deep polyester filling",
+      cover: "Quality damask fabric",
       turnable: true,
       weight: "~21kg (Double)",
     },
@@ -319,7 +319,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
 
       Unlike the double-sided Classic Ortho and Capri Ortho mattresses, Hampton Ortho features a single-sided design and should be rotated rather than flipped. Expertly made in the UK, this mattress has an approximate depth of 26cm and is available in three standard UK sizes: Single, Double and King. Please note that the Jacquard Black (J2) bed base shown in product images is sold separately.
 
-      Order your Hampton Ortho Mattress online from our mattress business at 70 Ilford Lane, Ilford, London IG1 2LA. Enjoy free UK delivery, a 1-year guarantee and the option of 0% interest-free finance, subject to applicable terms and eligibility requirements.`,
+      Order your Hampton Ortho Mattress online from our mattress business at 70 Ilford Lane, Ilford, London IG1 2LA. Enjoy free delivery within Greater London, a 1-year guarantee and the option of 0% interest-free finance, subject to applicable terms and eligibility requirements.`,
     ],
     accordionContent: {
       features:
@@ -349,7 +349,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
 
         <strong>Please note:</strong> Check your existing bed frame or divan dimensions before ordering. Mattress dimensions are approximate and small manufacturing tolerances may apply.`,
       deliveryReturns:
-        `• <strong>Free UK Delivery</strong> - Free UK delivery is available on Hampton Ortho mattresses. Your estimated delivery timing will be shown or confirmed as part of the ordering process.
+        `• <strong>Free Greater London Delivery</strong> - Free delivery within Greater London is available on Hampton Ortho mattresses. Your estimated delivery timing will be shown or confirmed as part of the ordering process.
 
         • <strong>1-Year Guarantee & Finance</strong> - Hampton Ortho is covered by our 1-year guarantee. 0% interest-free finance is also available subject to the applicable finance terms and eligibility requirements.
 
@@ -369,7 +369,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
       { label: "Firmness", value: "7.5/10", note: "Firm support" },
       { label: "Depth", value: "27cm", note: "Supportive profile" },
       { label: "Trial", value: "60 nights", note: "At-home comfort check" },
-      { label: "Delivery", value: "Free", note: "UK mainland" },
+      { label: "Delivery", value: "Free", note: "Greater London" },
     ],
     features: [
       {
@@ -389,14 +389,14 @@ const allOrthoMattressProducts: MattressProduct[] = [
       { question: "Can a firm mattress help with back pain?", answer: "A firm mattress may feel supportive for some people, but no mattress can be guaranteed to treat or relieve back pain. Comfort depends on factors including firmness preference, body weight and sleeping position. Persistent or severe back pain should be discussed with a qualified healthcare professional rather than relying on a mattress as treatment." },
       { question: "What is foam encapsulation in a mattress?", answer: "Foam encapsulation means the spring unit is surrounded by a foam border. In Hampton Ortho, this helps create a more structured perimeter around the open coil spring system and works alongside the adaptive memory foam comfort layer." },
       { question: "What is the difference between a firm and medium-to-firm mattress?", answer: "A firm mattress generally has less surface give and a more stable feel than a medium-to-firm mattress. Hampton Ortho is the firm option in our range; Classic Ortho and Capri Ortho are medium-to-firm, while Deluxe Ortho is extra firm. The best choice depends on the feel you prefer rather than firmness alone." },
-      { question: "Can I buy the Hampton Ortho mattress online in the UK?", answer: "Yes. Hampton Ortho is available to order online in single, double and king sizes, with free UK delivery, 0% interest-free finance and a 1-year guarantee. Current price, firmness, specifications and stock availability are shown on this product page before you order." },
+      { question: "Can I buy the Hampton Ortho mattress online in the UK?", answer: "Yes. Hampton Ortho is available to order online in single, double and king sizes, with free delivery within Greater London, 0% interest-free finance and a 1-year guarantee. Current price, firmness, specifications and stock availability are shown on this product page before you order." },
     ],
     bestFor: ["Firm Support", "Stomach Sleepers", "Heavy Sleepers (90kg+)"],
     stockCount: 6,
     compareSpecs: {
-      springType: "Reinforced open coil springs",
-      comfortLayer: "Firm support foam layer",
-      cover: "Woven fabric cover",
+      springType: "Open coil orthopaedic springs, foam-encapsulated",
+      comfortLayer: "Deep adaptive memory foam",
+      cover: "Luxurious knitted fabric",
       turnable: false,
       weight: "~24kg (Double)",
     },
@@ -420,7 +420,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
     heroDescription:
       "Deluxe Ortho is a UK-made extra firm orthopaedic mattress designed for sleepers who prefer a highly stable, low-sink sleep surface. Its open coil spring system is reinforced with wire-edge and butterfly support, while coir filling adds structure and a deep polyester layer provides cushioning above the springs. Hand-tufted and approximately 26cm deep, this double-sided mattress is available in single, double and king sizes.",
     whyChoose: [
-      "Deluxe Ortho is built for shoppers who specifically prefer an extra-firm orthopaedic mattress with traditional spring construction. Its interconnected open coil system is reinforced with wire-edge and butterfly support, while coir adds structure and a deep polyester layer provides cushioning above the spring unit. The mattress is hand-tufted, finished in quality damask fabric and made in the UK. Its double-sided construction allows it to be flipped and rotated as part of regular care. Deluxe Ortho is approximately 26cm deep and available in single, double and king sizes. Order online from our Ilford, London business with free UK delivery, 0% interest-free finance and a 1-year guarantee.",
+      "Deluxe Ortho is built for shoppers who specifically prefer an extra-firm orthopaedic mattress with traditional spring construction. Its interconnected open coil system is reinforced with wire-edge and butterfly support, while coir adds structure and a deep polyester layer provides cushioning above the spring unit. The mattress is hand-tufted, finished in quality damask fabric and made in the UK. Its double-sided construction allows it to be flipped and rotated as part of regular care. Deluxe Ortho is approximately 26cm deep and available in single, double and king sizes. Order online from our Ilford, London business with free delivery within Greater London, 0% interest-free finance and a 1-year guarantee.",
     ],
     accordionContent: {
       features:
@@ -449,7 +449,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
 
         <strong>Please note:</strong> Check your existing bed frame or divan dimensions before ordering. Mattress dimensions are approximate and small manufacturing tolerances may apply.`,
       deliveryReturns:
-        `• <strong>Free UK Delivery</strong> - Free UK delivery is available on Deluxe Ortho mattresses. Your estimated delivery timing will be shown or confirmed as part of the ordering process.
+        `• <strong>Free Greater London Delivery</strong> - Free delivery within Greater London is available on Deluxe Ortho mattresses. Your estimated delivery timing will be shown or confirmed as part of the ordering process.
 
         • <strong>1-Year Guarantee & Finance</strong> - Deluxe Ortho is covered by our 1-year guarantee. 0% interest-free finance is also available subject to the applicable finance terms and eligibility requirements.
 
@@ -469,7 +469,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
       { label: "Firmness", value: "9/10", note: "Extra-firm support" },
       { label: "Depth", value: "31cm", note: "Deep reinforced build" },
       { label: "Trial", value: "60 nights", note: "At-home comfort check" },
-      { label: "Delivery", value: "Free", note: "UK mainland" },
+      { label: "Delivery", value: "Free", note: "Greater London" },
     ],
     features: [
       {
@@ -489,14 +489,14 @@ const allOrthoMattressProducts: MattressProduct[] = [
       { question: "Is an extra-firm mattress good for back pain?", answer: "An extra-firm mattress can feel supportive to some sleepers, but it cannot be guaranteed to treat or relieve back pain. A mattress that feels too firm can also be uncomfortable for some people. If back pain is persistent, severe or accompanied by other symptoms, seek advice from a qualified healthcare professional rather than relying on a mattress as treatment." },
       { question: "What is an open coil spring mattress?", answer: "An open coil mattress uses interconnected springs that work together as one spring unit. Deluxe Ortho combines this traditional spring construction with wire-edge and butterfly support, coir filling, polyester cushioning and hand tufting to create its extra-firm feel." },
       { question: "Who should not choose an extra-firm mattress?", answer: "An extra-firm mattress may not suit sleepers who prefer noticeable cushioning or pressure relief, particularly some lighter or side sleepers. Firmness is subjective, so compare your sleeping position, body weight and comfort preference before choosing the firmest option in the range." },
-      { question: "Where can I buy the Deluxe Ortho mattress in London and the UK?", answer: "You can order Deluxe Ortho online from our business at 70 Ilford Lane, Ilford, London IG1 2LA. It is available in single, double and king sizes with free UK delivery, 0% interest-free finance and a 1-year guarantee. Current price and stock availability are shown on this product page before you order." },
+      { question: "Where can I buy the Deluxe Ortho mattress in London and the UK?", answer: "You can order Deluxe Ortho online from our business at 70 Ilford Lane, Ilford, London IG1 2LA. It is available in single, double and king sizes with free delivery within Greater London, 0% interest-free finance and a 1-year guarantee. Current price and stock availability are shown on this product page before you order." },
     ],
     bestFor: ["Firm Support", "Stomach Sleepers", "Heavy Sleepers (90kg+)", "Turnable / Double-Sided"],
     stockCount: 3,
     compareSpecs: {
-      springType: "Reinforced open coil, extra-firm",
-      comfortLayer: "Firm support foam layer",
-      cover: "Reinforced woven cover",
+      springType: "Open coil with wire-edge & butterfly support",
+      comfortLayer: "Coir filling & deep polyester layer",
+      cover: "Quality damask fabric",
       turnable: true,
       weight: "~29kg (Double)",
     },
@@ -522,7 +522,7 @@ export const formatGBP = (value: number) => `£${value.toFixed(2)}`;
  * the third feature row. Client wording, 03/11/2026.
  */
 const CARD_COPY: Record<string, { type: string; feature: string; finish?: string; depth?: string }> = {
-  "capri-orthopaedic-mattress": { type: "Orthopaedic Coil Spring Mattress", feature: "Wire edge support" },
+  "capri-orthopaedic-mattress": { type: "Orthopaedic Coil Spring Mattress", feature: "Wire edge support", finish: "Deep-tufted" },
   "classic-orthopaedic-mattress": { type: "Orthopaedic Coil Spring Mattress", feature: "Luxury feel fabric" },
   "hampton-orthopaedic-mattress": { type: "Adaptive Memory Foam Layer", feature: "Orthopaedic spring" },
   "deluxe-orthopaedic-mattress": { type: "Orthopaedic Coil Spring Mattress", feature: "Luxurious coir filling" },

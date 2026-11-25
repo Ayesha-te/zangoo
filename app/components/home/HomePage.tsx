@@ -315,7 +315,7 @@ function Hero() {
           Orthopaedic Mattresses For <em>Firm, Supportive Sleep</em>
         </h1>
         <p className="hero-sub">
-          We offer a focused range of UK-made orthopaedic mattresses in medium-to-firm, firm and extra-firm feels, with free UK delivery. Each model combines supportive spring construction with carefully selected comfort layers, tufted finishes and an approximately 26cm mattress depth.
+          We offer a focused range of UK-made orthopaedic mattresses in medium-to-firm, firm and extra-firm feels, with free delivery across Greater London. Each model combines supportive spring construction with carefully selected comfort layers, tufted finishes and an approximately 26cm mattress depth.
         </p>
         <div className="hero-stars" role="img" aria-label="5 star verified reviews">
           <span className="stars" aria-hidden="true">
@@ -390,7 +390,7 @@ function Collections() {
                 <h2 className="h2lt rv" id="coll-h">
                   Explore Our Orthopaedic Mattresses
                 </h2>
-                <p>Compare our UK-made orthopaedic and pocket spring mattresses by firmness, construction and care style. Available in single, double and king sizes, with delivery across London and the UK.</p>
+                <p>Compare our UK-made orthopaedic and pocket spring mattresses by firmness, construction and care style. Available in single, double and king sizes, with free delivery across Greater London.</p>
               </div>
               <Link href="/collections/" className="sec-lnk sec-lnk-lt shared-section-link rv" aria-label="View all collections">
                 View All Mattresses

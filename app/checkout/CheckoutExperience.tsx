@@ -639,7 +639,7 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
               <div className={styles.cardHead}>
                 <span className={styles.num}>2</span>
                 <h2 id="co-address">Delivery address</h2>
-                <p className={styles.headNote}>Delivering to <b>United Kingdom</b> <UkFlag /></p>
+                <p className={styles.headNote}>Delivering within <b>Greater London</b> <UkFlag /></p>
               </div>
               <div className={styles.grid}>
                 {field("firstName", <>First name <i>*</i></>, text("firstName", { autoComplete: "given-name", maxLength: LIMITS.name }))}
@@ -677,7 +677,7 @@ export function CheckoutExperience({ stripePublishableKey }: { stripePublishable
               <label className={`${styles.option} ${styles.optionSelected}`}>
                 <input type="radio" name="delivery" defaultChecked />
                 <TruckIcon />
-                <span><strong>Standard UK delivery</strong><small>Delivery in 3–5 working days</small></span>
+                <span><strong>Free Greater London delivery</strong><small>Delivery in 3–5 working days</small></span>
                 <b>FREE</b>
               </label>
               <div className={styles.collapse}>

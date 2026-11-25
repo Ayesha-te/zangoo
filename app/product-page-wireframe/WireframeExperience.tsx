@@ -554,7 +554,7 @@ export function WireframeExperience({ product, relatedProducts, isPreview = true
 
       <section className={styles.textInsert} aria-labelledby="insert-title">
         <div className={styles.textInsertCopy}>
-          <p className={styles.kicker}>{product.copy?.insertKicker ?? "Free UK delivery • 60-night trial • WhatsApp support"}</p>
+          <p className={styles.kicker}>{product.copy?.insertKicker ?? "Free Greater London delivery • 1-year guarantee • WhatsApp support"}</p>
           <h2 id="insert-title">{product.copy?.whyChooseTitle ?? `Why choose ${product.shortName}?`}</h2>
           {(product.whyChoose?.length ? product.whyChoose : [product.description]).map((paragraph) => (
             <p key={paragraph}>{paragraph}</p>

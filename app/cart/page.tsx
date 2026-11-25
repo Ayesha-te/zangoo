@@ -15,7 +15,7 @@ const SIZE_LABELS: Record<string, string> = { single: "Single (90 x 190cm)", dou
 
 // Same icons as the trust bar under the menu (SiteChrome). The flag is an image: Windows has no flag emoji.
 const benefits: Array<{ icon: string; label: string }> = [
-  { icon: "🚚", label: "Free UK delivery" },
+  { icon: "🚚", label: "Free delivery in Greater London" },
   { icon: "💳", label: "0% interest-free finance" },
   { icon: "🛡️", label: "1-year guarantee" },
   { icon: "🌱", label: "FSC certified & carbon neutral" },

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import CollectionProductPage from "../../[slug]/[product]/page";
 
 export const metadata: Metadata = {
-  title: "Orthopaedic Mattresses UK | Free UK Delivery | OrthoBedroom",
-  description: "Shop UK-made orthopaedic mattresses in medium-to-firm, firm and extra-firm feels. Single, double and king sizes with free UK delivery and 0% finance.",
+  title: "Orthopaedic & Pocket Spring Mattresses | Free London Delivery | OrthoBedroom",
+  description: "Shop UK-made orthopaedic mattresses in medium-to-firm, firm and extra-firm feels. Single, double and king sizes with free Greater London delivery and 0% finance.",
 };
 
 export default function BedroomMattressesPage() {

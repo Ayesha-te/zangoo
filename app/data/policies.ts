@@ -10,33 +10,33 @@ import type { MattressProduct } from "./mattressProducts";
 export type PolicySection = { heading: string; paragraphs: string[]; bullets?: string[] };
 export type Policy = { title: string; intro: string; sections: PolicySection[]; updated: string };
 
-/** Where a product can be delivered. Set per product in WooCommerce with a "Delivery area" attribute ("London only" / "UK"). */
+/** Where a product can be delivered. Set per product in WooCommerce with a "Delivery area" attribute ("Greater London only" / "UK"). */
 export type DeliveryArea = "london" | "uk";
 
 export const DELIVERY_AREA_LABEL: Record<DeliveryArea, { short: string; long: string }> = {
-  london: { short: "London delivery only", long: "This mattress is delivered within London only." },
+  london: { short: "Greater London only", long: "Free delivery to addresses within Greater London." },
   uk: { short: "UK delivery available", long: "This mattress can be delivered across the UK mainland." },
 };
 
+/** Default: Greater London (client, 25/11/2026: every current mattress is delivered free within Greater London only). */
 export function deliveryAreaOf(product: Pick<MattressProduct, "deliveryArea">): DeliveryArea {
-  return product.deliveryArea ?? "uk";
+  return product.deliveryArea ?? "london";
 }
 
 export const DELIVERY_POLICY: Policy = {
   title: "Delivery Information",
-  intro: "Free delivery on every mattress. Delivery areas vary by product: each product page shows whether that mattress is delivered within London only or across the UK.",
+  intro: "Free delivery on every mattress within Greater London. Each product page also shows its delivery area.",
   updated: "17 November 2026",
   sections: [
     {
       heading: "Delivery cost",
-      paragraphs: ["Delivery is free on all mattress orders. There is no minimum order value."],
+      paragraphs: ["Delivery is free on all mattress orders within Greater London. There is no minimum order value."],
     },
     {
       heading: "Where we deliver",
-      paragraphs: ["Delivery areas depend on the mattress you choose. Each product page shows one of the following:"],
-      bullets: [
-        "London delivery only: available to addresses within London.",
-        "UK delivery available: available to addresses across the UK mainland.",
+      paragraphs: [
+        "We currently deliver our mattresses within Greater London only. Each product page shows the delivery area for that mattress.",
+        "If you live outside Greater London, please message us on WhatsApp before ordering and we will let you know what we can do.",
       ],
     },
     {
@@ -94,7 +94,7 @@ export const RETURNS_POLICY: Policy = {
 export function productDeliverySummary(product: Pick<MattressProduct, "deliveryArea">) {
   const area = deliveryAreaOf(product);
   return [
-    { title: "Free delivery", text: `${DELIVERY_AREA_LABEL[area].long} Delivery is free and usually takes 3 to 5 working days.` },
+    { title: area === "london" ? "Free delivery in Greater London" : "Free delivery", text: `${DELIVERY_AREA_LABEL[area].long} Delivery usually takes 3 to 5 working days.` },
     { title: "14-day cancellation", text: "Changed your mind? You can cancel within 14 days of delivery. Mattresses must be unused and in their original packaging." },
   ];
 }
