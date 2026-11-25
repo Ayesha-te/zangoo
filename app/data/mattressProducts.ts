@@ -179,7 +179,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
       comfortLayer: "Deep polyester filling",
       cover: "Quality damask fabric",
       turnable: true,
-      weight: "~24kg (Double)",
+      weight: "—", // not provided (client, 25/11/2026)
     },
   },
   {
@@ -289,7 +289,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
       comfortLayer: "Deep polyester filling",
       cover: "Quality damask fabric",
       turnable: true,
-      weight: "~21kg (Double)",
+      weight: "—", // not provided (client, 25/11/2026)
     },
   },
   {
@@ -398,7 +398,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
       comfortLayer: "Deep adaptive memory foam",
       cover: "Luxurious knitted fabric",
       turnable: false,
-      weight: "~24kg (Double)",
+      weight: "—", // not provided (client, 25/11/2026)
     },
   },
   {
@@ -498,7 +498,7 @@ const allOrthoMattressProducts: MattressProduct[] = [
       comfortLayer: "Coir filling & deep polyester layer",
       cover: "Quality damask fabric",
       turnable: true,
-      weight: "~29kg (Double)",
+      weight: "50kg", // client, 25/11/2026
     },
   },
 ];
